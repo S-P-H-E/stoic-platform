@@ -1,9 +1,17 @@
+//firebase
+import { collection, getDocs } from 'firebase/firestore';
+import { auth, db } from "@/utils/firebase";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 import React from 'react'
 import Input from './Input'
 import Button from './Button'
 import { AiOutlineGoogle } from 'react-icons/ai'
 
 export default function Login() {
+    const route = useRouter()
+    const [user, loading] = useAuthState(auth);
   return (
     <div className='flex flex-col gap-6 border border-[--border] shadow-xl p-7 rounded-xl'>
         <div>
@@ -27,6 +35,8 @@ export default function Login() {
             <h1 className='text-lg font-medium'>Password</h1>
             <Input type='password' placeholder="Enter your password here" eye={true}/>
         </div>
+
+        <Button onclick={null} title="Create account" style='bg-white text-black hover:bg-white/90'/>
     </div>
   )
 }
