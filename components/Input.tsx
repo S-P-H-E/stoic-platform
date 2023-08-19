@@ -27,7 +27,7 @@ interface InputProps {
           placeholder={placeholder} />
 
         {eye ? (
-          <button onClick={toggleVisibility} className='text-[--highlight]'>
+          <button onClick={toggleVisibility} className='text-[--highlight] hover:text-white transition'>
             {toggle ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}
           </button>
         ) : (
