@@ -2,7 +2,6 @@ import React from 'react'
 import Input from './Input'
 import Button from './Button'
 import { AiOutlineGoogle } from 'react-icons/ai'
-import { BsFillEyeFill } from 'react-icons/bs'
 
 export default function Login() {
   return (
@@ -22,11 +21,11 @@ export default function Login() {
 
         <div>
             <h1 className='text-lg font-medium'>Email</h1>
-            <Input type='email' placeholder="Enter your email here" />
+            <Input type='email' placeholder="Enter your email here" eye={false}/>
         </div>
         <div>
             <h1 className='text-lg font-medium'>Password</h1>
-            <Input type='password' placeholder="Enter your password here" icon={<BsFillEyeFill />}/>
+            <Input type='password' placeholder="Enter your password here" eye={true}/>
         </div>
     </div>
   )
