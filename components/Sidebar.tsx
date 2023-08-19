@@ -9,7 +9,7 @@ import { RiDashboardLine } from 'react-icons/ri';
 import { BiMessageAlt } from 'react-icons/bi';
 import { RiSettings3Line } from 'react-icons/ri';
 import { BiBook } from 'react-icons/bi';
-import { VscLibrary } from 'react-icons/gr';
+import { VscLibrary } from 'react-icons/vsc';
 
 const montserrat = Montserrat({ weight: '600', subsets: ['latin'] });
 
@@ -25,14 +25,14 @@ const routes = [
     href: '/community',
   },
   {
-    label: 'Courses',
+    label: 'Resources',
     icon: VscLibrary,
-    href: '/courses',
+    href: '/resources',
   },
   {
-    label: 'Resources',
+    label: 'Courses',
     icon: BiBook,
-    href: '/resources',
+    href: '/courses',
   },
   {
     label: 'Settings',
