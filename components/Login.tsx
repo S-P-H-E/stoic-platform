@@ -5,7 +5,7 @@ import { AiOutlineGoogle } from 'react-icons/ai'
 
 export default function Login() {
   return (
-    <div className='flex flex-col gap-6 border border-[--border] shadow-xl p-7 rounded-xl'>
+    <div className='flex flex-col gap-6 border border-[--border] shadow-xl p-7 rounded-xl pb-8'>
         <div>
             <h1 className='text-2xl font-medium'>Create an account</h1>
             <p className='text-[--highlight]'>Enter your email below to create your account</p>
