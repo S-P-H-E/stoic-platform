@@ -25,7 +25,7 @@ interface InputProps {
     return (
       <div className='flex border border-[--border] p-2 rounded-lg w-full'>
         <input type={inputType} onChange={onchange} className={`bg-transparent items-center focus:border-white-60 w-full placeholder:text-[--highlight] outline-none ${className}`}
-          placeholder={placeholder} />
+          placeholder={placeholder} autoComplete="new-password" />
 
         {eye ? (
           <button onClick={toggleVisibility} className='text-[--highlight] hover:text-white transition'>

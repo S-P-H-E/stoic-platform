@@ -30,6 +30,7 @@ export default function Login() {
     "auth/wrong-password": "The password is incorrect.",
     "auth/missing-password": "The password is missing.",
     "auth/email-already-in-use": "The email address is already in use by another account.",
+    "auth/user-not-found": "The email address is not associated with an existing account.", 
   }
 
   const googleProvider = new GoogleAuthProvider();
@@ -69,9 +70,6 @@ export default function Login() {
     const [registerEmail, setRegisterEmail] = useState("")
     const [registerPassword, setRegisterPassword] = useState("")
 
-    const [loginEmail, setLoginEmail] = useState("")
-    const [loginPassword, setLoginPassword] = useState("")
-
     const [isLoginMode, setIsLoginMode] = useState(false); // Add this state
 
 
@@ -90,7 +88,7 @@ export default function Login() {
 
     const login = async () => {
         try {
-            const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword)
+            const user = await signInWithEmailAndPassword(auth, registerEmail, registerPassword)
             message.success("Signed in successfully");
             router.push('/dashboard');
           } catch (error) {
@@ -134,11 +132,11 @@ export default function Login() {
 
         <div>
             <h1 className='text-lg font-medium'>Email</h1>
-            <Input type='email' placeholder="Enter your email here" eye={false} onchange={(event: any) => setLoginEmail(event.target.value)}/>
+            <Input type='email' placeholder="Enter your email here" eye={false} onchange={(event: any) => setRegisterEmail(event.target.value)}/>
         </div>
         <div>
             <h1 className='text-lg font-medium'>Password</h1>
-            <Input type='password' placeholder="Enter your password here" eye={true} onchange={(event: any) => setLoginPassword(event.target.value)}/>
+            <Input type='password' placeholder="Enter your password here" eye={true} onchange={(event: any) => setRegisterPassword(event.target.value)}/>
         </div>
         <Button onClick={login}>Sign In</Button>
         <p className='text-sm text-stone-400 gap-1 flex'>Dont have an account?<button className='text-sm text-stone-400 underline' onClick={changeForm}>Register</button></p>
