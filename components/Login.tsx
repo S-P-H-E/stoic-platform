@@ -1,16 +1,69 @@
 "use client"
 
+//Firebase
+import { collection, getDocs, addDoc, query, where } from 'firebase/firestore';
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useState } from 'react'
 import Input from './Input'
 import Button from './Button'
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { AiOutlineGoogle } from 'react-icons/ai'
-import { auth } from '@/utils/firebase'
-
+import { auth, db } from '@/utils/firebase'
+import { message } from 'antd';
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const router = useRouter()
+  const [user, loading] = useAuthState(auth);
 
-    const [user, setUser] = useState({})
+  type FirebaseError = {
+    code: string;
+    message: string;
+    // Other properties you might expect in a Firebase error
+  };
+
+  const firebaseErrorMessages: Record<string, string> = {
+    "auth/invalid-email": "The email address is not valid.",
+    "auth/missing-email": "The email address is missing.",
+    "auth/wrong-password": "The password is incorrect.",
+    "auth/missing-password": "The password is missing.",
+    "auth/email-already-in-use": "The email address is already in use by another account.",
+  }
+
+  const googleProvider = new GoogleAuthProvider();
+
+  const handleLogin = async () => {
+      try {
+        // Google Auth
+        const res = await signInWithPopup(auth, googleProvider);
+        message.success("Signed in successfully");
+
+        //Router
+        router.push('/dashboard');
+
+        // User
+        const userRef = collection(db, "users");
+        const q = query(userRef, where("email", "==", res.user.email));
+        const querySnapshot = await getDocs(q);
+
+        // Firestore
+        if (querySnapshot.empty) {
+          const docRef = await addDoc(userRef, {
+            name: res.user.displayName,
+            email: res.user.email,
+          });
+          console.log("Document written with ID:", docRef.id);
+        } else {
+          console.log("User exists");
+        }
+      } catch (err) {
+        message.error("Error signing in");
+        console.error(err);
+      }
+    };
+
+    // Email Auth
 
     const [registerEmail, setRegisterEmail] = useState("")
     const [registerPassword, setRegisterPassword] = useState("")
@@ -24,25 +77,35 @@ export default function Login() {
     const register = async () => {
         try {
             const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword)
-        } catch (error) {
-            alert((error as Error).message);
+            message.success("Signed up successfully");
+          } catch (error) {
+            const firebaseError = error as FirebaseError;
+            const errorCode = firebaseError.code as keyof typeof firebaseErrorMessages;
+            const errorMessage = firebaseErrorMessages[errorCode] || "An error occurred. Please try again.";
+            message.error(errorMessage);
         }
     }
 
     const login = async () => {
         try {
             const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword)
-        } catch (error) {
-            alert((error as Error).message);
-        }
+            message.success("Signed in successfully");
+            router.push('/dashboard');
+          } catch (error) {
+            const firebaseError = error as FirebaseError;
+            const errorCode = firebaseError.code as keyof typeof firebaseErrorMessages;
+            const errorMessage = firebaseErrorMessages[errorCode] || "An error occurred. Please try again.";
+            message.error(errorMessage);
+          }
     }
+
 
     const logout = async () => {
         await signOut(auth)
     }
 
+    // switches between login and register
     const changeForm = () => {
-        console.log('Button clicked');
         setIsLoginMode(!isLoginMode);
     }
 
@@ -57,7 +120,7 @@ export default function Login() {
         </div>
 
         <div className='flex flex-col justify-start items-center w-full'>
-        <Button>
+        <Button onClick={handleLogin}>
               <AiOutlineGoogle />
               Google
             </Button>
@@ -86,7 +149,7 @@ export default function Login() {
         </div>
 
         <div className='flex flex-col justify-start items-center w-full'>
-            <Button>
+        <Button onClick={handleLogin}>
               <AiOutlineGoogle />
               Google
             </Button>
