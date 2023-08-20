@@ -31,7 +31,7 @@ export default function Login() {
 
     const login = async () => {
         try {
-            const user = await signInWithEmailAndPassword(auth, loginEmail, loginEmail)
+            const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword)
         } catch (error) {
             alert((error as Error).message);
         }
@@ -75,7 +75,7 @@ export default function Login() {
             <h1 className='text-lg font-medium'>Password</h1>
             <Input type='password' placeholder="Enter your password here" eye={true} onchange={(event: any) => setRegisterPassword(event.target.value)}/>
         </div>
-        <Button onClick={register}>Sign In</Button>
+        <Button onClick={login}>Sign In</Button>
         <p className='text-sm text-stone-400 gap-1 flex'>Dont have an account?<button className='text-sm text-stone-400 underline' onClick={changeForm}>Register</button></p>
     </>
     ) : (
