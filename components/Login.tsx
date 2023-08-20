@@ -69,11 +69,11 @@ export default function Login() {
 
         <div>
             <h1 className='text-lg font-medium'>Email</h1>
-            <Input type='email' placeholder="Enter your email here" eye={false} onchange={(event: any) => setRegisterEmail(event.target.value)}/>
+            <Input type='email' placeholder="Enter your email here" eye={false} onchange={(event: any) => setLoginEmail(event.target.value)}/>
         </div>
         <div>
             <h1 className='text-lg font-medium'>Password</h1>
-            <Input type='password' placeholder="Enter your password here" eye={true} onchange={(event: any) => setRegisterPassword(event.target.value)}/>
+            <Input type='password' placeholder="Enter your password here" eye={true} onchange={(event: any) => setLoginPassword(event.target.value)}/>
         </div>
         <Button onClick={login}>Sign In</Button>
         <p className='text-sm text-stone-400 gap-1 flex'>Dont have an account?<button className='text-sm text-stone-400 underline' onClick={changeForm}>Register</button></p>
