@@ -61,15 +61,15 @@ const Sidebar = () => {
     }, [loading, user]);
     
     return (
-      <div className='flex flex-col justify-between items-start absolute px-3 py-2 bg-blue-500 left-0 h-full max-h-screen p-1 w-[15rem] bg-transparent border-[--border] border-r text-white'>
-          <div>
-            <Link href="/dashboard" className="flex items-center text-center ml-4 my-6">
-              <h1
-                className={clsx('mt-1 text-3xl font-semibold tracking-widest', montserrat.className)}
-              >
-                S T O I C
-              </h1>
-            </Link>
+      <div className='fixed left-0 h-full min-h-screen justify-center p-1 items-center w-[15rem] bg-transparent border-[--border] border-r text-white'>
+        <div className="px-3 py-2 flex-1">
+          <Link href="/dashboard" className="flex items-center text-center ml-4 my-6">
+            <h1
+              className={clsx('mt-1 text-3xl font-semibold tracking-widest', montserrat.className)}
+            >
+              S T O I C
+            </h1>
+          </Link>
             <div className='flex flex-col gap-1'> {/* added the gap here */}
               {routes.map((route) => (
                 <Link
@@ -91,14 +91,16 @@ const Sidebar = () => {
           </div>
 
           </div>
-          <div className='relative top-0 w-full flex justify-center items-center gap-2 text-sm font-medium'>
+{/*           <div className='relative top-0 w-full flex justify-center items-center gap-2 text-sm font-medium'>
             {user && user.photoURL && (
               <>
-                <Image src={user.photoURL} alt={user.displayName} height={35} width={35} className="rounded-full w-[35px] h-fit" />
-                <h1>{user?.displayName}</h1>
+                <Image src={user.photoURL} alt="user icon" height={35} width={35} className="rounded-full w-[35px] h-fit" />
+                <h1>
+                  {user?.displayName}
+                </h1>
               </>
             )}
-          </div>
+          </div> */}
       </div>
     );
   };

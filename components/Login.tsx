@@ -17,6 +17,7 @@ export default function Login() {
   const router = useRouter()
   const [user, loading] = useAuthState(auth);
 
+
   type FirebaseError = {
     code: string;
     message: string;
@@ -77,6 +78,7 @@ export default function Login() {
     const register = async () => {
         try {
             const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword)
+            router.push('/dashboard');
             message.success("Signed up successfully");
           } catch (error) {
             const firebaseError = error as FirebaseError;

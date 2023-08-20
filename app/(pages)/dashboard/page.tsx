@@ -1,9 +1,21 @@
+"use client"
+
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/utils/firebase';
+
 export default function Dashboard() {
+  const [user, loading] = useAuthState(auth);
+
+
   return (
-    <main className='h-screen flex ml-[15rem] m-4'>
-      <div className="flex">
-        Welcome User!
+    <div className='h-screen flex flex-col ml-[16rem] m-4'>
+      <div>
+        <h1 className='text-2xl font-bold'>Dashboard</h1>
       </div>
-    </main>
+      <div className="flex flex-col">
+        <p>Welcome, {user?.displayName}</p>
+        <p>Your email address: {user?.email}</p>
+      </div>
+    </div>
   )
 }
