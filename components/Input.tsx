@@ -5,7 +5,7 @@ import Input from './Input'
 import Button from './Button'
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { AiOutlineGoogle } from 'react-icons/ai'
-import { auth } from '@/app/firebaseconfig'
+import { auth } from '@/utils/firebase'
 
 export default function Login() {
 
