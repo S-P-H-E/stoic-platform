@@ -61,7 +61,7 @@ export default function Login() {
         }
       } catch (err) {
         message.error("Error signing in");
-        console.error(err);
+        alert(err); // for debug
       }
     };
 
