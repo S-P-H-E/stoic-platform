@@ -1,25 +1,9 @@
 "use client"
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, db } from '@/utils/firebase';
-import { useEffect, useState } from 'react';
-import { collection, query, getDocs, where } from 'firebase/firestore';
+
+import { UserDataFetcher } from "@/utils/userDataFetcher";
 
 export default function Dashboard() {
-  const [user, loading] = useAuthState(auth);
-  const [userName, setUserName] = useState(null);
-
-  useEffect(() => {
-    if (user) {
-      const userRef = collection(db, 'users');
-      const q = query(userRef, where('email', '==', user.email));
-      getDocs(q).then((querySnapshot) => {
-        if (!querySnapshot.empty) {
-          const userData = querySnapshot.docs[0].data();
-          setUserName(userData.name);
-        }
-      });
-    }
-  }, [user]);
+  const { userName, user, loading } = UserDataFetcher();
 
   return (
     <div className='h-screen flex flex-col ml-[16rem] m-4'>
