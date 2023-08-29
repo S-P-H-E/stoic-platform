@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useAuthState } from 'react-firebase-hooks/auth';

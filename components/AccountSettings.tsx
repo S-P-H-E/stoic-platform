@@ -6,13 +6,15 @@ import { BsChevronLeft } from 'react-icons/bs'
 import Input from './Input'
 import Button from './Button'
 import {BiLogOut} from 'react-icons/bi'
+import { UserDataFetcher } from '@/utils/userDataFetcher'
 
 export default function AccountSettings() {
-    
+  const { userName, user, loading } = UserDataFetcher();
   const router = useRouter()
+
   return (
     <div className="flex flex-col h-full w-full">
-    <h1 className="font-bold md:text-3xl 2xl:text-4xl">Account Setings</h1>
+    <h1 className="font-bold sm:text-2xl md:text-3xl 2xl:text-4xl">Account Setings</h1>
       <div>
         <button onClick={() => router.back()} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
         <BsChevronLeft/>
@@ -27,8 +29,8 @@ export default function AccountSettings() {
 
               </div>
                 <div>
-                  <h1 className="2xl:text-4xl lg:text-3xl md:text-2xl font-bold">Melih Yardım</h1>
-                  <h2 className='text-light text-[--highlight] 2xl:text-lg lg:text-base text-sm'>melihyardim1057@gmail.com</h2>
+                  <h1 className="2xl:text-4xl lg:text-3xl md:text-2xl font-bold">{userName ? userName : 'loading...'}</h1>
+                  <h2 className='text-light text-[--highlight] 2xl:text-lg lg:text-base text-sm'>{user ? user?.email : "loading..."}</h2>
                 </div>
               </div>
 
@@ -40,23 +42,28 @@ export default function AccountSettings() {
             </div>
           </div>
           <hr className='border-[--border]'/>
-          <div className='flex flex-col md:mt-6 2xl:mt-16 md:text-2xl 2xl:text-3xl font-semibold gap-2'>
-            <div className="2xl:mb-8 md:mb-4 gap-2 flex flex-col">
+          <div className='flex flex-col md:mt-6 mt-6 2xl:mt-16 md:text-2xl 2xl:text-3xl font-semibold gap-2'>
+            <div className="2xl:mb-8 mb-4 gap-2 flex flex-col">
               <h1>Display Name</h1>
-              <Input className="font-normal text-lg" type='text'/>
+              <div className="flex-col flex md:flex-row gap-3">
+                <Input className="font-normal text-lg" type='text' placeholder={userName ? userName : 'loading...'}/>
+                <Button className='lg:font-semibold 2x:text-lg md:text-base gap-3 md:max-w-[25%]'>
+                  Update
+                </Button>
+              </div>
             </div>
 
-            <div className="2xl:mb-8 md:mb-4 gap-2 flex flex-col">
+            <div className="2xl:mb-8 mb-4 gap-2 flex flex-col">
               <h1>Email</h1>
-              <p className='text-[--highlight] lg:text-xl'>melihyardim1057@gmail.com</p>
+              <p className='text-[--highlight] lg:text-xl'>{user ? user?.email : "loading..."}</p>
             </div>
 
-            <div className="2xl:mb-8 md:mb-4 mb-0 gap-2 flex flex-col w-64 2xl:h-32 h-[6.7rem]">
+            <div className="2xl:mb-8 lg:mb-4 mb-0 gap-2 flex flex-col w-64 2xl:h-32">
               <h1>Password</h1>
               <Button className='font-normal text-base lg:text-lg'>Change Password</Button>
             </div>
 
-            <div className="md:w-40 items-center justify-center lg:hidden">
+            <div className="md:w-40 items-center justify-center lg:hidden mt-6 mb-3">
               <Button className='bg-red-600 hover:bg-red-500 font-normal 2x:text-lg md:text-base hover:ring-2 ring-white/20 duration-200'>
                 Log Out
                 <BiLogOut/>
