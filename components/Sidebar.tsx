@@ -61,7 +61,7 @@ const Sidebar = () => {
     }, [loading, user]);
     
     return (
-      <div className='fixed left-0 h-full min-h-screen justify-center p-1 items-center w-[15rem] bg-transparent border-[--border] border-r text-white'>
+      <div className='fixed left-0 h-full min-h-screen justify-center p-1 items-center w-[15rem] bg-transparent border-[--border] border-r text-white sm:block hidden'>
         <div className="px-3 py-2 flex-1">
           <Link href="/dashboard" className="flex items-center text-center ml-4 mb-6">
             <h1
