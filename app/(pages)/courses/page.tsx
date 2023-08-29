@@ -1,3 +1,5 @@
+import { FiDownload } from 'react-icons/fi'
+
 export default function Courses() {
     const iframeTitle = "AE - Episode 1"; 
 
@@ -14,7 +16,7 @@ export default function Courses() {
                     </iframe>
                 </div>
                 <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-semibold mt-4">{iframeTitle}</h1>
+                <h1 className="text-3xl font-semibold mt-6">{iframeTitle}</h1>
                 <p className="font-light">The After Effects UI</p>
 
 
@@ -22,21 +24,12 @@ export default function Courses() {
                 <h1 className="text-xl mt-8">Resources</h1>
                     <div className="max-w-[80%] max-h-[20rem] gap-2 flex"> {/* resources section */}
                         <div className="bg-white/5 rounded-lg p-2 flex gap-3">
-                            <div className="bg-white/5 rounded-lg h-32 w-32 items-center justify-center flex">
-                                <h1> Test </h1>
-                            </div>
-                            <div className="bg-white/5 rounded-lg h-32 w-32 items-center justify-center flex">
-                                <h1> Test </h1>
-                            </div>
-                            <div className="bg-white/5 rounded-lg h-32 w-32 items-center justify-center flex">
-                                <h1> Wigga </h1>
-                            </div>
-                            <div className="bg-white/5 rounded-lg h-32 w-32 items-center justify-center flex">
-                                <h1> Test </h1>
-                            </div>
-                            <div className="bg-white/5 rounded-lg h-32 w-32 items-center justify-center flex">
-                                <h1> Test </h1>
-                            </div>
+                        <div className="bg-white/5 rounded-lg h-32 w-32 items-center justify-center flex group hover:cursor-pointer">
+                                    <h1 className="group-hover:hidden">Test</h1>
+                                    <div className='hidden group-hover:flex w-full h-full text-center items-center justify-center transition-all hover:bg-white/5 rounded-lg'>
+                                        <FiDownload size={32} className="w-6 h-6  text-center items-center justify-center text-white" />
+                                    </div>
+                        </div>
                         </div>
                     </div>
                 </div>
