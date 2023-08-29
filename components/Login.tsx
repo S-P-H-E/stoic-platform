@@ -160,6 +160,10 @@ export default function Login() {
         </div>
 
         <div>
+            <h1 className='text-lg font-medium'>Username</h1>
+            <Input type='email' placeholder="Enter your username here" eye={false} onchange={(event: any) => setRegisterEmail(event.target.value)}/>
+        </div>
+        <div>
             <h1 className='text-lg font-medium'>Email</h1>
             <Input type='email' placeholder="Enter your email here" eye={false} onchange={(event: any) => setRegisterEmail(event.target.value)}/>
         </div>
