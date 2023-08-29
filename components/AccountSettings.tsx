@@ -13,7 +13,7 @@ export default function AccountSettings() {
   const router = useRouter()
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-fullsm:flex-none">
     <h1 className="font-bold sm:text-2xl md:text-3xl 2xl:text-4xl">Account Setings</h1>
       <div>
         <button onClick={() => router.back()} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
@@ -23,7 +23,7 @@ export default function AccountSettings() {
       </div>
       <div className="border-[--border] border rounded-lg">
         <div className="w-full h-2/6 px-8 md:px-12 py-2">
-          <div className='2xl:p-8 md:p-4 p-4 px-0 flex items-center justify-between gap-4'>
+          <div className='2xl:py-8 md:py-4 py-4 px-0 flex items-center justify-between gap-4'>
             <div className="flex items-center gap-4">
               <div className='rounded-full bg-white 2xl:w-32 2xl:h-32 md:h-24 md:w-24 h-20 w-20'>
 
@@ -34,8 +34,8 @@ export default function AccountSettings() {
                 </div>
               </div>
 
-              <div className="gap-2 lg:flex flex-col 2xl:w-48 md:w-40 h-32 items-center justify-center hidden">
-              <Button className='bg-red-600 hover:bg-red-500 lg:font-semibold 2x:text-lg md:text-base gap-3 hover:ring-2 ring-white/20 duration-200'>
+              <div className="gap-2 lg:flex flex-col lg:w-[25%] md:w-40 h-32 items-center justify-center hidden">
+              <Button className='bg-red-600 hover:bg-red-500 lg:font-semibold 2xl:text-lg md:text-base gap-3 hover:ring-2 ring-white/20 duration-200'>
                 Log Out
                 <BiLogOut/>
               </Button>
