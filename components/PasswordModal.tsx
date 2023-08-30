@@ -41,7 +41,7 @@ export default function PasswordModal({ onClose }: PasswordModalProps) {
       }
     };
   
-    const { userName, user, loading, userId } = UserDataFetcher();
+    const { userName, user, userId } = UserDataFetcher();
     return (
   
         <div className="relative flex flex-col border border-[--border] rounded-lg p-8 bg-black">

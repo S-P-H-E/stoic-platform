@@ -15,7 +15,7 @@ import { message } from 'antd';
 import PasswordModal from './PasswordModal'
 
 export default function AccountSettings() {
-  const { userName, user, loading, userId } = UserDataFetcher();
+  const { userName, user, userId } = UserDataFetcher();
   const router = useRouter()
 
   const [displayName, setDisplayName] = useState("")
