@@ -17,6 +17,7 @@ export function UserDataFetcher() {
       const userRef = collection(db, 'users');
       const q = query(userRef, where('email', '==', user.email));
       
+      
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();

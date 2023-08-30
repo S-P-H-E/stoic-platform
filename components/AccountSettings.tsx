@@ -11,7 +11,8 @@ import { signOut} from 'firebase/auth'
 import { auth } from '@/utils/firebase'
 import { db } from '@/utils/firebase'
 import { doc, updateDoc } from 'firebase/firestore';
-import { updateUserDisplayName } from './../utils/updateUserName';
+import { message } from 'antd';
+import Link from 'next/link'
 
 export default function AccountSettings() {
   const { userName, user, loading, userId } = UserDataFetcher();
@@ -19,20 +20,18 @@ export default function AccountSettings() {
 
   const [displayName, setDisplayName] = useState("")
 
-
   const handleUpdateDisplayName = async () => {
     if (userId && displayName.trim() !== '') {
       try {
         await updateDoc(doc(db, 'users', userId), { name: displayName });
-        console.log('Name updated successfully!');
+        message.success("Display name changed successfully!");
+        setDisplayName('');
       } catch (error) {
-        console.error('Error updating name:', error);
+        message.error("Something went wrong when changing display name");
       }
     }
   };
   
-
-
   return (
     <div className="flex flex-col h-full w-fullsm:flex-none">
     <h1 className="font-bold sm:text-2xl md:text-3xl 2xl:text-4xl">Account Setings</h1>
@@ -56,7 +55,7 @@ export default function AccountSettings() {
               </div>
 
               <div className="gap-2 lg:flex flex-col lg:w-[25%] md:w-40 h-32 items-center justify-center hidden">
-              <Button onClick={() => signOut(auth)} className='bg-red-600 hover:bg-red-500 lg:font-semibold 2xl:text-lg md:text-base gap-3 hover:ring-2 ring-red-500/50 duration-200'>
+              <Button onClick={() => signOut(auth)} className='bg-red-600 hover:bg-red-500 lg:font-semibold 2xl:text-lg md:text-base gap-3 !ring-red-500/50'>
                 Log Out
                 <BiLogOut/>
               </Button>
@@ -67,7 +66,7 @@ export default function AccountSettings() {
             <div className="2xl:mb-8 mb-4 gap-2 flex flex-col">
               <h1>Display Name</h1>
               <div className="flex-col flex md:flex-row gap-3">
-                <Input onchange={(event: any) => setDisplayName(event.target.value)} className="font-normal text-lg" type='text' placeholder={userName ? userName : 'loading...'}/>
+                <Input value={displayName} onChange={(event: any) => setDisplayName(event.target.value)} className="font-normal text-lg" type='text' placeholder={userName ? userName : 'loading...'}/>
                 <Button onClick={handleUpdateDisplayName} className='lg:font-semibold 2x:text-lg md:text-base gap-3 md:max-w-[25%]'>
                   Update
                 </Button>
@@ -81,11 +80,16 @@ export default function AccountSettings() {
 
             <div className="2xl:mb-8 lg:mb-4 mb-0 gap-2 flex flex-col w-64 2xl:h-32">
               <h1>Password</h1>
+              <Link
+                href="/change-password"
+                className="text-sm rounded-lg transition-all bg-slate-700/10 hover:bg-slate-700/20 p-1 hover:p-[7px] no-underline shadow-md"
+              >
               <Button className='font-normal text-base lg:text-lg'>Change Password</Button>
+              </Link>
             </div>
 
             <div className="md:w-40 items-center justify-center lg:hidden mt-6 mb-3">
-              <Button onClick={() => signOut(auth)} className='bg-red-600 hover:bg-red-500 font-normal 2x:text-lg md:text-base hover:ring-2 ring-red-500/50 duration-200'>
+              <Button onClick={() => signOut(auth)} className='bg-red-600 hover:bg-red-500 font-normal 2x:text-lg md:text-base !ring-red-500/50'>
                 Log Out
                 <BiLogOut/>
               </Button>
