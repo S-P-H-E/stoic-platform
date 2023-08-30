@@ -31,9 +31,5 @@ export function UserDataFetcher() {
     }
   }, [user]);
 
-<<<<<<< HEAD
-  return { userName, user, loading, profile };
-=======
   return { userName, user, loading, userId };
->>>>>>> refs/remotes/origin/main
 }
