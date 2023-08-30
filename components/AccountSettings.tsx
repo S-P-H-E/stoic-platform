@@ -1,16 +1,37 @@
 "use client"
 
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 import { BsChevronLeft } from 'react-icons/bs'
 import Input from './Input'
 import Button from './Button'
 import {BiLogOut} from 'react-icons/bi'
 import { UserDataFetcher } from '@/utils/userDataFetcher'
+import { signOut} from 'firebase/auth'
+import { auth } from '@/utils/firebase'
+import { db } from '@/utils/firebase'
+import { doc, updateDoc } from 'firebase/firestore';
+import { updateUserDisplayName } from './../utils/updateUserName';
 
 export default function AccountSettings() {
-  const { userName, user, loading } = UserDataFetcher();
+  const { userName, user, loading, userId } = UserDataFetcher();
   const router = useRouter()
+
+  const [displayName, setDisplayName] = useState("")
+
+
+  const handleUpdateDisplayName = async () => {
+    if (userId && displayName.trim() !== '') {
+      try {
+        await updateDoc(doc(db, 'users', userId), { name: displayName });
+        console.log('Name updated successfully!');
+      } catch (error) {
+        console.error('Error updating name:', error);
+      }
+    }
+  };
+  
+
 
   return (
     <div className="flex flex-col h-full w-fullsm:flex-none">
@@ -25,7 +46,7 @@ export default function AccountSettings() {
         <div className="w-full h-2/6 px-8 md:px-12 py-2">
           <div className='2xl:py-8 md:py-4 py-4 px-0 flex items-center justify-between gap-4'>
             <div className="flex items-center gap-4">
-              <div className='rounded-full bg-white 2xl:w-32 2xl:h-32 md:h-24 md:w-24 h-20 w-20'>
+              <div className='rounded-full bg-white 2xl:w-32 2xl:h-32 md:h-28 md:w-28 h-20 w-20'>
 
               </div>
                 <div>
@@ -35,7 +56,7 @@ export default function AccountSettings() {
               </div>
 
               <div className="gap-2 lg:flex flex-col lg:w-[25%] md:w-40 h-32 items-center justify-center hidden">
-              <Button className='bg-red-600 hover:bg-red-500 lg:font-semibold 2xl:text-lg md:text-base gap-3 hover:ring-2 ring-white/20 duration-200'>
+              <Button onClick={() => signOut(auth)} className='bg-red-600 hover:bg-red-500 lg:font-semibold 2xl:text-lg md:text-base gap-3 hover:ring-2 ring-red-500/50 duration-200'>
                 Log Out
                 <BiLogOut/>
               </Button>
@@ -46,8 +67,8 @@ export default function AccountSettings() {
             <div className="2xl:mb-8 mb-4 gap-2 flex flex-col">
               <h1>Display Name</h1>
               <div className="flex-col flex md:flex-row gap-3">
-                <Input className="font-normal text-lg" type='text' placeholder={userName ? userName : 'loading...'}/>
-                <Button className='lg:font-semibold 2x:text-lg md:text-base gap-3 md:max-w-[25%]'>
+                <Input onchange={(event: any) => setDisplayName(event.target.value)} className="font-normal text-lg" type='text' placeholder={userName ? userName : 'loading...'}/>
+                <Button onClick={handleUpdateDisplayName} className='lg:font-semibold 2x:text-lg md:text-base gap-3 md:max-w-[25%]'>
                   Update
                 </Button>
               </div>
@@ -64,7 +85,7 @@ export default function AccountSettings() {
             </div>
 
             <div className="md:w-40 items-center justify-center lg:hidden mt-6 mb-3">
-              <Button className='bg-red-600 hover:bg-red-500 font-normal 2x:text-lg md:text-base hover:ring-2 ring-white/20 duration-200'>
+              <Button onClick={() => signOut(auth)} className='bg-red-600 hover:bg-red-500 font-normal 2x:text-lg md:text-base hover:ring-2 ring-red-500/50 duration-200'>
                 Log Out
                 <BiLogOut/>
               </Button>
