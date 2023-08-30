@@ -13,7 +13,7 @@ export default function Dashboard() {
         <h1 className='text-2xl font-bold'>Dashboard</h1>
       </div>
       <div className="flex flex-col">
-        <p>Welcome,</p>{user?.displayName}
+        <p>Welcome,{user?.displayName}</p>
         <p>Your email address:{user?.email}</p>
       </div>
     </div>
