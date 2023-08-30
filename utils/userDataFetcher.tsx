@@ -8,6 +8,7 @@ import { auth, db } from '@/utils/firebase';
 export function UserDataFetcher() {
   const [user, loading] = useAuthState(auth);
   const [userName, setUserName] = useState(null);
+  const [profile, setProfile] = useState()
 
   const [userId, setUserId] = useState<string | null>(null); // Explicitly define the type
 
@@ -30,5 +31,9 @@ export function UserDataFetcher() {
     }
   }, [user]);
 
+<<<<<<< HEAD
+  return { userName, user, loading, profile };
+=======
   return { userName, user, loading, userId };
+>>>>>>> refs/remotes/origin/main
 }

@@ -4,7 +4,7 @@ export default function Courses() {
     const iframeTitle = "AE - Episode 1"; 
 
     return (
-        <div className='h-screen flex flex-col ml-[14rem]'>
+        <div className='h-screen flex flex-col md:ml-[14rem]'>
             <div className="p-14 pt-8">{/* video container */}
                 <div className="group w-[80%] pb-[45.1%] rounded-lg relative flex flex-col items-start justify-start"> {/* video player */}
                     <iframe 
