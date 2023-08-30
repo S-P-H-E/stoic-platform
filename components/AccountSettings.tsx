@@ -13,7 +13,7 @@ export default function AccountSettings() {
   const router = useRouter()
 
   return (
-    <div className="flex flex-col h-full w-fullsm:flex-none">
+    <div className="flex flex-col h-full w-full sm:flex-none">
     <h1 className="font-bold sm:text-2xl md:text-3xl 2xl:text-4xl">Account Setings</h1>
       <div>
         <button onClick={() => router.back()} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">

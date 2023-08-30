@@ -8,6 +8,7 @@ import { collection, query, getDocs, where } from 'firebase/firestore';
 export function UserDataFetcher() {
   const [user, loading] = useAuthState(auth);
   const [userName, setUserName] = useState(null);
+  const [profile, setProfile] = useState()
 
   useEffect(() => {
     if (user) {
@@ -22,5 +23,5 @@ export function UserDataFetcher() {
     }
   }, [user]);
 
-  return { userName, user, loading };
+  return { userName, user, loading, profile };
 }
