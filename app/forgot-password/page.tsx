@@ -23,8 +23,6 @@ export default function PasswordReset() {
       setMessage('Error sending password reset email.');
     }
   };
-  
-
 
   return (
     <div className='h-screen flex flex-col ml-[16rem] m-4'>
