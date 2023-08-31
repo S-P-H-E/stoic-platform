@@ -27,13 +27,9 @@ export function UserDataFetcher() {
         }
       });
   
-      return unsubscribe; // Unsubscribe from the listener when component unmounts
+      return unsubscribe;
     }
   }, [user]);
 
-<<<<<<< HEAD
-  return { userName, user, loading, profile };
-=======
   return { userName, user, loading, userId };
->>>>>>> refs/remotes/origin/main
 }
