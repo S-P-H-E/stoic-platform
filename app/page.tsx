@@ -29,7 +29,7 @@ export default function Home() {
     router.push('/dashboard')
     return (
       <main className='h-screen flex flex-col justify-center items-center text-2xl'>
-        <h3>You are already logged in</h3>
+        <h3>You are logged in</h3>
         <div className='text-lg flex gap-2 items-center justify-center text-[--highlight]'>
           <p>Returning to dashboard</p>
           <BiLoader className="animate-spin" />
