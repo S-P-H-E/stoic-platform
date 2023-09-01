@@ -12,13 +12,18 @@ import { auth } from '@/utils/firebase'
 import { db } from '@/utils/firebase'
 import { doc, updateDoc } from 'firebase/firestore';
 import { message } from 'antd';
-import Link from 'next/link'
+import PasswordModal from './PasswordModal'
 
 export default function AccountSettings() {
-  const { userName, user, loading, userId } = UserDataFetcher();
+  const { userName, user, userId } = UserDataFetcher();
   const router = useRouter()
 
   const [displayName, setDisplayName] = useState("")
+  const [MenuOpen, setMenuOpen] = useState(false)
+
+  const closePasswordModal = () => {
+    setMenuOpen(false);
+  };
 
   const handleUpdateDisplayName = async () => {
     if (userId && displayName.trim() !== '') {
@@ -34,6 +39,14 @@ export default function AccountSettings() {
   
   return (
     <div className="flex flex-col h-full w-full sm:flex-none">
+    {MenuOpen && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div>
+                    <PasswordModal onClose={closePasswordModal}/>
+                </div>
+              </div>
+            )}
+
     <h1 className="font-bold sm:text-2xl md:text-3xl 2xl:text-4xl">Account Setings</h1>
       <div>
         <button onClick={() => router.back()} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
@@ -73,6 +86,8 @@ export default function AccountSettings() {
               </div>
             </div>
 
+
+
             <div className="2xl:mb-8 mb-4 gap-2 flex flex-col">
               <h1>Email</h1>
               <p className='text-[--highlight] lg:text-xl'>{user ? user?.email : "loading..."}</p>
@@ -80,12 +95,7 @@ export default function AccountSettings() {
 
             <div className="2xl:mb-8 lg:mb-4 mb-0 gap-2 flex flex-col w-64 2xl:h-32">
               <h1>Password</h1>
-              <Link
-                href="/change-password"
-                className="text-sm rounded-lg transition-all bg-slate-700/10 hover:bg-slate-700/20 p-1 hover:p-[7px] no-underline shadow-md"
-              >
-              <Button className='font-normal text-base lg:text-lg'>Change Password</Button>
-              </Link>
+              <Button onClick={() => setMenuOpen(true)} className='font-normal text-base lg:text-lg'>Change Password</Button>
             </div>
 
             <div className="md:w-40 items-center justify-center lg:hidden mt-6 mb-3">
