@@ -51,12 +51,12 @@ export default function Search(){
       }
     };
 
-    const handleInputKeyPress = (e) => {
-    if (e.key === 'Enter') {
-        e.preventDefault(); // Prevent the default behavior of the Enter key (submitting a form)
-        handleSubmit(); // Call handleSubmit when Enter key is pressed
-    }
-    };
+    const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // Prevent the default behavior of the Enter key (submitting a form)
+          handleSubmit(); // Call handleSubmit when Enter key is pressed
+        }
+      };
 
     return(
         <Dialog>
