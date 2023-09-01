@@ -23,9 +23,9 @@ export default function Search(){
     const [conversation, setConversation] = useState([]);
     const [loading, setLoading] = useState(false); // Add loading state
   
-    const handleInputChange = (e) => {
-      setInput(e.target.value);
-    };
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInput(e.target.value);
+      };
   
     const handleSubmit = async () => {
       try {
@@ -39,9 +39,12 @@ export default function Search(){
         });
   
         const modelResponse = completion.choices[0].message.content;
-        setResponse(modelResponse);
-        setConversation(updatedConversation); // Update the conversation history
-        setLoading(false); // Set loading back to false when response is received
+
+        if (modelResponse !== null) {
+            setResponse(modelResponse);
+            setConversation(updatedConversation);
+            setLoading(false);
+        }
       } catch (error) {
         console.error('Error:', error);
         setLoading(false); // Set loading to false on error as well
@@ -58,7 +61,9 @@ export default function Search(){
     return(
         <Dialog>
             <DialogTrigger>
-                <AiOutlineMenu size={20} />
+                <div className="hover:bg-[--border] transition p-2 rounded-lg" > {/* just a hover animation delete if u dont like it */}
+                    <AiOutlineMenu size={20}/>
+                </div>
             </DialogTrigger>
             <DialogContent>
                 <div>

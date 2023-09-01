@@ -7,7 +7,7 @@ import React, { useState } from 'react'
 import Input from './Input';
 import Button from './Button';
 import {CgClose} from 'react-icons/cg'
-import { doc, increment, onSnapshot, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 
 interface PasswordModalProps {
   onClose: () => void;
