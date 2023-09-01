@@ -63,7 +63,7 @@ export default function AccountSettings() {
               </div>
                 <div>
                   <h1 className="2xl:text-4xl lg:text-3xl md:text-2xl font-bold">{userName ? userName : 'loading...'}</h1>
-                  <h2 className='text-light text-[--highlight] 2xl:text-lg lg:text-base text-sm'>{user.email ? user?.email : "loading..."}</h2>
+                  <h2 className='text-light text-[--highlight] 2xl:text-lg lg:text-base text-sm'>{userName ? user?.email : "loading..."}</h2>
                 </div>
               </div>
 
@@ -90,7 +90,7 @@ export default function AccountSettings() {
 
             <div className="2xl:mb-8 mb-4 gap-2 flex flex-col">
               <h1>Email</h1>
-              <p className='text-[--highlight] lg:text-xl'>{user.email ? user?.email : "loading..."}</p>
+              <p className='text-[--highlight] lg:text-xl'>{userName ? user?.email : "loading..."}</p>
             </div>
 
             <div className="2xl:mb-8 lg:mb-4 mb-0 gap-2 flex flex-col w-64 2xl:h-32">
