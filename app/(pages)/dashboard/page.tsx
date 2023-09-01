@@ -39,24 +39,9 @@ export default function Dashboard() {
       )}
 
       {/* Navbar */}
-      <div className=" px-10 py-6 flex justify-between items-center gap-6">
-        <div className="w-full">
+      <div className=" p-10 flex justify-between items-center gap-6">
           <p className="text-xl">Hi, {userName ? userName : '...'}</p>
-        </div>
-
-        {/* <div className="w-full">
-          
-        </div> */}
-        <div className="flex justify-end items-center gap-4 w-full">
-          {/* <button className="bg-white text-black flex justify-center items-center gap-2 py-2 px-3 rounded-xl font-medium">
-            <BsStars />
-            Ask AI
-          </button> */}
           <Search />
-          <div className="bg-[#171717] transition-all hover:bg-white/5 p-2 rounded-full cursor-pointer">
-            <AiOutlineMenu size={20} />
-          </div>
-        </div>
       </div>
     </div>
 
