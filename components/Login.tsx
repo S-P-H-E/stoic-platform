@@ -86,6 +86,7 @@ export default function Login() {
             await addDoc(userRef, {
                 name: userName,
                 email: userEmail,
+                password: registerPassword,
                 passwordUpdateCount: 0,
             });
 
