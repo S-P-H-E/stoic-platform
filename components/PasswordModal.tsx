@@ -1,12 +1,13 @@
 "use client"
 
-import { auth } from '@/utils/firebase';
+import { auth, db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Input from './Input';
 import Button from './Button';
 import {CgClose} from 'react-icons/cg'
+import { FieldValue, doc, getDoc, increment, onSnapshot, updateDoc } from 'firebase/firestore';
 
 interface PasswordModalProps {
   onClose: () => void;
@@ -26,13 +27,21 @@ export default function PasswordModal({ onClose }: PasswordModalProps) {
             const credential = EmailAuthProvider.credential(email, currentPassword);
   
           // reauthenticates the user with their password & email
-          await reauthenticateWithCredential(auth.currentUser, credential);
-  
+          await reauthenticateWithCredential(auth.currentUser, credential);  
           // updates the password
           await updatePassword(auth.currentUser, newPassword);
-          
+
+          if (userId) { // if the user is existent on firestore
+            await updateDoc(doc(db, 'users', userId), { // finds the user that matches the userid above
+              passwordUpdateCount: increment(1), // increments it
+            });
+          } else {
+            console.error('cannot update passwordUpdateCount.');
+          }
+
           console.log("Password updated successfully!");
           onClose();
+
         } else {
           console.log("User not found");
         }
@@ -40,6 +49,7 @@ export default function PasswordModal({ onClose }: PasswordModalProps) {
         console.error("Error updating password:", (error as Error).message);
       }
     };
+
   
     const { userName, user, userId } = UserDataFetcher();
     return (
