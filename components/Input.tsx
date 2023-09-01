@@ -1,7 +1,6 @@
 "use client"
 
-import React, { ReactElement, useState } from 'react';
-import type { IconType } from 'react-icons';
+import React, { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs'
 
 

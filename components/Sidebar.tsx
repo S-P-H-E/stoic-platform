@@ -10,12 +10,10 @@ import { BiMessageAlt } from 'react-icons/bi';
 import { RiSettings3Line } from 'react-icons/ri';
 import { BiBook } from 'react-icons/bi';
 import { VscLibrary } from 'react-icons/vsc';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/utils/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '@/utils/firebase';
 
 const montserrat = Montserrat({ weight: '600', subsets: ['latin'] });
 
@@ -52,13 +50,12 @@ const Sidebar = () => {
 
     const router = useRouter();
     const [user, loading] = useAuthState(auth);
-    const [referralLink, setReferralLink] = useState('');
   
     useEffect(() => {
       if (!loading && !user) {
         router.push('/');
       }
-    }, [loading, user]);
+    }, [loading, user, router]);
     
     return (
       <div className='fixed left-0 h-full min-h-screen justify-center p-1 items-center w-[15rem] bg-transparent border-[--border] border-r text-white sm:block hidden'>
