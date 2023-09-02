@@ -54,6 +54,7 @@ export default function Login() {
           const docRef = await addDoc(userRef, {
             name: res.user.displayName,
             email: res.user.email,
+            status: 'user',
           });
           console.log("Document written with ID:", docRef.id);
         } else {
@@ -88,6 +89,7 @@ export default function Login() {
                 email: userEmail,
                 password: registerPassword,
                 passwordUpdateCount: 0,
+                status: 'user',
             });
 
 
