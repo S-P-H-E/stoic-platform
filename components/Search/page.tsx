@@ -12,6 +12,12 @@ import { YoutubeLogo, MusicNotes, Book, FileArrowDown, Gear } from "@phosphor-ic
 import OpenAI from 'openai';
 import Link from 'next/link';
 
+type Message = {
+    role: string;
+    content: string;
+  };
+  
+
 const openai = new OpenAI({
   apiKey: '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',
   dangerouslyAllowBrowser: true
@@ -20,7 +26,7 @@ const openai = new OpenAI({
 export default function Search(){
     const [input, setInput] = useState('');
     const [response, setResponse] = useState('');
-    const [conversation, setConversation] = useState([]);
+    const [conversation, setConversation] = useState<Message[]>([]);
     const [loading, setLoading] = useState(false); // Add loading state
   
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
