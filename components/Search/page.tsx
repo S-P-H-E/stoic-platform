@@ -16,10 +16,9 @@ type Message = {
     role: string;
     content: string;
   };
-  
 
 const openai = new OpenAI({
-  apiKey: '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',
+  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
   dangerouslyAllowBrowser: true
 });
 
