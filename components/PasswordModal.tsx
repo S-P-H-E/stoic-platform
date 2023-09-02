@@ -77,8 +77,8 @@ export default function PasswordModal({ onClose }: PasswordModalProps) {
           <h1 className='text-2xl font-bold mb-4 pt-2 text-center'>Change Password</h1>
             <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-2 mb-4">
-            <Input eye={true} type="password" placeholder="Type your old password" onChange={(event: any) => setCurrentPassword(event.target.value)}/>
-            <Input eye={true} type="password" placeholder="Type your new password" onChange={(event: any) => setNewPassword(event.target.value)}/>
+            <Input eye={true} type="password" placeholder="Type your old password" onChange={(event: React.ChangeEvent<HTMLInputElement>) => setCurrentPassword(event.target.value)}/>
+            <Input eye={true} type="password" placeholder="Type your new password" onChange={(event: React.ChangeEvent<HTMLInputElement>) => setNewPassword(event.target.value)}/>
             </div>
             <Button onClick={handleSubmit}>Set your password</Button>
         </div>

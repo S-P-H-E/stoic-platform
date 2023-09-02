@@ -105,7 +105,7 @@ export default function AccountSettings() {
             <div className="2xl:mb-8 mb-4 gap-2 flex flex-col">
               <h1>Display Name</h1>
               <div className="flex-col flex md:flex-row gap-3">
-                <Input value={displayName} onChange={(event: any) => setDisplayName(event.target.value)} className="font-normal text-lg" type='text' placeholder={userName ? userName : 'loading...'}/>
+                <Input value={displayName} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setDisplayName(event.target.value)} className="font-normal text-lg" type='text' placeholder={userName ? userName : 'loading...'}/>
                 <Button onClick={handleUpdateDisplayName} className='lg:font-semibold 2x:text-lg md:text-base gap-3 md:max-w-[25%]'>
                   Update
                 </Button>

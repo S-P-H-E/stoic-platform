@@ -148,11 +148,11 @@ export default function Login() {
 
         <div>
             <h1 className='text-lg font-medium'>Email</h1>
-            <Input value={registerEmail} type='email' placeholder="Enter your email here" eye={false} onChange={(event: any) => setRegisterEmail(event.target.value)}/>
+            <Input value={registerEmail} type='email' placeholder="Enter your email here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterEmail(event.target.value)}/>
         </div>
         <div>
             <h1 className='text-lg font-medium'>Password</h1>
-            <Input value={registerPassword} type='password' placeholder="Enter your password here" eye={true} onChange={(event: any) => setRegisterPassword(event.target.value)}/>
+            <Input value={registerPassword} type='password' placeholder="Enter your password here" eye={true} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterPassword(event.target.value)}/>
         </div>
         <Button onClick={login}>Sign In</Button>
         <p className='text-sm text-stone-400 gap-1 flex'>Dont have an account?<button className='text-sm text-stone-400 underline hover:text-stone-100 transition' onClick={changeForm}>Register</button></p>
@@ -177,15 +177,15 @@ export default function Login() {
 
         <div>
             <h1 className='text-lg font-medium'>Username</h1>
-            <Input value={registerName} type='text' placeholder="Enter your username here" eye={false} onChange={(event: any) => setRegisterName(event.target.value)}/>
+            <Input value={registerName} type='text' placeholder="Enter your username here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterName(event.target.value)}/>
         </div>
         <div>
             <h1 className='text-lg font-medium'>Email</h1>
-            <Input value={registerEmail} type='email' placeholder="Enter your email here" eye={false} onChange={(event: any) => setRegisterEmail(event.target.value)}/>
+            <Input value={registerEmail} type='email' placeholder="Enter your email here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterEmail(event.target.value)}/>
         </div>
         <div>
             <h1 className='text-lg font-medium'>Password</h1>
-            <Input value={registerPassword} type='password' placeholder="Enter your password here" eye={true} onChange={(event: any) => setRegisterPassword(event.target.value)}/>
+            <Input value={registerPassword} type='password' placeholder="Enter your password here" eye={true} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterPassword(event.target.value)}/>
         </div>
         <Button onClick={register}>Sign Up</Button>
         <p className='text-sm text-stone-400 gap-1 flex'>Already have an account?<button className='hover:text-stone-100 transition text-sm text-stone-400 underline' onClick={changeForm}>Login</button></p>

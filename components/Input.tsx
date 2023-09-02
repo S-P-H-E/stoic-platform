@@ -9,7 +9,7 @@ interface InputProps {
     className?: string;
     type: string;
     eye?: boolean;
-    onChange?: any;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     value?: string;
   }
 
