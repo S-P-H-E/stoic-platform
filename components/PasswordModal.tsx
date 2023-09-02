@@ -1,12 +1,13 @@
 "use client"
 
-import { auth } from '@/utils/firebase';
+import { auth, db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
 import React, { useState } from 'react'
 import Input from './Input';
 import Button from './Button';
 import {CgClose} from 'react-icons/cg'
+import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 
 interface PasswordModalProps {
   onClose: () => void;
@@ -26,13 +27,36 @@ export default function PasswordModal({ onClose }: PasswordModalProps) {
             const credential = EmailAuthProvider.credential(email, currentPassword);
   
           // reauthenticates the user with their password & email
-          await reauthenticateWithCredential(auth.currentUser, credential);
-  
+          await reauthenticateWithCredential(auth.currentUser, credential);  
           // updates the password
           await updatePassword(auth.currentUser, newPassword);
-          
+
+
+          let updated = false; 
+          if (userId && !updated) {
+            const userDocRef = doc(db, 'users', userId);
+            const unsubscribe = onSnapshot(userDocRef, (snapshot) => {
+              if (snapshot.exists()) {
+                // The user document exists, and we haven't updated the count yet
+                if (!updated) {
+                  // Increment the 'passwordUpdateCount' field by 1
+                  const currentCount = snapshot.data().passwordUpdateCount || 0;
+                  updateDoc(userDocRef, {
+                    passwordUpdateCount: currentCount + 1,
+                  });
+                  
+                  updated = true;
+                  unsubscribe();
+                }
+              } else {
+                console.error('User document does not exist.');
+              }
+            });
+          }
+
           console.log("Password updated successfully!");
           onClose();
+
         } else {
           console.log("User not found");
         }
@@ -40,6 +64,7 @@ export default function PasswordModal({ onClose }: PasswordModalProps) {
         console.error("Error updating password:", (error as Error).message);
       }
     };
+
   
     const { userName, user, userId } = UserDataFetcher();
     return (

@@ -83,9 +83,11 @@ export default function Login() {
             const userName = registerName;
 
             const userRef = collection(db, "users");
-            const docRef = await addDoc(userRef, {
+            await addDoc(userRef, {
                 name: userName,
                 email: userEmail,
+                password: registerPassword,
+                passwordUpdateCount: 0,
             });
 
 

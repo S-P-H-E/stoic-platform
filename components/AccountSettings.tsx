@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsChevronLeft } from 'react-icons/bs'
 import Input from './Input'
 import Button from './Button'
@@ -10,7 +10,7 @@ import { UserDataFetcher } from '@/utils/userDataFetcher'
 import { signOut} from 'firebase/auth'
 import { auth } from '@/utils/firebase'
 import { db } from '@/utils/firebase'
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { message } from 'antd';
 import PasswordModal from './PasswordModal'
 
@@ -20,6 +20,8 @@ export default function AccountSettings() {
 
   const [displayName, setDisplayName] = useState("")
   const [MenuOpen, setMenuOpen] = useState(false)
+  
+  const [hasPassword, setHasPassword] = useState(false);
 
   const closePasswordModal = () => {
     setMenuOpen(false);
@@ -36,6 +38,30 @@ export default function AccountSettings() {
       }
     }
   };
+
+  useEffect(() => {
+    async function checkPasswordField() {
+      if (userId) {
+        const userDocRef = doc(db, 'users', userId);
+
+        try {
+          const docSnapshot = await getDoc(userDocRef);
+          if (docSnapshot.exists()) {
+            const userData = docSnapshot.data();
+            // Check if the user has a password field in Firestore
+            if (userData.password) {
+              setHasPassword(true);
+            }
+          }
+        } catch (error) {
+          console.error('Error checking password field:', error);
+        }
+      }
+    }
+
+    checkPasswordField();
+  }, [userId]);
+
   
   return (
     <div className="flex flex-col h-full w-full sm:flex-none">
@@ -93,10 +119,13 @@ export default function AccountSettings() {
               <p className='text-[--highlight] lg:text-xl'>{userName ? user?.email : "loading..."}</p>
             </div>
 
-            <div className="2xl:mb-8 lg:mb-4 mb-0 gap-2 flex flex-col w-64 2xl:h-32">
-              <h1>Password</h1>
-              <Button onClick={() => setMenuOpen(true)} className='font-normal text-base lg:text-lg'>Change Password</Button>
-            </div>
+            { hasPassword &&
+              <div className="2xl:mb-8 lg:mb-4 mb-0 gap-2 flex flex-col w-64 2xl:h-32">
+                <h1>Password</h1>
+                <Button onClick={() => setMenuOpen(true)} className='font-normal text-base lg:text-lg'>Change Password</Button>
+              </div>
+            }
+
 
             <div className="md:w-40 items-center justify-center lg:hidden mt-6 mb-3">
               <Button onClick={() => signOut(auth)} className='bg-red-600 hover:bg-red-500 font-normal 2x:text-lg md:text-base !ring-red-500/50'>
