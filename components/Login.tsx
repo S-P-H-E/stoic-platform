@@ -12,6 +12,8 @@ import { AiOutlineGoogle } from 'react-icons/ai'
 import { auth, db } from '@/utils/firebase'
 import { message } from 'antd';
 import { useRouter } from "next/navigation";
+import { validateEmail, validateNameLength, validatePassword } from '@/utils/validation'
+import InputError from './InputError';
 
 export default function Login() {
   const router = useRouter()
@@ -75,8 +77,31 @@ export default function Login() {
 
     const [isLoginMode, setIsLoginMode] = useState(false); // Add this state
 
+    const [passwordErrorUI, setPasswordErrorUI] = useState(false)
 
     const register = async () => {
+      const nameError = validateNameLength(registerName);
+
+      if (nameError) {
+        message.error("Name cannot be longer than 21 characters.")
+        return;
+      }
+
+      const emailError = validateEmail(registerEmail);
+
+      if (emailError) {
+        message.error("Email format is not valid.")
+        return;
+      }
+
+      const passwordError = validatePassword(registerPassword);
+
+      if (passwordError) {
+        message.error("Password must follow the security rules");
+        setPasswordErrorUI(true)
+        return;
+      }
+
         try {
             const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword)
 
@@ -117,11 +142,6 @@ export default function Login() {
           }
     }
 
-
-    const logout = async () => {
-        await signOut(auth)
-    }
-
     // switches between login and register
     const changeForm = () => {
         setIsLoginMode(!isLoginMode);
@@ -129,7 +149,7 @@ export default function Login() {
 
   return (
     <>
-    <div className='flex flex-col gap-6 w-[27rem] border border-[--border] shadow-xl p-7 rounded-xl pb-8'>
+    <div className='mx-2 flex flex-col gap-6 w-[22rem] sm:w-[27rem] border border-[--border] shadow-xl p-7 rounded-xl pb-8'>
     {isLoginMode ? (
     <>
         <div>
@@ -180,14 +200,23 @@ export default function Login() {
         <div>
             <h1 className='text-lg font-medium'>Username</h1>
             <Input value={registerName} type='text' placeholder="Enter your username here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterName(event.target.value)}/>
+            {registerName.length > 21 && (
+              <InputError>Username cannot be longer than 21 digits</InputError>
+            )}
         </div>
         <div>
             <h1 className='text-lg font-medium'>Email</h1>
             <Input value={registerEmail} type='email' placeholder="Enter your email here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterEmail(event.target.value)}/>
+            {registerEmail.length > 80 && (
+                <InputError>Invalid email format</InputError>
+            )}
         </div>
         <div>
             <h1 className='text-lg font-medium'>Password</h1>
             <Input value={registerPassword} type='password' placeholder="Enter your password here" eye={true} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterPassword(event.target.value)}/>
+            {passwordErrorUI &&
+            <InputError>Password must contain at least 8 digits, a number and uppercase</InputError>
+            }
         </div>
         <Button onClick={register}>Sign Up</Button>
         <p className='text-sm text-stone-400 gap-1 flex'>Already have an account?<button className='hover:text-stone-100 transition text-sm text-stone-400 underline' onClick={changeForm}>Login</button></p>
