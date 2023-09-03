@@ -35,16 +35,36 @@ export default function PasswordModal({ onClose }: PasswordModalProps) {
           let updated = false; 
           if (userId && !updated) {
             const userDocRef = doc(db, 'users', userId);
-            const unsubscribe = onSnapshot(userDocRef, (snapshot) => {
+
+            const unsubscribe = onSnapshot(userDocRef, async (snapshot) => {
               if (snapshot.exists()) {
                 // The user document exists, and we haven't updated the count yet
                 if (!updated) {
-                  // Increment the 'passwordUpdateCount' field by 1
+                  const userData = snapshot.data();
+                  const lastUpdateTimestamp = userData.lastPasswordUpdate || 0;
                   const currentCount = snapshot.data().passwordUpdateCount || 0;
-                  updateDoc(userDocRef, {
-                    passwordUpdateCount: currentCount + 1,
-                  });
+
+                  const now = Date.now();
+                  const oneHourInMillis = 60 * 60 * 1000; // 1 hour in milliseconds
                   
+                  if (now - lastUpdateTimestamp >= oneHourInMillis) {
+                    // If it's been more than an hour, reset the count
+                    await updateDoc(userDocRef, {
+                      passwordUpdateCount: 1,
+                      lastPasswordUpdate: now,
+                    });
+                  } else if (currentCount < 3) {
+                    // If within the hour and count is less than 3, allow the update
+                    updateDoc(userDocRef, {
+                      passwordUpdateCount: currentCount + 1,
+                      password: newPassword
+                    });
+                  } else {
+                    // If within the hour and count is 3 or more, deny the update
+                    console.error('Password change rate limit exceeded.');
+                    return;
+                  }
+            
                   updated = true;
                   unsubscribe();
                 }
@@ -77,8 +97,8 @@ export default function PasswordModal({ onClose }: PasswordModalProps) {
           <h1 className='text-2xl font-bold mb-4 pt-2 text-center'>Change Password</h1>
             <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-2 mb-4">
-            <Input eye={true} type="password" placeholder="Type your old password" onChange={(event: any) => setCurrentPassword(event.target.value)}/>
-            <Input eye={true} type="password" placeholder="Type your new password" onChange={(event: any) => setNewPassword(event.target.value)}/>
+            <Input eye={true} type="password" placeholder="Type your old password" onChange={(event: React.ChangeEvent<HTMLInputElement>) => setCurrentPassword(event.target.value)}/>
+            <Input eye={true} type="password" placeholder="Type your new password" onChange={(event: React.ChangeEvent<HTMLInputElement>) => setNewPassword(event.target.value)}/>
             </div>
             <Button onClick={handleSubmit}>Set your password</Button>
         </div>

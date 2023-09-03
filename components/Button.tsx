@@ -1,6 +1,5 @@
 import { FC, ReactNode } from 'react';
-import React, { ReactElement } from 'react';
-import type { IconType } from 'react-icons';
+import React from 'react';
 import clsx from 'clsx'; // Import the clsx library
 
 interface ButtonProps {

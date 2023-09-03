@@ -4,6 +4,7 @@ import { useEffect, useState, ReactNode } from 'react';
 import { collection, query, where, onSnapshot, updateDoc, doc } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '@/utils/firebase';
+import { useRouter } from 'next/navigation';
 
 // custom hook to get userName, userId, and user.email etc.
 export function UserDataFetcher() {
@@ -11,12 +12,14 @@ export function UserDataFetcher() {
   const [userName, setUserName] = useState(null);
   const [userId, setUserId] = useState<string | null>(null);
 
+  const router = useRouter()
+
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         // Things to do when user is authenticated
       } else {
-        // Perform tasks for when the user is not authenticated
+        router.push('/')
       }
     });
 
@@ -39,7 +42,7 @@ export function UserDataFetcher() {
     }
 
     return unsubscribeAuth;
-  }, [user]);
+  }, [user, router]);
 
   return { userName, user, userId, fetching };
 }

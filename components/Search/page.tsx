@@ -9,13 +9,13 @@ import { BsStars } from 'react-icons/bs'
 import { AiOutlineMenu } from "react-icons/ai";
 import { YoutubeLogo, MusicNotes, Book, FileArrowDown, Gear } from "@phosphor-icons/react";
 import Link from 'next/link';
-
 import openai from '@/app/api/GPT';
+
 
 export default function Search(){
     const [input, setInput] = useState('');
     const [response, setResponse] = useState('');
-    const [conversation, setConversation] = useState([]);
+    const [conversation, setConversation] = useState<Message[]>([]);
     const [loading, setLoading] = useState(false); // Add loading state
   
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +69,7 @@ export default function Search(){
                             className="bg-transparent placeholder:text-[#444445] w-full outline-none text-white"
                             value={input}
                             onChange={handleInputChange}
-                            onKeyPress={handleInputKeyPress}
+                            onKeyDown={handleInputKeyPress}
                             />
                     </div>
                     <div className="h-[1px] bg-[#272727] my-1"/>
