@@ -29,6 +29,14 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
 
   const uploadProfilePicture = async () => {
     if (selectedImage && user && userId) {
+      const allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif']; // Add any other allowed image types
+  
+      if (!allowedFileTypes.includes(selectedImage.type)) {
+        // Check if the selected file's MIME type is in the allowed list
+        message.error('Invalid file type. Please select a valid image file.');
+        return; // Abort the upload process if the file type is not allowed
+      }
+  
       try {
         setIsLoading(true); // Set isLoading to true when the upload starts
   
@@ -59,7 +67,7 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
   });
 
   return (
-    <div className="relative py-16 bg-black border-[--border] border flex flex-col gap-2 p-8 rounded-lg text-center">
+    <div className="relative py-12 bg-black border-[--border] border flex flex-col gap-2 p-8 rounded-lg text-center">
       <button className='absolute top-4 right-4 text-[--highlight] hover:text-white transition cursor-pointer'>
         <CgClose onClick={() => onClose()} size="20"/>
       </button>
