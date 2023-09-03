@@ -64,7 +64,7 @@ export default function Login() {
         }
       } catch (err) {
         message.error("Error signing in");
-        alert(err); // for debug
+        /* alert(err); // for debug */
       }
     };
 
@@ -78,30 +78,42 @@ export default function Login() {
     const [isLoginMode, setIsLoginMode] = useState(false); // Add this state
 
     const [passwordErrorUI, setPasswordErrorUI] = useState(false)
+    const [emailErrorUI, setEmailErrorUI] = useState(false)
+
+    const [loginEmailError, setLoginEmailError] = useState(false);
+    const [loginPasswordError, setLoginPasswordError] = useState(false);
 
     const register = async () => {
+      const validationErrors = [];
+      
       const nameError = validateNameLength(registerName);
-
       if (nameError) {
-        message.error("Name cannot be longer than 21 characters.")
-        return;
-      }
-
+        validationErrors.push("Name cannot be longer than 21 characters.");
+        
+      } 
+    
       const emailError = validateEmail(registerEmail);
-
       if (emailError) {
-        message.error("Email format is not valid.")
-        return;
+        validationErrors.push("Email format is not valid.");
+        setEmailErrorUI(true)
       }
-
+    
       const passwordError = validatePassword(registerPassword);
-
       if (passwordError) {
-        message.error("Password must follow the security rules");
+        validationErrors.push("Password must follow the security rules");
         setPasswordErrorUI(true)
+      }
+    
+      if (validationErrors.length > 0) {
+        // Display all validation errors
+        validationErrors.forEach((error) => {
+          message.error(error);
+        });
+    
+        // Optionally, set state variables like setEmailErrorUI and setPasswordErrorUI to true here if needed.
         return;
       }
-
+      
         try {
             const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword)
 
@@ -113,7 +125,6 @@ export default function Login() {
                 name: userName,
                 email: userEmail,
                 password: registerPassword,
-                passwordUpdateCount: 0,
                 status: 'user',
             });
 
@@ -138,7 +149,14 @@ export default function Login() {
             const firebaseError = error as FirebaseError;
             const errorCode = firebaseError.code as keyof typeof firebaseErrorMessages;
             const errorMessage = firebaseErrorMessages[errorCode] || "An error occurred. Please try again.";
+
             message.error(errorMessage);
+
+            if (errorCode === "auth/invalid-email" || errorCode === "auth/missing-email") {
+              setEmailErrorUI(true);
+            } else if (errorCode === "auth/wrong-password" || errorCode === "auth/missing-password") {
+              setPasswordErrorUI(true);
+            }
           }
     }
 
@@ -171,10 +189,16 @@ export default function Login() {
         <div>
             <h1 className='text-lg font-medium'>Email</h1>
             <Input value={registerEmail} type='email' placeholder="Enter your email here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterEmail(event.target.value)}/>
+            {(registerEmail.length > 80 || emailErrorUI) && (
+                <InputError>Wrong email provided.</InputError>
+            )}
         </div>
         <div>
             <h1 className='text-lg font-medium'>Password</h1>
             <Input value={registerPassword} type='password' placeholder="Enter your password here" eye={true} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterPassword(event.target.value)}/>
+            {passwordErrorUI &&
+            <InputError>Password is not right</InputError>
+            }
         </div>
         <Button onClick={login}>Sign In</Button>
         <p className='text-sm text-stone-400 gap-1 flex'>Dont have an account?<button className='text-sm text-stone-400 underline hover:text-stone-100 transition' onClick={changeForm}>Register</button></p>
@@ -207,7 +231,7 @@ export default function Login() {
         <div>
             <h1 className='text-lg font-medium'>Email</h1>
             <Input value={registerEmail} type='email' placeholder="Enter your email here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterEmail(event.target.value)}/>
-            {registerEmail.length > 80 && (
+            {(registerEmail.length > 80 || emailErrorUI) && (
                 <InputError>Invalid email format</InputError>
             )}
         </div>
