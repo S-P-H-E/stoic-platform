@@ -11,7 +11,7 @@ interface ButtonProps {
 
 const Button: FC<ButtonProps> = ({ onClick, className, children, disabled }) => {
   const buttonClasses = clsx(
-    'flex justify-center items-center gap-1 w-full text-center p-2 px-6 rounded-lg border border-[--border] hover:bg-[--border] transition hover:ring-offset-2 ring-offset-black hover:ring ring-white/10',
+    'flex justify-center items-center gap-1 w-full text-center p-2 px-6 rounded-lg ring-offset-black border border-[--border] transition hover:bg-[--border] hover:ring-offset-2 hover:ring ring-white/10',
     className // Use the additional classes
   );
 

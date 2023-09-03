@@ -1,80 +1,106 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '@/utils/firebase';
-import React from 'react';
 import { message } from 'antd';
 import Button from './Button';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import Image from 'next/image';
 import { updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import {CgClose} from 'react-icons/cg'
+import { CgClose } from 'react-icons/cg';
+import { useDropzone } from 'react-dropzone'; // Import useDropzone
 
 interface PasswordModalProps {
   onClose: () => void;
 }
 
-export default function ProfilePhotoUplaod({ onClose }: PasswordModalProps) {
+type Accept = string | string[];
+
+export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { user, userId } = UserDataFetcher();
+
+  const onFileSelected = useCallback((file: File) => {
+    setSelectedImage(file);
+  }, []);
 
   const uploadProfilePicture = async () => {
     if (selectedImage && user && userId) {
       try {
+        setIsLoading(true); // Set isLoading to true when the upload starts
+  
         const storageRef = ref(storage, `profilePictures/${userId}`);
         await uploadBytes(storageRef, selectedImage);
-
+  
         const imageUrl = await getDownloadURL(storageRef);
         setProfileImageUrl(imageUrl);
         await updateProfile(user, { photoURL: imageUrl });
-        
-        
+  
         onClose();
         message.success('Profile picture uploaded successfully!');
+  
         const userDocRef = doc(db, 'users', userId);
         await setDoc(userDocRef, { profileImageUrl: imageUrl }, { merge: true });
       } catch (error) {
         console.error('Error uploading profile picture:', error);
         message.error('Failed to upload profile picture.');
+      } finally {
+        setIsLoading(false); // Set isLoading back to false when the upload is complete or encounters an error
       }
     }
   };
 
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: (acceptedFiles) => onFileSelected(acceptedFiles[0]),
+
+  });
+
   return (
     <div className="relative py-16 bg-black border-[--border] border flex flex-col gap-2 p-8 rounded-lg text-center">
-     
-     <button className='absolute top-4 right-4 text-[--highlight] hover:text-white transition cursor-pointer'>
-            <CgClose onClick={() => onClose()} size="20"/>
+      <button className='absolute top-4 right-4 text-[--highlight] hover:text-white transition cursor-pointer'>
+        <CgClose onClick={() => onClose()} size="20"/>
       </button>
 
-      <input
-        type="file"
-        className="bg-transparent border-[--border] text-lg border p-2 rounded-lg text-center"
-        accept="image/*"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) {
-            setSelectedImage(file);
-          }
-        }}
-      />
+      <div
+        {...getRootProps()}
+        className='border-dashed border border-[--border] bg-black p-8 rounded-lg text-center cursor-pointer'
+      >
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <p>Drop the image right here...</p>
+        ) : (
+          <p>Drag an image here, or click to select one</p>
+        )}
+      </div>
+
       {selectedImage ? (
         <>
-        <div className="flex justify-center m-2 items-center flex-col gap-4">
-          <Image
-            alt="Profile picture"
-            src={URL.createObjectURL(selectedImage)} // Display the selected image
-            width={440}
-            height={440}
-            className="border border-[--border] rounded-lg flex"
-          />
-        </div>
-        <Button className="font-normal text-base lg:text-lg" onClick={uploadProfilePicture}>
-        Upload Profile Picture
-      </Button>
-      </>
+          <div className="flex justify-center m-2 items-center flex-col gap-4">
+            <Image
+              alt="Profile picture"
+              src={URL.createObjectURL(selectedImage)} // Display the selected image
+              width={440}
+              height={440}
+              className="border border-[--border] rounded-lg flex"
+            />
+          </div>
+          <Button
+             className={`
+             font-lg text-base lg:text-xl
+             ${
+              isLoading
+                ? 'cursor-not-allowed hover:bg-transparent hover:ring-offset-0 hover:ring-0 text-[--border]'
+                : ''
+            }`}
+            onClick={uploadProfilePicture}
+            disabled={isLoading} // Disable the button when isLoading is true
+          >
+            {isLoading ? 'Uploading...' : 'Upload Profile Picture'}
+          </Button>
+        </>
       ) : null}
     </div>
   );
