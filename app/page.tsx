@@ -4,7 +4,6 @@ import Login from '@/components/Login'
 import { useRouter } from 'next/navigation'
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import Skeleton from '@/components/Skeleton';
-import { useEffect, useState } from 'react';
 import { BiLoader } from 'react-icons/bi';
 
 export default function Home() {
@@ -28,13 +27,13 @@ export default function Home() {
   } else {
     router.push('/dashboard')
     return (
-      <main className='h-screen flex flex-col justify-center items-center text-2xl'>
+      <div className='h-screen flex flex-col justify-center items-center text-2xl'>
         <h3>You are logged in</h3>
         <div className='text-lg flex gap-2 items-center justify-center text-[--highlight]'>
           <p>Returning to dashboard</p>
           <BiLoader className="animate-spin" />
         </div>
-      </main>
+      </div>
   )}
 
 }

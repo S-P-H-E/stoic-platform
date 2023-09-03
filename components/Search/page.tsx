@@ -8,19 +8,9 @@ import { BiSearch } from 'react-icons/bi'
 import { BsStars } from 'react-icons/bs'
 import { AiOutlineMenu } from "react-icons/ai";
 import { YoutubeLogo, MusicNotes, Book, FileArrowDown, Gear } from "@phosphor-icons/react";
-
-import OpenAI from 'openai';
 import Link from 'next/link';
+import openai from '@/app/api/GPT';
 
-type Message = {
-    role: string;
-    content: string;
-  };
-
-const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-});
 
 export default function Search(){
     const [input, setInput] = useState('');
