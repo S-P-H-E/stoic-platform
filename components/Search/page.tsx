@@ -10,7 +10,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { YoutubeLogo, MusicNotes, Book, FileArrowDown, Gear } from "@phosphor-icons/react";
 import Link from 'next/link';
 
-import openai from '@/app/api/gpt';
+import openai from '@/app/api/GPT';
 
 export default function Search(){
     const [input, setInput] = useState('');
