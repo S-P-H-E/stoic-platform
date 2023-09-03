@@ -2,14 +2,14 @@
 import { z } from "zod";
 
 // Define validation schemas
-export const nameSchema = z.string().max(21);
+export const nameSchema = z.string().min(1).max(21);
 
 export function validateNameLength(name: string) {
   try {
     nameSchema.parse(name);
     return null; // Validation succeeded, return null (no error message)
   } catch (error) {
-    return "Name must be at most 21 characters long"; // Validation failed, return an error message
+    return "Name must be at least 1 character and at most 21 characters long"; // Validation failed, return an error message
   }
 }
 

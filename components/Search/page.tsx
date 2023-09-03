@@ -79,7 +79,7 @@ export default function Search(){
                             className="bg-transparent placeholder:text-[#444445] w-full outline-none text-white"
                             value={input}
                             onChange={handleInputChange}
-                            onKeyPress={handleInputKeyPress}
+                            onKeyDown={handleInputKeyPress}
                             />
                     </div>
                     <div className="h-[1px] bg-[#272727] my-1"/>

@@ -17,7 +17,6 @@ interface InputProps {
     const [toggle, setToggle] = useState(true)
     const [inputFocused, setInputFocused] = useState(false);
 
-
     const handleInputFocus = () => {
       setInputFocused(true);
     };
@@ -37,7 +36,8 @@ interface InputProps {
     return (
       <div className={`duration-200 transition-all flex border p-2 rounded-lg w-full ${borderClassName}`}>
         <input value={value} type={inputType} onChange={onChange} className={`bg-transparent items-center focus:border-white-60 w-full placeholder:text-[--highlight] outline-none ${className}`}
-          placeholder={placeholder} autoComplete="new-password" onFocus={handleInputFocus} onBlur={handleInputBlur} />
+          placeholder={placeholder} autoComplete="new-password" onFocus={handleInputFocus} onBlur={handleInputBlur}   
+          />
 
         {eye ? (
           <button onClick={toggleVisibility} className='text-[--highlight] hover:text-white transition'>

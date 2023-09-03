@@ -7,13 +7,13 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useState } from 'react'
 import Input from './Input'
 import Button from './Button'
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { AiOutlineGoogle } from 'react-icons/ai'
 import { auth, db } from '@/utils/firebase'
 import { message } from 'antd';
 import { useRouter } from "next/navigation";
 import { validateEmail, validateNameLength, validatePassword } from '@/utils/validation'
-import InputError from './InputError';
+import InputResponse from './InputResponse';
 
 export default function Login() {
   const router = useRouter()
@@ -79,18 +79,16 @@ export default function Login() {
 
     const [passwordErrorUI, setPasswordErrorUI] = useState(false)
     const [emailErrorUI, setEmailErrorUI] = useState(false)
-
-    const [loginEmailError, setLoginEmailError] = useState(false);
-    const [loginPasswordError, setLoginPasswordError] = useState(false);
+    const [nameErrorUI, setNameErrorUI] = useState(false)
 
     const register = async () => {
       const validationErrors = [];
       
       const nameError = validateNameLength(registerName);
       if (nameError) {
-        validationErrors.push("Name cannot be longer than 21 characters.");
-        
-      } 
+        validationErrors.push("Name cannot be empty or longer than 21 characters.");
+        setNameErrorUI(true)
+      }
     
       const emailError = validateEmail(registerEmail);
       if (emailError) {
@@ -163,6 +161,10 @@ export default function Login() {
     // switches between login and register
     const changeForm = () => {
         setIsLoginMode(!isLoginMode);
+
+        setNameErrorUI(false);
+        setPasswordErrorUI(false);
+        setEmailErrorUI(false)
     }
 
   return (
@@ -190,14 +192,14 @@ export default function Login() {
             <h1 className='text-lg font-medium'>Email</h1>
             <Input value={registerEmail} type='email' placeholder="Enter your email here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterEmail(event.target.value)}/>
             {(registerEmail.length > 80 || emailErrorUI) && (
-                <InputError>Wrong email provided.</InputError>
+                <InputResponse>Wrong email provided.</InputResponse>
             )}
         </div>
         <div>
             <h1 className='text-lg font-medium'>Password</h1>
             <Input value={registerPassword} type='password' placeholder="Enter your password here" eye={true} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterPassword(event.target.value)}/>
             {passwordErrorUI &&
-            <InputError>Password is not right</InputError>
+            <InputResponse>Password is not right.</InputResponse>
             }
         </div>
         <Button onClick={login}>Sign In</Button>
@@ -224,22 +226,22 @@ export default function Login() {
         <div>
             <h1 className='text-lg font-medium'>Username</h1>
             <Input value={registerName} type='text' placeholder="Enter your username here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterName(event.target.value)}/>
-            {registerName.length > 21 && (
-              <InputError>Username cannot be longer than 21 digits</InputError>
+            {(registerName.length > 21 || nameErrorUI) && (
+                <InputResponse>Name cannot be empty or longer than 21 characters.</InputResponse>
             )}
         </div>
         <div>
             <h1 className='text-lg font-medium'>Email</h1>
             <Input value={registerEmail} type='email' placeholder="Enter your email here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterEmail(event.target.value)}/>
             {(registerEmail.length > 80 || emailErrorUI) && (
-                <InputError>Invalid email format</InputError>
+                <InputResponse>Invalid email format.</InputResponse>
             )}
         </div>
         <div>
             <h1 className='text-lg font-medium'>Password</h1>
             <Input value={registerPassword} type='password' placeholder="Enter your password here" eye={true} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterPassword(event.target.value)}/>
             {passwordErrorUI &&
-            <InputError>Password must contain at least 8 digits, a number and uppercase</InputError>
+            <InputResponse>Password must contain at least 8 digits, a number and uppercase.</InputResponse>
             }
         </div>
         <Button onClick={register}>Sign Up</Button>

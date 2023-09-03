@@ -13,6 +13,8 @@ import { db } from '@/utils/firebase'
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { message } from 'antd';
 import PasswordModal from './PasswordModal'
+import ProfilePhotoUplaod from './ProfilePhotoUplaod'
+import UserImage from './UserImage'
 
 export default function AccountSettings() {
   const { userName, user, userId } = UserDataFetcher();
@@ -20,12 +22,17 @@ export default function AccountSettings() {
 
   const [displayName, setDisplayName] = useState("")
   const [MenuOpen, setMenuOpen] = useState(false)
+  const [imgMenuOpen, setImgMenuOpen] = useState(false)
   
   const [hasPassword, setHasPassword] = useState(false);
 
   const closePasswordModal = () => {
     setMenuOpen(false);
   };
+
+  const closeImageModal = () => {
+    setImgMenuOpen(!imgMenuOpen)
+  }
 
   const handleUpdateDisplayName = async () => {
     if (userId && displayName.trim() !== '') {
@@ -84,8 +91,8 @@ export default function AccountSettings() {
         <div className="w-full h-2/6 px-8 md:px-12 py-2">
           <div className='2xl:py-8 md:py-4 py-4 px-0 flex items-center justify-between gap-4'>
             <div className="flex items-center gap-4">
-              <div className='rounded-full bg-white 2xl:w-32 2xl:h-32 md:h-28 md:w-28 h-20 w-20'>
-
+              <div className='rounded-full bg-transparent 2xl:w-32 2xl:h-32 md:h-28 md:w-28 h-20 w-20'>
+                <UserImage/>
               </div>
                 <div>
                   <h1 className="2xl:text-4xl lg:text-3xl md:text-2xl font-bold">{userName ? userName : 'loading...'}</h1>
@@ -112,15 +119,25 @@ export default function AccountSettings() {
               </div>
             </div>
 
-
-
-            <div className="2xl:mb-8 mb-4 gap-2 flex flex-col">
+            <div className="2xl:mb-6 mb-4 gap-2 flex flex-col">
               <h1>Email</h1>
               <p className='text-[--highlight] lg:text-xl'>{userName ? user?.email : "loading..."}</p>
             </div>
 
+            <div className="2xl:mb-6 lg:mb-4 mb-0 gap-2 flex flex-col w-64 ">
+              <h1>User Image</h1>
+              <Button onClick={() => setImgMenuOpen(!imgMenuOpen)} className='font-normal text-base lg:text-lg'>Update</Button>
+              {imgMenuOpen ?
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div>
+                <ProfilePhotoUplaod onClose={closeImageModal}/>
+              </div>
+            </div>
+              : null}
+            </div>
+
             { hasPassword &&
-              <div className="2xl:mb-8 lg:mb-4 mb-0 gap-2 flex flex-col w-64 2xl:h-32">
+              <div className="2xl:mb-6 lg:mb-4 mb-0 gap-2 flex flex-col w-64">
                 <h1>Password</h1>
                 <Button onClick={() => setMenuOpen(true)} className='font-normal text-base lg:text-lg'>Change Password</Button>
               </div>
