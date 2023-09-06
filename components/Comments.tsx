@@ -4,6 +4,7 @@ import { db, auth } from '@/utils/firebase';
 import { MdDelete } from 'react-icons/md'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { Dropdown } from 'antd';
+import Image from 'next/image';
 
 export default function Comments({ courseId }: { courseId: string }) { // Explicitly define the courseId prop type
   const [comments, setComments] = useState<any[]>([]); // Specify any[] as the initial type
@@ -119,7 +120,7 @@ export default function Comments({ courseId }: { courseId: string }) { // Explic
           <li key={comment.id} className='bg-[#262626] my-4 p-4 rounded-2xl'>
             <div className='flex justify-between items-center'>
               <div className='flex justify-center items-center'>
-                <img src={comment.userProfilePic} alt='Profile' className='w-8 h-8 rounded-full mr-2' />
+                <Image src={comment.userProfilePic} alt="Profile Picture" className='w-8 h-8 rounded-full mr-2'/>
                 <h1 className='text-2xl'>{comment.userName}</h1>
               </div>
               {auth.currentUser && auth.currentUser.uid === comment.userId && (

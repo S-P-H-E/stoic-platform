@@ -3,14 +3,15 @@
 import { useEffect } from 'react';
 import { auth, db } from '@/utils/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { BsArrowLeftShort } from 'react-icons/bs';
 import Lesson from '@/components/Lesson';
 import Head from 'next/head';
 import Comments from '@/components/Comments';
+import { UserDataFetcher } from '@/utils/userDataFetcher';
 
-/* interface Course {
+ interface Course {
   id: string;
   name: string;
   description: string;
@@ -27,19 +28,25 @@ interface LessonData {
 interface CourseLessonsProps {
   course: Course | null;
   lessons: LessonData[];
-} */
+}
 
-export default function CourseLessons({ course, lessons }) {
+export default function CourseLessons({ course, lessons }: CourseLessonsProps) {
   const router = useRouter();
-  const [user, loading] = useAuthState(auth);
+  const searchParams = useSearchParams();
 
+  const { userName, user, userId, fetching } = UserDataFetcher();
+
+/*const [user, loading] = UserDataFetcher; */ // this code always sends to login on refresh for an odd reason so use the upper one instead
+ 
   useEffect(() => {
     if (!user) {
       router.push('/login');
     }
   }, [user, router]);
 
-  const { courseId } = router.query;
+  const courseId = searchParams.get('courseId');
+
+/*const courseId = useSearchParams() */
 
   return (
     <>
@@ -82,7 +89,7 @@ export default function CourseLessons({ course, lessons }) {
                     message={lesson.message} // THIS IS SO GAY
                     link={lesson.link}
                     index={index}
-                    courseId={courseId}
+                    courseId={courseId as string}
                     lessonId={lesson.id}
                   />
                 ))
@@ -93,7 +100,7 @@ export default function CourseLessons({ course, lessons }) {
                 </>
               )}
             </div>
-            <Comments courseId={courseId} />
+            <Comments courseId={courseId as string} />
           </div>
         </div>
       </div>
@@ -101,7 +108,7 @@ export default function CourseLessons({ course, lessons }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: any) {
   try {
     const { courseId } = context.params;
     const courseDocRef = doc(db, 'courses', courseId);
