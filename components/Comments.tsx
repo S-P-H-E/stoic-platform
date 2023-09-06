@@ -7,6 +7,7 @@ import { HiMiniPencilSquare } from 'react-icons/hi2'
 import { Dropdown } from 'antd';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
+import UserImage from './UserImage';
 
 export default function Comments({ courseId }: { courseId: string }) {
   const [comments, setComments] = useState<any[]>([]);
@@ -114,24 +115,45 @@ export default function Comments({ courseId }: { courseId: string }) {
 
   return (
     <div className='flex flex-col gap-2'>
+      <h1 className='text-lg'>
+        {filteredComments.length === 1
+          ? `${filteredComments.length} Comment`
+          : `${filteredComments.length} Comments`}
+      </h1>
       <form onSubmit={handleSubmitComment} className='flex flex-col md:flex-row justify-between items-center w-full gap-2'>
+        {comments.length > 0 && (
+          // <Image
+          //   width={400}
+          //   height={400}
+          //   src={comments[0].userProfilePic} // Access the first comment's userProfilePic
+          //   alt="Profile Picture"
+          //   className='w-8 h-8 rounded-full mx-4'
+          // />
+          
+          <div className='h-[50px] w-[50px]'>
+            <UserImage />
+          </div>
+        )}
         <input
           placeholder='Type your comment here'
           type="text"
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          className='w-full outline-none rounded-full px-6 p-3 bg-[#181718] text-lg'
+          className='w-full outline-none py-3 bg-transparent text-lg border-b border-[#3f3f3f] placeholder:text-[#b9b9b9]'
         />
-        <button type="submit" className='bg-[white] text-black m-1 p-4 rounded-full font-medium w-full md:w-fit'>
+        {/* <button type="submit" className='bg-[white] text-black m-1 p-4 rounded-full font-medium w-full md:w-fit'>
           <HiMiniPencilSquare size={20}/>
-        </button>
+        </button> */}
       </form>
       <ul>
         {filteredComments.map((comment) => (
-          <li key={comment.id} className='bg-[#181718] my-4 p-4 rounded-2xl'>
+          <li key={comment.id} className=' my-4 p-4 rounded-2xl'>
             <div className='flex justify-between items-center'>
               <div className='flex justify-center items-center'>
-                <Image width={400} height={400} src={comment.userProfilePic} alt="Profile Picture" className='w-8 h-8 rounded-full mr-2'/>
+                {/* <Image width={400} height={400} src={comment.userProfilePic} alt="Profile Picture" className='w-8 h-8 rounded-full mr-2'/> */}
+                <div className='!h-[40px] w-[40px]'>
+                  <UserImage />
+                </div>
                 <h1 className='text-2xl'>{comment.userName}</h1>
               </div>
               {auth.currentUser && auth.currentUser.uid === comment.userId && (
