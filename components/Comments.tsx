@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { collection, addDoc, query, orderBy, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, doc, deleteDoc, getDocs, Timestamp } from 'firebase/firestore';
 import { db, auth } from '@/utils/firebase';
 import { MdDelete } from 'react-icons/md'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { Dropdown } from 'antd';
 
-export default function Comments({ courseId }) {
-  const [comments, setComments] = useState([]);
+export default function Comments({ courseId }: { courseId: string }) { // Explicitly define the courseId prop type
+  const [comments, setComments] = useState<any[]>([]); // Specify any[] as the initial type
   const [newComment, setNewComment] = useState('');
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function Comments({ courseId }) {
     }
   }, [courseId]);
 
-  const handleSubmitComment = async (e) => {
+  const handleSubmitComment = async (e: React.FormEvent<HTMLFormElement>) => { // Specify the event type
     e.preventDefault();
     if (newComment.trim() === '') {
       return;
@@ -50,7 +50,7 @@ export default function Comments({ courseId }) {
       await addDoc(commentsRef, {
         courseId,
         comment: newComment,
-        timestamp: new Date(),
+        timestamp: Timestamp.fromDate(new Date()),
         userId: user.uid,
         userName: user.displayName,
         userProfilePic: user.photoURL,
@@ -62,7 +62,7 @@ export default function Comments({ courseId }) {
     }
   };
 
-  const handleDeleteComment = async (commentId) => {
+  const handleDeleteComment = async (commentId: string) => { // Specify the commentId type
     try {
       const commentRef = doc(db, 'comments', commentId);
       await deleteDoc(commentRef);
@@ -71,7 +71,7 @@ export default function Comments({ courseId }) {
     }
   };
 
-  const detectAndStyleLinks = (comment) => {
+  const detectAndStyleLinks = (comment: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const matches = comment.match(urlRegex);
 
@@ -91,7 +91,7 @@ export default function Comments({ courseId }) {
     return styledComment;
   };
 
-  const renderDeleteButton = (commentId) => (
+  const renderDeleteButton = (commentId: string) => (
     <button
       onClick={() => handleDeleteComment(commentId)}
       className='flex justify-center items-center gap-2 bg-white p-2 rounded-md shadow-xl text-red-500 transition-all hover:bg-red-500 hover:text-white'
@@ -142,7 +142,7 @@ export default function Comments({ courseId }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: any) {
   try {
     const { courseId } = context.params;
 
