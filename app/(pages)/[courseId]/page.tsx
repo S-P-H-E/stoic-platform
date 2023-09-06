@@ -1,81 +1,74 @@
 "use client"
-
 import { useEffect, useState } from 'react';
 import { auth, db } from '@/utils/firebase';
+import { BsChevronLeft } from 'react-icons/bs'
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { collection, doc, getDoc, getDocs, Firestore, query, orderBy, where } from 'firebase/firestore'; // Import necessary functions
+import { collection, doc, getDoc, getDocs, Firestore, query, orderBy, where } from 'firebase/firestore';
 import Image from 'next/image';
 import Script from 'next/script';
 import { BsArrowLeftShort } from 'react-icons/bs';
 import Lesson from '@/components/Lesson';
-import Head from 'next/head';
 import Comments from '@/components/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
+import Search from "@/components/Search/page";
 
-// Define a type for the course data
 type Course = {
   name: string;
-  description: string; // You can add other fields here as needed
+  description: string;
 };
 
-// Define a type for the lesson data
 type Lesson = {
   title: string;
   description: string;
-  active: boolean; // Add the "active" field
+  active: boolean;
   url: string;
+  order: number;
 };
 
-export default function CourseLessons({ }) {
-  const { courseId } = useParams(); // Destructure courseId directly
-  const [course, setCourse] = useState<Course | null>(null); // Initialize course as null
-  const [lessons, setLessons] = useState<Lesson[]>([]); // Initialize lessons as an empty array
-  const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null); // Initialize currentLesson as null
+export default function CourseLessons() {
+  const { courseId } = useParams();
+  const [course, setCourse] = useState<Course | null>(null);
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
+  const { userName } = UserDataFetcher();
+  const router = useRouter()
 
   useEffect(() => {
-    // Function to fetch and set course data
     const fetchCourseData = async () => {
       try {
-        const firestore = db; // Initialize Firestore instance (use your own initialization)
-        const courseDocRef = doc(firestore, 'courses', courseId); // Replace 'your-collection-name' with the actual collection name
+        const firestore = db;
+        const courseDocRef = doc(firestore, 'courses', courseId);
         const courseDocSnap = await getDoc(courseDocRef);
         
         if (courseDocSnap.exists()) {
-          const courseData = courseDocSnap.data() as Course; // Type assertion
+          const courseData = courseDocSnap.data() as Course;
           setCourse(courseData);
         } else {
-          // Handle the case where the course document doesn't exist
           console.error('Course not found');
         }
       } catch (error) {
-        // Handle any errors that occur during fetching
         console.error('Error fetching course:', error);
       }
     };
 
-    // Function to fetch and set lessons data
     const fetchLessonsData = async () => {
       try {
-        const firestore = db; // Initialize Firestore instance (use your own initialization)
-        const lessonsCollectionRef = collection(firestore, 'courses', courseId, 'lessons'); // Specify the correct path
-
-        // Add an orderBy clause to order lessons by the "order" field
+        const firestore = db;
+        const lessonsCollectionRef = collection(firestore, 'courses', courseId, 'lessons');
         const orderedLessonsQuery = query(lessonsCollectionRef, orderBy('order'));
-
         const lessonsQuerySnapshot = await getDocs(orderedLessonsQuery);
 
         const lessonData: Lesson[] = [];
 
         lessonsQuerySnapshot.forEach((doc) => {
           if (doc.exists()) {
-            const lesson = doc.data() as Lesson; // Type assertion
+            const lesson = doc.data() as Lesson;
             lessonData.push(lesson);
           }
         });
 
         setLessons(lessonData);
 
-        // Find the active lesson
         const activeLesson = lessonData.find((lesson) => lesson.active);
 
         if (activeLesson) {
@@ -83,12 +76,10 @@ export default function CourseLessons({ }) {
         }
 
       } catch (error) {
-        // Handle any errors that occur during fetching
         console.error('Error fetching lessons:', error);
       }
     };
 
-    // Call both functions to fetch course and lessons data when courseId changes
     if (courseId) {
       fetchCourseData();
       fetchLessonsData();
@@ -96,10 +87,16 @@ export default function CourseLessons({ }) {
   }, [courseId]);
 
   return (
-    <>
+    <div className='flex flex-col justify-center items-center'>
+      <div className="p-10 flex justify-between items-center gap-6 w-full">
+        <button onClick={() => router.back()} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
+        <BsChevronLeft/>
+            <h3 className="text-lg">Go back</h3>
+        </button>
+        <Search />
+      </div>
+
       <div className="flex p-10">
-        {/* <h1>{course?.name}</h1>
-        <h1>{course?.description}</h1> */}
         <div>
           {currentLesson ? (
             <>
@@ -117,27 +114,26 @@ export default function CourseLessons({ }) {
                 <h1 className='text-3xl font-medium'>{currentLesson.title}</h1>
                 <p>{currentLesson.description}</p>
               </div>
-              <Comments courseId={courseId as string} />
+              <Comments courseId={courseId as string} /> {/* Pass courseId to the Comments component */}
             </>
           ) : (
             <p>No active lessons found</p>
           )}
-          </div>
+        </div>
 
-          <div>
+        <div>
           <div className='flex flex-col gap-5'>
             {lessons.map((lesson, index) => (
               <div key={index}>
-                <div className='px-5'>
+                <div className='mx-5 px-3 py-3 rounded-xl transition-all bg-[#181718] hover:bg-[#1E1D1E] cursor-pointer flex justify-start items-center gap-2'>
+                  <p className='bg-[#2F2E30] rounded-full p-2 px-4'>{lesson.order as unknown as string}</p>
                   <h1 className='text-xl font-medium'>{lesson.title}</h1>
-                  <p>{lesson.description}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
-        
       </div>
-    </>
+    </div>
   );
 }
