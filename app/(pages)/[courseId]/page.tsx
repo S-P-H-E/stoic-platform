@@ -108,7 +108,7 @@ export default function CourseLessons({ course, lessons }: CourseLessonsProps) {
   );
 }
 
-export async function getServerSideProps(context: any) {
+export async function generateStaticPrams(context: any) {
   try {
     const { courseId } = context.params;
     const courseDocRef = doc(db, 'courses', courseId);
