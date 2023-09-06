@@ -14,6 +14,7 @@ import {FiExternalLink, FiLoader} from 'react-icons/fi'
 import SocialLink from "@/components/Converter/SocialLink";
 import Link from "next/link";
 import { BsMusicNote, BsTrash } from "react-icons/bs";
+import { message } from "antd";
 
 interface AdaptiveFormat {
   url: string;
@@ -77,11 +78,9 @@ export default function Home() {
     event.preventDefault();
     if (inputUrlRef.current !== null) {
       const youtubeId = YoutubeParser(inputUrlRef.current.value)
-      console.log(youtubeId);
 
       // Code to connect to rapid api
       if (youtubeId) {
-        console.log(youtubeId);
         setLoading(true);
         const options: AxiosRequestConfig = {
         method: 'GET',
@@ -101,9 +100,6 @@ export default function Home() {
       .then(response => {
         const formatsArray = response.data.adaptiveFormats;
         const otherFormatsArray = response.data.formats;
-
-        console.log('the length of the array:' + formatsArray.length)
-        console.log("the length of the other array: " + otherFormatsArray.length)
 
         const videotitle = response.data.title;
         const thumbnail = response.data.thumbnail[ 3 | 2 | 1 | 0].url;
@@ -481,7 +477,7 @@ export default function Home() {
       })
       inputUrlRef.current.value = "";
       } else {
-        console.log("THIS IS NOT A VALID LINK")
+        message.error("This is not a valid link")
       }
     }
   };
@@ -525,7 +521,7 @@ export default function Home() {
             <div className="md:items-start md:justify-start md:flex-row flex flex-col gap-4 items-center justify-center">
               <div className="md:w-[32rem] flex flex-col gap-3 w-80 pt-2">
               <div className="transition hover:ring-offset-4 hover:ring-4 ring-[--border] ring-offset-[--bg] border border-[--border] group w-[32rem] h-[18rem] overflow-hidden items-center justify-center flex rounded-lg">
-              <Link className="" target="_blank" href={inputValue || "cantfindvideo"}>
+              <Link target="_blank" href={inputValue || "cantfindvideo"}>
                   <div className="relative group overflow-hidden h-[18rem] flex w-[32rem] items-center justify-center">
                       <Image
                         alt="Video Thumbnail"

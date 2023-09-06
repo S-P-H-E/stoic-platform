@@ -12,6 +12,7 @@ import {AiFillYoutube} from "react-icons/ai"
 import { BsTrash } from "react-icons/bs";
 import { BiLoader } from "react-icons/bi";
 import { YoutubeParser } from "@/utils/converter/YtParser";
+import { message } from "antd";
 
 export default function Home() {
   const inputUrlRef = useRef<HTMLInputElement | null>(null);
@@ -35,13 +36,12 @@ export default function Home() {
       
       if (!isYouTubeUrlValid(inputUrl)) {
         // Display an error message to the user or handle invalid URL case
-        console.error("Invalid YouTube URL");
+        message.error("This is not a valid link")
         return;
       }
 
       const youtubeId = YoutubeParser(inputUrl)
       setLoading(true);
-      console.log(youtubeId);
 
       const options: AxiosRequestConfig = {
         method: 'GET',
@@ -58,8 +58,6 @@ export default function Home() {
        .then(res => {
         setVideoTitle(res.data.title);
         setUrlResult(res.data.link)
-        console.log(videoTitle)
-        console.log(urlResult)
       })
        .catch(err => console.log(err))
        .finally(() => {

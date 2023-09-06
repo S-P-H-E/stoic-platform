@@ -13,6 +13,7 @@ import SocialLink from "@/components/Converter/SocialLink";
 import Link from "next/link";
 import {BsMusicNote, BsTrash } from "react-icons/bs";
 import {FaHeart, FaCommentAlt} from "react-icons/fa"
+import { message } from "antd";
 
 
 
@@ -56,11 +57,9 @@ export default function Home() {
     if (inputUrlRef.current !== null) {
       const tiktokUrl = (inputUrlRef.current.value)
       const tiktokUrlPattern = /^https:\/\/(www\.)?tiktok\.com\//;
-      console.log(tiktokUrl);
 
       // Code to connect to rapid api
       if (tiktokUrlPattern.test(tiktokUrl)) {
-        console.log("Valid TikTok URL:", tiktokUrl);
         setLoading(true);
         const options: AxiosRequestConfig = {
         method: 'GET',
@@ -101,10 +100,6 @@ export default function Home() {
         setHDQuality(hDQuality)
         setVideoMusic(videoMusic)
 
-        console.log('Default Quality:' + defaultQuality)
-        console.log('Better Quality:' + betterQuality)
-        console.log('HD Quality:' + hDQuality)
-
       })
       .catch(err => console.log(err))
       .finally(() => {
@@ -112,7 +107,7 @@ export default function Home() {
       })
       inputUrlRef.current.value = "";
       } else {
-        console.log("THIS IS NOT A VALID LINK")
+        message.error("This is not a valid link")
       }
     }
   };

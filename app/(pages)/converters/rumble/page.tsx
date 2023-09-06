@@ -14,6 +14,7 @@ import Link from "next/link";
 import {SiTiktok} from "react-icons/si"
 import { BsMusicNote, BsTrash } from "react-icons/bs";
 import { convertRumbleURLToAPIURL } from "@/utils/converter/RumbleParser";
+import { message } from "antd";
 
 
 
@@ -56,7 +57,6 @@ export default function Home() {
 
       // Code to connect to rapid api
       if (rumbleUrl) {
-        console.log("Valid Rumble URL:", rumbleUrl);
         setLoading(true);
         const options: AxiosRequestConfig = {
           method: 'GET', // Specify the HTTP method as a string
@@ -93,8 +93,6 @@ export default function Home() {
         setQuality1440p(quality1440p)
         setQuality2160p(quality2160p)
 
-        console.log('Default Quality:' + quality360p)
-
       })
       .catch(err => console.log(err))
       .finally(() => {
@@ -102,7 +100,7 @@ export default function Home() {
       })
       inputUrlRef.current.value = "";
       } else {
-        console.log("THIS IS NOT A VALID LINK")
+        message.error("This is not a valid link")
       }
     }
   };
