@@ -2,8 +2,8 @@
 
 // Import necessary modules and components
 import { UserDataFetcher } from "@/utils/userDataFetcher";
-import Search from "@/components/Search/page";
 import CourseLogic from "@/components/Course/logic";
+import Search from "@/components/Search/page";
 
 // Define the Dashboard functional component
 export default function Dashboard(){

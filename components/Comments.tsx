@@ -3,18 +3,22 @@ import { collection, addDoc, query, orderBy, onSnapshot, doc, deleteDoc, getDocs
 import { db, auth } from '@/utils/firebase';
 import { MdDelete } from 'react-icons/md'
 import { BsThreeDotsVertical } from 'react-icons/bs'
+import { HiMiniPencilSquare } from 'react-icons/hi2'
 import { Dropdown } from 'antd';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
-export default function Comments({ courseId }: { courseId: string }) { // Explicitly define the courseId prop type
-  const [comments, setComments] = useState<any[]>([]); // Specify any[] as the initial type
+export default function Comments({ courseId }: { courseId: string }) {
+  const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState('');
+
+  const { currentCourse } = useParams();
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
         const commentsRef = collection(db, 'comments');
-        const q = query(commentsRef, orderBy('timestamp'));
+        const q = query(commentsRef, orderBy('timestamp', 'desc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
           const commentsData = snapshot.docs.map((doc) => ({
             id: doc.id,
@@ -34,7 +38,10 @@ export default function Comments({ courseId }: { courseId: string }) { // Explic
     }
   }, [courseId]);
 
-  const handleSubmitComment = async (e: React.FormEvent<HTMLFormElement>) => { // Specify the event type
+  console.log(currentCourse)
+
+
+  const handleSubmitComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newComment.trim() === '') {
       return;
@@ -63,7 +70,7 @@ export default function Comments({ courseId }: { courseId: string }) { // Explic
     }
   };
 
-  const handleDeleteComment = async (commentId: string) => { // Specify the commentId type
+  const handleDeleteComment = async (commentId: string) => {
     try {
       const commentRef = doc(db, 'comments', commentId);
       await deleteDoc(commentRef);
@@ -85,7 +92,7 @@ export default function Comments({ courseId }: { courseId: string }) { // Explic
     matches.forEach((match) => {
       styledComment = styledComment.replace(
         match,
-        `<a href="${match}" class="text-yellow-500 underline" target="_blank" rel="noopener noreferrer">${match}</a>`
+        `<a href="${match}" class="text-blue-500 underline" target="_blank" rel="noopener noreferrer">${match}</a>`
       );
     });
 
@@ -102,22 +109,26 @@ export default function Comments({ courseId }: { courseId: string }) { // Explic
     </button>
   );
 
+  // Filter comments based on currentCourse
+  const filteredComments = comments.filter(comment => comment.courseId === courseId);
+
   return (
     <div className='flex flex-col gap-2'>
-      <h1 className="text-3xl font-medium">Comments</h1>
       <form onSubmit={handleSubmitComment} className='flex flex-col md:flex-row justify-between items-center w-full gap-2'>
         <input
           placeholder='Type your comment here'
           type="text"
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          className='w-full outline-none rounded-full px-6 p-3 bg-[#262626] text-lg'
+          className='w-full outline-none rounded-full px-6 p-3 bg-[#181718] text-lg'
         />
-        <button type="submit" className='bg-[#FEC800] hover:bg-[#fec700bf] transition text-black m-1 px-6 p-3 rounded-full font-medium w-full md:w-fit'>Comment</button>
+        <button type="submit" className='bg-[white] text-black m-1 p-4 rounded-full font-medium w-full md:w-fit'>
+          <HiMiniPencilSquare size={20}/>
+        </button>
       </form>
       <ul>
-        {comments.map((comment) => (
-          <li key={comment.id} className='bg-[#262626] my-4 p-4 rounded-2xl'>
+        {filteredComments.map((comment) => (
+          <li key={comment.id} className='bg-[#181718] my-4 p-4 rounded-2xl'>
             <div className='flex justify-between items-center'>
               <div className='flex justify-center items-center'>
                 <Image width={400} height={400} src={comment.userProfilePic} alt="Profile Picture" className='w-8 h-8 rounded-full mr-2'/>
@@ -142,6 +153,7 @@ export default function Comments({ courseId }: { courseId: string }) { // Explic
     </div>
   );
 }
+
 
 export async function getServerSideProps(context: any) {
   try {
