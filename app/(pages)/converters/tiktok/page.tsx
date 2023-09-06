@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "@/components/Button";
 import Input from "@/components/Converter/Input";
 import clsx from "clsx";
@@ -14,6 +14,9 @@ import Link from "next/link";
 import {BsMusicNote, BsTrash } from "react-icons/bs";
 import {FaHeart, FaCommentAlt} from "react-icons/fa"
 import { message } from "antd";
+import { DocumentData, DocumentReference, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/utils/firebase";
+import { UserDataFetcher } from "@/utils/userDataFetcher";
 
 
 
@@ -40,6 +43,28 @@ export default function Home() {
   };
 
   const RumbleIcon = '/RumbleIcon.svg'
+  const { userName, user, userId } = UserDataFetcher();
+
+  const incrementConverterUseCount = async (userId: string) => {
+    const userDocRef: DocumentReference<DocumentData> = doc(db, 'users', userId);
+  
+    try {
+      const userDocSnapshot = await getDoc(userDocRef);
+      if (userDocSnapshot.exists()) {
+        const { converterUseCount } = userDocSnapshot.data() as { converterUseCount: number };
+  
+        const updatedConverterUseCount = converterUseCount + 1;
+  
+        await updateDoc(userDocRef, {
+          converterUseCount: updatedConverterUseCount,
+        });
+      } else {
+        console.error('User document does not exist');
+      }
+    } catch (error) {
+      console.error('Error incrementing converterUseCount:', error);
+    }
+  };
   
   function formatInteractionCount(count: number) {
     if (count < 1000) {
@@ -51,16 +76,24 @@ export default function Home() {
     }
   }
   
+  
   // What happens when the user presses on search button
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (inputUrlRef.current !== null) {
       const tiktokUrl = (inputUrlRef.current.value)
       const tiktokUrlPattern = /^https:\/\/(www\.)?tiktok\.com\//;
 
-      // Code to connect to rapid api
+      if (!userId) {
+        message.error("You are not allowed to use this.")
+        return; // Return early to prevent further execution
+      }
+
       if (tiktokUrlPattern.test(tiktokUrl)) {
         setLoading(true);
+          incrementConverterUseCount(userId);
+
         const options: AxiosRequestConfig = {
         method: 'GET',
         url: 'https://tiktok-video-no-watermark2.p.rapidapi.com/',
@@ -72,7 +105,7 @@ export default function Home() {
           url: tiktokUrl,
           hd: '1' // have to be made dynamic
         }
-      }
+    }
       
       // What to do after connected to api
       axios(options)

@@ -113,7 +113,7 @@ export default function Comments({ courseId }: { courseId: string }) { // Explic
           onChange={(e) => setNewComment(e.target.value)}
           className='w-full outline-none rounded-full px-6 p-3 bg-[#262626] text-lg'
         />
-        <button type="submit" className='bg-[#FEC800] text-black m-1 px-6 p-3 rounded-full font-medium w-full md:w-fit'>Comment</button>
+        <button type="submit" className='bg-[#FEC800] hover:bg-[#fec700bf] transition text-black m-1 px-6 p-3 rounded-full font-medium w-full md:w-fit'>Comment</button>
       </form>
       <ul>
         {comments.map((comment) => (

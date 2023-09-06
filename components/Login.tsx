@@ -57,6 +57,7 @@ export default function Login() {
             name: res.user.displayName,
             email: res.user.email,
             status: 'user',
+            converterUseCount: 0,
           });
           console.log("Document written with ID:", docRef.id);
         } else {
