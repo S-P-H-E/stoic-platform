@@ -26,7 +26,7 @@ type Lesson = {
 };
 
 export default function CourseLessons() {
-  const { courseId } = useParams();
+  const { courseId } = useParams() as { courseId: string };
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
@@ -36,8 +36,7 @@ export default function CourseLessons() {
   useEffect(() => {
     const fetchCourseData = async () => {
       try {
-        const firestore = db;
-        const courseDocRef = doc(firestore, 'courses', courseId);
+        const courseDocRef = doc(db, 'courses', courseId);
         const courseDocSnap = await getDoc(courseDocRef);
         
         if (courseDocSnap.exists()) {
@@ -53,8 +52,7 @@ export default function CourseLessons() {
 
     const fetchLessonsData = async () => {
       try {
-        const firestore = db;
-        const lessonsCollectionRef = collection(firestore, 'courses', courseId, 'lessons');
+        const lessonsCollectionRef = collection(db, 'courses', courseId, 'lessons');
         const orderedLessonsQuery = query(lessonsCollectionRef, orderBy('order'));
         const lessonsQuerySnapshot = await getDocs(orderedLessonsQuery);
 

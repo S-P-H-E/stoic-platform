@@ -7,6 +7,7 @@ import { HiMiniPencilSquare } from 'react-icons/hi2'
 import { Dropdown } from 'antd';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
+import UserImage from './UserImage';
 
 export default function Comments({ courseId }: { courseId: string }) {
   const [comments, setComments] = useState<any[]>([]);
@@ -131,7 +132,9 @@ export default function Comments({ courseId }: { courseId: string }) {
           <li key={comment.id} className='bg-[#181718] my-4 p-4 rounded-2xl'>
             <div className='flex justify-between items-center'>
               <div className='flex justify-center items-center'>
-                <Image width={400} height={400} src={comment.userProfilePic} alt="Profile Picture" className='w-8 h-8 rounded-full mr-2'/>
+                <div className='!h-[40px] !w-[40px]'>
+                  <UserImage/>
+                </div>
                 <h1 className='text-2xl'>{comment.userName}</h1>
               </div>
               {auth.currentUser && auth.currentUser.uid === comment.userId && (
