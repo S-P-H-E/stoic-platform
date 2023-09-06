@@ -9,6 +9,7 @@ import { updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { CgClose } from 'react-icons/cg';
 import { useDropzone } from 'react-dropzone'; // Import useDropzone
+import { BsImageFill } from 'react-icons/bs'
 
 interface PasswordModalProps {
   onClose: () => void;
@@ -78,9 +79,15 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
       >
         <input {...getInputProps()} />
         {isDragActive ? (
-          <p>Drop the image right here...</p>
+          <div className='flex flex-col justify-center items-center gap-3'>
+            <BsImageFill size={60}/>
+            <p>Drag your image here, or <mark className='bg-transparent text-blue-500 hover:underline'>browse</mark></p>
+          </div>
         ) : (
-          <p>Drag an image here, or click to select one</p>
+          <div className='flex flex-col justify-center items-center gap-3'>
+            <BsImageFill size={50}/>
+            <p>Drag your image here, or <mark className='bg-transparent text-blue-500 hover:underline'>browse</mark></p>
+          </div>
         )}
       </div>
 
