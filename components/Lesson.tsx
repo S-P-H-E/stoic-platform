@@ -8,6 +8,7 @@ interface LessonProps {
   link: string;
   courseId: string;
   lessonId: string;
+  message: string;
   contentId?: string; // Make contentId optional
 }
 

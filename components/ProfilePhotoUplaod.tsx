@@ -68,7 +68,7 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
   });
 
   return (
-    <div className="relative py-12 bg-black border-[--border] border flex flex-col gap-2 p-8 rounded-lg text-center">
+    <div className="relative py-16 bg-black border-[--border] border flex flex-col gap-2 p-8 rounded-lg text-center">
       <button className='absolute top-4 right-4 text-[--highlight] hover:text-white transition cursor-pointer'>
         <CgClose onClick={() => onClose()} size="20"/>
       </button>
@@ -103,13 +103,7 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
             />
           </div>
           <Button
-             className={`
-             font-lg text-base lg:text-xl
-             ${
-              isLoading
-                ? 'cursor-not-allowed hover:bg-transparent hover:ring-offset-0 hover:ring-0 text-[--border]'
-                : ''
-            }`}
+             className='font-lg text-base lg:text-xl'
             onClick={uploadProfilePicture}
             disabled={isLoading} // Disable the button when isLoading is true
           >

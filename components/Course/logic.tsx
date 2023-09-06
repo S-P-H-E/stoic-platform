@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
-import { UserDataFetcher } from '@/utils/userDataFetcher';
 import Course from './page';
 
 // Define the DashboardProps interface
