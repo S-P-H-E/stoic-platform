@@ -7,9 +7,10 @@ import {
 import { BiSearch } from 'react-icons/bi'
 import { BsStars } from 'react-icons/bs'
 import { AiOutlineMenu } from "react-icons/ai";
-import { YoutubeLogo, MusicNotes, Book, FileArrowDown, Gear } from "@phosphor-icons/react";
+import { YoutubeLogo, FileArrowDown, Gear, TiktokLogo, Triangle } from "@phosphor-icons/react";
 import Link from 'next/link';
 import openai from '@/app/api/GPT';
+import Image from 'next/image';
 
 export default function Search(){
     const [input, setInput] = useState('');
@@ -90,15 +91,19 @@ export default function Search(){
                         )}
 
                     <div className="flex flex-col items-start gap-1 p-5">
-                        <h1 className="text-[#444445] cursor-default">Tools</h1>
+                        <h1 className="text-[#444445] cursor-default">Converters</h1>
 
-                        <Link href={'https://stoic-mp4-converter.vercel.app/'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
-                            <YoutubeLogo size={22} color="#444445" weight="fill" />
-                            Download MP4 video
+                        <Link href={'/converters/ytmp4'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
+                            <Image src={'/images/youtube.png'} alt='tiktok' width={15} height={0}/>
+                            YouTube
                         </Link>
-                        <Link href={'https://stoic-converter.vercel.app/'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
-                            <MusicNotes size={22} color="#444445" weight="fill" />
-                            Download MP3 audio
+                        <Link href={'/converters/tiktok'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
+                            <Image src={'/images/tiktok.png'} alt='tiktok' width={15} height={0}/>
+                            TikTok
+                        </Link>
+                        <Link href={'/converters/rumble'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
+                            <Image src={'/images/rumble.png'} alt='tiktok' width={15} height={0}/>
+                            Rumble
                         </Link>
                     </div>
 
