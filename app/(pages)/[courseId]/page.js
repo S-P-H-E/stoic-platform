@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { auth, db } from '@/utils/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
@@ -10,6 +10,25 @@ import Lesson from '@/components/Lesson';
 import Head from 'next/head';
 import Comments from '@/components/Comments';
 
+/* interface Course {
+  id: string;
+  name: string;
+  description: string;
+}
+
+interface LessonData {
+  id: string;
+  name: string;
+  message: string;
+  link: string;
+}
+
+
+interface CourseLessonsProps {
+  course: Course | null;
+  lessons: LessonData[];
+} */
+
 export default function CourseLessons({ course, lessons }) {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
@@ -18,9 +37,9 @@ export default function CourseLessons({ course, lessons }) {
     if (!user) {
       router.push('/login');
     }
-  }, [user]);
+  }, [user, router]);
 
-  const { courseId } = router.query; //fix this for next/navigation
+  const { courseId } = router.query;
 
   return (
     <>
@@ -60,7 +79,7 @@ export default function CourseLessons({ course, lessons }) {
                   <Lesson
                     key={lesson.id}
                     name={lesson.name}
-                    message={lesson.message}
+                    message={lesson.message} // THIS IS SO GAY
                     link={lesson.link}
                     index={index}
                     courseId={courseId}
