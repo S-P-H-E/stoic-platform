@@ -22,6 +22,7 @@ type Lesson = {
   description: string;
   url: string;
   order: number;
+  id: string;
 };
 
 export default function CourseLessons() {

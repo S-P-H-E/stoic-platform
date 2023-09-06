@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
-import { collection, addDoc, query, orderBy, onSnapshot, doc, deleteDoc, getDocs, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, doc, deleteDoc, getDocs, Timestamp, getDoc } from 'firebase/firestore';
 import { db, auth } from '@/utils/firebase';
 import { MdDelete } from 'react-icons/md'
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import { HiMiniPencilSquare } from 'react-icons/hi2'
 import { Dropdown } from 'antd';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import UserImage from './UserImage';
+import { UserDataFetcher } from './../utils/userDataFetcher';
 
 export default function Comments({ courseId }: { courseId: string }) {
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState('');
 
+  const { userName, user, userId, fetching } = UserDataFetcher();
   const { currentCourse } = useParams();
 
   useEffect(() => {
@@ -20,10 +21,15 @@ export default function Comments({ courseId }: { courseId: string }) {
       try {
         const commentsRef = collection(db, 'comments');
         const q = query(commentsRef, orderBy('timestamp', 'desc'));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-          const commentsData = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
+        const unsubscribe = onSnapshot(q, async (snapshot) => {
+          const commentsData = await Promise.all(snapshot.docs.map(async (doc) => {
+            const commentData = doc.data();
+            const userProfilePic = await getUserProfilePic(commentData.userId);
+            return {
+              id: doc.id,
+              ...commentData,
+              userProfilePic: userProfilePic || '/default-profile-pic-url',
+            };
           }));
           setComments(commentsData);
         });
@@ -60,8 +66,8 @@ export default function Comments({ courseId }: { courseId: string }) {
         courseId,
         comment: newComment,
         timestamp: Timestamp.fromDate(new Date()),
-        userId: user.uid,
-        userName: user.displayName,
+        userId: userId,
+        userName: userName,
         userProfilePic: user.photoURL,
       });
 
@@ -78,6 +84,20 @@ export default function Comments({ courseId }: { courseId: string }) {
     } catch (error) {
       console.error('Error deleting comment:', error);
     }
+  };
+
+  const getUserProfilePic = async (userId: string) => {
+    try {
+      const userDocRef = doc(db, 'users', userId);
+      const userDocSnapshot = await getDoc(userDocRef);
+      if (userDocSnapshot.exists()) {
+        const userData = userDocSnapshot.data();
+        return userData.profileImageUrl;
+      }
+    } catch (error) {
+      console.error('Error fetching user profile picture:', error);
+    }
+    return null; // Return a default image URL or handle missing images here
   };
 
   const detectAndStyleLinks = (comment: string) => {
@@ -130,7 +150,7 @@ export default function Comments({ courseId }: { courseId: string }) {
           //   className='w-8 h-8 rounded-full mx-4'
           // />
           
-          <div className='h-[50px] w-[50px]'>
+          <div className='h-[50px] w-[52px]'>
             <UserImage />
           </div>
         )}
@@ -150,6 +170,7 @@ export default function Comments({ courseId }: { courseId: string }) {
           <li key={comment.id} className=' my-4 p-4 rounded-2xl'>
             <div className='flex justify-between items-center'>
               <div className='flex justify-center items-center'>
+
                 <Image width={400} height={400} src={comment.userProfilePic} alt="Profile Picture" className='w-8 h-8 rounded-full mr-2'/>
                 <h1 className='text-2xl'>{comment.userName}</h1>
               </div>

@@ -10,7 +10,7 @@ import { UserDataFetcher } from '@/utils/userDataFetcher'
 import { signOut} from 'firebase/auth'
 import { auth } from '@/utils/firebase'
 import { db } from '@/utils/firebase'
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { message } from 'antd';
 import PasswordModal from './PasswordModal'
 import ProfilePhotoUplaod from './ProfilePhotoUplaod'
@@ -38,6 +38,17 @@ export default function AccountSettings() {
     if (userId && displayName.trim() !== '') {
       try {
         await updateDoc(doc(db, 'users', userId), { name: displayName });
+        
+        const commentsRef = collection(db, 'comments');
+        const q = query(commentsRef, where('userId', '==', userId));
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach(async (commentDoc) => {
+          const commentId = commentDoc.id;
+          const commentRef = doc(commentsRef, commentId);
+          await updateDoc(commentRef, { userName: displayName });
+        });
+
         message.success("Display name changed successfully!");
         setDisplayName('');
       } catch (error) {
