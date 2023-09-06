@@ -11,7 +11,6 @@ import { YoutubeLogo, MusicNotes, Book, FileArrowDown, Gear } from "@phosphor-ic
 import Link from 'next/link';
 import openai from '@/app/api/GPT';
 
-
 export default function Search(){
     const [input, setInput] = useState('');
     const [response, setResponse] = useState('');
