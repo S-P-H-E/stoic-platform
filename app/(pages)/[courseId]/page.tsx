@@ -2,8 +2,7 @@
 
 import { useEffect } from 'react';
 import { auth, db } from '@/utils/firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { BsArrowLeftShort } from 'react-icons/bs';
 import Lesson from '@/components/Lesson';
@@ -37,16 +36,8 @@ export default function CourseLessons({ course, lessons }: CourseLessonsProps) {
   const { userName, user, userId, fetching } = UserDataFetcher();
 
 /*const [user, loading] = UserDataFetcher; */ // this code always sends to login on refresh for an odd reason so use the upper one instead
- 
-  useEffect(() => {
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user, router]);
-
-  const courseId = searchParams.get('courseId');
-
-/*const courseId = useSearchParams() */
+  const courseId = useParams().courseId;
+  console.log(courseId);
 
   return (
     <>
