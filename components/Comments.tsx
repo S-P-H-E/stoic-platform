@@ -104,7 +104,7 @@ export default function Comments({ courseId }: { courseId: string }) { // Explic
 
   return (
     <div className='flex flex-col gap-2'>
-      <h1 className="text-3xl font-medium">Comments</h1>
+      {/* <h1 className="text-3xl font-medium">Comments</h1> */}
       <form onSubmit={handleSubmitComment} className='flex flex-col md:flex-row justify-between items-center w-full gap-2'>
         <input
           placeholder='Type your comment here'
