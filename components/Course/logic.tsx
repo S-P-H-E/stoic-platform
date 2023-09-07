@@ -1,5 +1,7 @@
+"use client"
+
 import { FC, useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, where, query } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 import Course from './page';
 
@@ -18,22 +20,28 @@ const CourseLogic: FC<CourseLogicProps> = () => {
     const fetchCourses = async () => {
       try {
         const coursesRef = collection(db, 'courses');
-        const snapshot = await getDocs(coursesRef);
-        const coursesData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+        const q = query(coursesRef, where('lessons', '!=', null));
+        const snapshot = await getDocs(q);
+
+        const coursesData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
         setCourses(coursesData);
       } catch (error) {
         console.error('Error fetching courses:', error);
-        // Handle the error here if needed
       }
     };
 
     fetchCourses();
-  }, []); // Empty dependency array to ensure it only runs once on mount
-
+  }, []);  // Empty dependency array to ensure it only runs once on mount
+  
   return (
-    <div className='flex flex-col md:flex-row gap-5 px-10'>
+    <div className='flex flex-col md:flex-row gap-5'>
       {courses.map((course) => (
-        <Course key={course.id} course={course} />
+        <Course key={course.id} course={course} lessons={[]}/>
       ))}
     </div>
   );

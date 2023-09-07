@@ -45,7 +45,6 @@ export default function Comments({ courseId }: { courseId: string }) {
     }
   }, [courseId]);
 
-  console.log(currentCourse)
 
 
   const handleSubmitComment = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -171,10 +170,10 @@ export default function Comments({ courseId }: { courseId: string }) {
             <div className='flex justify-between items-center'>
               <div className='flex justify-center items-center'>
 
-                <Image width={400} height={400} src={comment.userProfilePic} alt="Profile Picture" className='w-8 h-8 rounded-full mr-2'/>
+                <Image width={500} height={500} src={comment.userProfilePic} alt="Profile Picture" className='w-10 h-10 rounded-full mr-2'/>
                 <h1 className='text-2xl'>{comment.userName}</h1>
               </div>
-              {auth.currentUser && auth.currentUser.uid === comment.userId && (
+              {userId === comment.userId && (
                 <Dropdown
                   overlay={renderDeleteButton(comment.id)}
                   trigger={['click']}
