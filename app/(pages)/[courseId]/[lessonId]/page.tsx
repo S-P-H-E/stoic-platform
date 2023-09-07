@@ -75,7 +75,7 @@ export default function LessonPage() {
       <div className="flex p-10">
         <div>
             <>
-              <div className='w-[1024px] h-[576px]'>
+              <div className='w-[1024px] h-[576px] rounded-3xl shadow-2xl shadow-white/10'>
                 <iframe
                   src={lesson.url}
                   allow="autoplay; fullscreen; picture-in-picture"
@@ -85,9 +85,9 @@ export default function LessonPage() {
               </div>
               <Script src="https://player.vimeo.com/api/player.js" />
 
-              <div className='py-5'>
+              <div className='my-5 mb-20 border border-[#1E1E1E] rounded-2xl p-5'>
                 <h1 className='text-3xl font-medium'>{lesson.title}</h1>
-                <p className='bg-[#181718] rounded-xl p-4 mt-3'>{lesson.description}</p>
+                <p className='rounded-xl mt-3'>{lesson.description}</p>
               </div>
               <Comments courseId={courseId as string} />
             </>
@@ -97,8 +97,8 @@ export default function LessonPage() {
           <div className='flex flex-col gap-5'>
           {lessons.map((lessonItem, index) => (
             <Link href={`/${courseId}/${lessonItem.id as string}`} key={index} className='cursor-pointer'>
-                <div className={`mx-5 px-3 py-3 rounded-xl transition-all bg-[#181718] hover:bg-[#1E1D1E] cursor-pointer flex justify-start items-center gap-2 ${index === currentLessonIndex ? 'bg-[#1E1D1E]' : ''}`}>
-                    <p className='bg-[#2F2E30] rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
+                <div className={`mx-5 px-3 py-3 rounded-2xl transition-all border border-[#1E1E1E] hover:scale-105 cursor-pointer flex justify-start items-center gap-2 ${index === currentLessonIndex ? 'bg-[#1E1D1E]' : ''}`}>
+                    <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
                     <h1 className='text-xl font-medium'>{lessonItem.title}</h1>
                 </div>
             </Link>
