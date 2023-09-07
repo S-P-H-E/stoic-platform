@@ -1,3 +1,5 @@
+"use client"
+
 import { FC, useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
@@ -31,7 +33,7 @@ const CourseLogic: FC<CourseLogicProps> = () => {
   }, []); // Empty dependency array to ensure it only runs once on mount
 
   return (
-    <div className='flex flex-col md:flex-row gap-5 px-10'>
+    <div className='flex flex-col md:flex-row gap-5'>
       {courses.map((course) => (
         <Course key={course.id} course={course} />
       ))}

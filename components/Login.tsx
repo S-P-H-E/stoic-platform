@@ -41,7 +41,7 @@ export default function Login() {
       try {
         // Google Auth
         const res = await signInWithPopup(auth, googleProvider);
-        message.success("Signed in successfully");
+        message.success("Signed in successfully as");
 
         //Router
         router.push('/dashboard');

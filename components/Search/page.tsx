@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState, useEffect  } from 'react';
 import {
     Dialog,
@@ -12,6 +14,11 @@ import Link from 'next/link';
 import openai from '@/app/api/GPT';
 import Image from 'next/image';
 
+type Message = {
+    role: string;
+    content: string;
+  };
+
 export default function Search(){
     const [input, setInput] = useState('');
     const [response, setResponse] = useState('');
@@ -25,7 +32,7 @@ export default function Search(){
     const handleSubmit = async () => {
       try {
         const newMessage = { role: 'user', content: input };
-        const updatedConversation = [...conversation, newMessage];
+        const updatedConversation: Message[] = [...conversation, newMessage];
         setLoading(true); // Set loading to true when submitting
   
         const completion = await openai.chat.completions.create({

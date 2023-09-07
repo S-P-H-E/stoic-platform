@@ -2,11 +2,9 @@
 import { useEffect, useState } from 'react';
 import { auth, db } from '@/utils/firebase';
 import { BsChevronLeft } from 'react-icons/bs'
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { collection, doc, getDoc, getDocs, setDoc, Firestore, query, orderBy, where, addDoc } from 'firebase/firestore';
-import Image from 'next/image';
+import { useParams, useRouter } from 'next/navigation';
+import { collection, doc, getDoc, getDocs, query, orderBy, where, onSnapshot, updateDoc } from 'firebase/firestore';
 import Script from 'next/script';
-import { BsArrowLeftShort } from 'react-icons/bs';
 import Lesson from '@/components/Lesson';
 import Comments from '@/components/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
@@ -29,6 +27,7 @@ export default function CourseLessons() {
   const { courseId } = useParams() as { courseId: string };
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [lessonIdDoc, setLessonIdDoc] = useState<string | null>(null);
   const [currentLessonIndex, setCurrentLessonIndex] = useState<number | null>(null);
   const [userData, setUserData] = useState<any>(null); // State to store user data
   const { user, userId } = UserDataFetcher();
@@ -40,9 +39,14 @@ export default function CourseLessons() {
         const courseDocRef = doc(db, 'courses', courseId);
         const courseDocSnap = await getDoc(courseDocRef);
         
-        if (courseDocSnap.exists()) {
+        if (courseDocSnap.exists() && userId) {
           const courseData = courseDocSnap.data() as Course;
           setCourse(courseData);
+
+          const userDocRef = doc(db, 'users', userId);
+          updateDoc(userDocRef, {
+            lastCourse: courseId,
+          });
         } else {
           console.error('Course not found');
         }
@@ -57,7 +61,7 @@ export default function CourseLessons() {
         const orderedLessonsQuery = query(lessonsCollectionRef, orderBy('order'));
         const lessonsQuerySnapshot = await getDocs(orderedLessonsQuery);
 
-        console.log("LessonId: ", lessonsCollectionRef)
+        console.log("Lesson Collection: ", lessonsCollectionRef)
 
         const lessonData: Lesson[] = [];
 
@@ -82,7 +86,7 @@ export default function CourseLessons() {
     // Fetch user data
     const fetchUserData = async () => {
       try {
-        if (user) {
+        if (user && userId) {
           const userDocRef = doc(db, 'users', userId);
           const userDocSnap = await getDoc(userDocRef);
           if (userDocSnap.exists()) {
@@ -100,36 +104,30 @@ export default function CourseLessons() {
       fetchLessonsData();
       fetchUserData();
     }
-  }, [courseId]);
+  }, [courseId, user, userId, lessonIdDoc]);
 
   const handleLessonClick = async (index: number) => {
     setCurrentLessonIndex(index);
-  
     // Ensure that user is logged in
     if (user) {
-      const userEmail = user.email; // Get the user's email
-  
-      if (userEmail) {
+      if (userId) {
         try {
-          const userDocRef = doc(db, 'users', userEmail); // Use the user's email as the document ID
-          const lessonDocRef = doc(db, 'courses', courseId, 'lessons', lessons[index].id);
-  
-          console.log('lessonDocRef:', lessonDocRef); // Add this log to check the lessonDocRef
-          console.log('Selected Lesson ID:', lessons[index].id); // Log the selected lesson's ID
-  
+        const userDocRef = doc(db, 'users', userId);
+
+        const lessonTitle = lessons[index].title;
+        const lessonDocRef = doc(db, 'courses', courseId, 'lessons', lessonTitle);
+        const q = query(collection(db, 'courses', courseId, 'lessons'), where('title', '==', lessonTitle));
+          const unsubscribeFirestore = onSnapshot(q, (querySnapshot) => {
+            if (!querySnapshot.empty) {
+                setLessonIdDoc(querySnapshot.docs[0].id);
+                console.log('Lesson Doc Id:', lessonIdDoc)
+                updateDoc(userDocRef, {
+                  lastlesson: lessonIdDoc,
+                });
+            }
+          });        
           const lessonDocSnap = await getDoc(lessonDocRef);
-  
-          console.log('lessonDocSnap.exists():', lessonDocSnap.exists()); // Add this log to check if the lesson document exists
-  
-          if (lessonDocSnap.exists()) {
-            const lastLessonId = lessonDocSnap.id;
-            console.log('Last Lesson ID:', lastLessonId);
-  
-            await setDoc(userDocRef, { lastlesson: lastLessonId }, { merge: true });
-            // Use setDoc with merge:true to update or create the document if it doesn't exist.
-          } else {
-            console.error('Lesson document not found');
-          }
+          console.log('lessonDocSnap.exists():', lessonDocSnap.exists());
         } catch (error) {
           console.error('Error updating lastlesson field:', error);
         }
@@ -140,8 +138,6 @@ export default function CourseLessons() {
       console.error('User not logged in'); // Handle the case where the user is not logged in.
     }
   };
-  
-  
 
 
   return (

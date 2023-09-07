@@ -1,25 +1,23 @@
-"use client"
-
 // Import necessary modules and components
-import { UserDataFetcher } from "@/utils/userDataFetcher";
+import Continue from "@/components/Continue";
 import CourseLogic from "@/components/Course/logic";
+import Greeting from "@/components/Greeting";
 import Search from "@/components/Search/page";
 
 // Define the Dashboard functional component
 export default function Dashboard(){
-  const { userName } = UserDataFetcher();
 
   return (
     <div>
       {/* Navbar */}
       <div className="p-10 flex justify-between items-center gap-6">
-        <p className="text-xl">Hi, {userName ? userName : '...'}</p>
+        <Greeting/>
         <Search />
       </div>
-
       {/* Courses */}
-      <div>
+      <div className="p-10 flex gap-8">
         <CourseLogic courses={[]} />
+        <Continue/>
       </div>
     </div>
   );
