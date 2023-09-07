@@ -8,10 +8,11 @@ interface CourseProps {
   }
 
 const Course: FC<CourseProps> = ({ course, lesson }) => {
+  console.log("Lesson in Course component:", lesson);
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/${course.id}/${lesson.id}`);
+    router.push(`/${course.id}/${lesson}`);
   };
 
   return (

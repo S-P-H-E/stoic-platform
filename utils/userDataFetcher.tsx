@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState, ReactNode } from 'react';
-import { collection, query, where, onSnapshot, updateDoc, doc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '@/utils/firebase';
 import { useRouter } from 'next/navigation';
@@ -12,6 +12,7 @@ export function UserDataFetcher() {
   const [userName, setUserName] = useState(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [userLastLesson, setUserLastLesson] = useState(null);
+  const [userLastCourse, setUserLastCourse] = useState(null);
 
   const router = useRouter()
 
@@ -32,6 +33,7 @@ export function UserDataFetcher() {
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
             setUserLastLesson(userData.lastlesson);
+            setUserLastCourse(userData.lastCourse)
             setUserName(userData.name);
             setUserId(querySnapshot.docs[0].id);
         }
@@ -46,5 +48,5 @@ export function UserDataFetcher() {
     return unsubscribeAuth;
   }, [user, router]);
 
-  return { userName, userLastLesson, user, userId, fetching };
+  return { userName, userLastLesson, userLastCourse, user, userId, fetching };
 }
