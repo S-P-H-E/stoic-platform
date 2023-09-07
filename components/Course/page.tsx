@@ -4,13 +4,14 @@ import { FC, ReactNode } from 'react';
 
 interface CourseProps {
     course?: any
+    lesson?: any
   }
 
-const Course: FC<CourseProps> = ({ course }) => {
+const Course: FC<CourseProps> = ({ course, lesson }) => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/${course.id}`);
+    router.push(`/${course.id}/${lesson.id}`);
   };
 
   return (
