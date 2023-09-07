@@ -1,7 +1,7 @@
 "use client"
 
 import { FC, useEffect, useState } from 'react';
-import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, where, query } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 import Course from './page';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
