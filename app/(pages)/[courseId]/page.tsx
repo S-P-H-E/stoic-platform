@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { auth, db } from '@/utils/firebase';
 import { BsChevronLeft } from 'react-icons/bs'
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { collection, doc, getDoc, getDocs, setDoc, Firestore, query, orderBy, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc, Firestore, query, orderBy, where, addDoc } from 'firebase/firestore';
 import Image from 'next/image';
 import Script from 'next/script';
 import { BsArrowLeftShort } from 'react-icons/bs';
@@ -31,7 +31,7 @@ export default function CourseLessons() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [currentLessonIndex, setCurrentLessonIndex] = useState<number | null>(null);
   const [userData, setUserData] = useState<any>(null); // State to store user data
-  const { userName } = UserDataFetcher();
+  const { user, userId } = UserDataFetcher();
   const router = useRouter();
 
   useEffect(() => {
@@ -57,6 +57,8 @@ export default function CourseLessons() {
         const orderedLessonsQuery = query(lessonsCollectionRef, orderBy('order'));
         const lessonsQuerySnapshot = await getDocs(orderedLessonsQuery);
 
+        console.log("LessonId: ", lessonsCollectionRef)
+
         const lessonData: Lesson[] = [];
 
         lessonsQuerySnapshot.forEach((doc) => {
@@ -80,9 +82,8 @@ export default function CourseLessons() {
     // Fetch user data
     const fetchUserData = async () => {
       try {
-        const user = auth.currentUser;
         if (user) {
-          const userDocRef = doc(db, 'users', user.uid);
+          const userDocRef = doc(db, 'users', userId);
           const userDocSnap = await getDoc(userDocRef);
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
@@ -103,22 +104,49 @@ export default function CourseLessons() {
 
   const handleLessonClick = async (index: number) => {
     setCurrentLessonIndex(index);
-
-    // Update the "lastlesson" field in the user's collection
-    if (userData) {
-      try {
-        const userDocRef = doc(db, 'users', );
-        await setDoc(userDocRef, { lastlesson: lessons[index].id }, { merge: true });
-        // Note: You'll need to make sure your Lesson documents have an "id" field or modify this part accordingly.
-      } catch (error) {
-        console.error('Error updating lastlesson field:', error);
+  
+    // Ensure that user is logged in
+    if (user) {
+      const userEmail = user.email; // Get the user's email
+  
+      if (userEmail) {
+        try {
+          const userDocRef = doc(db, 'users', userEmail); // Use the user's email as the document ID
+          const lessonDocRef = doc(db, 'courses', courseId, 'lessons', lessons[index].id);
+  
+          console.log('lessonDocRef:', lessonDocRef); // Add this log to check the lessonDocRef
+          console.log('Selected Lesson ID:', lessons[index].id); // Log the selected lesson's ID
+  
+          const lessonDocSnap = await getDoc(lessonDocRef);
+  
+          console.log('lessonDocSnap.exists():', lessonDocSnap.exists()); // Add this log to check if the lesson document exists
+  
+          if (lessonDocSnap.exists()) {
+            const lastLessonId = lessonDocSnap.id;
+            console.log('Last Lesson ID:', lastLessonId);
+  
+            await setDoc(userDocRef, { lastlesson: lastLessonId }, { merge: true });
+            // Use setDoc with merge:true to update or create the document if it doesn't exist.
+          } else {
+            console.error('Lesson document not found');
+          }
+        } catch (error) {
+          console.error('Error updating lastlesson field:', error);
+        }
+      } else {
+        console.error('User email is undefined'); // Handle the case where user email is undefined.
       }
+    } else {
+      console.error('User not logged in'); // Handle the case where the user is not logged in.
     }
   };
+  
+  
+
 
   return (
     <div className='flex flex-col justify-center items-center'>
-      <div className="p-10 flex justify-between items-center gap-6 w-full">
+      <div className="px-10 pt-10 flex justify-between items-center gap-6 w-full">
         <button onClick={() => router.back()} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
         <BsChevronLeft/>
             <h3 className="text-lg">Go back</h3>
