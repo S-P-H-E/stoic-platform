@@ -15,9 +15,9 @@ export default function Dashboard(){
         <Search />
       </div>
       {/* Courses */}
-      <div className="p-10 flex gap-8">
-        <CourseLogic courses={[]} />
+      <div className="p-10 flex flex-col gap-8">
         <Continue/>
+        <CourseLogic courses={[]} />
       </div>
     </div>
   );

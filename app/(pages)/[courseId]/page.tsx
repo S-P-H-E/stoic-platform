@@ -9,6 +9,7 @@ import Lesson from '@/components/Lesson';
 import Comments from '@/components/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import Search from "@/components/Search/page";
+import Link from 'next/link';
 
 type Course = {
   name: string;
@@ -143,10 +144,10 @@ export default function CourseLessons() {
   return (
     <div className='flex flex-col justify-center items-center'>
       <div className="px-10 pt-10 flex justify-between items-center gap-6 w-full">
-        <button onClick={() => router.back()} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
-        <BsChevronLeft/>
-            <h3 className="text-lg">Go back</h3>
-        </button>
+        <Link href={'/dashboard'} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
+            <BsChevronLeft/>
+            <h1 className="text-lg">Go back</h1>
+        </Link>
         <Search />
       </div>
 
@@ -168,7 +169,7 @@ export default function CourseLessons() {
                 <h1 className='text-3xl font-medium'>{lessons[currentLessonIndex].title}</h1>
                 <p className='bg-[#181718] rounded-xl p-4 mt-3'>{lessons[currentLessonIndex].description}</p>
               </div>
-              <Comments courseId={courseId as string} /> {/* Pass courseId to the Comments component */}
+              {/* <Comments courseId={courseId as string} /> Pass courseId to the Comments component */}
             </>
           ) : (
             <p>No active lessons found</p>
@@ -178,12 +179,12 @@ export default function CourseLessons() {
         <div>
           <div className='flex flex-col gap-5'>
             {lessons.map((lesson, index) => (
-              <div key={index} onClick={() => handleLessonClick(index)}>
+              <Link href={`/${courseId}/${courseId}`} key={index}>
                 <div className={`mx-5 px-3 py-3 rounded-xl transition-all bg-[#181718] hover:bg-[#1E1D1E] cursor-pointer flex justify-start items-center gap-2 ${index === currentLessonIndex ? 'bg-[#1E1D1E]' : ''}`}>
                   <p className='bg-[#2F2E30] rounded-full p-2 px-4'>{lesson.order as unknown as string}</p>
                   <h1 className='text-xl font-medium'>{lesson.title}</h1>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
