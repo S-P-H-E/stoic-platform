@@ -20,28 +20,36 @@ const CourseLogic: FC<CourseLogicProps> = () => {
     const fetchCourses = async () => {
       try {
         const coursesRef = collection(db, 'courses');
+        const snapshot = await getDocs(coursesRef);
+        const coursesData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-        const q = query(coursesRef, where('lessons', '!=', null));
-        const snapshot = await getDocs(q);
+        // Fetch lessons for each course
+        const coursesWithLessons = await Promise.all(
+          coursesData.map(async (course) => {
+            const lessonsRef = collection(coursesRef, course.id, 'lessons'); // Adjust the path to your lessons collection
+            const lessonsSnapshot = await getDocs(lessonsRef);
+            const lessonsData = lessonsSnapshot.docs.map((lessonDoc) => ({
+              id: lessonDoc.id,
+              ...lessonDoc.data(),
+            }));
 
-        const coursesData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+            return { ...course, lessons: lessonsData };
+          })
+        );
 
-        setCourses(coursesData);
+        setCourses(coursesWithLessons);
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
     };
 
     fetchCourses();
-  }, []);  // Empty dependency array to ensure it only runs once on mount
-  
+  }, []);// Empty dependency array to ensure it only runs once on mount
+
   return (
     <div className='flex flex-col md:flex-row gap-5'>
       {courses.map((course) => (
-        <Course key={course.id} course={course} lessons={[]}/>
+        <Course key={course.id} course={course} lesson={course.lessons[0]} />
       ))}
     </div>
   );
