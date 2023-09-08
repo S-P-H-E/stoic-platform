@@ -2,12 +2,13 @@
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { db } from '@/utils/firebase';
-import { collection, doc, getDoc, getDocs, query } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc } from 'firebase/firestore';
 import { BsChevronLeft } from 'react-icons/bs'
 import Link from 'next/link';
 import Search from '@/components/Search/page';
 import Script from 'next/script';
 import Comments from '@/components/Comments';
+import { UserDataFetcher } from '@/utils/userDataFetcher';
 
 interface LessonItem {
   id: string;
@@ -21,19 +22,27 @@ export default function LessonPage() {
   const { courseId, lessonId } = useParams();
   const [lesson, setLesson] = useState<any | null>(null);
   const [lessons, setLessons] = useState<LessonItem[]>([]);
+
+  const {user, userId } = UserDataFetcher()
+
   let currentLessonIndex = -1;
   
   const pathname = usePathname();
 
   console.log('Current pathname: ' + pathname)
+ 
+/*   console.log("lastLesson" + userLastLesson) */
 
   useEffect(() => {
 
     const fetchLessonData = async () => {
       try {
-        if (courseId && lessonId) {
+        if (courseId && lessonId && userId) {
           const lessonDocRef = doc(db, 'courses', courseId as string, 'lessons', lessonId as string);
           const lessonDocSnap = await getDoc(lessonDocRef);
+
+          const userCourseRef = doc(db, 'users', String(userId), 'courses', String(courseId));
+          setDoc(userCourseRef, { lastLessonId: lessonId }, { merge: true })
 
           if (lessonDocSnap.exists()) {
             const lessonData = lessonDocSnap.data();
@@ -47,6 +56,7 @@ export default function LessonPage() {
       }
     };
 
+    console.log('Course Id: ' + courseId)
     const fetchLessonsForCourse = async () => {
       try {
         if (courseId) {
@@ -73,10 +83,10 @@ export default function LessonPage() {
 
     fetchLessonData();
     fetchLessonsForCourse();
-  }, [courseId, lessonId]);
+  }, [courseId, lessonId, userId]);
 
   if (!lesson || !lessons) {
-    return <div>Loading...</div>;
+    return <div className='flex justify-center items-center h-screen w-full'>Loading...</div>;
   }
 
   return (

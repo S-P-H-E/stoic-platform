@@ -45,10 +45,8 @@ const CourseLogic: FC<CourseLogicProps> = () => {
 
               // check if the user has last lesson here in future
               if (userLastCourse && userLastLesson) {
-                const aeLastLesson = userLastLesson;
-                  // gonna fix these when we have the fields in firestore
-                setAeLesson(userLastLesson);
-                setShortFormLesson(userLastLesson);
+              
+
               } else {
                 const AeFirstLesson = '57ALYHAF74nRUw4sKuEG';
                 const ShortFormFirstLesson = '2KLESohi8Qpvz9uKEc08';
