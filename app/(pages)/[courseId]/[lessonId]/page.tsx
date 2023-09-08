@@ -121,7 +121,8 @@ export default function LessonPage() {
                 <h1 className='text-3xl font-medium'>{lesson.title}</h1>
                 <p className='rounded-xl mt-3'>{lesson.description}</p>
               </div>
-              <Comments courseId={courseId as string} />
+              
+              <Comments courseId={courseId as string} lessonId={lessonId as string}/> {/* I want to return the lessons document id here */}
             </>
         </div>
 

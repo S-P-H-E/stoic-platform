@@ -9,7 +9,7 @@ import { useParams } from 'next/navigation';
 import UserImage from './UserImage';
 import { UserDataFetcher } from './../utils/userDataFetcher';
 
-export default function Comments({ courseId }: { courseId: string }) {
+export default function Comments({ courseId, lessonId }: { courseId: string, lessonId: any }) {
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState('');
 
@@ -63,6 +63,7 @@ export default function Comments({ courseId }: { courseId: string }) {
       const commentsRef = collection(db, 'comments');
       await addDoc(commentsRef, {
         courseId,
+        lessonId,
         comment: newComment,
         timestamp: Timestamp.fromDate(new Date()),
         userId: userId,
