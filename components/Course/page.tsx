@@ -1,5 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { FC } from 'react';
+import {motion} from 'framer-motion'
 
 interface CourseProps {
     course?: CourseInfo
@@ -29,14 +30,23 @@ const Course: FC<CourseProps> = ({ course, shortFormLesson, aeLesson }) => {
   };
 
   return (
-    <div className='bg-gradient-to-t from-[#181818] border border-[#3030307a] to-50% p-4 rounded-2xl md:w-[500px] h-[200px] flex flex-col justify-end cursor-pointer transition-all active:scale-105 md:hover:scale-105' onClick={handleClick}>
+    <motion.div className='bg-gradient-to-t from-[#181818] border border-[#3030307a] to-50% p-4 rounded-2xl md:w-[500px] h-[200px] flex flex-col justify-end cursor-pointer transition-all active:scale-105 md:hover:scale-105' onClick={handleClick}
+    initial={{
+      scale: "0.5",
+      opacity: "0",
+    }}
+    whileInView={{
+      opacity: "1",
+      scale: "1"
+    }}
+    >
       { course ? 
       <>
         <h1 className='text-2xl md:text-3xl font-medium text-start'>{course.name}</h1>
         <p className='text-[#8c8c8c]'>{course.description}</p>
       </>
       : null}
-    </div>
+    </motion.div>
   );
 }
 

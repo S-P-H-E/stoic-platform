@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect  } from 'react';
+import React, { useState  } from 'react';
 import {
     Dialog,
     DialogContent,
@@ -15,6 +15,7 @@ import openai from '@/app/api/GPT';
 import Image from 'next/image';
 import { SiTiktok } from 'react-icons/si';
 import { FaYoutube } from 'react-icons/fa';
+import {motion} from 'framer-motion'
 
 type Message = {
     role: "function" | "user" | "system" | "assistant";
@@ -66,9 +67,18 @@ export default function Search(){
     return(
         <Dialog>
             <DialogTrigger>
-                <div className="hover:bg-[--border] transition p-2 rounded-lg" > {/* just a hover animation delete if u dont like it */}
+                <motion.div className="hover:bg-[--border] transition p-2 rounded-lg"
+                    initial={{
+                        scale: "0.5",
+                        opacity: "0",
+                      }}
+                      animate={{
+                        opacity: "1",
+                        scale: "1"
+                      }}
+                > {/* just a hover animation delete if u dont like it */}
                     <AiOutlineMenu size={20}/>
-                </div>
+                </motion.div>
             </DialogTrigger>
             <DialogContent>
                 <div>
