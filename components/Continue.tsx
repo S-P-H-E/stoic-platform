@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 export default function Continue() {
-  const { generalLastCourse, generalLastLesson, userId, fetching } = UserDataFetcher();
+  const { generalLastCourse, generalLastLesson, userId, fetching, userName } = UserDataFetcher();
 
   const [lastLessonName, setLastLessonName] = useState<string | null>(null);
   const [lastLessonDescription, setLastLessonDescription] = useState<string | null>(null);
@@ -55,16 +55,20 @@ export default function Continue() {
   return (
     <>
     {lastLessonName ? 
-          <button onClick={() => router.push(`/${generalLastCourse}/${generalLastLesson}`)}>
-          <div className='bg-gradient-to-t from-[#181818] border border-[#3030307a] to-50% p-4 rounded-2xl md:w-[500px] h-[200px] flex flex-col cursor-pointer transition-all active:scale-105 md:hover:scale-105'>
-            <h1 className='text-2xl md:text-3xl font-medium text-start'>Continue where you left off</h1>
-            <h1 className='text-2xl md:text-3xl font-medium text-start'>{lastCourseName}</h1>
-            <div className="justify-end md:w-[500px] h-[200px] flex flex-col ">
-              <h1 className='text-2xl md:text-3xl font-medium text-start'>{lastLessonName ? lastLessonName : null}</h1>
-              <p className='text-[#8c8c8c]'>{lastLessonDescription ? lastLessonDescription : null}</p> 
+        <div>
+          <h1 className='text-2xl font-medium text-start pb-4'>Continue Watching for {userName ? userName : '...'}</h1>
+          <button onClick={() => router.push(`/${generalLastCourse}/${generalLastLesson}`)} className='w-full'>
+            <div className='bg- border border-[#3030307a] to-50% p-4 rounded-2xl w-full h-[200px] flex flex-col cursor-pointer transition-all active:scale-105 md:hover:scale-105'>
+              
+              
+              <div className="justify-end md:w-[500px] h-[200px] flex flex-col">
+                <h1 className='text-2xl md:text-3xl font-medium text-start'>{lastLessonName ? lastLessonName : null}</h1>
+                {/* <p className='text-[#8c8c8c]'>{lastLessonDescription ? lastLessonDescription : null}</p>  */}
+                <h1 className='text-md font-medium text-start'>{lastCourseName}</h1>
+              </div>
             </div>
-          </div>
-        </button>
+          </button>
+        </div>
     : null}
     </>
   )

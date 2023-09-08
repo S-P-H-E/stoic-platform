@@ -82,11 +82,13 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
           <div className='flex flex-col justify-center items-center gap-3'>
             <BsImageFill size={60}/>
             <p>Drag your image here, or <mark className='bg-transparent text-blue-500 hover:underline'>browse</mark></p>
+            <p className='text-[18px] italic text-[#707070]'>max file size 5MB - png, gif & jpeg allowed</p>
           </div>
         ) : (
           <div className='flex flex-col justify-center items-center gap-3'>
             <BsImageFill size={50}/>
             <p>Drag your image here, or <mark className='bg-transparent text-blue-500 hover:underline'>browse</mark></p>
+            <p className='text-[18px] italic font-normal text-[#707070]'>max file size 5MB - png, gif & jpeg allowed</p>
           </div>
         )}
       </div>
