@@ -24,7 +24,7 @@ export function UserDataFetcher() {
       } else {
         router.push('/')
       }
-    });
+    }); // push to buy premium page
 
     if (user) {
       const userRef = collection(db, 'users');

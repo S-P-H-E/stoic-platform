@@ -40,6 +40,7 @@ const CourseLogic: FC<CourseLogicProps> = () => {
         } else if (courseId === 'hypnDNVZXujeVT8pwkL6') {
           setShortFormLesson(lastLessonId);
         } // add more else ifs in future
+        
       } else {
         console.log(`User ${userId} has no record for course ${courseId}`);
         return null;
