@@ -13,6 +13,7 @@ export function UserDataFetcher() {
   const [userId, setUserId] = useState<string | null>(null);
   const [userLastLesson, setUserLastLesson] = useState(null);
   const [userLastCourse, setUserLastCourse] = useState(null);
+  const [userStatus, setUserStatus] = useState("user");
 
   const router = useRouter()
 
@@ -32,9 +33,10 @@ export function UserDataFetcher() {
       const unsubscribeFirestore = onSnapshot(q, (querySnapshot) => {
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
-            setUserLastLesson(userData.lastlesson);
+            setUserLastLesson(userData.lastlesson); // gonna get updated
             setUserLastCourse(userData.lastCourse)
             setUserName(userData.name);
+            setUserStatus(userData.status);
             setUserId(querySnapshot.docs[0].id);
         }
       });
@@ -48,5 +50,5 @@ export function UserDataFetcher() {
     return unsubscribeAuth;
   }, [user, router]);
 
-  return { userName, userLastLesson, userLastCourse, user, userId, fetching };
+  return { userName, userLastLesson, userLastCourse, userStatus, user, userId, fetching };
 }

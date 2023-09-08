@@ -23,7 +23,7 @@ export default function Login() {
   type FirebaseError = {
     code: string;
     message: string;
-    // Other properties you might expect in a Firebase error
+    // Other prperties you might expect in a Firebase error
   };
 
   const firebaseErrorMessages: Record<string, string> = {
@@ -135,7 +135,6 @@ export default function Login() {
             const errorCode = firebaseError.code as keyof typeof firebaseErrorMessages;
             const errorMessage = firebaseErrorMessages[errorCode] || "An error occurred. Please try again.";
             message.error(errorMessage);
-            console.log(error)
         }
     }
 

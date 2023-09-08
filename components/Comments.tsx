@@ -13,7 +13,7 @@ export default function Comments({ courseId }: { courseId: string }) {
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState('');
 
-  const { userName, user, userId, fetching } = UserDataFetcher();
+  const { userName, user, userId, fetching, userStatus } = UserDataFetcher();
   const { currentCourse } = useParams();
 
   useEffect(() => {
@@ -173,7 +173,7 @@ export default function Comments({ courseId }: { courseId: string }) {
                 <Image width={500} height={500} src={comment.userProfilePic} alt="Profile Picture" className='w-10 h-10 rounded-full mr-2'/>
                 <h1 className='text-2xl'>{comment.userName}</h1>
               </div>
-              {userId === comment.userId && (
+              {userId === comment.userId || userStatus === 'admin' ? (
                 <Dropdown
                   overlay={renderDeleteButton(comment.id)}
                   trigger={['click']}
@@ -181,7 +181,7 @@ export default function Comments({ courseId }: { courseId: string }) {
                 >
                   <BsThreeDotsVertical className='cursor-pointer' />
                 </Dropdown>
-              )}
+              ) : null}
             </div>
             <p className='py-3' dangerouslySetInnerHTML={{ __html: detectAndStyleLinks(comment.comment) }}></p>
             <div className='flex items-center'></div>

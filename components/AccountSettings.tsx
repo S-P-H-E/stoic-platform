@@ -15,6 +15,7 @@ import { message } from 'antd';
 import PasswordModal from './PasswordModal'
 import ProfilePhotoUplaod from './ProfilePhotoUplaod'
 import UserImage from './UserImage'
+import { validateNameLength } from '@/utils/validation'
 
 export default function AccountSettings() {
   const { userName, user, userId } = UserDataFetcher();
@@ -26,6 +27,8 @@ export default function AccountSettings() {
   
   const [hasPassword, setHasPassword] = useState(false);
 
+  const [nameErrorUI, setNameErrorUI] = useState(false)
+
   const closePasswordModal = () => {
     setMenuOpen(false);
   };
@@ -35,7 +38,23 @@ export default function AccountSettings() {
   }
 
   const handleUpdateDisplayName = async () => {
+
     if (userId && displayName.trim() !== '') {
+      const validationErrors = [];
+
+      const nameError = validateNameLength(displayName);
+      if (nameError) {
+        validationErrors.push("Name cannot be empty or longer than 21 characters.");
+        setNameErrorUI(true)
+      }
+
+      if (validationErrors.length > 0) {
+        validationErrors.forEach((error) => {
+          message.error(error);
+        });
+        return;
+      }
+
       try {
         await updateDoc(doc(db, 'users', userId), { name: displayName });
         
@@ -51,6 +70,7 @@ export default function AccountSettings() {
 
         message.success("Display name changed successfully!");
         setDisplayName('');
+
       } catch (error) {
         message.error("Something went wrong when changing display name");
       }
@@ -135,7 +155,7 @@ export default function AccountSettings() {
               <p className='text-[--highlight] lg:text-xl'>{userName ? user?.email : "loading..."}</p>
             </div>
 
-            <div className="2xl:mb-6 lg:mb-4 mb-0 gap-2 flex flex-col w-64 ">
+            <div className="2xl:mb-6 lg:mb-4 mb-0 gap-2 flex flex-col w-full md:w-64">
               <h1>User Image</h1>
               <Button onClick={() => setImgMenuOpen(!imgMenuOpen)} className='font-normal text-base lg:text-lg'>Update</Button>
               {imgMenuOpen ?
