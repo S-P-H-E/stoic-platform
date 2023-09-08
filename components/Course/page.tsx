@@ -3,7 +3,6 @@ import { FC } from 'react';
 
 interface CourseProps {
     course?: CourseInfo
-    lesson?: string
     shortFormLesson?: string
     aeLesson?: string
   }
@@ -14,7 +13,7 @@ interface CourseProps {
     description: string;
   }
 
-const Course: FC<CourseProps> = ({ course, lesson, shortFormLesson, aeLesson }) => {
+const Course: FC<CourseProps> = ({ course, shortFormLesson, aeLesson }) => {
   const router = useRouter();
 
   const handleClick = () => {

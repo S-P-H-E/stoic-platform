@@ -40,9 +40,14 @@ export default function LessonPage() {
         if (courseId && lessonId && userId) {
           const lessonDocRef = doc(db, 'courses', courseId as string, 'lessons', lessonId as string);
           const lessonDocSnap = await getDoc(lessonDocRef);
-
           const userCourseRef = doc(db, 'users', String(userId), 'courses', String(courseId));
           setDoc(userCourseRef, { lastLessonId: lessonId }, { merge: true })
+
+          const userRef = doc(db, 'users', userId)
+          updateDoc(userRef, {
+            generalLastCourse: courseId,
+            generalLastLesson: lessonId,
+          });
 
           if (lessonDocSnap.exists()) {
             const lessonData = lessonDocSnap.data();

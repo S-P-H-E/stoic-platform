@@ -1,7 +1,7 @@
 "use client"
 
 import { FC, useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 import Course from './page';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
@@ -17,15 +17,41 @@ const CourseLogic: FC<CourseLogicProps> = () => {
   const [courses, setCourses] = useState<Array<any>>([]);
   const [LessonToGo, setLessonToGo] = useState<any>(null)
   
-  const [aeLesson, setAeLesson] = useState<string>('')
-  const [shortFormLesson, setShortFormLesson] = useState<string>('')
+  const [aeLesson, setAeLesson] = useState<string>('57ALYHAF74nRUw4sKuEG')
+  const [shortFormLesson, setShortFormLesson] = useState<string>('2KLESohi8Qpvz9uKEc08')
+
+  const [AeLastLesson, setAeLastLesson] = useState<string | null>(null);
+  const [shortformLastLesson, setShortformLastLesson] = useState<string | null>(null);
+
 
   const {userId} = UserDataFetcher();
 
+  const fetchLastLessonId = async (userId: string, courseId: string) => {
+    try {
+      const userCourseRef = doc(db, 'users', String(userId), 'courses', String(courseId));
+      const userCourseSnapshot = await getDoc(userCourseRef);
+  
+      if (userCourseSnapshot.exists()) {
+        const lastLessonId = userCourseSnapshot.data().lastLessonId;
+        /* console.log(`User ${userId} last watched lesson for course ${courseId}: ${lastLessonId}`); */
+  
+        if (courseId === '0E5D3rrDvLtdJfPHqFUB') {
+          setAeLesson(lastLessonId);
+        } else if (courseId === 'hypnDNVZXujeVT8pwkL6') {
+          setShortFormLesson(lastLessonId);
+        } // add more else ifs in future
+      } else {
+        console.log(`User ${userId} has no record for course ${courseId}`);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching lastLessonId:', error);
+      return null;
+    }
+  };
+  
 
-  //CHECK USER ID SOON !VER Y IM PO R TANT 4HWFIJHEFKJ
   useEffect(() => {
-    // Check if userId is available before fetching courses
     if (userId) {
       const fetchCourses = async () => {
         try {
@@ -43,17 +69,9 @@ const CourseLogic: FC<CourseLogicProps> = () => {
                 ...lessonDoc.data(),
               }));
 
-              // check if the user has last lesson here in future
-              if (!userId) {
-              
-
-              } else {
-                const AeFirstLesson = '57ALYHAF74nRUw4sKuEG';
-                const ShortFormFirstLesson = '2KLESohi8Qpvz9uKEc08';
-
-                setAeLesson(AeFirstLesson);
-                console.log('Course Id' + course.id)
-                setShortFormLesson(ShortFormFirstLesson);
+              if (userId) {
+                const AeLastLessonId = await fetchLastLessonId(userId, '0E5D3rrDvLtdJfPHqFUB');
+                const ShortFormlastLessonId = await fetchLastLessonId(userId, 'hypnDNVZXujeVT8pwkL6');
               }
 
               return { ...course, lessons: lessonsData };
@@ -68,12 +86,14 @@ const CourseLogic: FC<CourseLogicProps> = () => {
 
       fetchCourses();
     }
-  }, [userId, aeLesson, shortFormLesson]);
+  }, [userId, AeLastLesson, shortformLastLesson]);
+  
+
 
   return (
     <div className='flex flex-col md:flex-row gap-5'>
       {courses.map((course) => (
-        <Course key={course.id} course={course} lesson={LessonToGo} aeLesson={aeLesson} shortFormLesson={shortFormLesson} />
+        <Course key={course.id} course={course} aeLesson={aeLesson} shortFormLesson={shortFormLesson} />
       ))}
     </div>
   );

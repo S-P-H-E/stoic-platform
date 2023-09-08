@@ -12,6 +12,8 @@ export function UserDataFetcher() {
   const [userName, setUserName] = useState(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [userStatus, setUserStatus] = useState("user");
+  const [generalLastCourse, setGeneralLastCourse] = useState('')
+  const [generalLastLesson, setGeneralLastLesson] = useState('')
 
   const router = useRouter()
 
@@ -34,6 +36,8 @@ export function UserDataFetcher() {
             setUserName(userData.name);
             setUserStatus(userData.status);
             setUserId(querySnapshot.docs[0].id);
+            setGeneralLastCourse(userData.generalLastCourse);
+            setGeneralLastLesson(userData.generalLastLesson)
         }
       });
 
@@ -46,5 +50,5 @@ export function UserDataFetcher() {
     return unsubscribeAuth;
   }, [user, router]);
 
-  return { userName, userStatus, user, userId, fetching };
+  return { generalLastCourse, generalLastLesson, userName, userStatus, user, userId, fetching };
 }
