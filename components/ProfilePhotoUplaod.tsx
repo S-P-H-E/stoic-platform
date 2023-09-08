@@ -97,9 +97,9 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
             <Image
               alt="Profile picture"
               src={URL.createObjectURL(selectedImage)} // Display the selected image
-              width={440}
-              height={440}
-              className="border border-[--border] rounded-lg flex"
+              width={100}
+              height={0}
+              className="border border-[--border] rounded-lg flex w-[20vh] object-contain mx-auto"
             />
           </div>
           <Button
