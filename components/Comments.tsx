@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import UserImage from './UserImage';
 import { UserDataFetcher } from './../utils/userDataFetcher';
+import { HiMiniPencilSquare } from 'react-icons/hi2'
 
 export default function Comments({ courseId, lessonId }: { courseId: string, lessonId: any }) {
   const [comments, setComments] = useState<any[]>([]);
@@ -161,9 +162,9 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
           onChange={(e) => setNewComment(e.target.value)}
           className='w-full outline-none py-3 bg-transparent text-lg border-b border-[#3f3f3f] placeholder:text-[#b9b9b9]'
         />
-        {/* <button type="submit" className='bg-[white] text-black m-1 p-4 rounded-full font-medium w-full md:w-fit'>
+        <button type="submit" className='bg-[white] text-black m-1 p-4 rounded-full font-medium w-full md:w-fit'>
           <HiMiniPencilSquare size={20}/>
-        </button> */}
+        </button>
       </form>
       <ul>
         {filteredComments.map((comment) => (
@@ -184,7 +185,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
                 </Dropdown>
               ) : null}
             </div>
-            <p className='py-3' dangerouslySetInnerHTML={{ __html: detectAndStyleLinks(comment.comment) }}></p>
+            <p className='py-3 max-w-[1000px]' dangerouslySetInnerHTML={{ __html: detectAndStyleLinks(comment.comment) }}></p>
             <div className='flex items-center'></div>
             <p className='text-[#5e5e5e]'>{comment.timestamp.toDate().toLocaleString()}</p>
           </li>
