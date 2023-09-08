@@ -13,11 +13,14 @@ import { YoutubeLogo, FileArrowDown, Gear, TiktokLogo, Triangle } from "@phospho
 import Link from 'next/link';
 import openai from '@/app/api/GPT';
 import Image from 'next/image';
+import { SiTiktok } from 'react-icons/si';
+import { FaYoutube } from 'react-icons/fa';
 
 type Message = {
-    role: string;
+    role: "function" | "user" | "system" | "assistant";
     content: string;
   };
+  
 
 export default function Search(){
     const [input, setInput] = useState('');
@@ -30,11 +33,11 @@ export default function Search(){
       };
   
     const handleSubmit = async () => {
-      try {
-        const newMessage = { role: 'user', content: input };
-        const updatedConversation: Message[] = [...conversation, newMessage];
-        setLoading(true); // Set loading to true when submitting
-  
+        try {
+            const newMessage: Message = { role: 'user', content: input };
+            const updatedConversation: Message[] = [...conversation, newMessage];
+            setLoading(true);
+        
         const completion = await openai.chat.completions.create({
           messages: updatedConversation,
           model: 'gpt-3.5-turbo',
@@ -101,15 +104,15 @@ export default function Search(){
                         <h1 className="text-[#444445] cursor-default">Converters</h1>
 
                         <Link href={'/converters/ytmp4'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
-                            <Image src={'/images/youtube.png'} alt='tiktok' width={15} height={0}/>
+                            <FaYoutube size={22} color="#444445" weight="fill"/>
                             YouTube
                         </Link>
                         <Link href={'/converters/tiktok'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
-                            <Image src={'/images/tiktok.png'} alt='tiktok' width={15} height={0}/>
+                            <SiTiktok size={22} color="#444445" weight="fill"/>
                             TikTok
                         </Link>
                         <Link href={'/converters/rumble'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
-                            <Image src={'/images/rumble.png'} alt='tiktok' width={15} height={0}/>
+                            <Image src={'/images/Rumble.svg'} alt='rumble' width={18} height={18}/>
                             Rumble
                         </Link>
                     </div>
