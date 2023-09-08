@@ -20,7 +20,7 @@ const CourseLogic: FC<CourseLogicProps> = () => {
   const [aeLesson, setAeLesson] = useState<string>('')
   const [shortFormLesson, setShortFormLesson] = useState<string>('')
 
-  const {userId, userLastCourse, userLastLesson} = UserDataFetcher();
+  const {userId} = UserDataFetcher();
 
 
   //CHECK USER ID SOON !VER Y IM PO R TANT 4HWFIJHEFKJ
@@ -44,16 +44,15 @@ const CourseLogic: FC<CourseLogicProps> = () => {
               }));
 
               // check if the user has last lesson here in future
-              if (userLastCourse && userLastLesson) {
-                const aeLastLesson = userLastLesson;
-                  // gonna fix these when we have the fields in firestore
-                setAeLesson(userLastLesson);
-                setShortFormLesson(userLastLesson);
+              if (!userId) {
+              
+
               } else {
                 const AeFirstLesson = '57ALYHAF74nRUw4sKuEG';
                 const ShortFormFirstLesson = '2KLESohi8Qpvz9uKEc08';
 
                 setAeLesson(AeFirstLesson);
+                console.log('Course Id' + course.id)
                 setShortFormLesson(ShortFormFirstLesson);
               }
 
@@ -69,7 +68,7 @@ const CourseLogic: FC<CourseLogicProps> = () => {
 
       fetchCourses();
     }
-  }, [userId, userLastCourse, userLastLesson, aeLesson, shortFormLesson]);
+  }, [userId, aeLesson, shortFormLesson]);
 
   return (
     <div className='flex flex-col md:flex-row gap-5'>
