@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { FC } from 'react';
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 
 interface CourseProps {
     course?: CourseInfo

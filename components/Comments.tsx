@@ -9,6 +9,7 @@ import { useParams } from 'next/navigation';
 import UserImage from './UserImage';
 import { UserDataFetcher } from './../utils/userDataFetcher';
 import { HiMiniPencilSquare } from 'react-icons/hi2'
+import {motion} from 'framer-motion'
 
 export default function Comments({ courseId, lessonId }: { courseId: string, lessonId: any }) {
   const [comments, setComments] = useState<any[]>([]);
@@ -16,6 +17,20 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
 
   const { userName, user, userId, fetching, userStatus } = UserDataFetcher();
   const { currentCourse } = useParams();
+
+  const fadeInAnimationVariants = { // for framer motion  
+    initial: {
+        opacity: 0,
+        y: 100,
+    },
+    animate: (index: number) => ({
+        opacity: 1,
+        y: 0,
+        transition: {
+            delay: 0.05 * index,
+        }
+    })
+}
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -168,7 +183,15 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
       </form>
       <ul>
         {filteredComments.map((comment) => (
-          <li key={comment.id} className=' my-4 p-4 rounded-2xl'>
+          <motion.li key={comment.id} className=' my-4 p-4 rounded-2xl'
+          custom={comment.id}
+          variants={fadeInAnimationVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{
+            once: true,
+          }}
+          >
             <div className='flex justify-between items-center'>
               <div className='flex justify-center items-center'>
                 <Image width={500} height={500} src={comment.userProfilePic} alt="Profile Picture" className='w-10 h-10 rounded-full mr-2'/>
@@ -187,7 +210,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
             <p className='py-3 max-w-[1000px]' dangerouslySetInnerHTML={{ __html: detectAndStyleLinks(comment.comment) }}></p>
             <div className='flex items-center'></div>
             <p className='text-[#5e5e5e]'>{comment.timestamp.toDate().toLocaleString()}</p>
-          </li>
+          </motion.li>
         ))}
       </ul>
     </div>

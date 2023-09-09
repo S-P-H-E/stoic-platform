@@ -9,6 +9,7 @@ import Search from '@/components/Search/page';
 import Script from 'next/script';
 import Comments from '@/components/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
+import {motion} from 'framer-motion'
 
 interface LessonItem {
   id: string;
@@ -30,6 +31,20 @@ export default function LessonPage() {
   const pathname = usePathname();
 
   console.log('Current pathname: ' + pathname)
+
+  const fadeInAnimationVariants = { // for framer motion  
+    initial: {
+        opacity: 0,
+        y: 100,
+    },
+    animate: (index: number) => ({
+        opacity: 1,
+        y: 0,
+        transition: {
+            delay: 0.05 * index,
+        }
+    })
+}
  
 /*   console.log("lastLesson" + userLastLesson) */
 
@@ -107,11 +122,11 @@ export default function LessonPage() {
       <div className="flex p-10">
         <div>
             <>
-              <div className='w-[1024px] h-[576px] rounded-3xl shadow-2xl shadow-white/10'>
+              <div className='w-[1024px] h-[576px] rounded-3xl shadow-2xl shadow-white/10 transition ring-[--border] hover:ring-4 hover:ring-offset-4 ring-offset-[--bg]'>
                 <iframe
                   src={lesson.url}
                   allow="autoplay; fullscreen; picture-in-picture"
-                  style={{ width: '100%', height: '100%', borderRadius: '20px' }}
+                  style={{ width: '100%', height: '100%', borderRadius: '24px' }}
                   /* title="AE - Episode 1" */
                 />
               </div>
@@ -129,12 +144,22 @@ export default function LessonPage() {
         <div>
           <div className='flex flex-col gap-5'>
           {lessons.map((lessonItem, index) => (
+            <motion.div key={index}
+            custom={index}
+            variants={fadeInAnimationVariants}
+            initial="initial"
+            whileInView="animate"
+            viewport={{
+              once: true,
+            }}
+            >
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer'>
                 <div className={`mx-5 px-3 py-3 rounded-2xl transition-all border border-[#1E1E1E] hover:scale-105 cursor-pointer flex justify-start items-center gap-2 ${index === currentLessonIndex ? 'bg-[#1E1D1E]' : ''}`}>
                     <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
                     <h1 className='text-xl font-medium'>{lessonItem.title}</h1>
                 </div>
             </Link>
+            </motion.div>
             ))}
           </div>
         </div>
