@@ -32,8 +32,8 @@ export default function UserImage() {
   }, [userId]);
 
   // Extract the first letter of the userName
-  const firstLetter = userName ? userName.charAt(0) : '';
-  const lastLetter = userName ? userName.charAt(userName.length-1) : ''
+  const firstLetter = (userName as string | undefined)?.charAt(0) || '';
+  const lastLetter = (userName as string | undefined)?.charAt((userName as string | undefined)?.length - 1) || '';
 
   return (
     <Avatar className="w-full h-full">

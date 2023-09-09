@@ -33,7 +33,7 @@ const Course: FC<CourseProps> = ({ course, shortFormLesson, aeLesson }) => {
     <motion.div className='bg-gradient-to-t from-[#181818] border border-[#3030307a] to-50% p-4 rounded-2xl md:w-[500px] h-[200px] flex flex-col justify-end cursor-pointer transition-all active:scale-105 md:hover:scale-105' onClick={handleClick}
     initial={{
       scale: "0.5",
-      opacity: "0",
+      opacity: "0.1",
     }}
     whileInView={{
       opacity: "1",
