@@ -10,6 +10,7 @@ import Script from 'next/script';
 import Comments from '@/components/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 
+
 interface LessonItem {
   id: string;
   title: string;
