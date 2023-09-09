@@ -171,7 +171,6 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
           <li key={comment.id} className=' my-4 p-4 rounded-2xl'>
             <div className='flex justify-between items-center'>
               <div className='flex justify-center items-center'>
-
                 <Image width={500} height={500} src={comment.userProfilePic} alt="Profile Picture" className='w-10 h-10 rounded-full mr-2'/>
                 <h1 className='text-2xl'>{comment.userName}</h1>
               </div>

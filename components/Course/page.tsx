@@ -39,6 +39,8 @@ const Course: FC<CourseProps> = ({ course, shortFormLesson, aeLesson }) => {
       opacity: "1",
       scale: "1"
     }}
+    whileHover={{ scale: 1.05  }}
+    whileTap={{ scale: 0.95 }}
     >
       { course ? 
       <>
