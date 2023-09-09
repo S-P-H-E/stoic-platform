@@ -4,8 +4,14 @@
 
 * {
     --highlight: #717178;
-    --border: #27272a;
+    --border: #1E1E1E;
     --bg: #09090b;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
 }
 
 body {
@@ -13,5 +19,4 @@ body {
     color: white;
     background-color: var(--bg);
 }
- 
- 
+
