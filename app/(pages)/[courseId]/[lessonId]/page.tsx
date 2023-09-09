@@ -2,7 +2,7 @@
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { db } from '@/utils/firebase';
-import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, onSnapshot, query, setDoc, updateDoc } from 'firebase/firestore';
 import { BsChevronLeft } from 'react-icons/bs'
 import Link from 'next/link';
 import Search from '@/components/Search/page';
@@ -10,20 +10,11 @@ import Script from 'next/script';
 import Comments from '@/components/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import {motion} from 'framer-motion'
-import { AiOutlineLink, AiFillDelete } from 'react-icons/ai'
+import { AiOutlineLink } from 'react-icons/ai'
 import {
   ContextMenu,
   ContextMenuCheckboxItem,
   ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuLabel,
-  ContextMenuRadioGroup,
-  ContextMenuRadioItem,
-  ContextMenuSeparator,
-  ContextMenuShortcut,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 
@@ -77,6 +68,13 @@ export default function LessonPage() {
     }
   }
 
+  function truncateText(text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  }
+
   useEffect(() => {
     const fetchLessonData = async () => {
       try {
@@ -104,25 +102,27 @@ export default function LessonPage() {
       }
     };
 
-    const fetchLessonsForCourse = async () => {
+    const fetchLessonsForCourse = () => {
       try {
         if (courseId) {
           const lessonsRef = collection(db, 'courses', courseId as string, 'lessons');
           const q = query(lessonsRef);
-          const querySnapshot = await getDocs(q);
-
-          const lessonsData: LessonItem[] = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            title: doc.data().title,
-            description: doc.data().description,
-            order: doc.data().order,
-          }));
-          lessonsData.sort((a, b) => a.order - b.order);
-          
-          setLessons(lessonsData);
-          
+    
+          const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const lessonsData: LessonItem[] = querySnapshot.docs.map((doc) => ({
+              id: doc.id,
+              title: doc.data().title,
+              description: doc.data().description,
+              order: doc.data().order,
+            }));
+            lessonsData.sort((a, b) => a.order - b.order);
+    
+            setLessons(lessonsData);
+          });
+    
+          return () => unsubscribe(); // Unsubscribe when the component unmounts
         } else {
-          console.log('Course Id not found')
+          console.log('Course Id not found');
         }
       } catch (error) {
         console.error('Error fetching lessons:' + error);
@@ -163,7 +163,9 @@ export default function LessonPage() {
 
               <div className='my-5 md:mb-20 border border-[--border] rounded-2xl p-5'>
                 <div className='flex justify-between'>
-                  <h1 className='text-3xl font-medium'>{lesson.title}</h1>
+                  <h1 className='text-3xl font-medium'>
+                  {truncateText(lesson.title, 40)}
+                  </h1>
                   <button className='border border-[--border] flex gap-1 h-fit items-center rounded-xl px-2'>
                     <AiOutlineLink />
                     Link
@@ -201,7 +203,9 @@ export default function LessonPage() {
                   <ContextMenuTrigger>
                   <div className={`mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-start items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'invert' : ''}`}>
                     <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
-                    <h1 className='text-xl font-medium text-white'>{lessonItem.title}</h1>
+                    <h1 className='text-xl font-medium text-white'>
+                      {truncateText(lessonItem.title, 18)}
+                    </h1>
                   </div>
                   </ContextMenuTrigger>
                 

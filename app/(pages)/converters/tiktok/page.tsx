@@ -202,7 +202,7 @@ export default function Home() {
                 { videoTitle ?
                  <h1 className="pt-2 md:text-2xl font-semibold text-lg overflow-hidden whitespace-nowrap">
                  {videoTitle.length > 14
-                   ? `${videoTitle.slice(0, 12)}...`
+                   ? `${videoTitle.slice(0, 14)}...`
                   : videoTitle}
                   </h1>
                 : null}

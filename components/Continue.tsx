@@ -17,6 +17,12 @@ export default function Continue() {
 
   const router = useRouter()
 
+  function truncateText(text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  }
 
   useEffect(() => {
     if (userId && generalLastCourse && generalLastLesson) {
@@ -63,9 +69,9 @@ export default function Continue() {
               
               
               <div className="justify-end md:w-[500px] h-[200px] flex flex-col">
-                <h1 className='text-2xl md:text-3xl font-medium text-start'>{lastLessonName ? lastLessonName : null}</h1>
+                <h1 className='text-2xl md:text-3xl font-medium text-start'>{lastLessonName ? truncateText(lastLessonName, 30) : null}</h1>
                 {/* <p className='text-[#8c8c8c]'>{lastLessonDescription ? lastLessonDescription : null}</p>  */}
-                <h1 className='text-md font-medium text-start'>{lastCourseName}</h1>
+                <h1 className='text-md font-medium text-start'>{lastCourseName ? truncateText(lastCourseName, 50) : null}</h1>
               </div>
             </div>
           </button>
