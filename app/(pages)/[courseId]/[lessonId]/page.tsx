@@ -10,7 +10,22 @@ import Script from 'next/script';
 import Comments from '@/components/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import {motion} from 'framer-motion'
-import { AiOutlineLink } from 'react-icons/ai'
+import { AiOutlineLink, AiFillDelete } from 'react-icons/ai'
+import {
+  ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu"
 
 
 interface LessonItem {
@@ -170,10 +185,20 @@ export default function LessonPage() {
             }}
             >
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
-                <div className={`mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] hover:scale-105 cursor-pointer flex justify-start items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'invert' : ''}`}>
+                <ContextMenu>
+                  <ContextMenuTrigger>
+                  <div className={`mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-start items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'invert' : ''}`}>
                     <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
-                    <h1 className='text-xl font-medium'>{lessonItem.title}</h1>
-                </div>
+                    <h1 className='text-xl font-medium text-white'>{lessonItem.title}</h1>
+                  </div>
+                  </ContextMenuTrigger>
+                <ContextMenuContent className="w-64">
+                  <ContextMenuCheckboxItem>
+                    Delete
+                  </ContextMenuCheckboxItem>
+                </ContextMenuContent>
+              </ContextMenu>
+                
             </Link>
             </motion.div>
             ))}
