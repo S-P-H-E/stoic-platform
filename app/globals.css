@@ -4,7 +4,8 @@
 
 * {
     --highlight: #717178;
-    --border: #27272a;
+    --modal: #0F0F10;
+    --border: #1E1E1E;
     --bg: #09090b;
 }
 
@@ -13,7 +14,7 @@ body {
     color: white;
     background-color: var(--bg);
 }
- 
+
 @layer base {
   :root {
     --background: black;

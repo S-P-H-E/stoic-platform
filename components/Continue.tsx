@@ -57,7 +57,7 @@ export default function Continue() {
     {lastLessonName ? 
         <div
         >
-          <h1 className='text-2xl font-medium text-start pb-4'>Continue Watching for {userName ? userName : '...'}</h1>
+          <h1 className='text-2xl font-medium text-start pb-4'>Continue Learning for {userName ? userName : '...'}</h1>
           <button onClick={() => router.push(`/${generalLastCourse}/${generalLastLesson}`)} className='w-full'>
             <div className='bg- border border-[#3030307a] to-50% p-4 rounded-2xl w-full h-[200px] flex flex-col cursor-pointer transition-all active:scale-105 md:hover:scale-105'>
               
