@@ -2,7 +2,7 @@
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { db } from '@/utils/firebase';
-import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc } from 'firebase/firestore';
 import { BsChevronLeft } from 'react-icons/bs'
 import Link from 'next/link';
 import Search from '@/components/Search/page';
@@ -41,9 +41,7 @@ export default function LessonPage() {
   const [lesson, setLesson] = useState<any | null>(null);
   const [lessons, setLessons] = useState<LessonItem[]>([]);
 
-  const {user, userId } = UserDataFetcher()
-
-  
+  const {user, userId, userStatus } = UserDataFetcher()
   
   const pathname = usePathname();
 
@@ -68,9 +66,18 @@ export default function LessonPage() {
 }
  
 /*   console.log("lastLesson" + userLastLesson) */
+  const deleteLesson = async () => {
+    try {
+      if (lessonId) {
+        const lessonDocRef = doc(db, 'courses', courseId as string, 'lessons', lessonId as string);
+        await deleteDoc(lessonDocRef);
+      }
+    } catch(error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
-
     const fetchLessonData = async () => {
       try {
         if (courseId && lessonId && userId) {
@@ -97,7 +104,6 @@ export default function LessonPage() {
       }
     };
 
-    console.log('Course Id: ' + courseId)
     const fetchLessonsForCourse = async () => {
       try {
         if (courseId) {
@@ -183,6 +189,12 @@ export default function LessonPage() {
             viewport={{
               once: true,
             }}
+            whileHover={{
+              scale: 1.08
+            }}
+            whileTap={{
+              scale: 1
+            }}
             >
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
@@ -192,19 +204,21 @@ export default function LessonPage() {
                     <h1 className='text-xl font-medium text-white'>{lessonItem.title}</h1>
                   </div>
                   </ContextMenuTrigger>
-                <ContextMenuContent className="w-64">
-                  <ContextMenuCheckboxItem>
-                    Delete
-                  </ContextMenuCheckboxItem>
-                </ContextMenuContent>
-              </ContextMenu>
                 
+                {userStatus == 'admin' &&
+                  <ContextMenuContent className="w-64">
+                    <ContextMenuCheckboxItem className="cursor-pointer" onClick={deleteLesson}>
+                      Delete
+                    </ContextMenuCheckboxItem>
+                  </ContextMenuContent>
+                }
+                </ContextMenu>
             </Link>
             </motion.div>
             ))}
             <div className='visible md:hidden'>
                 <Comments courseId={courseId as string} lessonId={lessonId as string}/>
-              </div>
+            </div>
           </div>
         </div>
       </div>
