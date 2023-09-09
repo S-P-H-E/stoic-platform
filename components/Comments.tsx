@@ -151,7 +151,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
           //   className='w-8 h-8 rounded-full mx-4'
           // />
           
-          <div className='h-[50px] w-[52px]'>
+          <div className='h-[50px] aspect-square'>
             <UserImage />
           </div>
         )}
