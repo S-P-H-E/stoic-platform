@@ -158,12 +158,12 @@ export default function LessonPage() {
               <div className='my-5 md:mb-20 border border-[--border] rounded-2xl p-5'>
                 <div className='flex justify-between'>
                   <h1 className='text-3xl font-medium'>{lesson.title}</h1>
-                  <button className='border border-[--border] flex gap-1 h-fit items-center rounded-xl px-2'>
-                    <AiOutlineLink />
+                  <button className='bg-[--border] border border-[--border] flex gap-1 h-fit items-center rounded-full py-1 px-3'>
+                    <AiOutlineLink size={20}/>
                     Link
                   </button>
                 </div>
-                <p className='rounded-xl mt-3'>{lesson.description}</p>
+                <p className='rounded-xl mt-3 max-w-[950px]'>{lesson.description}</p>
               </div>
               
               <div className='hidden md:block'>
