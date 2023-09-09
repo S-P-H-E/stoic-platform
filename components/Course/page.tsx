@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { FC } from 'react';
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 
 interface CourseProps {
     course?: CourseInfo
@@ -39,6 +39,8 @@ const Course: FC<CourseProps> = ({ course, shortFormLesson, aeLesson }) => {
       opacity: "1",
       scale: "1"
     }}
+    whileHover={{ scale: 1.05  }}
+    whileTap={{ scale: 0.95 }}
     >
       { course ? 
       <>
