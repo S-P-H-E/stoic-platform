@@ -4,6 +4,8 @@ import CourseLogic from "@/components/Course/logic";
 import CreateCourse from "@/components/CreateCourse/page";
 import Greeting from "@/components/Greeting";
 import Search from "@/components/Search/page";
+import UserImage from "@/components/UserImage";
+import Link from "next/link";
 
 // Define the Dashboard functional component
 export default function Dashboard(){
@@ -16,6 +18,9 @@ export default function Dashboard(){
         <div className="flex justify-center items-center gap-3">
           <CreateCourse />
           <Search />
+          <Link href={'/settings'} className="w-[50px] h-[50px] cursor-pointer">
+            <UserImage />
+          </Link>
         </div>
       </div>
       {/* Courses */}

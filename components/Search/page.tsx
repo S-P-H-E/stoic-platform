@@ -77,7 +77,7 @@ export default function Search(){
                         scale: "1"
                       }}
                 > {/* just a hover animation delete if u dont like it */}
-                    <AiOutlineMenu size={20}/>
+                    <BiSearch size={20}/>
                 </motion.div>
             </DialogTrigger>
             <DialogContent>

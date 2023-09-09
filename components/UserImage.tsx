@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getDownloadURL, ref } from 'firebase/storage';
@@ -8,7 +9,7 @@ import { db } from '@/utils/firebase'; // Import your Firestore instance
 
 export default function UserImage() {
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-  const { user, userId } = UserDataFetcher();
+  const { user, userId, userName } = UserDataFetcher();
 
   useEffect(() => {
     if (userId) {
@@ -30,10 +31,15 @@ export default function UserImage() {
     }
   }, [userId]);
 
+  // Extract the first letter of the userName
+  const firstLetter = userName ? userName.charAt(0) : '';
+  const lastLetter = userName ? userName.charAt(userName.length-1) : ''
+
   return (
     <Avatar className="w-full h-full">
       <AvatarImage src={profileImageUrl ?? undefined} />
-      <AvatarFallback>CN</AvatarFallback>
+      {/* Display the first letter of the userName */}
+      <AvatarFallback className='uppercase select-none'>{firstLetter}{lastLetter}</AvatarFallback>
     </Avatar>
   );
 }
