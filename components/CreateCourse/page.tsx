@@ -81,7 +81,7 @@ export default function CreateCourse() {
               Upload
             </button>
 
-            <div className='border border-dashed border-[--border] w-full h-[70px] rounded-xl flex justify-center items-center md:hidden'>
+            <div className='border border-dashed border-[#444444] w-full h-[70px] rounded-xl flex justify-center items-center gap-1 md:hidden'>
               <AiOutlineCloudUpload size={20} />
               Upload
             </div>
