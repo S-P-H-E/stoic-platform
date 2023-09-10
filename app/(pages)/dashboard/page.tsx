@@ -15,10 +15,12 @@ export default function Dashboard(){
 
       <div className="flex flex-col justify-center items-center">
         {/* Navbar */}
-        <div className="p-10 flex justify-between items-center gap-6 w-[1000px]">
+        <div className="px-10 pt-7 pb-3 md:p-10 flex justify-between items-center gap-6 w-full md:w-[1000px]">
           <Greeting/>
           <div className="flex justify-center items-center gap-3">
-            <CreateCourse />
+            <div className="hidden md:flex">
+              <CreateCourse />
+            </div>
             <Search />
             <Link href={'/settings'} className="w-[50px] h-[50px] cursor-pointer">
               <UserImage />
@@ -26,7 +28,10 @@ export default function Dashboard(){
           </div>
         </div>
         {/* Courses */}
-        <div className="p-10 flex flex-col gap-8 w-[1000px]">
+        <div className=" p-5 md:p-10 flex flex-col gap-8 w-full md:w-[1000px]">
+            <div className="grid md:hidden w-full">
+              <CreateCourse />
+            </div>
           <Continue/>
           <CourseLogic courses={[]} />
         </div>

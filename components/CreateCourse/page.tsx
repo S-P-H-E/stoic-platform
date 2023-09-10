@@ -75,10 +75,17 @@ export default function CreateCourse() {
     <Dialog>
       <DialogTrigger>
         {userStatus === 'admin' ? (
-          <button className='flex justify-center items-center px-2 py-1 border border-[#3030307a] gap-1 rounded-xl cursor-pointer'>
-            <AiOutlineCloudUpload size={20} />
-            Upload
-          </button>
+          <>
+            <button className='hidden md:flex justify-center items-center px-2 py-1 border border-[#3030307a] gap-1 rounded-xl cursor-pointer'>
+              <AiOutlineCloudUpload size={20} />
+              Upload
+            </button>
+
+            <div className='border border-dashed border-[--border] w-full h-[70px] rounded-xl flex justify-center items-center md:hidden'>
+              <AiOutlineCloudUpload size={20} />
+              Upload
+            </div>
+          </>
         ) : null}
       </DialogTrigger>
       <DialogContent>
