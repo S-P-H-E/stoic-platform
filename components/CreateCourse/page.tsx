@@ -9,12 +9,14 @@ import {
 } from "@/components/ui/dialog";
 import Input from '../Converter/Input';
 import Button from '../Button';
-import { collection, doc, addDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 
 export default function CreateCourse() {
   const { userStatus } = UserDataFetcher();
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<{
+    [x: string]: React.ReactNode; id: string;  
+}[]>([]);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [lessonTitle, setlessonTitle] = useState('');
   const [lessonDescription, setLessonDescription] = useState('');

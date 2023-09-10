@@ -32,14 +32,13 @@ export default function UserImage() {
   }, [userId]);
 
   // Extract the first letter of the userName
-  const firstLetter = userName ? userName.charAt(0) : '';
-  const lastLetter = userName ? userName.charAt(userName.length-1) : ''
+  const userChar: string = userName ? userName : '';
 
   return (
     <Avatar className="w-full h-full">
       <AvatarImage src={profileImageUrl ?? undefined} />
       {/* Display the first letter of the userName */}
-      <AvatarFallback className='uppercase select-none'>{firstLetter}{lastLetter}</AvatarFallback>
+      <AvatarFallback className='uppercase select-none'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
     </Avatar>
   );
 }

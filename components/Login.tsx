@@ -73,8 +73,8 @@ export default function Login() {
 
     const [registerEmail, setRegisterEmail] = useState("")
     const [registerPassword, setRegisterPassword] = useState("")
-
     const [registerName, setRegisterName] = useState("")
+    const [registerSocial, setRegisterSocial] = useState("")
 
     const [isLoginMode, setIsLoginMode] = useState(false); // Add this state
 
@@ -125,6 +125,7 @@ export default function Login() {
                 email: userEmail,
                 password: registerPassword,
                 status: 'user',
+                social: registerSocial,
             });
 
 
@@ -243,6 +244,10 @@ export default function Login() {
             {passwordErrorUI &&
             <InputResponse>Password must contain at least 8 digits, a number and uppercase.</InputResponse>
             }
+        </div>
+        <div>
+            <h1 className='text-lg font-medium'>Social</h1>
+            <Input value={registerSocial} type='text' placeholder="Enter your account link here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterSocial(event.target.value)}/>
         </div>
         <Button onClick={register}>Sign Up</Button>
         <p className='text-sm text-stone-400 gap-1 flex'>Already have an account?<button className='hover:text-stone-100 transition text-sm text-stone-400 underline' onClick={changeForm}>Login</button></p>
