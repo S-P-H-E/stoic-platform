@@ -13,7 +13,7 @@ export default function Home() {
   if (fetching ) {
     return (
       <main className='h-screen flex justify-center items-center text-2xl'>
-        <Skeleton/>
+        {/* <Skeleton/> */}
       </main>
     );
   }

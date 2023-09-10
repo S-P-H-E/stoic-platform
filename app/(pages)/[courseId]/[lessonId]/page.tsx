@@ -10,13 +10,15 @@ import Script from 'next/script';
 import Comments from '@/components/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import {motion} from 'framer-motion'
-import { AiOutlineLink } from 'react-icons/ai'
+import { BiCopy } from 'react-icons/bi'
 import {
   ContextMenu,
   ContextMenuCheckboxItem,
   ContextMenuContent,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
+import CreateCourse from '@/components/CreateCourse/page';
+import { message } from 'antd';
 
 
 interface LessonItem {
@@ -37,10 +39,6 @@ export default function LessonPage() {
   const pathname = usePathname();
 
   const lessonpath = useParams()
-
-  console.log("Lesson Path: ", lessonpath.lessonId, " pathname: ", pathname)
-
-  console.log('Current pathname: ' + pathname)
 
   const fadeInAnimationVariants = { // for framer motion  
     initial: {
@@ -147,7 +145,54 @@ export default function LessonPage() {
   }, [courseId, lessonId, userId, router]);
 
   if (!lesson || !lessons) {
-    return <div className='flex justify-center items-center h-screen w-full'>Loading...</div>;
+    return (
+      <>
+        <div className='flex flex-col justify-center items-center'>
+      <div className="px-10 pt-10 flex justify-between items-center gap-6 w-full">
+        <Link href={'/dashboard'} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
+            <BsChevronLeft/>
+            <h1 className="text-lg">Go back</h1>
+        </Link>
+       <div className='flex gap-3 items-center'>
+
+        <Search />
+       </div>
+      </div>
+
+      <div className="flex flex-col md:flex-row p-10">
+        <div className=''>
+            <>
+              <div className=' md:w-[1024px] bg-[#252525] rounded-3xl shadow-2xl animate-pulse aspect-video' />
+
+              <div className='my-5 md:mb-20 rounded-2xl p-5'>
+                <div className='h-[25px] w-[150px] bg-[#252525] rounded-lg mb-2'/>
+                <div className='h-[20px] md:w-[400px] bg-[#252525] rounded-lg'></div>
+              </div>
+              
+              <div className='hidden md:block'>
+                <Comments courseId={courseId as string} lessonId={lessonId as string}/>
+              </div>
+            </>
+        </div>
+
+        <div>
+          <div className='flex flex-col justify-center items-center gap-5'>
+              <div className='mx-5 rounded-2xl bg-[#252525] h-[80px] w-full md:w-[300px]'/>
+            <div className='visible md:hidden'>
+                <Comments courseId={courseId as string} lessonId={lessonId as string}/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </>
+    );
+  }
+
+  const handleLinkCopy = () => {
+    const currentUrl = 'https://app.stoiccord.com'+pathname
+    navigator.clipboard.writeText(currentUrl);
+    message.success('Copied to clipboard');
   }
 
   return (
@@ -157,10 +202,12 @@ export default function LessonPage() {
             <BsChevronLeft/>
             <h1 className="text-lg">Go back</h1>
         </Link>
+       <div className='flex gap-3 items-center'>
         <Search />
+       </div>
       </div>
 
-      <div className="flex flex-col md:flex-row p-10">
+      <div className="flex flex-col md:flex-row p-5 md:p-10">
         <div>
             <>
               <div className=' md:w-[1024px] rounded-3xl shadow-2xl shadow-white/10 aspect-video'>
@@ -174,16 +221,20 @@ export default function LessonPage() {
               <Script src="https://player.vimeo.com/api/player.js" />
 
               <div className='my-5 md:mb-20 border border-[--border] rounded-2xl p-5'>
-                <div className='flex justify-between'>
+                <div className='flex flex-col md:flex-row justify-between'>
+                  <button className='border border-[--border] flex w-fit md:hidden gap-1 h-fit items-center rounded-xl mb-5 px-2' onClick={handleLinkCopy}>
+                    <BiCopy />
+                    Copy 
+                  </button>
                   <h1 className='text-3xl font-medium'>
-                  {truncateText(lesson.title, 40)}
+                    {truncateText(lesson.title, 40)}
                   </h1>
-                  <button className='border border-[--border] flex gap-1 h-fit items-center rounded-xl px-2'>
-                    <AiOutlineLink />
-                    Link
+                  <button className='hidden border border-[--border] md:flex gap-1 h-fit items-center rounded-xl px-2' onClick={handleLinkCopy}>
+                    <BiCopy />
+                    Copy
                   </button>
                 </div>
-                <p className='rounded-xl mt-3'>{lesson.description}</p>
+                <p className='rounded-xl mt-3 max-w-[950px] text-sm md:text-base'>{lesson.description}</p>
               </div>
               
               <div className='hidden md:block'>
@@ -213,10 +264,13 @@ export default function LessonPage() {
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
                   <ContextMenuTrigger>
-                  <div className={`mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-start items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'invert' : ''}`}>
+                  <div className={` w-full md:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-start items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'invert' : ''}`}>
                     <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
+                    <h1 className='text-xl font-medium text-white hidden md:flex'>
+                      {truncateText(lessonItem.title, 14)}
+                    </h1>
                     <h1 className='text-xl font-medium text-white'>
-                      {truncateText(lessonItem.title, 18)}
+                      {truncateText(lessonItem.title, 29)}
                     </h1>
                   </div>
                   </ContextMenuTrigger>

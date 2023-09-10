@@ -157,12 +157,12 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
       
     </Head>
     <div className='flex flex-col gap-2'>
-      <h1 className='text-lg'>
+      <h1 className='text-lg p-4 pb-1'>
         {filteredComments.length === 1
           ? `${filteredComments.length} Comment`
           : `${filteredComments.length} Comments`}
       </h1>
-      <form onSubmit={handleSubmitComment} className='flex flex-col md:flex-row justify-between items-center w-full gap-2'>
+      <form onSubmit={handleSubmitComment} className='flex justify-between items-center w-full gap-2 px-4'>
         {comments.length > 0 && (
           // <Image
           //   width={400}
@@ -172,7 +172,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
           //   className='w-8 h-8 rounded-full mx-4'
           // />
           
-          <div className='h-[50px] aspect-square'>
+          <div className='h-[40px] md:h-[50px] aspect-square'>
             <UserImage />
           </div>
         )}
