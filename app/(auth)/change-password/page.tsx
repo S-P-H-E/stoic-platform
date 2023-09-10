@@ -2,12 +2,13 @@
 
 import Button from '@/components/Button'
 import Input from '@/components/Input'
-import { auth } from '@/utils/firebase'
+import { auth, db } from '@/utils/firebase'
 import { validatePassword } from '@/utils/validation'
 import { message } from 'antd'
 import clsx from 'clsx'
 import { confirmPasswordReset } from 'firebase/auth'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { collection, doc, getDocs, query, where } from 'firebase/firestore'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { FiLoader } from 'react-icons/fi'
 
@@ -17,6 +18,7 @@ export default function ChangePassword() {
   const [isLoading, setIsLoading] = useState(false);
 
   async function resetPassword(oobcode: string, newPassword: string) {
+
     const validationErrors = [];
     const passwordError = validatePassword(newPassword);
     if (passwordError) {

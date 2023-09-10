@@ -269,7 +269,7 @@ export default function LessonPage() {
                     <h1 className='text-xl font-medium text-white hidden md:flex'>
                       {truncateText(lessonItem.title, 14)}
                     </h1>
-                    <h1 className='text-xl font-medium text-white'>
+                    <h1 className='text-xl font-medium text-white md:hidden flex'>
                       {truncateText(lessonItem.title, 29)}
                     </h1>
                   </div>
