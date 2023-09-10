@@ -147,7 +147,7 @@ export default function LessonPage() {
     
   }, [courseId, lessonId, userId, router]);
 
-  if (lesson || lessons) {
+  if (!lesson || !lessons) {
     return (
       <>
         <div className='flex flex-col justify-center items-center'>
@@ -182,45 +182,7 @@ export default function LessonPage() {
 
         <div>
           <div className='flex flex-col gap-5'>
-            <div className='mx-5 rounded-2xl bg-[#252525] h-[80px] w-[100px]'/>
-          {lessons.map((lessonItem, index) => (
-            <motion.div key={index}
-            custom={index}
-            variants={fadeInAnimationVariants}
-            initial="initial"
-            whileInView="animate"
-            viewport={{
-              once: true,
-            }}
-            whileHover={{
-              scale: 1.08
-            }}
-            whileTap={{
-              scale: 1
-            }}
-            >
-            <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
-                <ContextMenu>
-                  <ContextMenuTrigger>
-                  <div className={`mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-start items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'invert' : ''}`}>
-                    <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
-                    <h1 className='text-xl font-medium text-white'>
-                      {truncateText(lessonItem.title, 18)}
-                    </h1>
-                  </div>
-                  </ContextMenuTrigger>
-                
-                {userStatus == 'admin' &&
-                  <ContextMenuContent className="w-64">
-                    <ContextMenuCheckboxItem className="cursor-pointer" onClick={deleteLesson}>
-                      Delete
-                    </ContextMenuCheckboxItem>
-                  </ContextMenuContent>
-                }
-                </ContextMenu>
-            </Link>
-            </motion.div>
-            ))}
+              <div className='mx-5 rounded-2xl bg-[#252525] h-[80px] w-[300px]'/>
             <div className='visible md:hidden'>
                 <Comments courseId={courseId as string} lessonId={lessonId as string}/>
             </div>
@@ -298,7 +260,7 @@ export default function LessonPage() {
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
                   <ContextMenuTrigger>
-                  <div className={`mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-start items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'invert' : ''}`}>
+                  <div className={`w-[300px] mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-start items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'invert' : ''}`}>
                     <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
                     <h1 className='text-xl font-medium text-white'>
                       {truncateText(lessonItem.title, 18)}
