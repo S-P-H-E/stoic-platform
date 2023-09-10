@@ -76,7 +76,7 @@ export default function Search(){
                         opacity: "1",
                         scale: "1"
                       }}
-                > {/* just a hover animation delete if u dont like it */}
+                >
                     <BiSearch size={20}/>
                 </motion.div>
             </DialogTrigger>
