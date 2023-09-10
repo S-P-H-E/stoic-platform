@@ -2,7 +2,7 @@
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { db } from '@/utils/firebase';
-import { collection, deleteDoc, doc, getDoc, onSnapshot, query, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import { BsChevronLeft } from 'react-icons/bs'
 import Link from 'next/link';
 import Search from '@/components/Search/page';
@@ -95,7 +95,19 @@ export default function LessonPage() {
             const lessonData = lessonDocSnap.data();
             setLesson(lessonData);
           } else {
-            console.error('Lesson not found');
+            const firstLessonQuery = query(
+              collection(db, 'courses', courseId as string, 'lessons'),
+              orderBy('order'), // Assuming 'order' is the field to order lessons by
+              limit(1) // Limit to the first lesson
+            );
+    
+            const firstLessonSnapshot = await getDocs(firstLessonQuery);
+            if (!firstLessonSnapshot.empty) {
+              const firstLessonData = firstLessonSnapshot.docs[0].data();
+              const firstLessonId = firstLessonSnapshot.docs[0].id;
+              
+              router.push(`/${courseId}/${firstLessonId}`);
+            }
           }
         }
       } catch (error) {
@@ -133,7 +145,7 @@ export default function LessonPage() {
     fetchLessonData();
     fetchLessonsForCourse();
     
-  }, [courseId, lessonId, userId]);
+  }, [courseId, lessonId, userId, router]);
 
   if (lesson || lessons) {
     return (
