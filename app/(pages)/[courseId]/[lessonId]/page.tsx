@@ -224,7 +224,7 @@ export default function LessonPage() {
                 <div className='flex flex-col md:flex-row justify-between'>
                   <button className='border border-[--border] flex w-fit md:hidden gap-1 h-fit items-center rounded-xl mb-5 px-2' onClick={handleLinkCopy}>
                     <BiCopy />
-                    Copy
+                    Copy 
                   </button>
                   <h1 className='text-3xl font-medium'>
                   {truncateText(lesson.title, 40)}
