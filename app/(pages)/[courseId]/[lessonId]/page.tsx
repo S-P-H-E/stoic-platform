@@ -263,7 +263,7 @@ export default function LessonPage() {
                   <div className={`w-[300px] mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-start items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'invert' : ''}`}>
                     <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
                     <h1 className='text-xl font-medium text-white'>
-                      {truncateText(lessonItem.title, 18)}
+                      {truncateText(lessonItem.title, 14)}
                     </h1>
                   </div>
                   </ContextMenuTrigger>
