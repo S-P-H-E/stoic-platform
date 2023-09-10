@@ -227,14 +227,14 @@ export default function LessonPage() {
                     Copy 
                   </button>
                   <h1 className='text-3xl font-medium'>
-                  {truncateText(lesson.title, 40)}
+                    {truncateText(lesson.title, 40)}
                   </h1>
                   <button className='hidden border border-[--border] md:flex gap-1 h-fit items-center rounded-xl px-2' onClick={handleLinkCopy}>
                     <BiCopy />
                     Copy
                   </button>
                 </div>
-                <p className='rounded-xl mt-3 max-w-[950px]'>{lesson.description}</p>
+                <p className='rounded-xl mt-3 max-w-[950px] text-sm md:text-base'>{lesson.description}</p>
               </div>
               
               <div className='hidden md:block'>
@@ -266,8 +266,11 @@ export default function LessonPage() {
                   <ContextMenuTrigger>
                   <div className={` w-full md:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-start items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'invert' : ''}`}>
                     <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
-                    <h1 className='text-xl font-medium text-white'>
+                    <h1 className='text-xl font-medium text-white hidden md:flex'>
                       {truncateText(lessonItem.title, 14)}
+                    </h1>
+                    <h1 className='text-xl font-medium text-white'>
+                      {truncateText(lessonItem.title, 29)}
                     </h1>
                   </div>
                   </ContextMenuTrigger>
