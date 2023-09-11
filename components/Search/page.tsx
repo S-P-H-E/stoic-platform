@@ -67,7 +67,7 @@ export default function Search(){
     return(
         <Dialog>
             <DialogTrigger>
-                <motion.div className="hover:bg-[--border] transition p-2 rounded-lg"
+                <motion.div className="hover:bg-[--highlight] transition p-2 rounded-lg border border-[--highlight] px-2 py-1"
                     initial={{
                         scale: "0.5",
                         opacity: "0",
@@ -76,8 +76,9 @@ export default function Search(){
                         opacity: "1",
                         scale: "1"
                       }}
-                > {/* just a hover animation delete if u dont like it */}
-                    <BiSearch size={20}/>
+                >
+                    {/* <BiSearch size={20}/> */}
+                    Tools
                 </motion.div>
             </DialogTrigger>
             <DialogContent>

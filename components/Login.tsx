@@ -1,6 +1,11 @@
 "use client"
 
-//Firebase
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 import { collection, getDocs, addDoc, query, where } from 'firebase/firestore';
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -14,6 +19,7 @@ import { message } from 'antd';
 import { useRouter } from "next/navigation";
 import { validateEmail, validateNameLength, validatePassword } from '@/utils/validation'
 import InputResponse from './InputResponse';
+import ForgotPassword from "./ForgotPassword";
 
 export default function Login() {
   const router = useRouter()
@@ -23,7 +29,6 @@ export default function Login() {
   type FirebaseError = {
     code: string;
     message: string;
-    // Other prperties you might expect in a Firebase error
   };
 
   const firebaseErrorMessages: Record<string, string> = {
@@ -76,7 +81,7 @@ export default function Login() {
     const [registerName, setRegisterName] = useState("")
     const [registerSocial, setRegisterSocial] = useState("")
 
-    const [isLoginMode, setIsLoginMode] = useState(false); // Add this state
+    const [isLoginMode, setIsLoginMode] = useState(true);
 
     const [passwordErrorUI, setPasswordErrorUI] = useState(false)
     const [emailErrorUI, setEmailErrorUI] = useState(false)
@@ -205,6 +210,16 @@ export default function Login() {
         </div>
         <Button onClick={login}>Sign In</Button>
         <p className='text-sm text-stone-400 gap-1 flex'>Dont have an account?<button className='text-sm text-stone-400 underline hover:text-stone-100 transition' onClick={changeForm}>Register</button></p>
+        <div className="flex">
+          <Dialog>
+          <DialogTrigger>
+              <p className='flex text-sm text-stone-400 hover:text-white transition hover:underline'>Forgot your password?</p>
+            </DialogTrigger>
+          <DialogContent>
+            <ForgotPassword/>
+          </DialogContent>
+          </Dialog>
+        </div>
     </>
     ) : (
     <>

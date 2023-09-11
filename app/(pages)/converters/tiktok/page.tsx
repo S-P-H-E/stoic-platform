@@ -83,7 +83,7 @@ export default function Home() {
     event.preventDefault();
     if (inputUrlRef.current !== null) {
       const tiktokUrl = (inputUrlRef.current.value)
-      const tiktokUrlPattern = /^https:\/\/(www\.)?tiktok\.com\//;
+      const tiktokUrlPattern = /^https:\/\/(www\.)?(vm\.)?tiktok\.com\//
 
       if (!userId) {
         message.error("You are not allowed to use this.")

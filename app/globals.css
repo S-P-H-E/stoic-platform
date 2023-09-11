@@ -15,6 +15,20 @@ body {
     background-color: var(--bg);
 }
 
+.gradient-01 {
+  background-image: linear-gradient(
+    270deg,
+    hsl(0, 0%, 21%) 0%,
+    hsl(0, 0%, 51%) 26%,
+    hsl(257deg 70% 86%) 39%,
+    hsl(202deg 92% 90%) 50%,
+    hsl(215deg 77% 81%) 61%,
+    hsl(0, 0%, 66%) 74%,
+    hsl(0, 0%, 0%) 100%
+  );
+  filter: blur(125px);
+}
+
 @layer base {
   :root {
     --background: black;
