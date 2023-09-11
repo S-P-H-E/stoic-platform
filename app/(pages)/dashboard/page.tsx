@@ -15,7 +15,10 @@ export default function Dashboard(){
 
       <div className="flex flex-col justify-center items-center">
         {/* Navbar */}
-        <div className="px-10 pt-7 pb-3 md:p-10 flex justify-between items-center gap-6 w-full md:w-[1000px]">
+        <div className="gradient-01 animate-pulse duration-1 absolute w-full h-[100px] top-10 z-[-10]">
+          
+        </div>
+        <div className=" px-10 pt-7 pb-3 md:p-10 flex justify-between items-center gap-6 w-full md:w-[1000px]">
           <Greeting/>
           <div className="flex justify-center items-center gap-3">
             <div className="hidden md:flex">
