@@ -11,12 +11,13 @@ interface AuthGuardProps {
 
 function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();
-  const [user, loading] = useAuthState(auth); // Replace 'auth' with your authentication object or hook
+  const [user, loading] = useAuthState(auth);
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/');
     }
+
   }, [loading, user, router]);
 
   return <>{children}</>;

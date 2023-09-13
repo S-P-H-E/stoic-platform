@@ -43,9 +43,9 @@ export default function Home() {
   };
 
   const RumbleIcon = '/RumbleIcon.svg'
-  const { userName, user, userId } = UserDataFetcher();
+  const { userId } = UserDataFetcher();
 
-  const incrementConverterUseCount = async (userId: string) => {
+/*   const incrementConverterUseCount = async (userId: string) => {
     const userDocRef: DocumentReference<DocumentData> = doc(db, 'users', userId);
   
     try {
@@ -64,7 +64,7 @@ export default function Home() {
     } catch (error) {
       console.error('Error incrementing converterUseCount:', error);
     }
-  };
+  }; */
   
   function formatInteractionCount(count: number) {
     if (count < 1000) {
@@ -92,7 +92,7 @@ export default function Home() {
 
       if (tiktokUrlPattern.test(tiktokUrl)) {
         setLoading(true);
-          incrementConverterUseCount(userId);
+          /* incrementConverterUseCount(userId); */
 
         const options: AxiosRequestConfig = {
         method: 'GET',

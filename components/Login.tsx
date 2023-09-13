@@ -64,9 +64,9 @@ export default function Login() {
             status: 'user',
             converterUseCount: 0,
           });
-          console.log("Document written with ID:", docRef.id);
+          /* console.log("Document written with ID:", docRef.id); */
         } else {
-          console.log("User exists");
+          /* console.log("User exists"); */
         }
       } catch (err) {
         message.error("Error signing in");
@@ -129,7 +129,7 @@ export default function Login() {
                 name: userName,
                 email: userEmail,
                 password: registerPassword,
-                status: 'user',
+                status: 'free',
                 social: registerSocial,
             });
 

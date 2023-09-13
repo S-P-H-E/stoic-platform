@@ -150,6 +150,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
 
   // Filter comments based on currentCourse
   const filteredComments = comments.filter(comment => comment.courseId === courseId);
+  
 
   return (
     <>

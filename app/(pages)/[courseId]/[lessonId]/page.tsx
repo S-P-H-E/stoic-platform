@@ -17,7 +17,6 @@ import {
   ContextMenuContent,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
-import CreateCourse from '@/components/CreateCourse/page';
 import { message } from 'antd';
 
 

@@ -38,12 +38,20 @@ export function UserDataFetcher() {
             setUserId(querySnapshot.docs[0].id);
             setGeneralLastCourse(userData.generalLastCourse);
             setGeneralLastLesson(userData.generalLastLesson)
+
+            const newUserStatus = userData.status;
+            setUserStatus(newUserStatus);
+          if (newUserStatus === "free") {
+            router.push('/upgrade');
+            }
         }
       });
 
       return () => {
         unsubscribeAuth();
-        unsubscribeFirestore();
+        if (unsubscribeFirestore) {
+          unsubscribeFirestore();
+        }
       };
     }
 

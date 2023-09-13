@@ -3,7 +3,6 @@
 import Login from '@/components/Login'
 import { useRouter } from 'next/navigation'
 import { UserDataFetcher } from '@/utils/userDataFetcher';
-import Skeleton from '@/components/Skeleton';
 import { BiLoader } from 'react-icons/bi';
 
 export default function Home() {

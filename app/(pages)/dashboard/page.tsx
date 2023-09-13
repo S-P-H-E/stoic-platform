@@ -1,4 +1,3 @@
-// Import necessary modules and components
 import Continue from "@/components/Continue";
 import CourseLogic from "@/components/Course/logic";
 import CreateCourse from "@/components/CreateCourse/page";
