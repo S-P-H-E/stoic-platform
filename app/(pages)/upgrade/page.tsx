@@ -1,4 +1,8 @@
 "use client"
+<<<<<<< HEAD
+=======
+
+>>>>>>> 682eb136d5ecadce10c825ae2e8066c2d1a70843
 import React from 'react'
 import { FaBook, FaStripe } from 'react-icons/fa'
 import { BsFillPersonFill, BsStars, BsFillCheckCircleFill, BsPeopleFill } from 'react-icons/bs'
