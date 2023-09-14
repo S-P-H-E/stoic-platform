@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 * {
+    --upgrade: #F7C910;
     --highlight: #717178;
     --modal: #0F0F10;
     --border: #1E1E1E;
@@ -106,22 +107,22 @@ body {
   margin-top: 10px;
   width: 200px;
   height: 50px;
-  padding: 0.5em 0.75em;
+  padding: 0.4em 0.7em;
   border: none;
   border-radius: 0.75rem;
-  color: var(--highlight);
+  color: var(--upgrade);
   transition: all 1000ms;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   position: relative;
   overflow: hidden;
-  outline: 2px solid var(--highlight);
+  outline: 2px solid var(--upgrade);
 }
 
 .upgrade:hover {
-  color: #ffffff;
+  color: #09090B;
   transform: scale(1.1);
-  outline: 2px solid var(--highlight);
-  box-shadow: 4px 5px 17px -4px var(--highlight);
+  outline: 2px solid var(--upgrade);
+  box-shadow: 4px 5px 17px -4px var(--upgrade);
 }
 
 .upgrade::before {
@@ -131,7 +132,7 @@ body {
   top: 0;
   width: 0;
   height: 100%;
-  background-color: var(--highlight);
+  background-color: var(--upgrade);
   transform: skewX(45deg);
   z-index: -1;
   transition: width 700ms;
