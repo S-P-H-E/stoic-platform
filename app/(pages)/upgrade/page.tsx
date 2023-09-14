@@ -58,10 +58,12 @@ export default function Upgrade() {
         }}
       >
         <div className='flex flex-col justify-center items-center w-full'>
-          {/* <div className='flex items-center gap-1 bg-[--upgrade] rounded-full px-4 py-1 text-black my-2'>
+          {userName ? 
+            <div className='flex items-center gap-1 bg-[--upgrade] rounded-full px-4 py-1 text-black my-2'>
             <BsFillPersonFill />
             <h2 className='text-black'>{userName}</h2>
-          </div> */}
+            </div>
+          : null}
           <h1 className='text-2xl uppercase'>Upgrade to premium</h1>
         </div>
 
@@ -70,7 +72,7 @@ export default function Upgrade() {
         </h1>
 
         {features.map((feature) => (
-          <div key={feature.id} className='flex justify-between items-center gap-1 w-full p-2 rounded-md border border-[#1C1C1D]'>
+          <div key={feature.id} className='flex justify-between items-center gap-1 w-full p-2 rounded-md border border-[#1C1C1D] hover:bg-[#1C1C1D] transition duration-200'>
             <div className='flex items-center'>
               <div className='bg-[#F7C910]/10 text-[--upgrade] p-2 rounded-lg'>
                 {feature.icon}
