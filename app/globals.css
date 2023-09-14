@@ -101,3 +101,42 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.upgrade {
+  margin-top: 10px;
+  width: 200px;
+  height: 50px;
+  padding: 0.5em 0.75em;
+  border: none;
+  border-radius: 0.75rem;
+  color: var(--highlight);
+  transition: all 1000ms;
+  font-size: 1.2rem;
+  position: relative;
+  overflow: hidden;
+  outline: 2px solid var(--highlight);
+}
+
+.upgrade:hover {
+  color: #ffffff;
+  transform: scale(1.1);
+  outline: 2px solid var(--highlight);
+  box-shadow: 4px 5px 17px -4px var(--highlight);
+}
+
+.upgrade::before {
+  content: "";
+  position: absolute;
+  left: -50px;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background-color: var(--highlight);
+  transform: skewX(45deg);
+  z-index: -1;
+  transition: width 700ms;
+}
+
+.upgrade:hover::before {
+  width: 250%;
+}
