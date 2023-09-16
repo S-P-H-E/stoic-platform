@@ -83,14 +83,14 @@ export default function Resources() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-4">
       <Input
         type="text"
         placeholder="Search resources..."
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
       />
-      <div className="flex gap-2 mt-4">
+      <div className="flex gap-2">
       {tags.map((tag) => (
         <ButtonShad
           variant="outline"
@@ -104,7 +104,7 @@ export default function Resources() {
         </ButtonShad>
       ))}
     </div>
-      <div className="flex gap-4 flex-wrap items-center">
+      <div className="flex gap-4 flex-wrap items-center mt-4">
         {filteredResources.map((resource) => (
           <Resource
             key={resource.resourceName}
