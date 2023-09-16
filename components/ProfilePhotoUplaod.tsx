@@ -75,7 +75,7 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
 
       <div
         {...getRootProps()}
-        className='border-dashed border border-[--border] bg-black p-8 rounded-lg text-center cursor-pointer'
+        className='border-dashed border-2 border-[--border] bg-black p-8 rounded-lg text-center cursor-pointer'
       >
         <input {...getInputProps()} />
         {isDragActive ? (

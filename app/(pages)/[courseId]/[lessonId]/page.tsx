@@ -37,6 +37,8 @@ export default function LessonPage() {
   
   const pathname = usePathname();
 
+  
+
   const lessonpath = useParams()
 
   const fadeInAnimationVariants = { // for framer motion  
@@ -148,7 +150,7 @@ export default function LessonPage() {
       <>
         <div className='flex flex-col justify-center items-center'>
       <div className="px-10 pt-10 flex justify-between items-center gap-6 w-full">
-        <Link href={'/dashboard'} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
+        <Link href={'/dashboard'} className="mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
             <BsChevronLeft/>
             <h1 className="text-lg">Go back</h1>
         </Link>

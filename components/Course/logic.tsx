@@ -32,6 +32,8 @@ const CourseLogic: FC<CourseLogicProps> = () => {
       const userCourseSnapshot = await getDoc(userCourseRef);
   
       if (userCourseSnapshot.exists()) {
+
+        console.log("test " + courseId)
         const lastLessonId = userCourseSnapshot.data().lastLessonId;
         /* console.log(`User ${userId} last watched lesson for course ${courseId}: ${lastLessonId}`); */
   
