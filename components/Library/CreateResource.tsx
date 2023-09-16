@@ -35,7 +35,6 @@ export default function CreateResource() {
 
   const { user, userId } = UserDataFetcher();
 
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFiles) => onImageSelected(acceptedFiles[0]),
     maxSize: 20 * 1024 * 1024,
@@ -161,7 +160,6 @@ export default function CreateResource() {
           setIsLoading(false);
         }
       };
-
       uploadImage();
     }
   }, [selectedImage, userId, fileError]);
@@ -210,26 +208,26 @@ export default function CreateResource() {
       >
         <input {...getInputProps()} />
         {selectedImage ? (
-          <div className="flex justify-center m-2 items-center flex-col gap-4">
+          <div className="flex justify-center items-center flex-col gap-2">
             <p className="text-[--highlight]">You can click again to change the image</p>
              <Image
               alt="Profile picture"
               src={URL.createObjectURL(selectedImage)}
               width={100}
-              height={0}
-              className="p-2 border border-[--border] rounded-lg flex w-[25vh] object-contain mx-auto"
+              height={100}
+              className="p-2 border border-[--border] rounded-lg flex w-[20vh] object-contain mx-auto"
             />
             <button onClick={() => {setSelectedImage(null); setResourceImageUrl(null);}} className="hover:text-white text-[--highlight] transition flex gap-1 items-center"><MdDelete/>Clear Image</button>
           </div>
         ) : <>
           {isDragActive ? (
-          <div className='flex flex-col justify-center items-center gap-3'>
+          <div className='flex flex-col justify-center items-center gap-1'>
             <BsImageFill size={60}/>
             <p>Drag your image here, or <mark className='bg-transparent text-blue-500 hover:underline'>browse</mark></p>
             <p className='text-[18px] italic text-[#707070]'>max file size 20MB - png, gif & jpeg allowed</p>
           </div>
             ) : (
-          <div className='flex flex-col justify-center items-center gap-3'>
+          <div className='flex flex-col justify-center items-center gap-1'>
             <BsImageFill size={50}/>
             <p>Drag your image here, or <mark className='bg-transparent text-blue-500 hover:underline'>browse</mark></p>
             <p className='text-[18px] italic font-normal text-[#707070]'>max file size 20MB - png, gif & jpeg allowed</p>
@@ -241,30 +239,30 @@ export default function CreateResource() {
       <h1 className='text-lg font-medium w-full text-start'>File</h1>
 <div
   {...getFileRootProps()}
-  className='border-dashed border-2 border-[--border] hover:border-white transition duration-200 p-4 rounded-lg text-center cursor-pointer w-full items-center justify-center flex'
+  className='border-dashed border-2 border-[--border] hover:border-white transition duration-200 p-2 rounded-lg text-center cursor-pointer w-full items-center justify-center flex'
 >
   <input {...getFileInputProps()} />
   {selectedFile ? (
-    <div className="flex justify-center m-2 items-center flex-col gap-4">
+    <div className="flex justify-center items-center flex-col gap-2">
       <p className="text-[--highlight]">You can click again to change the file</p>
       <p>{truncateText(selectedFile.name, 20)}</p>
       {fileUploadProgress !== null && (
         <Progress value={fileUploadProgress} />
       )}
-      <button onClick={() => {setSelectedFile(null); setFileDownloadLink(null);}} className="hover:text-white text-[--highlight] transition flex gap-1 items-center">
+      <button onClick={() => {setSelectedFile(null); setFileDownloadLink(null);}} className="hover:text-white p-1 text-[--highlight] transition flex gap-1 items-center">
         <MdDelete/> Clear File
       </button>
     </div>
   ) : (
     <>
       {isFileDragActive ? (
-        <div className='flex flex-col justify-center items-center gap-3'>
+        <div className='flex flex-col justify-center items-center gap-1'>
           <AiFillFileAdd size={60}/>
           <p>Drag your files here, or <mark className='bg-transparent text-blue-500 hover:underline'>browse</mark></p>
           <p className='text-[18px] italic text-[#707070]'>max file size 200MB</p>
         </div>
       ) : (
-        <div className='flex flex-col justify-center items-center gap-3'>
+        <div className='flex flex-col justify-center items-center gap-1'>
           <AiFillFileAdd size={60}/>
           <p>Drag your files here, or <mark className='bg-transparent text-blue-500 hover:underline'>browse</mark></p>
           <p className='text-[18px] italic text-[#707070]'>max file size 200MB</p>
@@ -316,8 +314,12 @@ export default function CreateResource() {
       </Popover>
   </div>
       
-      <Button onClick={createResource} disabled={isLoading}>
-        {isLoading ? 'Creating...' : 'Create Resource'}
+      <Button onClick={createResource} disabled={isLoading}
+      className={clsx({
+        'text-[--highlight]': isLoading,
+      })}
+      >
+        {isLoading ? 'Loading...' : 'Create Resource'}
       </Button>
     </div>
   )

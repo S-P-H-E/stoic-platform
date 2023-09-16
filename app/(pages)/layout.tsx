@@ -12,14 +12,12 @@ export default function PagesLayout({
 }) {
   return (
     <html lang="en">
-
         <body className={inter.className}>
           <AuthGuard>
             {/* <Sidebar /> */}
             {children}
           </AuthGuard>
         </body>
-
     </html>
   )
 }
