@@ -58,7 +58,7 @@ export default function Resources() {
     const resourceName = resource.resourceName?.toLowerCase();
     const searchTerm = searchInput.toLowerCase();
 
-    /* const resourceTags = resource.tags || []; */ // gonna fix this part soon
+    const resourceTags = resource.tags || []; // gonna fix this part soon
     const hasSelectedTag = selectedTags.some((tagId) =>
       resourceTags.includes(tagId)
     );
