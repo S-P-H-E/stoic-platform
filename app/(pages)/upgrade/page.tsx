@@ -48,8 +48,8 @@ export default function Upgrade() {
     },
   ]
 
-  if (userStatus == "admin" || "user") {
-    router.push("/dashboard")
+  if (userStatus == 'admin" || "user') {
+    router.push('/dashboard')
   }
 
   return (

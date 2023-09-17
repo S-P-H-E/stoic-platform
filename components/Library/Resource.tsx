@@ -18,10 +18,9 @@ export default function Resource({downloadLink, resourceName, resourceImage, onD
     }
     return text;
   }
-
   return (
     <div>
-        {downloadLink ? (
+    {downloadLink ? (
           <div className="sm:w-64 sm:h-64 min-w-[9rem] min-h-[12rem] sm:p-8 border-[--border] border rounded-lg flex flex-col items-center justify-center gap-1">
             <Image className="rounded-lg w-20 h-20 sm:w-40 sm:h-40" src={resourceImage} alt="Resource Image" width={500} height={500} />
             { resourceName ? 
