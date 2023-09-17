@@ -6,12 +6,12 @@ import React from 'react'
 
 export default function Library() {
   return (
-    <section className="p-8">
+    <section className="sm:p-10 p-8 flex flex-col gap-2">
       <div className="flex justify-between">
       <GoBack/>
       <CreateButton/>
       </div>
-    <div className="p-8">  
+    <div>  
       <Resources/>
     </div>
     </section>

@@ -22,12 +22,12 @@ export default function Resource({downloadLink, resourceName, resourceImage, onD
   return (
     <div>
         {downloadLink ? (
-          <div className="h-64 p-8 border-[--border] border rounded-lg flex flex-col items-center justify-center gap-1">
-            <Image className="rounded-lg w-40 h-40" src={resourceImage} alt="Resource Image" width={500} height={500} />
+          <div className="sm:w-64 sm:h-64 min-w-[9rem] min-h-[12rem] sm:p-8 border-[--border] border rounded-lg flex flex-col items-center justify-center gap-1">
+            <Image className="rounded-lg w-20 h-20 sm:w-40 sm:h-40" src={resourceImage} alt="Resource Image" width={500} height={500} />
             { resourceName ? 
-              <p className="text-lg font-semibold">{truncateText(resourceName, 16)}</p>
+              <p className="text-base md:text-lg font-semibold">{truncateText(resourceName, 16)}</p>
             : null}
-            <Link className="p-2 border border-[--border] rounded-xl hover:bg-[--border] transition flex items-center gap-1" href={downloadLink} target="_blank">
+            <Link className="sm:p-2 p-1 border border-[--border] rounded-xl hover:bg-[--border] transition flex items-center gap-1" href={downloadLink} target="_blank">
               <HiDownload />
               Download
             </Link>
