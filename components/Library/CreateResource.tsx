@@ -132,7 +132,7 @@ export default function CreateResource() {
         const imageUrl = await getDownloadURL(storageRef);
         setResourceImageUrl(imageUrl);
 
-        message.success('Resource picture set successfully!');
+        // message.success('Resource picture set successfully!');
       } catch (error) {
         console.error('Error uploading profile picture:', error);
         message.error('Failed to upload profile picture.');

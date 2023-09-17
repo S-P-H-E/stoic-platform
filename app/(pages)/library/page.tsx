@@ -1,3 +1,4 @@
+"use client"
 import GoBack from '@/components/GoBack'
 import CreateButton from '@/components/Library/CreateButton'
 import Resources from '@/components/Library/Resources'
