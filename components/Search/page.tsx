@@ -16,6 +16,7 @@ import Image from 'next/image';
 import { SiTiktok } from 'react-icons/si';
 import { FaYoutube } from 'react-icons/fa';
 import {motion} from 'framer-motion'
+import { FiYoutube } from 'react-icons/fi';
 
 type Message = {
     role: "function" | "user" | "system" | "assistant";
@@ -114,6 +115,10 @@ export default function Search(){
                     <div className="flex flex-col items-start gap-1 p-5">
                         <h1 className="text-[#444445] cursor-default">Converters</h1>
 
+                        <Link href={'/converters/ytmp3'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
+                            <FiYoutube size={22} color="#444445" weight="fill"/>
+                            YouTube MP3
+                        </Link>
                         <Link href={'/converters/ytmp4'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
                             <FaYoutube size={22} color="#444445" weight="fill"/>
                             YouTube

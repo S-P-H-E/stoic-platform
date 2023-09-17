@@ -108,7 +108,7 @@ export default function Home() {
   const placeholderImageUrl = "/placeholder.jpg";
 
   return (
-    <main className="flex flex-col justify-center items-center w-full sm:h-screen h-full text-center gap-4 p-8">
+    <main className="flex flex-col items-center w-full h-full text-center pt-64 gap-4 p-8">
       <h1 className="text-5xl font-semibold text-green-500">
         Rumble <span className="text-white">Converter</span>
       </h1>
@@ -207,9 +207,9 @@ export default function Home() {
         ) : null}
           <hr className="border-[--border]"/>
         <div className="flex justify-center items-center gap-4">
-          <SocialLink link="https://youtube-converter-six.vercel.app" icon={AiFillYoutube} iconSize={64}/>
-          <SocialLink icon={SiTiktok} iconSize={36} link="https://tiktok-converter.vercel.app"/>
-          <SocialLink link="https://mp3-converter-one.vercel.app" iconSize={36} icon={BsMusicNote}/>
+          <SocialLink link="/converters/ytmp4" icon={AiFillYoutube} iconSize={64}/>
+          <SocialLink icon={SiTiktok} iconSize={36} link="/converters/tiktok"/>
+          <SocialLink link="/converters/ytmp3" iconSize={36} icon={BsMusicNote}/>
         </div>
       </section>
     </main>
