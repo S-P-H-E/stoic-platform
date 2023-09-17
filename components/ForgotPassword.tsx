@@ -5,6 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 import { message } from 'antd';
+import clsx from 'clsx';
 
 export default function ForgotPassword() {
 
@@ -13,6 +14,7 @@ export default function ForgotPassword() {
     message: string;
   };
 
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [user, loading] = useAuthState(auth);
     const [email, setEmail] = useState('');
     const [uiMessage, setUIMessage] = useState('');
@@ -28,6 +30,7 @@ export default function ForgotPassword() {
   
     const handlePasswordReset = async () => {
       try {
+        setIsLoading(true)
         const authInstance = getAuth(); 
         await sendPasswordResetEmail(authInstance, email ,{
           url: 'http://localhost:3000/'
@@ -41,6 +44,8 @@ export default function ForgotPassword() {
         const errorMessage = firebaseErrorMessages[errorCode] || "An error occurred. Please try again.";
         message.error(errorMessage);
         setUIMessage(errorMessage);
+      } finally {
+        setIsLoading(false)
       }
     };
   
@@ -60,7 +65,7 @@ export default function ForgotPassword() {
           ) : (
             <div className="w-full gap-3 flex flex-col mt-2">
               <Input type='email' onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} placeholder='Enter your email' value={email} />    
-              <Button onClick={handlePasswordReset}>Reset Password</Button>
+              <Button onClick={handlePasswordReset} disabled={isLoading} className={clsx({'text-[--highlight]': isLoading })}>{isLoading  ? 'Proceeding...' : 'Send email'}</Button>
             </div>
           )}
           <p className="text-stone-400 font-light mt-2 text-center">{uiMessage}</p>

@@ -48,7 +48,7 @@ export default function Upgrade() {
     },
   ]
 
-  if (userStatus == 'admin' || "user") {
+  if (userStatus != 'admin' || "user") {
     router.push('/dashboard')
   }
 
