@@ -23,7 +23,7 @@ export default function Resource({downloadLink, resourceName, resourceImage, onD
     <div>
         {downloadLink ? (
           <div className="h-64 p-8 border-[--border] border rounded-lg flex flex-col items-center justify-center gap-1">
-            <Image className="rounded-lg w-40 h-40" src={resourceImage} alt="Resource Image" width={500} height={0} />
+            <Image className="rounded-lg w-40 h-40" src={resourceImage} alt="Resource Image" width={500} height={500} />
             { resourceName ? 
               <p className="text-lg font-semibold">{truncateText(resourceName, 16)}</p>
             : null}

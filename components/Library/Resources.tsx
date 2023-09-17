@@ -130,7 +130,7 @@ export default function Resources() {
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
       />
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
       {tags.map((tag) => (
         <ContextMenu key={tag.name}>
           <ContextMenuTrigger>
@@ -170,7 +170,7 @@ export default function Resources() {
       </Dialog>
       : null}
     </div>
-      <div className="flex gap-4 flex-wrap items-center mt-4">
+      <div className="flex gap-4 flex-wrap items-center mt-4 justify-center sm:items-start sm:justify-start">
         {filteredResources.map((resource) => (
           <ContextMenu key={resource.resourceName}>
             <ContextMenuTrigger>
