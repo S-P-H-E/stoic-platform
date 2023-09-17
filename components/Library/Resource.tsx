@@ -6,9 +6,10 @@ interface ResourceProps {
   downloadLink: string | null;
   resourceName: string | null;
   resourceImage: string | StaticImport;
+  onDelete: () => void;
 }
 
-export default function Resource({downloadLink, resourceName, resourceImage}: ResourceProps) {
+export default function Resource({downloadLink, resourceName, resourceImage, onDelete}: ResourceProps) {
 
   function truncateText(text: string, maxLength: number) {
     if (text.length > maxLength) {

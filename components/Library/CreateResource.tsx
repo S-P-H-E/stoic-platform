@@ -17,12 +17,15 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '../ui/command';
 import clsx from 'clsx';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
+import CreateTag from './CreateTag';
 
 export default function CreateResource() {
   const [resourceName, setResourceName] = useState('');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [resourceImageUrl, setResourceImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [fileIsLoading, setFileIsLoading] = useState(false);
   const [fileError, setFileError] = useState<string | null>(null); 
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -33,7 +36,7 @@ export default function CreateResource() {
   const [selectedValues, setSelectedValues] = React.useState<string[]>([]);
   const [tags, setTags] = React.useState<string[]>([]);
 
-  const { user, userId } = UserDataFetcher();
+  const { user, userId, userStatus } = UserDataFetcher();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFiles) => onImageSelected(acceptedFiles[0]),
@@ -48,7 +51,7 @@ export default function CreateResource() {
 
   const createResource = async () => {
     try {
-      if (user && userId) {
+      if (user && userId && userStatus == 'admin') {
         const resourcesCollectionRef = collection(db, 'resources');
   
         const resourceData = {
@@ -68,7 +71,9 @@ export default function CreateResource() {
         await Promise.all(tagPromises);
 
         message.success('Resource created successfully!');
-      }
+      } else (
+        message.error('An error occured.. try again later')
+      )
     } catch (error) {
       console.error('Error creating resource:', error);
       message.error('Failed to create resource.');
@@ -83,7 +88,7 @@ export default function CreateResource() {
   
     if (file) {
       try {
-        setIsLoading(true);
+        setFileIsLoading(true)
   
         // Continue with file upload
         const storageRef = ref(storage, `resources/files/${file.name}`);
@@ -104,7 +109,7 @@ export default function CreateResource() {
         console.error('Error uploading file:', error);
         message.error('Failed to upload file.');
       } finally {
-        setIsLoading(false);
+        setFileIsLoading(false)
       }
     }
   }, []);
@@ -217,7 +222,7 @@ export default function CreateResource() {
               height={100}
               className="p-2 border border-[--border] rounded-lg flex w-[20vh] object-contain mx-auto"
             />
-            <button onClick={() => {setSelectedImage(null); setResourceImageUrl(null);}} className="hover:text-white text-[--highlight] transition flex gap-1 items-center"><MdDelete/>Clear Image</button>
+            <button onClick={() => {setSelectedImage(null); setResourceImageUrl(null); setIsLoading(false);}} className="hover:text-white text-[--highlight] transition flex gap-1 items-center"><MdDelete/>Clear Image</button>
           </div>
         ) : <>
           {isDragActive ? (
@@ -249,7 +254,7 @@ export default function CreateResource() {
       {fileUploadProgress !== null && (
         <Progress value={fileUploadProgress} />
       )}
-      <button onClick={() => {setSelectedFile(null); setFileDownloadLink(null);}} className="hover:text-white p-1 text-[--highlight] transition flex gap-1 items-center">
+      <button onClick={() => {setSelectedFile(null); setFileDownloadLink(null); setFileIsLoading(false)}} className="hover:text-white p-1 text-[--highlight] transition flex gap-1 items-center">
         <MdDelete/> Clear File
       </button>
     </div>
@@ -272,7 +277,7 @@ export default function CreateResource() {
   )}
 </div>
   <div className='flex flex-col items-start w-full gap-3'>
-    <h1 className='text-lg font-medium'>Categories</h1>
+    <h1 className='text-lg font-medium'>Tags</h1>
     <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <ButtonShad
@@ -290,12 +295,23 @@ export default function CreateResource() {
         <PopoverContent className="w-[25rem] p-0">
           <Command>
             <CommandInput placeholder="Search tag..." />
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty className="gap-2 flex flex-col items-center justify-center p-4">
+              <p>No tags found.</p>
+              <Dialog>
+                <DialogTrigger>
+                  <ButtonShad variant="outline">Create tag </ButtonShad>
+                </DialogTrigger>
+                <DialogContent>
+                  <CreateTag/>
+                </DialogContent>
+              </Dialog>
+            </CommandEmpty>
             <CommandGroup>
-            {tags.map((tagName) => ( // Map over the tags array
+            {tags.map((tagName) => (
                 <CommandItem
                   key={tagName}
                   onSelect={() => toggleSelection(tagName)}
+                  className="cursor-pointer"
                 >
                   <Check
                     className={clsx(
@@ -314,12 +330,12 @@ export default function CreateResource() {
       </Popover>
   </div>
       
-      <Button onClick={createResource} disabled={isLoading}
+      <Button onClick={createResource} disabled={isLoading || fileIsLoading}
       className={clsx({
-        'text-[--highlight]': isLoading,
+        'text-[--highlight]': isLoading || fileIsLoading,
       })}
       >
-        {isLoading ? 'Loading...' : 'Create Resource'}
+        {isLoading || fileIsLoading ? 'Loading...' : 'Create Resource'}
       </Button>
     </div>
   )
