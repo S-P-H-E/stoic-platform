@@ -2,14 +2,13 @@
 import React from 'react'
 import { FaBook, FaStripe } from 'react-icons/fa'
 import { BsFillPersonFill, BsStars, BsFillCheckCircleFill, BsPeopleFill } from 'react-icons/bs'
-import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import { UserDataFetcher } from '@/utils/userDataFetcher'
-import { useRouter } from 'next/navigation'
+/* import { useRouter } from 'next/navigation' */
 
 export default function Upgrade() {
   const { userName, userStatus, fetching } = UserDataFetcher()
-  const router = useRouter()
+/*   const router = useRouter() */
 
   const fadeInAnimationVariants = { // for framer motion  
     initial: {
@@ -48,9 +47,9 @@ export default function Upgrade() {
     },
   ]
 
-  if (userStatus == 'admin' || 'user') {
+/*   if (userStatus == 'admin' || 'user') {
     router.push('/dashboard')
-  }
+  } */
 
   return (
     <div className='flex justify-center items-center h-screen'>
