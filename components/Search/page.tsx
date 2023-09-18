@@ -84,7 +84,7 @@ export default function Search(){
             </DialogTrigger>
             <DialogContent>
                 <div>
-                    <div className="flex justify-center items-center gap-2 text-[#444445] px-4 py-4 rounded-full w-full">
+                    <div className="flex justify-center items-center gap-2 text-[#444445] px-4 py-4 rounded-full w-11/12 sm:w-full">
                         <BsStars size={20}/>
                         <input 
                             placeholder="Ask AI..." 
