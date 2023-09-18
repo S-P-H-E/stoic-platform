@@ -112,7 +112,7 @@ export default function Search(){
                             )
                         )}
 
-                    <div className="flex flex-col items-start gap-1 p-5">
+                    <div className="flex flex-col items-start sm:gap-1 px-5 py-3 sm:py-5">
                         <h1 className="text-[#444445] cursor-default">Converters</h1>
 
                         <Link href={'/converters/ytmp3'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
@@ -133,7 +133,7 @@ export default function Search(){
                         </Link>
                     </div>
 
-                    <div className="flex flex-col items-start gap-1 p-5">
+                    <div className="flex flex-col items-start gap-1 px-5 py-3 sm:py-5">
                         <h1 className="text-[#444445] cursor-default">Resources</h1>
 
                         <Link href={'/library'} className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
@@ -142,7 +142,7 @@ export default function Search(){
                         </Link>
                     </div>
 
-                    <div className="flex flex-col items-start gap-1 p-5">
+                    <div className="flex flex-col items-start gap-1 px-5 py-3 sm:py-5">
                         <h1 className="text-[#444445] cursor-default">Profile</h1>
 
                         <Link href={'/settings'} className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
