@@ -32,7 +32,7 @@ export default function Search(){
   
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
-      };
+    };
   
     const handleSubmit = async () => {
         try {
@@ -128,7 +128,7 @@ export default function Search(){
                             TikTok
                         </Link>
                         <Link href={'/converters/rumble'} target='_blank' className="flex justify-start items-center gap-2 transition-all duration-300 rounded-lg hover:bg-[#1B1B1D] w-full px-2 py-2">
-                            <Image src={'/images/Rumble.svg'} alt='rumble' width={18} height={18}/>
+                            <Image src={'/images/Rumble.svg'} alt='rumble' width={22} height={22}/>
                             Rumble
                         </Link>
                     </div>
@@ -153,6 +153,5 @@ export default function Search(){
                 </div>
             </DialogContent>
         </Dialog>
-
     )
 }

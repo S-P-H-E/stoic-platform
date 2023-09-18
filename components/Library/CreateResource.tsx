@@ -281,10 +281,10 @@ export default function CreateResource() {
     <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <ButtonShad
+            className="w-full justify-between border"
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between"
           >
           {selectedValues.length > 0
             ? selectedValues.join(", ")

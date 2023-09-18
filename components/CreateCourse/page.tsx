@@ -11,18 +11,25 @@ import Input from '../Converter/Input';
 import Button from '../Button';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
+import clsx from 'clsx';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '../ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { ButtonShad } from '../ui/buttonshad';
+import { message } from 'antd';
 
 export default function CreateCourse() {
   const { userStatus } = UserDataFetcher();
-  const [courses, setCourses] = useState<{
-    [x: string]: React.ReactNode; id: string;  
-}[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState('');
+  const [courses, setCourses] = useState<{ id: string; name: string }[]>([]);
   const [lessonTitle, setlessonTitle] = useState('');
   const [lessonDescription, setLessonDescription] = useState('');
   const [lessonURL, setLessonURL] = useState('');
   const [lessonOrder, setLessonOrder] = useState('');
   const [error, setError] = useState('');
+
+  const [selectedCourse, setSelectedCourse] = useState('');
+  const [open, setOpen] = React.useState(false);
+  const [selectedValues, setSelectedValues] = useState('');
 
   useEffect(() => {
     // Fetch the list of courses from Firestore
@@ -31,6 +38,7 @@ export default function CreateCourse() {
         const querySnapshot = await getDocs(collection(db, 'courses'));
         const coursesData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
+          name: 'docname',
           ...doc.data(),
         }));
         setCourses(coursesData);
@@ -41,6 +49,16 @@ export default function CreateCourse() {
 
     fetchCourses();
   }, []);
+  
+  const toggleSelection = (value: string) => {
+    if (selectedValues === value) {
+      // If the clicked course is already selected, unselect it
+      setSelectedValues('');
+    } else {
+      // Otherwise, select the clicked course
+      setSelectedValues(value);
+    }
+  };
 
   const handleUpload = async () => {
     if (!selectedCourse) {
@@ -60,14 +78,15 @@ export default function CreateCourse() {
     try {
       const lessonsCollectionRef = collection(db, 'courses', selectedCourse, 'lessons');
       await addDoc(lessonsCollectionRef, lessonData);
-      // Reset form fields and error message
       setlessonTitle('');
       setLessonDescription('');
       setLessonURL('');
       setLessonOrder('');
       setError('');
+
+      message.success("Successfully added lesson: " + lessonTitle)
     } catch (error) {
-      console.error('Error uploading lesson:', error);
+      message.error('Error adding lesson:')
     }
   };
 
@@ -93,7 +112,45 @@ export default function CreateCourse() {
           <h1 className='text-xl font-medium pb-3'>Upload Lesson</h1>
           <h1 className='text-lg font-medium w-full'>Course</h1>
           <div className="w-full">
-            <select
+            <Popover>
+              <PopoverTrigger asChild>
+                <ButtonShad
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-full justify-between"
+                  >
+                  {selectedValues.length > 0
+                  ? selectedValues
+                  : "Select course..."}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </ButtonShad>
+              </PopoverTrigger>
+              <PopoverContent className='className="w-[20rem] p-0'>
+                <Command>
+                  <CommandInput placeholder="Search course..." />
+                  <CommandEmpty className="gap-2 flex flex-col items-center justify-center p-4">
+                    <p>No course found.</p>
+                  </CommandEmpty>
+                  <CommandGroup>
+                  {courses.map((course) => (
+                    <CommandItem key={course.id} value={String(course.name)} onSelect={() => {toggleSelection(String(course.name)); setSelectedCourse(course.id)}}>
+                          <Check
+                          className={clsx(
+                            "mr-2 h-4 w-4",
+                            selectedValues.includes(course.name)
+                              ? "opacity-100"
+                              : "opacity-0"
+                          )}
+                        />
+                      {course.name}
+                    </CommandItem>
+                  ))}
+                  </CommandGroup>
+                  </Command>
+              </PopoverContent>
+            </Popover>
+{/*             <select
             className='text-white bg-transparent border border-[--border] w-full p-2 rounded-lg focus:bg-[--modal]'
               value={selectedCourse}
               onChange={(e) => {
@@ -108,7 +165,7 @@ export default function CreateCourse() {
                   {course.name}
                 </option>
               ))}
-            </select>
+            </select> */}
           </div>
           <h1 className='text-lg font-medium w-full text-start'>Name</h1>
           <Input
