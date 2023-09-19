@@ -32,6 +32,7 @@ export default function LessonPage() {
   const { courseId, lessonId } = useParams();
   const [lesson, setLesson] = useState<any | null>(null);
   const [lessons, setLessons] = useState<LessonItem[]>([]);
+  const [copied, setCopied] = useState<boolean>(false)
 
   const {user, userId, userStatus } = UserDataFetcher()
   
@@ -151,12 +152,10 @@ export default function LessonPage() {
         <div className='flex flex-col justify-center items-center'>
       <div className="px-10 pt-10 flex justify-between items-center gap-6 w-full">
         <Link href={'/dashboard'} className="mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
-            <BsChevronLeft/>
-            <h1 className="text-lg">Go back</h1>
+          <BsChevronLeft/>
+          <h1 className="text-lg">Go back</h1>
         </Link>
        <div className='flex gap-3 items-center'>
-
-        <Search />
        </div>
       </div>
 
@@ -180,7 +179,7 @@ export default function LessonPage() {
           <div className='flex flex-col justify-center items-center gap-5'>
               <div className='mx-5 rounded-2xl bg-[#252525] h-[80px] w-full md:w-[300px]'/>
             <div className='visible md:hidden'>
-                <Comments courseId={courseId as string} lessonId={lessonId as string}/>
+              <Comments courseId={courseId as string} lessonId={lessonId as string}/>
             </div>
           </div>
         </div>
@@ -193,8 +192,13 @@ export default function LessonPage() {
   const handleLinkCopy = () => {
     const currentUrl = 'https://app.stoiccord.com'+pathname
     navigator.clipboard.writeText(currentUrl);
-    message.success('Copied to clipboard');
-  }
+    message.success('Link copied to clipboard');
+    setCopied(true)
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2500);
+  };
 
   return (
     <div className='flex flex-col justify-center items-center'>
@@ -225,14 +229,20 @@ export default function LessonPage() {
                 <div className='flex flex-col md:flex-row justify-between'>
                   <button className='border border-[--border] flex w-fit md:hidden gap-1 h-fit items-center rounded-xl mb-5 px-2' onClick={handleLinkCopy}>
                     <BiCopy />
-                    Copy 
+                    {copied ? 
+                    <p>Copied!</p>
+                    : <p>Copy</p>
+                    }
                   </button>
                   <h1 className='text-3xl font-medium'>
                     {truncateText(lesson.title, 40)}
                   </h1>
                   <button className='hidden border border-[--border] md:flex gap-1 h-fit items-center rounded-xl px-2' onClick={handleLinkCopy}>
                     <BiCopy />
-                    Copy
+                    {copied ? 
+                    <p>Copied!</p>
+                    : <p>Copy</p>
+                    }
                   </button>
                 </div>
                 <p className='rounded-xl mt-3 max-w-[950px] text-sm md:text-base'>{lesson.description}</p>
