@@ -46,7 +46,7 @@ export default function Login() {
       try {
         // Google Auth
         const res = await signInWithPopup(auth, googleProvider);
-        message.success("Signed in successfully as");
+        message.success("Signed in successfully");
 
         //Router
         router.push('/dashboard');
@@ -61,8 +61,7 @@ export default function Login() {
           const docRef = await addDoc(userRef, {
             name: res.user.displayName,
             email: res.user.email,
-            status: 'user',
-            converterUseCount: 0,
+            status: 'free',
           });
           /* console.log("Document written with ID:", docRef.id); */
         } else {
@@ -126,11 +125,11 @@ export default function Login() {
 
             const userRef = collection(db, "users");
             await addDoc(userRef, {
-                name: userName,
-                email: userEmail,
-                password: registerPassword,
-                status: 'free',
-                social: registerSocial,
+              name: userName,
+              email: userEmail,
+              password: registerPassword,
+              status: 'free',
+              social: registerSocial,
             });
 
 
