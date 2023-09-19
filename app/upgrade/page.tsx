@@ -56,11 +56,11 @@ export default function Upgrade() {
       name: 'Community'
     },
   ]
-
+/* 
   if (userStatus == 'user') {
     router.push('/dashboard')
   }
-
+ */
   return (
     <div className='flex flex-col gap-4 justify-center items-center h-screen'>
       <motion.div className='border border-[#1C1C1D] w-[450px] rounded-3xl p-8 flex flex-col items-center gap-2 bg-gradient-to-tl from-[white]/5'
