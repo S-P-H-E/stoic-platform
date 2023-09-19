@@ -1,7 +1,7 @@
 "use client"
 
-import Button from '@/components/Button'
-import Input from '@/components/Input'
+import Button from '@/components/UI Elements/Button'
+import Input from '@/components/UI Elements/Input'
 import { auth, db } from '@/utils/firebase'
 import { validatePassword } from '@/utils/validation'
 import { message } from 'antd'

@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import Button from '../Button'
+import Button from '../UI Elements/Button'
 import { UserDataFetcher } from '@/utils/userDataFetcher'
 import { IoMdCreate } from 'react-icons/io'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'

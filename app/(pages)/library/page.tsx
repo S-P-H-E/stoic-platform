@@ -1,5 +1,5 @@
 "use client"
-import GoBack from '@/components/GoBack'
+import GoBack from '@/components/UI Elements/GoBack'
 import CreateButton from '@/components/Library/CreateButton'
 import Resources from '@/components/Library/Resources'
 import React from 'react'

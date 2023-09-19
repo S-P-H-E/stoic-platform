@@ -1,4 +1,4 @@
-import AccountSettings from "@/components/AccountSettings"
+import AccountSettings from "@/components/Settings/AccountSettings"
 
 export default function Settings() {
     return (

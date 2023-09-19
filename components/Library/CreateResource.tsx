@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Input from '@/components/Input';
+import Input from '@/components/UI Elements/Input';
 import { useDropzone } from 'react-dropzone';
 import { BsImageFill } from 'react-icons/bs';
 import Image from 'next/image';
-import Button from '../Button';
+import Button from '../UI Elements/Button';
 import { ButtonShad } from "@/components/ui/buttonshad"
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { message } from 'antd';
@@ -139,8 +139,8 @@ export default function CreateResource() {
 
         // message.success('Resource picture set successfully!');
       } catch (error) {
-        console.error('Error uploading profile picture:', error);
-        message.error('Failed to upload profile picture.');
+        console.error('Error uploading resource picture:', error);
+        message.error('Failed to upload resource picture.');
       } finally {
         setIsLoading(false);
       }
@@ -209,7 +209,7 @@ export default function CreateResource() {
       <h1 className='text-lg font-medium w-full text-start'>Image</h1>
       <div
         {...getRootProps()}
-        className='border-dashed border-2 border-[--border] hover:border-white transition duration-200 p-4 rounded-lg text-center cursor-pointer w-full items-center justify-center flex'
+        className='border-dashed border-2 border-[--border] hover:border-white/40 hover:bg-black/40 transition duration-200 p-4 rounded-lg text-center cursor-pointer w-full items-center justify-center flex'
       >
         <input {...getInputProps()} />
         {selectedImage ? (
@@ -229,7 +229,7 @@ export default function CreateResource() {
           <div className='flex flex-col justify-center items-center gap-1'>
             <BsImageFill size={60}/>
             <p>Drag your image here, or <mark className='bg-transparent text-blue-500 hover:underline'>browse</mark></p>
-            <p className='text-[18px] italic text-[#707070]'>max file size 20MB - png, gif & jpeg allowed</p>
+            <p className='text-[18px] italic text-[#707070]'>max file size 20MB - png, jpeg & gif allowed</p>
           </div>
             ) : (
           <div className='flex flex-col justify-center items-center gap-1'>
@@ -244,7 +244,7 @@ export default function CreateResource() {
       <h1 className='text-lg font-medium w-full text-start'>File</h1>
 <div
   {...getFileRootProps()}
-  className='border-dashed border-2 border-[--border] hover:border-white transition duration-200 p-2 rounded-lg text-center cursor-pointer w-full items-center justify-center flex'
+  className='border-dashed border-2 border-[--border] hover:border-white/40 hover:bg-black/40 transition duration-200 p-2 rounded-lg text-center cursor-pointer w-full items-center justify-center flex'
 >
   <input {...getFileInputProps()} />
   {selectedFile ? (

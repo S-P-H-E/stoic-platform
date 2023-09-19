@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '@/utils/firebase';
 import { message } from 'antd';
-import Button from './Button';
+import Button from '@/components/UI Elements/Button'
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import Image from 'next/image';
 import { updateProfile } from 'firebase/auth';
@@ -10,6 +10,8 @@ import { doc, setDoc } from 'firebase/firestore';
 import { CgClose } from 'react-icons/cg';
 import { useDropzone } from 'react-dropzone'; // Import useDropzone
 import { BsImageFill } from 'react-icons/bs'
+import { MdDelete } from 'react-icons/md';
+import clsx from 'clsx';
 
 interface PasswordModalProps {
   onClose: () => void;
@@ -33,9 +35,8 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
       const allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif']; // Add any other allowed image types
   
       if (!allowedFileTypes.includes(selectedImage.type)) {
-        // Check if the selected file's MIME type is in the allowed list
         message.error('Invalid file type. Please select a valid image file.');
-        return; // Abort the upload process if the file type is not allowed
+        return;
       }
   
       try {
@@ -64,55 +65,59 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFiles) => onFileSelected(acceptedFiles[0]),
-    maxSize: 5 * 1024 * 1024, 
+    maxSize: 8 * 1024 * 1024, 
   });
 
   return (
-    <div className="relative py-16 bg-black border-[--border] border flex flex-col gap-2 p-8 rounded-lg text-center">
+    <div className="relative py-16 bg-[--bg] border-[--border] border flex flex-col gap-2 p-8 rounded-lg text-center">
       <button className='absolute top-4 right-4 text-[--highlight] hover:text-white transition cursor-pointer'>
         <CgClose onClick={() => onClose()} size="20"/>
       </button>
 
       <div
         {...getRootProps()}
-        className='border-dashed border-2 border-[--border] bg-black p-8 rounded-lg text-center cursor-pointer'
+        className='border-dashed border-2 border-[--border] bg-[--bg] hover:bg-black/40 transition p-8 rounded-lg text-center cursor-pointer'
       >
         <input {...getInputProps()} />
-        {isDragActive ? (
-          <div className='flex flex-col justify-center items-center gap-3'>
+        {selectedImage ? (
+          <div className="flex justify-center items-center flex-col gap-2">
+            <p className="text-[--highlight]">You can click again to change the image</p>
+             <Image
+              alt="Profile picture"
+              src={URL.createObjectURL(selectedImage)}
+              width={100}
+              height={100}
+              className="p-2 border border-[--border] rounded-lg flex w-[20vh] object-contain mx-auto"
+            />
+            <button onClick={() => {setSelectedImage(null); setIsLoading(false);}} className="hover:text-white text-[--highlight] transition flex gap-1 items-center"><MdDelete/>Clear Image</button>
+          </div>
+        ) : <>
+          {isDragActive ? (
+          <div className='flex flex-col justify-center items-center gap-1'>
             <BsImageFill size={60}/>
             <p>Drag your image here, or <mark className='bg-transparent text-blue-500 hover:underline'>browse</mark></p>
-            <p className='text-[18px] italic text-[#707070]'>max file size 5MB - png, gif & jpeg allowed</p>
+            <p className='text-[18px] italic text-[#707070]'>max file size 8MB - png, jpeg & gif allowed</p>
           </div>
-        ) : (
-          <div className='flex flex-col justify-center items-center gap-3'>
+            ) : (
+          <div className='flex flex-col justify-center items-center gap-1'>
             <BsImageFill size={50}/>
             <p>Drag your image here, or <mark className='bg-transparent text-blue-500 hover:underline'>browse</mark></p>
-            <p className='text-[18px] italic font-normal text-[#707070]'>max file size 5MB - png, gif & jpeg allowed</p>
+            <p className='text-[18px] italic font-normal text-[#707070]'>max file size 8MB - png, gif & jpeg allowed</p>
           </div>
         )}
+        </> }
       </div>
-
-      {selectedImage ? (
-        <>
-          <div className="flex justify-center m-2 items-center flex-col gap-4">
-            <Image
-              alt="Profile picture"
-              src={URL.createObjectURL(selectedImage)} // Display the selected image
-              width={100}
-              height={0}
-              className="border border-[--border] rounded-lg flex w-[20vh] object-contain mx-auto"
-            />
-          </div>
-          <Button
-             className='font-lg text-base lg:text-xl'
-            onClick={uploadProfilePicture}
-            disabled={isLoading} // Disable the button when isLoading is true
-          >
-            {isLoading ? 'Uploading...' : 'Upload Profile Picture'}
-          </Button>
-        </>
-      ) : null}
-    </div>
+      {selectedImage ? 
+      <Button
+         className={clsx({
+          'text-[--highlight]': isLoading,
+        }, 'font-lg text-base lg:text-xl')}
+         onClick={uploadProfilePicture}
+         disabled={isLoading}
+        >
+         {isLoading ? 'Uploading...' : 'Upload Profile Picture'}
+      </Button>
+      : null}
+      </div>
   );
 }

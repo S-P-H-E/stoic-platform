@@ -10,15 +10,15 @@ import { collection, getDocs, addDoc, query, where } from 'firebase/firestore';
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useState } from 'react'
-import Input from './Input'
-import Button from './Button'
+import Input from '../UI Elements/Input'
+import Button from '../UI Elements/Button'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { AiOutlineGoogle } from 'react-icons/ai'
 import { auth, db } from '@/utils/firebase'
 import { message } from 'antd';
 import { useRouter } from "next/navigation";
 import { validateEmail, validateNameLength, validatePassword } from '@/utils/validation'
-import InputResponse from './InputResponse';
+import InputResponse from '../InputResponse';
 import ForgotPassword from "./ForgotPassword";
 
 export default function Login() {

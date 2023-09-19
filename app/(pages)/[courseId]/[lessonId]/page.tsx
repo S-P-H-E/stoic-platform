@@ -7,7 +7,7 @@ import { BsChevronLeft } from 'react-icons/bs'
 import Link from 'next/link';
 import Search from '@/components/Search/page';
 import Script from 'next/script';
-import Comments from '@/components/Comments';
+import Comments from '@/components/Course/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import {motion} from 'framer-motion'
 import { BiCopy } from 'react-icons/bi'

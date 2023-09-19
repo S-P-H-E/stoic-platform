@@ -4,13 +4,13 @@ import { auth, db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
 import React, { useState } from 'react'
-import Input from './Input';
-import Button from './Button';
+import Input from '../UI Elements/Input';
+import Button from '../UI Elements/Button';
 import {CgClose} from 'react-icons/cg'
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { validatePassword } from '@/utils/validation'
 import { message } from 'antd';
-import InputResponse from './InputResponse';
+import InputResponse from '../InputResponse';
 
 type FirebaseError = {
   code: string;

@@ -56,12 +56,12 @@ export default function Upgrade() {
       name: 'Community'
     },
   ]
-  
+
     useEffect(() => {
       if (userStatus == 'user') {
       router.push('/dashboard');
       }
-    }, [router, userStatus]); // Empty dependency array ensures this runs on the client side after mount
+    }, [router, userStatus]);
 
   return (
     <div className='flex flex-col gap-4 justify-center items-center h-screen'>

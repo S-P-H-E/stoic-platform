@@ -3,8 +3,8 @@
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { BsChevronLeft } from 'react-icons/bs'
-import Input from './Input'
-import Button from './Button'
+import Input from '../UI Elements/Input'
+import Button from '../UI Elements/Button'
 import {BiLogOut} from 'react-icons/bi'
 import { UserDataFetcher } from '@/utils/userDataFetcher'
 import { signOut} from 'firebase/auth'
@@ -14,8 +14,9 @@ import { collection, doc, getDoc, getDocs, query, updateDoc, where } from 'fireb
 import { message } from 'antd';
 import PasswordModal from './PasswordModal'
 import ProfilePhotoUplaod from './ProfilePhotoUplaod'
-import UserImage from './UserImage'
+import UserImage from '../UserImage'
 import { validateNameLength } from '@/utils/validation'
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 
 export default function AccountSettings() {
   const { userName, user, userId } = UserDataFetcher();
@@ -157,14 +158,17 @@ export default function AccountSettings() {
 
             <div className="2xl:mb-6 lg:mb-4 mb-0 gap-2 flex flex-col w-full md:w-64">
               <h1>User Image</h1>
-              <Button onClick={() => setImgMenuOpen(!imgMenuOpen)} className='font-normal text-base lg:text-lg'>Update</Button>
-              {imgMenuOpen ?
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-              <div>
-                <ProfilePhotoUplaod onClose={closeImageModal}/>
-              </div>
-            </div>
-              : null}
+              {userId ? 
+              <Dialog>
+                <DialogTrigger onClick={() => setImgMenuOpen(!imgMenuOpen)}>
+                  <Button className='font-normal text-base lg:text-lg'>Update</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <ProfilePhotoUplaod onClose={closeImageModal}/>
+                </DialogContent>
+              </Dialog>
+              :null
+              }
             </div>
 
             { hasPassword &&

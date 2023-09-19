@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Input from '../Input'
-import Button from '../Button'
+import Input from '../UI Elements/Input'
+import Button from '../UI Elements/Button'
 import { useTagCreator } from '@/utils/useTagCreate';
 import clsx from 'clsx';
 import { message } from 'antd';

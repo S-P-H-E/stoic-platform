@@ -5,8 +5,8 @@ import { BsChevronLeft } from 'react-icons/bs'
 import { useParams, useRouter } from 'next/navigation';
 import { collection, doc, getDoc, getDocs, query, orderBy, where, onSnapshot, updateDoc } from 'firebase/firestore';
 import Script from 'next/script';
-import Lesson from '@/components/Lesson';
-import Comments from '@/components/Comments';
+import Lesson from '@/components/Course/Lesson';
+import Comments from '@/components/Course/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import Search from "@/components/Search/page";
 import Link from 'next/link';

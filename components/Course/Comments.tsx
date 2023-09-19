@@ -6,12 +6,12 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import { Dropdown } from 'antd';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import UserImage from './UserImage';
-import { UserDataFetcher } from './../utils/userDataFetcher';
+import UserImage from '../UserImage';
+import { UserDataFetcher } from '../../utils/userDataFetcher';
 import { HiMiniPencilSquare } from 'react-icons/hi2'
 import {motion} from 'framer-motion'
 import Head from 'next/head';
-import UserImagePassable from './UserImagePassable';
+import UserImagePassable from '../UserImagePassable';
 
 export default function Comments({ courseId, lessonId }: { courseId: string, lessonId: any }) {
   const [comments, setComments] = useState<any[]>([]);

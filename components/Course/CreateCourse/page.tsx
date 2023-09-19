@@ -7,15 +7,15 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Input from '../Converter/Input';
-import Button from '../Button';
+import Input from '../../Converter/Input';
+import Button from '../../UI Elements/Button';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 import clsx from 'clsx';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '../ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '../../ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { ButtonShad } from '../ui/buttonshad';
+import { ButtonShad } from '../../ui/buttonshad';
 import { message } from 'antd';
 
 export default function CreateCourse() {

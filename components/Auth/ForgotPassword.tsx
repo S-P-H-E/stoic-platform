@@ -2,8 +2,8 @@ import { auth } from '@/utils/firebase';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import React, { useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth';
-import Input from '@/components/Input';
-import Button from '@/components/Button';
+import Input from '@/components/UI Elements/Input';
+import Button from '@/components/UI Elements/Button';
 import { message } from 'antd';
 import clsx from 'clsx';
 

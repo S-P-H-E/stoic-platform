@@ -5,7 +5,7 @@ import Resource from './Resource';
 import { collection, deleteDoc, doc, getDocs, onSnapshot } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
-import Input from '../Input';
+import Input from '../UI Elements/Input';
 import { ButtonShad } from '../ui/buttonshad';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import {AiOutlinePlus} from 'react-icons/ai'

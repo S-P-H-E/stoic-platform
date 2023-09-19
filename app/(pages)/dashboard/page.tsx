@@ -1,6 +1,6 @@
 import Continue from "@/components/Continue";
 import CourseLogic from "@/components/Course/logic";
-import CreateCourse from "@/components/CreateCourse/page";
+import CreateCourse from "@/components/Course/CreateCourse/page";
 
 export default function Dashboard(){
 

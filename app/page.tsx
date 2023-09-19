@@ -1,6 +1,6 @@
 "use client"
 
-import Login from '@/components/Login'
+import Login from '@/components/Auth/Login'
 import { useRouter } from 'next/navigation'
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { BiLoader } from 'react-icons/bi';
