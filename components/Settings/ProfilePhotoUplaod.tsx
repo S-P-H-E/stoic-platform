@@ -70,10 +70,6 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
 
   return (
     <div className="relative py-16 bg-[--bg] border-[--border] border flex flex-col gap-2 p-8 rounded-lg text-center">
-      <button className='absolute top-4 right-4 text-[--highlight] hover:text-white transition cursor-pointer'>
-        <CgClose onClick={() => onClose()} size="20"/>
-      </button>
-
       <div
         {...getRootProps()}
         className='border-dashed border-2 border-[--border] bg-[--bg] hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer'
