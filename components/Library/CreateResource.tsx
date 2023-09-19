@@ -75,7 +75,7 @@ export default function CreateResource() {
         message.error('An error occured.. try again later')
       )
     } catch (error) {
-      console.error('Error creating resource:', error);
+      /* console.error('Error creating resource:', error); */
       message.error('Failed to create resource.');
     }
   };
@@ -106,7 +106,7 @@ export default function CreateResource() {
   
         message.success('File uploaded successfully!');
       } catch (error) {
-        console.error('Error uploading file:', error);
+        /* console.error('Error uploading file:', error); */
         message.error('Failed to upload file.');
       } finally {
         setFileIsLoading(false)
@@ -160,7 +160,7 @@ export default function CreateResource() {
           setResourceImageUrl(imageUrl);
 
         } catch (error) {
-          message.error('Failed to upload profile picture.');
+          message.error('Failed to upload resource picture.');
         } finally {
           setIsLoading(false);
         }
@@ -213,7 +213,7 @@ export default function CreateResource() {
       >
         <input {...getInputProps()} />
         {selectedImage ? (
-          <div className="flex justify-center items-center flex-col gap-2">
+          <div className="flex justify-center items-center flex-col gap-3">
             <p className="text-[--highlight]">You can click again to change the image</p>
              <Image
               alt="Profile picture"

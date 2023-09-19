@@ -76,11 +76,11 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
 
       <div
         {...getRootProps()}
-        className='border-dashed border-2 border-[--border] bg-[--bg] hover:bg-black/40 transition p-8 rounded-lg text-center cursor-pointer'
+        className='border-dashed border-2 border-[--border] bg-[--bg] hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer'
       >
         <input {...getInputProps()} />
         {selectedImage ? (
-          <div className="flex justify-center items-center flex-col gap-2">
+          <div className="flex justify-center items-center flex-col gap-4">
             <p className="text-[--highlight]">You can click again to change the image</p>
              <Image
               alt="Profile picture"
