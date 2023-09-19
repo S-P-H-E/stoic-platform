@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaBook, FaGraduationCap, FaStripe } from 'react-icons/fa'
 import { BsFillPersonFill, BsStars, BsFillCheckCircleFill, BsPeopleFill } from 'react-icons/bs'
 import { motion } from 'framer-motion'
@@ -56,11 +56,13 @@ export default function Upgrade() {
       name: 'Community'
     },
   ]
-/* 
-  if (userStatus == 'user') {
-    router.push('/dashboard')
-  }
- */
+  
+    useEffect(() => {
+      if (userStatus == 'user') {
+      router.push('/dashboard');
+      }
+    }, [router, userStatus]); // Empty dependency array ensures this runs on the client side after mount
+
   return (
     <div className='flex flex-col gap-4 justify-center items-center h-screen'>
       <motion.div className='border border-[#1C1C1D] w-[450px] rounded-3xl p-8 flex flex-col items-center gap-2 bg-gradient-to-tl from-[white]/5'
