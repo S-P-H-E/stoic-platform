@@ -207,9 +207,6 @@ export default function LessonPage() {
             <BsChevronLeft/>
             <h1 className="text-lg">Go back</h1>
         </Link>
-       <div className='flex gap-3 items-center'>
-        <Search />
-       </div>
       </div>
 
       <div className="flex flex-col md:flex-row p-5 md:p-10">
