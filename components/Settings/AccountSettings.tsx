@@ -105,12 +105,12 @@ export default function AccountSettings() {
   return (
     <div className="flex flex-col h-full w-full sm:flex-none">
     {MenuOpen && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <div>
-                    <PasswordModal onClose={closePasswordModal}/>
-                </div>
-              </div>
-            )}
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div>
+            <PasswordModal onClose={closePasswordModal}/>
+          </div>
+        </div>
+      )}
 
     <h1 className="font-bold sm:text-2xl md:text-3xl 2xl:text-4xl">Account Setings</h1>
       <div>
