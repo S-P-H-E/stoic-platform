@@ -57,9 +57,9 @@ export default function Upgrade() {
     },
   ]
 
-  if (userStatus == 'admin' || 'user') {
+/*   if (userStatus == 'admin' || 'user') {
     router.push('/dashboard')
-  }
+  } */
 
   return (
     <div className='flex flex-col gap-4 justify-center items-center h-screen'>
