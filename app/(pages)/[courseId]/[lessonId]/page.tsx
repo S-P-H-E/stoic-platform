@@ -5,7 +5,6 @@ import { db } from '@/utils/firebase';
 import { collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import { BsChevronLeft } from 'react-icons/bs'
 import Link from 'next/link';
-import Search from '@/components/Search/page';
 import Script from 'next/script';
 import Comments from '@/components/Course/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
@@ -18,6 +17,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 import { message } from 'antd';
+import VimeoPlayer from '@vimeo/player';
 
 
 interface LessonItem {
@@ -25,6 +25,7 @@ interface LessonItem {
   title: string;
   description: string;
   order: number;
+  url: string;
 }
 
 export default function LessonPage() {
@@ -33,12 +34,11 @@ export default function LessonPage() {
   const [lesson, setLesson] = useState<any | null>(null);
   const [lessons, setLessons] = useState<LessonItem[]>([]);
   const [copied, setCopied] = useState<boolean>(false)
-
+  const [vimeoUrl, setVimeoUrl] = useState<string>("")
+  
   const {user, userId, userStatus } = UserDataFetcher()
   
   const pathname = usePathname();
-
-  
 
   const lessonpath = useParams()
 
@@ -126,10 +126,15 @@ export default function LessonPage() {
               title: doc.data().title,
               description: doc.data().description,
               order: doc.data().order,
+              url: doc.data().url
             }));
             lessonsData.sort((a, b) => a.order - b.order);
-    
+
             setLessons(lessonsData);
+
+            if (lessonsData.length > 0) {
+              setVimeoUrl(lessonsData[0].url);
+            }
           });
     
           return () => unsubscribe(); // Unsubscribe when the component unmounts
@@ -144,7 +149,36 @@ export default function LessonPage() {
     fetchLessonData();
     fetchLessonsForCourse();
     
-  }, [courseId, lessonId, userId, router]);
+  }, [courseId, lessonId, userId, router, vimeoUrl]);
+
+  useEffect(() => {
+    if (vimeoUrl) {
+  
+      const handleVimeoMessage = (event: MessageEvent) => {
+        if (event.origin === 'https://player.vimeo.com') {
+          var iframe = document.querySelector('iframe');
+          var player = new VimeoPlayer(iframe);
+          player.on('play', function () {
+            console.log('Played the video');
+          });
+
+          player.on('ended', function() {
+            console.log('Ended the video');
+          });
+
+        }
+      };
+  
+      // Add the event listener
+      window.addEventListener('message', handleVimeoMessage);
+  
+      // Remove the event listener when the component unmounts
+      return () => {
+        window.removeEventListener('message', handleVimeoMessage);
+      };
+    }
+  }, [vimeoUrl]);
+  
 
   if (!lesson || !lessons) {
     return (

@@ -4,7 +4,7 @@ export function YoutubeParser(url: string) {
   var match = url.match(regExp);
   
   if (match && match[1]) {
-      return match[1];
+    return match[1];
   }
   
   return false;
