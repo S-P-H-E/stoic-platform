@@ -178,15 +178,8 @@ export default function LessonPage() {
       if (event.origin === 'https://player.vimeo.com' && userId) {
         var iframe = document.querySelector('iframe');
         var player = new VimeoPlayer(iframe);
-        player.on('play', function () {
-          console.log('Played the video');
-  
-          const userLessonRef = doc(db, 'users', String(userId), 'courses', String(courseId), String(lessonId));
-          setDoc(userLessonRef, { completed: true }, { merge: true })
-        });
-  
         player.on('ended', async function () {
-          console.log('Ended the video');
+          /* console.log('Ended the video'); */
   
           const userCourseLessonsRef = collection(
             db,
@@ -206,6 +199,7 @@ export default function LessonPage() {
         });
       }
     };
+  
   
     if (vimeoUrl) {
       window.addEventListener('message', handleVimeoMessageAsync);
