@@ -35,8 +35,9 @@ export default function LessonPage() {
   const [lessons, setLessons] = useState<LessonItem[]>([]);
   const [copied, setCopied] = useState<boolean>(false)
   const [vimeoUrl, setVimeoUrl] = useState<string>("")
+  const [userCompleted ,setUserCompleted] = useState<boolean>(false)
   
-  const {user, userId, userStatus } = UserDataFetcher()
+  const { userId, userStatus } = UserDataFetcher()
   
   const pathname = usePathname();
 
@@ -90,14 +91,35 @@ export default function LessonPage() {
             generalLastLesson: lessonId,
           });
 
+
+      /* const userLessonRef = doc(db, 'users', userId, 'courses', courseId, 'lessons', lessonId)
+          const userLessonDocSnap = await getDoc(lessonDocRef); */
+
           if (lessonDocSnap.exists()) {
             const lessonData = lessonDocSnap.data();
             setLesson(lessonData);
+
+            const userCourseLessonsRef = collection(
+              db,
+              'users',
+              String(userId),
+              'courses',
+              String(courseId),
+              'lessons'
+            );
+
+            const lessonIdStr = String(lessonId);
+            await setDoc(
+              doc(userCourseLessonsRef, lessonIdStr),
+              { watched: true },
+              { merge: true }
+            );
+
           } else {
             const firstLessonQuery = query(
               collection(db, 'courses', courseId as string, 'lessons'),
-              orderBy('order'), // Assuming 'order' is the field to order lessons by
-              limit(1) // Limit to the first lesson
+              orderBy('order'),
+              limit(1)
             );
     
             const firstLessonSnapshot = await getDocs(firstLessonQuery);
@@ -152,32 +174,88 @@ export default function LessonPage() {
   }, [courseId, lessonId, userId, router, vimeoUrl]);
 
   useEffect(() => {
+    const handleVimeoMessageAsync = async (event: MessageEvent) => {
+      if (event.origin === 'https://player.vimeo.com' && userId) {
+        var iframe = document.querySelector('iframe');
+        var player = new VimeoPlayer(iframe);
+        player.on('play', function () {
+          console.log('Played the video');
+  
+          const userLessonRef = doc(db, 'users', String(userId), 'courses', String(courseId), String(lessonId));
+          setDoc(userLessonRef, { completed: true }, { merge: true })
+        });
+  
+        player.on('ended', async function () {
+          console.log('Ended the video');
+  
+          const userCourseLessonsRef = collection(
+            db,
+            'users',
+            String(userId),
+            'courses',
+            String(courseId),
+            'lessons'
+          );
+  
+          const lessonIdStr = String(lessonId);
+          await setDoc(
+            doc(userCourseLessonsRef, lessonIdStr),
+            { completed: true },
+            { merge: true }
+          );
+        });
+      }
+    };
+  
     if (vimeoUrl) {
-  
-      const handleVimeoMessage = (event: MessageEvent) => {
-        if (event.origin === 'https://player.vimeo.com') {
-          var iframe = document.querySelector('iframe');
-          var player = new VimeoPlayer(iframe);
-          player.on('play', function () {
-            console.log('Played the video');
-          });
-
-          player.on('ended', function() {
-            console.log('Ended the video');
-          });
-
-        }
-      };
-  
-      // Add the event listener
-      window.addEventListener('message', handleVimeoMessage);
+      window.addEventListener('message', handleVimeoMessageAsync);
   
       // Remove the event listener when the component unmounts
       return () => {
-        window.removeEventListener('message', handleVimeoMessage);
+        window.removeEventListener('message', handleVimeoMessageAsync);
       };
     }
-  }, [vimeoUrl]);
+  }, [vimeoUrl, userId, courseId, lessonId]);
+
+  useEffect(() => {
+    const fetchUserCompletion = () => {
+      try {
+        if (userId && courseId && lessonId) {
+          // Create a reference to the specific lesson's completion status in Firestore
+          const lessonCompletionRef = doc(
+            db,
+            'users',
+            String(userId),
+            'courses',
+            String(courseId),
+            'lessons',
+            String(lessonId)
+          );
+  
+          // Create a real-time listener for the document
+          const unsubscribe = onSnapshot(lessonCompletionRef, (snapshot) => {
+            if (snapshot.exists()) {
+              const completed = snapshot.data()?.completed;
+  
+              if (completed === true) {
+                setUserCompleted(true);
+              } else {
+                setUserCompleted(false);
+              }
+            } else {
+              setUserCompleted(false);
+            }
+          });
+  
+          return () => unsubscribe();
+        }
+      } catch (error) {
+        console.error('Error fetching user completion:', error);
+      }
+    };
+  
+    fetchUserCompletion();
+  }, [userId, courseId, lessonId]);
   
 
   if (!lesson || !lessons) {
@@ -268,6 +346,9 @@ export default function LessonPage() {
                   <h1 className='text-3xl font-medium'>
                     {truncateText(lesson.title, 40)}
                   </h1>
+                  {userCompleted === true ? (
+                      <p className='text-green-500'>Completed</p>
+                      ) : ( <p className='text-green-500'>Not Completed</p> )}
                   <button className='hidden border border-[--border] md:flex gap-1 h-fit items-center rounded-xl px-2' onClick={handleLinkCopy}>
                     <BiCopy />
                     {copied ? 
