@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/context-menu"
 import { message } from 'antd';
 import VimeoPlayer from '@vimeo/player';
+import clsx from 'clsx';
+import { FaCheckCircle, FaEyeSlash, FaTimesCircle } from 'react-icons/fa';
 
 
 interface LessonItem {
@@ -36,6 +38,8 @@ export default function LessonPage() {
   const [copied, setCopied] = useState<boolean>(false)
   const [vimeoUrl, setVimeoUrl] = useState<string>("")
   const [userCompleted ,setUserCompleted] = useState<boolean>(false)
+  const [lessonCompletionStatus, setLessonCompletionStatus] = useState<boolean | null>(null);
+  const [lessonCompletionStatusMap, setLessonCompletionStatusMap] = useState(new Map());
   
   const { userId, userStatus } = UserDataFetcher()
   
@@ -58,14 +62,14 @@ export default function LessonPage() {
 }
  
 /*   console.log("lastLesson" + userLastLesson) */
-  const deleteLesson = async () => {
+  const deleteLesson = async (lessonIdToDelete: string) => {
     try {
-      if (lessonId) {
-        const lessonDocRef = doc(db, 'courses', courseId as string, 'lessons', lessonId as string);
+      if (lessonIdToDelete) {
+        const lessonDocRef = doc(db, 'courses', courseId as string, 'lessons', lessonIdToDelete);
         await deleteDoc(lessonDocRef);
       }
-    } catch(error) {
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -173,6 +177,7 @@ export default function LessonPage() {
     
   }, [courseId, lessonId, userId, router, vimeoUrl]);
 
+  
   useEffect(() => {
     const handleVimeoMessageAsync = async (event: MessageEvent) => {
       if (event.origin === 'https://player.vimeo.com' && userId) {
@@ -251,11 +256,54 @@ export default function LessonPage() {
     fetchUserCompletion();
   }, [userId, courseId, lessonId]);
   
+  useEffect(() => {
+    const fetchLessonCompletionStatus = async () => {
+      try {
+        if (userId && courseId) {
+          const userCourseLessonsRef = collection(
+            db,
+            'users',
+            String(userId),
+            'courses',
+            String(courseId),
+            'lessons'
+          );
+  
+          const unsubscribe = onSnapshot(userCourseLessonsRef, (querySnapshot) => {
+            const lessonCompletionStatusMap = new Map<string, boolean>();
+            
+            querySnapshot.forEach((docSnapshot) => {
+              const lessonId = docSnapshot.id;
+              const completed = docSnapshot.data()?.completed || false;
+              lessonCompletionStatusMap.set(lessonId, completed);
+            });
+  
+            setLessonCompletionStatusMap(lessonCompletionStatusMap);
+  
+            // Update the completion status of each lesson based on the snapshot data
+            setLessons((prevLessons) => {
+              return prevLessons.map((lessonItem) => ({
+                ...lessonItem,
+                completed: lessonCompletionStatusMap.get(lessonItem.id) || false,
+              }));
+            });
+          });
+  
+          return () => unsubscribe();
+        }
+      } catch (error) {
+        console.error('Error fetching lesson completion status:', error);
+      }
+    };
+  
+    fetchLessonCompletionStatus();
+  }, [userId, courseId]);
+  
 
   if (!lesson || !lessons) {
     return (
       <>
-        <div className='flex flex-col justify-center items-center'>
+      <div className='flex flex-col justify-center items-center'>
       <div className="px-10 pt-10 flex justify-between items-center gap-6 w-full">
         <Link href={'/dashboard'} className="mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
           <BsChevronLeft/>
@@ -342,7 +390,7 @@ export default function LessonPage() {
                   </h1>
                   {userCompleted === true ? (
                       <p className='text-green-500'>Completed</p>
-                      ) : ( <p className='text-green-500'>Not Completed</p> )}
+                      ) : ( <p className='text-red-500'>Incomplete</p> )}
                   <button className='hidden border border-[--border] md:flex gap-1 h-fit items-center rounded-xl px-2' onClick={handleLinkCopy}>
                     <BiCopy />
                     {copied ? 
@@ -381,20 +429,46 @@ export default function LessonPage() {
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
                   <ContextMenuTrigger>
-                  <div className={` w-full md:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-start items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'invert' : ''}`}>
-                    <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
-                    <h1 className='text-xl font-medium text-white hidden md:flex'>
-                      {truncateText(lessonItem.title, 14)}
-                    </h1>
-                    <h1 className='text-xl font-medium text-white md:hidden flex'>
-                      {truncateText(lessonItem.title, 29)}
-                    </h1>
+                  <div className={` w-full md:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black' : ''}`}>
+                    <div className="flex items-center">
+                      <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
+                      <h1 className={clsx('text-xl font-medium', {
+                        'text-black': String(lessonpath.lessonId) === String(lessonItem.id),
+                        'hidden md:flex': true,
+                      })}>
+                        {truncateText(lessonItem.title, 14)}
+                      </h1>
+                      <h1 className={clsx('text-xl font-medium', {
+                        'text-black': String(lessonpath.lessonId) === String(lessonItem.id),
+                        'md:hidden flex': true,
+                      })}>
+                        {truncateText(lessonItem.title, 29)}
+                      </h1>
+                    </div>
+                    {lessonCompletionStatusMap.has(lessonItem.id) ? (
+                      lessonCompletionStatusMap.get(lessonItem.id) ? (
+                        <>
+                          <p className="text-green-500 text-sm">Completed</p>
+                          <FaCheckCircle className="text-green-500" />
+                        </>
+                      ) : (
+                        <>
+                        <p className="text-red-500 text-sm">Incomplete</p>
+                        <FaTimesCircle className="text-red-500" />
+                        </>
+                      )
+                    ) : (
+                      <>
+                        <p className="text-gray-500 text-sm">Unwatched</p>
+                        <FaEyeSlash className="text-gray-500" />
+                      </>
+                    )}
                   </div>
                   </ContextMenuTrigger>
                 
                 {userStatus == 'admin' &&
                   <ContextMenuContent className="w-64">
-                    <ContextMenuCheckboxItem className="cursor-pointer" onClick={deleteLesson}>
+                    <ContextMenuCheckboxItem className="cursor-pointer" onClick={() => deleteLesson(lessonItem.id)}>
                       Delete
                     </ContextMenuCheckboxItem>
                   </ContextMenuContent>
