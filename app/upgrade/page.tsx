@@ -59,6 +59,7 @@ export default function Upgrade() {
 
     useEffect(() => {
       if (userStatus == 'user') {
+        console.log(userStatus)
       router.push('/dashboard');
       }
     }, [router, userStatus]);
