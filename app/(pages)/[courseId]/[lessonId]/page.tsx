@@ -20,6 +20,7 @@ import { message } from 'antd';
 import VimeoPlayer from '@vimeo/player';
 import clsx from 'clsx';
 import { FaCheckCircle, FaEyeSlash, FaTimesCircle } from 'react-icons/fa';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
 
 
 interface LessonItem {
@@ -388,16 +389,21 @@ export default function LessonPage() {
                   <h1 className='text-3xl font-medium'>
                     {truncateText(lesson.title, 40)}
                   </h1>
-                  {userCompleted === true ? (
-                      <p className='text-green-500'>Completed</p>
-                      ) : ( <p className='text-red-500'>Incomplete</p> )}
-                  <button className='hidden border border-[--border] md:flex gap-1 h-fit items-center rounded-xl px-2' onClick={handleLinkCopy}>
-                    <BiCopy />
-                    {copied ? 
-                    <p>Copied!</p>
-                    : <p>Copy</p>
-                    }
-                  </button>
+                  <div className='flex justify-center items-center gap-2'>
+                    <button className='hidden border border-[--border] md:flex gap-1 h-fit items-center rounded-xl px-2' onClick={handleLinkCopy}>
+                      <BiCopy />
+                      {copied ? 
+                      <p>Copied!</p>
+                      : <p>Copy</p>
+                      }
+                    </button>
+                    {userCompleted === true ? (
+                        <p className='text-green-500'>Completed</p>
+                        ) : ( 
+                          <AiOutlineCloseCircle className="text-red-500" />
+                    )}
+                  </div>
+                  
                 </div>
                 <p className='rounded-xl mt-3 max-w-[950px] text-sm md:text-base'>{lesson.description}</p>
               </div>
