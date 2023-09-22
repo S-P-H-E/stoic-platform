@@ -11,7 +11,7 @@ export function UserDataFetcher() {
   const [user, fetching] = useAuthState(auth);
   const [userName, setUserName] = useState(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [userStatus, setUserStatus] = useState("free");
+  const [userStatus, setUserStatus] = useState();
   const [generalLastCourse, setGeneralLastCourse] = useState('')
   const [generalLastLesson, setGeneralLastLesson] = useState('')
 
