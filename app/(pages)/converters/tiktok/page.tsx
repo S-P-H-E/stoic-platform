@@ -14,8 +14,6 @@ import Link from "next/link";
 import {BsMusicNote, BsTrash } from "react-icons/bs";
 import {FaHeart, FaCommentAlt} from "react-icons/fa"
 import { message } from "antd";
-import { DocumentData, DocumentReference, collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/utils/firebase";
 import { UserDataFetcher } from "@/utils/userDataFetcher";
 
 
@@ -83,7 +81,7 @@ export default function Home() {
     event.preventDefault();
     if (inputUrlRef.current !== null) {
       const tiktokUrl = (inputUrlRef.current.value)
-      const tiktokUrlPattern = /^https:\/\/(www\.)?(vm\.)?tiktok\.com\//
+      const tiktokUrlPattern = /^https:\/\/(www\.)?(vm\.)?tiktok\.com\/(@?\w+\/video\/\d+)/;
 
       if (!userId) {
         message.error("You are not allowed to use this.")
