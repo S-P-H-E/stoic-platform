@@ -13,6 +13,7 @@ import { BsTrash } from "react-icons/bs";
 import { BiLoader } from "react-icons/bi";
 import { YoutubeParser } from "@/utils/converter/YtParser";
 import { message } from "antd";
+import { UserDataFetcher } from "@/utils/userDataFetcher";
 
 export default function Home() {
   const inputUrlRef = useRef<HTMLInputElement | null>(null);
@@ -22,6 +23,9 @@ export default function Home() {
   const [isLoading, setLoading] = useState<boolean>(false);
 
   const RumbleIcon = '/RumbleIcon.svg'
+
+  const { userId, userStatus } = UserDataFetcher();
+  const isPremium = userStatus === 'user' || userStatus === 'admin'
 
   const isYouTubeUrlValid = (url: string): boolean => {
     // Use a regular expression to check if the URL is a valid YouTube video URL
@@ -33,6 +37,11 @@ export default function Home() {
     event.preventDefault();
     if (inputUrlRef.current !== null) {
       const inputUrl = inputUrlRef.current.value;
+
+      if (!userId && !isPremium) {
+        message.error("You are not allowed to use this.")
+        return; // Return early to prevent further execution
+      }
       
       if (!isYouTubeUrlValid(inputUrl)) {
         // Display an error message to the user or handle invalid URL case

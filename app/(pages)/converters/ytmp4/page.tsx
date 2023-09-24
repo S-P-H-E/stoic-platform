@@ -15,6 +15,7 @@ import SocialLink from "@/components/Converter/SocialLink";
 import Link from "next/link";
 import { BsMusicNote, BsTrash } from "react-icons/bs";
 import { message } from "antd";
+import { UserDataFetcher } from "@/utils/userDataFetcher";
 
 interface AdaptiveFormat {
   url: string;
@@ -63,6 +64,9 @@ export default function Home() {
 
   const RumbleIcon = '/RumbleIcon.svg'
 
+  const { userId, userStatus } = UserDataFetcher();
+  const isPremium = userStatus === 'user' || userStatus === 'admin'
+
   function formatInteractionCount(count: number) {
     if (count < 1000) {
       return count.toString();
@@ -81,6 +85,10 @@ export default function Home() {
     if (inputUrlRef.current !== null) {
       const youtubeId = YoutubeParser(inputUrlRef.current.value)
 
+      if (!userId && !isPremium) {
+        message.error("You are not allowed to use this.")
+        return; // Return early to prevent further execution
+      }
       // Code to connect to rapid api
       if (youtubeId) {
         setLoading(true);

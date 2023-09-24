@@ -41,7 +41,8 @@ export default function Home() {
   };
 
   const RumbleIcon = '/RumbleIcon.svg'
-  const { userId } = UserDataFetcher();
+  const { userId, userStatus } = UserDataFetcher();
+  const isPremium = userStatus === 'user' || userStatus === 'admin'
 
 /*   const incrementConverterUseCount = async (userId: string) => {
     const userDocRef: DocumentReference<DocumentData> = doc(db, 'users', userId);
@@ -83,7 +84,7 @@ export default function Home() {
       const tiktokUrl = (inputUrlRef.current.value)
       const tiktokUrlPattern = /^https:\/\/(www\.)?(vm\.)?tiktok\.com\/(@?\w+\/video\/\d+)/;
 
-      if (!userId) {
+      if (!userId && !isPremium) {
         message.error("You are not allowed to use this.")
         return; // Return early to prevent further execution
       }
