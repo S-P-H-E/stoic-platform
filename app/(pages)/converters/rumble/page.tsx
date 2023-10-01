@@ -15,6 +15,7 @@ import {SiTiktok} from "react-icons/si"
 import { BsMusicNote, BsTrash } from "react-icons/bs";
 import { convertRumbleURLToAPIURL } from "@/utils/converter/RumbleParser";
 import { message } from "antd";
+import { UserDataFetcher } from "@/utils/userDataFetcher";
 
 
 
@@ -33,6 +34,9 @@ export default function Home() {
   const [quality1080p, setQuality1080p] = useState<string | null>(null);
   const [quality1440p, setQuality1440p] = useState<string | null>(null);
   const [quality2160p, setQuality2160p] = useState<string | null>(null);
+
+  const { userId, userStatus } = UserDataFetcher();
+  const isPremium = userStatus === 'user' || userStatus === 'admin'
 
   // updates the input value everytime the input changes
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +58,11 @@ export default function Home() {
     event.preventDefault();
     if (inputUrlRef.current !== null) {
       const rumbleUrl = convertRumbleURLToAPIURL(inputUrlRef.current.value)
+
+      if (!userId && !isPremium) {
+        message.error("You are not allowed to use this.")
+        return; // Return early to prevent further execution
+      }
 
       // Code to connect to rapid api
       if (rumbleUrl) {

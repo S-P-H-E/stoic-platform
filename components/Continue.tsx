@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 export default function Continue() {
-  const { generalLastCourse, generalLastLesson, userId, fetching, userName } = UserDataFetcher();
+  const { generalLastCourse, generalLastLesson, userStatus, userId, fetching, userName } = UserDataFetcher();
 
   const [lastLessonName, setLastLessonName] = useState<string | null>(null);
   const [lastLessonDescription, setLastLessonDescription] = useState<string | null>(null);
@@ -16,6 +16,7 @@ export default function Continue() {
   const [lastCourseDescription, setLastCourseDescription] = useState<string | null>(null)
 
   const router = useRouter()
+  const isPremium = userStatus === 'user' || userStatus === 'admin'
 
   function truncateText(text: string, maxLength: number) {
     if (text.length > maxLength) {
@@ -25,7 +26,7 @@ export default function Continue() {
   }
 
   useEffect(() => {
-    if (userId && generalLastCourse && generalLastLesson) {
+    if (userId && generalLastCourse && generalLastLesson && isPremium) {
       const lessonDocRef = doc(db, 'courses', generalLastCourse, 'lessons', generalLastLesson);
       const courseDocRef = doc(db, 'courses', generalLastCourse);
 
@@ -56,7 +57,7 @@ export default function Continue() {
         courseUnsubscribe();
       };
     }
-  }, [userId, generalLastCourse, generalLastLesson]);
+  }, [userId, generalLastCourse, generalLastLesson, isPremium]);
 
   return (
     <div>

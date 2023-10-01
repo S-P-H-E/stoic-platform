@@ -43,6 +43,7 @@ export default function LessonPage() {
   const [lessonCompletionStatusMap, setLessonCompletionStatusMap] = useState(new Map());
   
   const { userId, userStatus } = UserDataFetcher()
+  const isPremium = userStatus === 'user' || userStatus === 'admin'
   
   const pathname = usePathname();
 
@@ -84,7 +85,7 @@ export default function LessonPage() {
   useEffect(() => {
     const fetchLessonData = async () => {
       try {
-        if (courseId && lessonId && userId) {
+        if (courseId && lessonId && userId && isPremium) {
           const lessonDocRef = doc(db, 'courses', courseId as string, 'lessons', lessonId as string);
           const lessonDocSnap = await getDoc(lessonDocRef);
           const userCourseRef = doc(db, 'users', String(userId), 'courses', String(courseId));
@@ -176,12 +177,12 @@ export default function LessonPage() {
     fetchLessonData();
     fetchLessonsForCourse();
     
-  }, [courseId, lessonId, userId, router, vimeoUrl]);
+  }, [courseId, lessonId, userId, router, vimeoUrl, isPremium]);
 
   
   useEffect(() => {
     const handleVimeoMessageAsync = async (event: MessageEvent) => {
-      if (event.origin === 'https://player.vimeo.com' && userId) {
+      if (event.origin === 'https://player.vimeo.com' && userId && isPremium) {
         var iframe = document.querySelector('iframe');
         var player = new VimeoPlayer(iframe);
         player.on('ended', async function () {
@@ -215,12 +216,12 @@ export default function LessonPage() {
         window.removeEventListener('message', handleVimeoMessageAsync);
       };
     }
-  }, [vimeoUrl, userId, courseId, lessonId]);
+  }, [vimeoUrl, userId, courseId, lessonId, isPremium]);
 
   useEffect(() => {
     const fetchUserCompletion = () => {
       try {
-        if (userId && courseId && lessonId) {
+        if (userId && courseId && lessonId && isPremium) {
           // Create a reference to the specific lesson's completion status in Firestore
           const lessonCompletionRef = doc(
             db,
@@ -255,12 +256,12 @@ export default function LessonPage() {
     };
   
     fetchUserCompletion();
-  }, [userId, courseId, lessonId]);
+  }, [userId, courseId, lessonId, isPremium]);
   
   useEffect(() => {
     const fetchLessonCompletionStatus = async () => {
       try {
-        if (userId && courseId) {
+        if (userId && courseId && isPremium) {
           const userCourseLessonsRef = collection(
             db,
             'users',
@@ -298,7 +299,7 @@ export default function LessonPage() {
     };
   
     fetchLessonCompletionStatus();
-  }, [userId, courseId]);
+  }, [userId, courseId, isPremium]);
   
 
   if (!lesson || !lessons) {

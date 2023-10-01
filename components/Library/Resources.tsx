@@ -12,6 +12,7 @@ import {AiOutlinePlus} from 'react-icons/ai'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import CreateTag from './CreateTag';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '../ui/context-menu';
+import { message } from 'antd';
 
 interface ResourceData {
   id: string;
@@ -28,33 +29,42 @@ export default function Resources() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const { user, userId, userStatus } = UserDataFetcher();
+  const isPremium = userStatus === 'user' || userStatus === 'admin'
+  
 
   useEffect(() => {
-    const resourcesRef = collection(db, 'resources');
+    if (userId && isPremium) {
+      try {
+        const resourcesRef = collection(db, 'resources');
     
-    const unsubscribe = onSnapshot(resourcesRef, async (querySnapshot) => {
-      const resources: ResourceData[] = [];
-      for (const doc of querySnapshot.docs) {
-        const data = doc.data();
-        
-        const tagsSnapshot = await getDocs(collection(doc.ref, 'tags'));
-        const tagsData = tagsSnapshot.docs.map((tagDoc) => tagDoc.data().name);
-
-        resources.push({
-          id: doc.id,
-          downloadLink: data.downloadLink || "/null",
-          resourceName: data.name || "undefined",
-          resourceImage: data.resourceImage || "/null",
-          tags: tagsData, // Add tags to ResourceData
+        const unsubscribe = onSnapshot(resourcesRef, async (querySnapshot) => {
+          const resources: ResourceData[] = [];
+          for (const doc of querySnapshot.docs) {
+            const data = doc.data();
+            
+            const tagsSnapshot = await getDocs(collection(doc.ref, 'tags'));
+            const tagsData = tagsSnapshot.docs.map((tagDoc) => tagDoc.data().name);
+    
+            resources.push({
+              id: doc.id,
+              downloadLink: data.downloadLink || "/null",
+              resourceName: data.name || "undefined",
+              resourceImage: data.resourceImage || "/null",
+              tags: tagsData, // Add tags to ResourceData
+            });
+          }
+          setResourceData(resources);
         });
+          
+        return () => {
+          unsubscribe();
+        };
+      } catch(error) {
+        message.error("Unable to fetch resources")
       }
-      setResourceData(resources);
-    });
+    }
 
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  }, [isPremium, userId]);
 
 
   const handleTagClick = (tagName: any) => {
@@ -81,20 +91,27 @@ export default function Resources() {
   });
 
   useEffect(() => {
-    const tagsRef = collection(db, 'tags');
+    if (userId && isPremium) {
+      try{    
+        const tagsRef = collection(db, 'tags');
+    
+        const unsubscribeTags = onSnapshot(tagsRef, (querySnapshot) => {
+          const tagsData = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            name: doc.data().name || 'undefined',
+          }));
+          setTags(tagsData);
+        });
+    
+        return () => {
+          unsubscribeTags();
+        };
+      } catch(error) {
+        message.error("Error fetching tags")
+      }
+    }
 
-    const unsubscribeTags = onSnapshot(tagsRef, (querySnapshot) => {
-      const tagsData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        name: doc.data().name || 'undefined',
-      }));
-      setTags(tagsData);
-    });
-
-    return () => {
-      unsubscribeTags();
-    };
-  }, []);
+  }, [userId, isPremium]);
 
   const deleteResource = async (resourceId: string) => {
     try {

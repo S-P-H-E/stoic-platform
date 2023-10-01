@@ -5,6 +5,7 @@ import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 import Course from './page';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
+import { message } from 'antd';
 
 // Define the DashboardProps interface
 interface CourseLogicProps {
@@ -23,8 +24,8 @@ const CourseLogic: FC<CourseLogicProps> = () => {
   const [AeLastLesson, setAeLastLesson] = useState<string | null>(null);
   const [shortformLastLesson, setShortformLastLesson] = useState<string | null>(null);
 
-
-  const {userId} = UserDataFetcher();
+  const { userId, userStatus } = UserDataFetcher()
+  const isPremium = userStatus === 'user' || userStatus === 'admin'
 
   const fetchLastLessonId = async (userId: string, courseId: string) => {
     try {
@@ -44,7 +45,7 @@ const CourseLogic: FC<CourseLogicProps> = () => {
         } // add more else ifs in future
         
       } else {
-        console.log(`User ${userId} has no record for course ${courseId}`);
+        /* console.log(`User ${userId} has no record for course ${courseId}`); */
         return null;
       }
     } catch (error) {
@@ -55,7 +56,7 @@ const CourseLogic: FC<CourseLogicProps> = () => {
   
 
   useEffect(() => {
-    if (userId) {
+    if (userId && isPremium) {
       const fetchCourses = async () => {
         try {
           const coursesRef = collection(db, 'courses');
@@ -82,14 +83,16 @@ const CourseLogic: FC<CourseLogicProps> = () => {
           );
 
           setCourses(coursesWithLessons);
-        } catch (error) {
-          console.error('Error fetching courses:', error);
+        } catch (error: any) {
+          message.error('Error fetching courses:', error);
         }
       };
 
       fetchCourses();
+    } else {
+      message.error('Error getting user information');
     }
-  }, [userId, AeLastLesson, shortformLastLesson]);
+  }, [userId, AeLastLesson, shortformLastLesson, isPremium]);
   
 
 
