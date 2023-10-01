@@ -20,7 +20,7 @@ import { message } from 'antd';
 import VimeoPlayer from '@vimeo/player';
 import clsx from 'clsx';
 import { FaCheckCircle, FaEyeSlash, FaTimesCircle } from 'react-icons/fa';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { AiOutlineCloseCircle, AiFillCheckCircle } from 'react-icons/ai';
 
 
 interface LessonItem {
@@ -398,7 +398,7 @@ export default function LessonPage() {
                       }
                     </button>
                     {userCompleted === true ? (
-                        <p className='text-green-500'>Completed</p>
+                          <AiFillCheckCircle className="text-green-500"/>
                         ) : ( 
                           <AiOutlineCloseCircle className="text-red-500" />
                     )}
@@ -454,18 +454,18 @@ export default function LessonPage() {
                     {lessonCompletionStatusMap.has(lessonItem.id) ? (
                       lessonCompletionStatusMap.get(lessonItem.id) ? (
                         <>
-                          <p className="text-green-500 text-sm">Completed</p>
+                          {/* <p className="text-green-500 text-sm">Completed</p> */}
                           <FaCheckCircle className="text-green-500" />
                         </>
                       ) : (
                         <>
-                        <p className="text-red-500 text-sm">Incomplete</p>
+                        {/* <p className="text-red-500 text-sm">Incomplete</p> */}
                         <FaTimesCircle className="text-red-500" />
                         </>
                       )
                     ) : (
                       <>
-                        <p className="text-gray-500 text-sm">Unwatched</p>
+                        {/* <p className="text-gray-500 text-sm">Unwatched</p> */}
                         <FaEyeSlash className="text-gray-500" />
                       </>
                     )}

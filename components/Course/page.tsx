@@ -1,6 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { FC } from 'react';
 import { motion } from 'framer-motion'
+import Image from 'next/image';
 
 interface CourseProps {
     course?: CourseInfo
@@ -12,6 +13,7 @@ interface CourseProps {
     id: string;
     name: string;
     description: string;
+    image: string;
   }
 
 const Course: FC<CourseProps> = ({ course, shortFormLesson, aeLesson }) => {
@@ -49,6 +51,29 @@ const Course: FC<CourseProps> = ({ course, shortFormLesson, aeLesson }) => {
       </>
       : null}
     </motion.div>
+    // <motion.div className='w-full flex flex-col justify-end cursor-pointer transition-all active:scale-105 md:hover:scale-105' onClick={handleClick}
+    // initial={{
+    //   scale: "0.5",
+    //   opacity: "0.1",
+    // }}
+    // whileInView={{
+    //   opacity: "1",
+    //   scale: "1"
+    // }}
+    // whileHover={{ scale: 1.05  }}
+    // whileTap={{ scale: 0.95 }}
+    // >
+    //   { course ? 
+    //   <>
+    //     <div className='absolute p-4 bg-gradient-to-t from-[#000000] to-100% w-full rounded-2xl'>
+    //       <h1 className='text-2xl md:text-3xl font-medium text-start'>{course.name}</h1>
+    //       <p className='text-[#8c8c8c]'>{course.description}</p>
+    //     </div>
+    //     <Image src={course.image} alt='after effects' width={600} height={0} className='w-[600px] h-[200px] object-cover rounded-2xl '/>
+    //   </>
+    //   : null}
+      
+    // </motion.div>
   );
 }
 

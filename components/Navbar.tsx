@@ -6,7 +6,7 @@ import CreateCourse from "@/components/Course/CreateCourse/page";
 
 export default function Navbar() {
   return (
-    <div className="z-50 fixed px-8 pt-7 p-4 md:p-8 md:px-36 flex justify-between items-center gap-6 w-full lg:w-full bg-[--bg] border-b border-[--border]">
+    <div className=" px-8 pt-7 p-4 md:p-8 md:px-36 flex justify-between items-center gap-6 w-full lg:w-full bg-[--bg] border-b border-[--border]">
       <Greeting/>
       <div className="flex justify-center items-center gap-3">
         <div className="hidden md:flex">

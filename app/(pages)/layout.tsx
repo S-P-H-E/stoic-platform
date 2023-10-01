@@ -11,11 +11,8 @@ export default function PagesLayout({
 }) {
   return (
     <html lang="en">
-        <body className={inter.className}>
+        <body>
           <AuthGuard>
-            <div className="flex flex-col items-center mb-28">
-              <Navbar/>
-            </div>
             {children}
           </AuthGuard>
         </body>

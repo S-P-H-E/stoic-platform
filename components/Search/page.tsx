@@ -17,6 +17,7 @@ import { SiTiktok } from 'react-icons/si';
 import { FaYoutube } from 'react-icons/fa';
 import {motion} from 'framer-motion'
 import { FiYoutube } from 'react-icons/fi';
+import { RiMenuLine } from 'react-icons/ri';
 
 type Message = {
     role: "function" | "user" | "system" | "assistant";
@@ -68,7 +69,7 @@ export default function Search(){
     return(
         <Dialog>
             <DialogTrigger>
-                <motion.div className="hover:bg-[--highlight] transition p-2 rounded-lg border border-[--highlight] px-2 py-1"
+                <motion.div className="hover:bg-[--highlight] transition rounded-lg border border-[--highlight] px-3 py-2"
                     initial={{
                         scale: "0.5",
                         opacity: "0",
@@ -79,7 +80,7 @@ export default function Search(){
                       }}
                 >
                     {/* <BiSearch size={20}/> */}
-                    Tools
+                    <RiMenuLine />
                 </motion.div>
             </DialogTrigger>
             <DialogContent>
