@@ -1,106 +1,58 @@
-'use client';
+"use client"
+import Image from "next/image";
+import Link from "next/link";
+import { FiHome } from 'react-icons/fi'
+import { MdOutlineSchool } from 'react-icons/md'
+import { BsPerson } from 'react-icons/bs'
+import clsx from "clsx";
+import { usePathname } from 'next/navigation'
 
-import Image from 'next/image'
-import Link from 'next/link';
-import { Montserrat } from 'next/font/google';
-import { usePathname } from 'next/navigation';
-import clsx from 'clsx';
-import { RiDashboardLine } from 'react-icons/ri';
-import { BiMessageAlt } from 'react-icons/bi';
-import { RiSettings3Line } from 'react-icons/ri';
-import { BiBook } from 'react-icons/bi';
-import { VscLibrary } from 'react-icons/vsc';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { auth } from '@/utils/firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
-
-const montserrat = Montserrat({ weight: '600', subsets: ['latin'] });
-
-const routes = [
-  {
-    label: 'Dashboard',
-    icon: RiDashboardLine,
-    href: '/dashboard',
-  },
-  {
-    label: 'Community',
-    icon: BiMessageAlt,
-    href: '/community',
-  },
-  {
-    label: 'Resources',
-    icon: VscLibrary,
-    href: '/resources',
-  },
-  {
-    label: 'Courses',
-    icon: BiBook,
-    href: '/courses',
-  },
-  {
-    label: 'Settings',
-    icon: RiSettings3Line,
-    href: '/settings',
-  },
-];
-
-const Sidebar = () => {
-    const pathname = usePathname();
-
-    const router = useRouter();
-    const [user, loading] = useAuthState(auth);
-  
-    useEffect(() => {
-      if (!loading && !user) {
-        router.push('/');
-      }
-    }, [loading, user, router]);
+export default function Sidebar(){
+    const pathname = usePathname()
     
-    return (
-      <div className='fixed left-0 h-full min-h-screen justify-center p-1 items-center w-[15rem] bg-transparent border-[--border] border-r text-white sm:block hidden'>
-        <div className="px-3 py-2 flex-1">
-          <Link href="/dashboard" className="flex items-center text-center ml-4 mb-6">
-            <h1
-              className={clsx('mt-1 text-3xl font-semibold tracking-widest', montserrat.className)}
-            >
-              S T O I C
-            </h1>
-          </Link>
-            <div className='flex flex-col gap-1'> {/* added the gap here */}
-              {routes.map((route) => (
-                <Link
-                  href={route.href}
-                  key={route.href}
-                  className={clsx(
-                    'text-base sm:text-lg group flex p-3 w-full justify-start  font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
-                      pathname === route.href
-                          ? 'text-white bg-white/10'
-                          : 'text-zinc-400'
-                  )}
-                >
-                  <div className="flex items-center flex-1">
-                    <route.icon className='h-5 w-5 mr-3' />
-                    {route.label}
-                  </div>
-                </Link>
-              ))}
-          </div>
+    const items = [
+        {
+            id: 1,
+            icon: <FiHome />,
+            name: 'Dashboard',
+            route: '/'
+        },
+        {
+            id: 2,
+            icon: <MdOutlineSchool />,
+            name: 'Classes',
+            route: '/classes'
+        },
+        {
+            id: 3,
+            icon: <BsPerson />,
+            name: 'Students',
+            route: '/students'
+        },
+    ]
+    return(
+        <div className="fixed left-0 flex flex-col justify-between border-r border-[#E6E3E9] w-fit h-screen p-10">
+            <div>
+                <Image src={'/images/logo.png'} alt="logo" width={50} height={50} className="pb-10"/>
+                <div className="flex flex-col gap-6">
+                    {items.map((items) => (
+                        <Link href={items.route} key={items.id}>
+                            <div className={clsx("flex items-center gap-2 text-xl w-[200px] text-black font-medium px-3 py-2 rounded-lg bg-white hover:bg-[#F4F4F4]", pathname === items.route ? '!bg-[#000000] !text-white !hover:bg-[#000000]' : '')}>
+                                {items.icon}
+                                {items.name}
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+            <div className="flex gap-2 cursor-pointer hover:bg-[#F4F4F4] p-2 rounded-xl">
+                <Image src={'/images/profile.png'} alt="profile" width={50} height={0} className="h-[50px] w-[50px] rounded-full object-cover"/>
+                <div>
+                    <h1 className="text-xl">Emily Johnson</h1>
+                    <p className="text-[#808080]">Administrator</p>
+                </div>
+            </div>
 
-          </div>
-{/*           <div className='relative top-0 w-full flex justify-center items-center gap-2 text-sm font-medium'>
-            {user && user.photoURL && (
-              <>
-                <Image src={user.photoURL} alt="user icon" height={35} width={35} className="rounded-full w-[35px] h-fit" />
-                <h1>
-                  {user?.displayName}
-                </h1>
-              </>
-            )}
-          </div> */}
-      </div>
-    );
-  };
-  
-  export default Sidebar;
-  
+        </div>
+    )
+}

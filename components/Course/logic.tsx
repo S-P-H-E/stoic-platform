@@ -89,8 +89,6 @@ const CourseLogic: FC<CourseLogicProps> = () => {
       };
 
       fetchCourses();
-    } else {
-      message.error('Error getting user information');
     }
   }, [userId, AeLastLesson, shortformLastLesson, isPremium]);
   
