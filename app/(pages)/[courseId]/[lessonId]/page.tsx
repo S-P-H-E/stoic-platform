@@ -21,6 +21,7 @@ import VimeoPlayer from '@vimeo/player';
 import clsx from 'clsx';
 import { FaCheckCircle, FaEyeSlash, FaTimesCircle } from 'react-icons/fa';
 import { AiOutlineCloseCircle, AiFillCheckCircle } from 'react-icons/ai';
+import SkeletonLesson from './../../../../components/SkeletonLesson';
 
 
 interface LessonItem {
@@ -326,26 +327,7 @@ export default function LessonPage() {
 
       <div className="flex flex-col p-10 w-full h-screen">
         <div>
-            <>
-            <div className='flex gap-4'>
-            <div className='bg-[#252525] rounded-3xl shadow-2xl animate-pulse w-full h-[80%] aspect-video' />
-            <div>
-              <div className='flex flex-col justify-center items-center gap-5'>
-                  <div className='mx-5 rounded-2xl bg-[#252525] h-[80px] w-full md:w-[300px]'/>
-                <div className='visible md:hidden'>
-                  <Comments courseId={courseId as string} lessonId={lessonId as string}/>
-                </div>
-              </div>
-            </div>
-            </div>
-            <div className='my-5 md:mb-20 rounded-2xl p-5'>
-                <div className='h-[25px] w-[150px] bg-[#252525] rounded-lg mb-2'/>
-                <div className='h-[20px] md:w-[400px] bg-[#252525] rounded-lg'></div>
-              </div>
-              <div className='hidden md:block'>
-                <Comments courseId={courseId as string} lessonId={lessonId as string}/>
-              </div>
-            </>
+          <SkeletonLesson/>
         </div>
       </div>
     </div>
