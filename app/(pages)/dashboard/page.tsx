@@ -51,7 +51,7 @@ export default function Dashboard(){
             </Link>
           ))}
         </div>
-          {/* <Continue/> */}
+          <Continue/>
           <CourseLogic courses={[]} />
         </div>
       </div>
