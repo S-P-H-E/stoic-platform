@@ -31,7 +31,7 @@ export default function Sidebar(){
         },
     ]
     return(
-        <div className="fixed left-0 flex flex-col justify-between border-r border-[#E6E3E9] w-fit h-screen p-10">
+        <div className="fixed left-0 flex flex-col justify-between border-r border-[--border] w-fit h-screen p-10 bg-[--bg]">
             <div>
                 <Image src={'/images/logo.png'} alt="logo" width={50} height={50} className="pb-10"/>
                 <div className="flex flex-col gap-6">

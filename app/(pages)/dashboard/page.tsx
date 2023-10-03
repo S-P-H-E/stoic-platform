@@ -34,8 +34,7 @@ export default function Dashboard(){
     <>
       <div className="flex flex-col w-full h-screen items-center">
         {/* Navbar */}
-        <Navbar />
-        
+        {/* <Navbar />  */}    
         {/* Courses */}
         <div className=" p-5 md:px-10 flex flex-col gap-8 w-full md:w-[900px]">
             <div className="grid md:hidden w-full">
