@@ -314,7 +314,7 @@ export default function LessonPage() {
   if (!lesson || !lessons) {
     return (
       <>
-      <div className='flex flex-col justify-center items-center'>
+      <div className='flex flex-col justify-center items-center w-full'>
       <div className="px-10 pt-10 flex justify-between items-center gap-6 w-full">
         <Link href={'/dashboard'} className="mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
           <BsChevronLeft/>
@@ -327,7 +327,7 @@ export default function LessonPage() {
       <div className="flex flex-col md:flex-row p-10">
         <div className=''>
             <>
-              <div className=' md:w-[1024px] bg-[#252525] rounded-3xl shadow-2xl animate-pulse aspect-video' />
+              <div className=' md:w-full bg-[#252525] rounded-3xl shadow-2xl animate-pulse aspect-video' />
 
               <div className='my-5 md:mb-20 rounded-2xl p-5'>
                 <div className='h-[25px] w-[150px] bg-[#252525] rounded-lg mb-2'/>
@@ -377,7 +377,7 @@ export default function LessonPage() {
       <div className="flex flex-col md:flex-row p-5 md:p-10">
         <div>
             <>
-              <div className=' md:w-[1024px] rounded-3xl shadow-2xl shadow-white/10 aspect-video'>
+              <div className=' md:w-full rounded-3xl shadow-2xl shadow-white/10 aspect-video'>
                 <iframe
                   src={lesson.url}
                   allow="autoplay; fullscreen; picture-in-picture"
@@ -447,7 +447,7 @@ export default function LessonPage() {
                   <ContextMenuTrigger>
                   <div className={`w-full md:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
                   ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black' : ''}
-                  ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-green-400' : ''}`}>
+                  ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-green-400/30' : ''}`}>
                     <div className="flex items-center">
                       <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
                       <h1 className={clsx('text-xl font-medium', {
