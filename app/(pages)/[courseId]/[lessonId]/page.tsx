@@ -38,8 +38,8 @@ export default function LessonPage() {
   const [lessons, setLessons] = useState<LessonItem[]>([]);
   const [copied, setCopied] = useState<boolean>(false)
   const [vimeoUrl, setVimeoUrl] = useState<string>("")
+  const [videoPlaying, setVideoPlaying] = useState(false)
   const [userCompleted ,setUserCompleted] = useState<boolean>(false)
-  const [lessonCompletionStatus, setLessonCompletionStatus] = useState<boolean | null>(null);
   const [lessonCompletionStatusMap, setLessonCompletionStatusMap] = useState(new Map());
   
   const { userId, userStatus } = UserDataFetcher()
@@ -185,9 +185,18 @@ export default function LessonPage() {
       if (event.origin === 'https://player.vimeo.com' && userId && isPremium) {
         var iframe = document.querySelector('iframe');
         var player = new VimeoPlayer(iframe);
+
+        player.on('play', function(){
+          setVideoPlaying(true)
+          console.log("VIDEO PLAYED")
+        })
+
+        player.on('pause', function(){
+          setVideoPlaying(false)
+          console.log("VIDEO PAUSED")
+        })
+
         player.on('ended', async function () {
-          /* console.log('Ended the video'); */
-  
           const userCourseLessonsRef = collection(
             db,
             'users',
@@ -436,7 +445,9 @@ export default function LessonPage() {
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
                   <ContextMenuTrigger>
-                  <div className={` w-full md:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black' : ''}`}>
+                  <div className={`w-full md:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
+                  ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black' : ''}
+                  ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-green-400' : ''}`}>
                     <div className="flex items-center">
                       <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
                       <h1 className={clsx('text-xl font-medium', {
