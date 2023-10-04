@@ -1,58 +1,106 @@
-"use client"
-import Image from "next/image";
-import Link from "next/link";
-import { FiHome } from 'react-icons/fi'
-import { MdOutlineSchool } from 'react-icons/md'
-import { BsPerson } from 'react-icons/bs'
-import clsx from "clsx";
-import { usePathname } from 'next/navigation'
+'use client';
 
-export default function Sidebar(){
-    const pathname = usePathname()
-    
-    const items = [
-        {
-            id: 1,
-            icon: <FiHome />,
-            name: 'Dashboard',
-            route: '/'
-        },
-        {
-            id: 2,
-            icon: <MdOutlineSchool />,
-            name: 'Classes',
-            route: '/classes'
-        },
-        {
-            id: 3,
-            icon: <BsPerson />,
-            name: 'Students',
-            route: '/students'
-        },
-    ]
-    return(
-        <div className="fixed left-0 flex flex-col justify-between border-r border-[#E6E3E9] w-fit h-screen p-10">
-            <div>
-                <Image src={'/images/logo.png'} alt="logo" width={50} height={50} className="pb-10"/>
-                <div className="flex flex-col gap-6">
-                    {items.map((items) => (
-                        <Link href={items.route} key={items.id}>
-                            <div className={clsx("flex items-center gap-2 text-xl w-[200px] text-black font-medium px-3 py-2 rounded-lg bg-white hover:bg-[#F4F4F4]", pathname === items.route ? '!bg-[#000000] !text-white !hover:bg-[#000000]' : '')}>
-                                {items.icon}
-                                {items.name}
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-            </div>
-            <div className="flex gap-2 cursor-pointer hover:bg-[#F4F4F4] p-2 rounded-xl">
-                <Image src={'/images/profile.png'} alt="profile" width={50} height={0} className="h-[50px] w-[50px] rounded-full object-cover"/>
-                <div>
-                    <h1 className="text-xl">Emily Johnson</h1>
-                    <p className="text-[#808080]">Administrator</p>
-                </div>
-            </div>
+import Link from 'next/link';
+import Image from 'next/image';
+import { Montserrat } from 'next/font/google';
+import { usePathname } from 'next/navigation';
+import { clsx } from 'clsx';
 
+import {BrainCircuit,LayoutDashboard,GraduationCap,Book,Settings,Video} from 'lucide-react';
+import UserImage from './UserImage';
+import { UserDataFetcher } from '@/utils/userDataFetcher';
+
+const montserrat = Montserrat({ weight: '600', subsets: ['latin'] });
+
+const routes = [
+  {
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    href: '/dashboard',
+    color: 'text-white',
+  },
+  {
+    label: 'Courses',
+    icon: GraduationCap,
+    href: '/courses',
+    color: 'text-white',
+  },
+  {
+    label: 'Library',
+    icon: Book,
+    href: '/library',
+    color: 'text-white',
+  },
+  {
+    label: 'Stoic AI',
+    icon: BrainCircuit,
+    href: '/stoicai',
+    color: 'text-white',
+  },
+  {
+    label: 'Converters',
+    icon: Video,
+    href: '/converters',
+    color: 'text-white',
+  },
+  {
+    label: 'Settings',
+    icon: Settings,
+    href: '/settings',
+  },
+];
+
+const Sidebar = () => {
+  const { userName, userId } = UserDataFetcher();
+  const pathname = usePathname();
+  return (
+    <div className="flex h-full z-50">
+    <div className="top-0 left-0 h-full border-r border-[--border] p-4 w-full md:w-72 md:fixed bg-[--bg] text-white">
+      <div className="px-3 py-2 flex flex-col h-full">
+        <Link href="/dashboard" className="w-fit flex items-center pl-3 mb-14">
+          <div className="relative w-8 h-11 mr-4">
+            <Image fill alt="Logo" src="/stoicWhite.png" />
+          </div>
+          <h1
+            className={clsx(
+              'mt-1 text-2xl font-bold tracking-widest',
+              montserrat.className
+            )}
+          >
+            STOIC
+          </h1>
+        </Link>
+        <div className="justify-between h-full flex flex-col">
+        <div className="space-y-1 ">
+          {routes.map((route) => (
+            <Link
+              href={route.href}
+              key={route.href}
+              className={clsx(
+                'text-base group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
+                pathname === route.href
+                  ? 'text-white bg-white/10'
+                  : 'text-zinc-400'
+              )}
+            >
+              <div className="flex items-center flex-1">
+                <route.icon className={clsx('h-5 w-5 mr-3', route.color)} />
+                {route.label}
+              </div>
+            </Link>
+          ))}
         </div>
-    )
-}
+        <div className="px-2 flex gap-2 items-center">
+            <div className="h-10 w-10">
+              <UserImage/>
+            </div>
+            {userId ? <p className='font-medium'>{userName}</p>:null}
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  );
+};
+
+export default Sidebar;
