@@ -1,7 +1,7 @@
 import AuthGuard from '@/utils/AuthGuard'
 import { Inter } from 'next/font/google'
-import Navbar from "@/components/Navbar";
 import Sidebar from '@/components/Sidebar';
+import MobileSidebar from './../../components/MobileSidebar';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -12,15 +12,16 @@ export default function PagesLayout({
 }) {
   return (
     <html lang="en">
-        <body>
-          <div className="flex">
+        <body>   
           <AuthGuard>
-            <div className='pr-[17rem]'>
-            <Sidebar/>
+            <div className='hidden md:flex w-80 h-full border-[--border] md:border-r'> 
+              <Sidebar/>
             </div>
-            {children}
+            <div className="flex flex-col md:pl-[18rem]">
+            <MobileSidebar/>
+              {children}
+            </div>
           </AuthGuard>
-          </div>
         </body>
     </html>
   )

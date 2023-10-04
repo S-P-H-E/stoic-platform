@@ -6,9 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { collection, doc, getDoc, getDocs, query, orderBy, where, onSnapshot, updateDoc } from 'firebase/firestore';
 import Script from 'next/script';
 import Lesson from '@/components/Course/Lesson';
-import Comments from '@/components/Course/Comments';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
-import Search from "@/components/Search/page";
 import Link from 'next/link';
 
 type Course = {
@@ -32,7 +30,6 @@ export default function CourseLessons() {
   const [currentLessonIndex, setCurrentLessonIndex] = useState<number | null>(null);
   const [userData, setUserData] = useState<any>(null); // State to store user data
   const { user, userId } = UserDataFetcher();
-  const router = useRouter();
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -148,7 +145,6 @@ export default function CourseLessons() {
             <BsChevronLeft/>
             <h1 className="text-lg">Go back</h1>
         </Link>
-        <Search />
       </div>
 
       <div className="flex p-10">

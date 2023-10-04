@@ -21,7 +21,7 @@ import VimeoPlayer from '@vimeo/player';
 import clsx from 'clsx';
 import { FaCheckCircle, FaEyeSlash, FaTimesCircle } from 'react-icons/fa';
 import { AiOutlineCloseCircle, AiFillCheckCircle } from 'react-icons/ai';
-import SkeletonLesson from './../../../../components/SkeletonLesson';
+import SkeletonLesson from '../../../../components/SkeletonLesson';
 
 
 interface LessonItem {
@@ -426,7 +426,7 @@ export default function LessonPage() {
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
                   <ContextMenuTrigger>
-                  <div className={`w-full md:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
+                  <div className={`w-full lg:w-[250px] 2xl:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
                   ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black' : ''}
                   ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-yellow-500' : ''}`}>
                     <div className="flex items-center">
