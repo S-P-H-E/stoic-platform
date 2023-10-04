@@ -20,7 +20,6 @@ import { useRouter } from "next/navigation";
 import { validateEmail, validateNameLength, validatePassword } from '@/utils/validation'
 import InputResponse from '../InputResponse';
 import ForgotPassword from "./ForgotPassword";
-import { useFirebase } from "@/utils/authContext";
 
 export default function Login() {
   const router = useRouter()
