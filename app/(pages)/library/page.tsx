@@ -6,7 +6,7 @@ import React from 'react'
 
 export default function Library() {
   return (
-    <section className="md:p-10 md:px-36 p-8 flex flex-col gap-2 w-full">
+    <section className="md:p-10 md:px-16 p-8 flex flex-col gap-2 w-full">
       <div className="flex justify-between">
       <GoBack/>
       <CreateButton/>

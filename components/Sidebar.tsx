@@ -9,6 +9,8 @@ import { clsx } from 'clsx';
 import {BrainCircuit,LayoutDashboard,GraduationCap,Book,Settings,Video} from 'lucide-react';
 import UserImage from './UserImage';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
+import { BiLogOut } from 'react-icons/bi';
+import { useFirebase } from '@/utils/authContext';
 
 const montserrat = Montserrat({ weight: '600', subsets: ['latin'] });
 
@@ -53,9 +55,10 @@ const routes = [
 const Sidebar = () => {
   const { userName, userId } = UserDataFetcher();
   const pathname = usePathname();
+  const { signOut } = useFirebase()
   return (
     <div className="flex h-full z-50">
-    <div className="top-0 left-0 h-full border-r border-[--border] p-4 w-full md:w-72 md:fixed bg-[--bg] text-white">
+    <div className="top-0 left-0 h-full md:border-r border-[--border] p-4 w-full md:w-72 md:fixed bg-[--bg] text-white">
       <div className="px-3 py-2 flex flex-col h-full">
         <Link href="/dashboard" className="w-fit flex items-center pl-3 mb-14">
           <div className="relative w-8 h-11 mr-4">
@@ -90,11 +93,17 @@ const Sidebar = () => {
             </Link>
           ))}
         </div>
-        <div className="px-2 flex gap-2 items-center">
+        <div className="px-2 flex justify-between items-center">
+          <div className='flex items-center gap-2'>
             <div className="h-10 w-10">
               <UserImage/>
             </div>
             {userId ? <p className='font-medium'>{userName}</p>:null}
+          </div>
+            
+            <button onClick={()=> signOut()} className='hover:text-red-500 transition duration-200'>
+              <BiLogOut size={24}/>
+            </button>
           </div>
         </div>
       </div>
