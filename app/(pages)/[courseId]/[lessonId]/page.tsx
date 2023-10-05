@@ -22,6 +22,7 @@ import clsx from 'clsx';
 import { FaCheckCircle, FaEyeSlash, FaTimesCircle } from 'react-icons/fa';
 import { AiOutlineCloseCircle, AiFillCheckCircle } from 'react-icons/ai';
 import SkeletonLesson from '../../../../components/SkeletonLesson';
+import GoBack from '@/components/UI Elements/GoBack';
 
 
 interface LessonItem {
@@ -317,10 +318,7 @@ export default function LessonPage() {
       <>
       <div className='flex flex-col justify-center items-center w-full'>
       <div className="px-10 pt-10 flex justify-between items-center gap-6 w-full">
-        <Link href={'/dashboard'} className="mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
-          <BsChevronLeft/>
-          <h1 className="text-lg">Go back</h1>
-        </Link>
+        <GoBack/>
        <div className='flex gap-3 items-center'>
        </div>
       </div>
@@ -348,11 +346,8 @@ export default function LessonPage() {
 
   return (
     <div className='flex flex-col w-full'>
-      <div className="px-10 pt-10 flex justify-between items-center gap-6 w-full">
-        <Link href={'/dashboard'} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
-            <BsChevronLeft/>
-            <h1 className="text-lg">Go back</h1>
-        </Link>
+      <div className="px-4 md:px-10 pt-10 flex justify-between items-center gap-6 w-full">
+        <GoBack/>
       </div>
 
       <div className="flex flex-col md:flex-row p-5 md:p-10 w-full">
@@ -428,7 +423,7 @@ export default function LessonPage() {
                   <ContextMenuTrigger>
                   <div className={`w-full lg:w-[250px] 2xl:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
                   ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black' : ''}
-                  ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-yellow-500' : ''}`}>
+                  ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'animate-pulse' : ''}`}>
                     <div className="flex items-center">
                       <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
                       <h1 className={clsx('text-xl font-medium', {

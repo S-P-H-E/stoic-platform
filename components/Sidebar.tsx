@@ -56,6 +56,7 @@ const Sidebar = () => {
   const { userName, userId } = UserDataFetcher();
   const pathname = usePathname();
   const { signOut } = useFirebase()
+  
   return (
     <div className="flex h-full z-50">
     <div className="top-0 left-0 h-full md:border-r border-[--border] p-4 w-full md:w-72 md:fixed bg-[--bg] text-white">
