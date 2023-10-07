@@ -11,7 +11,7 @@
         const { userId, userStatus } = UserDataFetcher()
         const isPremium = userStatus === 'user' || userStatus === 'admin'
         
-        const [loadig, isLoading] = useState(true)
+        const [loading, isLoading] = useState(true)
 
         const [courses, setCourses] = useState<Array<any>>([]);
         const [userCourses, setUserCourses] = useState<Array<any>>([]); // User's watched courses
@@ -63,9 +63,9 @@
                 const userCourseRef = doc(db, 'users', userId, 'courses', course.id);
                 const userCourseSnapshot = await getDoc(userCourseRef);
 
-                if (userCourseSnapshot.exists()) {
+/*                 if (userCourseSnapshot.exists()) {
                     userCourseData = userCourseSnapshot.data();
-                }
+                } */
                 }
 
                 return {
@@ -84,7 +84,9 @@
             unsubscribe();
         };
         } catch (err) {
-        console.log(err);
+            console.log(err);
+        } finally {
+            isLoading(false)
         }
     }
     }, [userId, isPremium, userCourses]);
@@ -96,20 +98,27 @@
 
     return (
         <div className='flex flex-col gap-4'>
-        {courses.map((course) => {
-        const lastLessonId = course.userCourseData ? course.userCourseData.lastLessonId : null;
+        {
+            !loading ?
+            <>
+                {courses.map((course) => {
+                const lastLessonId = course.userCourseData ? course.userCourseData.lastLessonId : null;
 
-        const href = lastLessonId
-            ? `/${course.id}/${lastLessonId}`
-            : `/${course.id}/`;
+                const href = lastLessonId
+                    ? `/${course.id}/${lastLessonId}`
+                    : `/${course.id}/${course.firstLesson.id}`;
 
-        return (
-            <Link href={href} key={course.id} passHref className="flex flex-col w-fit bg-white text-black rounded-xl p-4">
-            <p>{truncateText(course.name, 35)}</p>
-            <p>{truncateText(course.description, 40)}</p>
-            </Link>
-        );
-        })}
+                return (
+                    <Link href={href} key={course.id} passHref className="flex flex-col w-fit bg-white text-black rounded-xl p-4">
+                    <p>{truncateText(course.name, 35)}</p>
+                    <p>{truncateText(course.description, 40)}</p>
+                    </Link>
+                );
+                })}
+            </>
+            
+            : <p>Loading...</p>
+        }
     </div>
     )
     }
