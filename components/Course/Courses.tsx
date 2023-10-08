@@ -10,8 +10,8 @@
       orderBy,
       query,
     } from 'firebase/firestore';
-    import Link from 'next/link';
     import React, { useCallback, useEffect, useState } from 'react';
+    import Course from './Course';
     
     export default function Courses() {
       const { userId, userStatus } = UserDataFetcher();
@@ -20,7 +20,6 @@
       const [loading, isLoading] = useState(true);
     
       const [courses, setCourses] = useState<Array<any>>([]);
-      const [userCourses, setUserCourses] = useState<Array<any>>([]); // User's watched courses
     
       function truncateText(text: string, maxLength: number) {
         if (text.length > maxLength) {
@@ -44,7 +43,7 @@
                 const lessonIds = lessonsSnapshot.docs.map((lessonDoc) => lessonDoc.id);
                 const firstLesson = lessonsSnapshot.docs[0];
 
-                let userCourseData = userCourses.find((data) => data.courseId === course.id);
+                let userCourseData
     
                 if (!userCourseData) {
                   const userCourseRef = doc(db, 'users', userId, 'courses', course.id);
@@ -69,14 +68,14 @@
             console.log(err);
           }
         }
-      }, [userId, isPremium, userCourses]);
+      }, [userId, isPremium]);
     
       useEffect(() => {
         fetchCourses();
-      }, [fetchCourses, userId, userCourses]);
+      }, [fetchCourses, userId]);
     
       return (
-        <div className='flex flex-col gap-4'>
+        <div className='flex md:flex-row flex-col gap-8 md:items-start items-center w-full'>
           {!loading ? (
             <>
               {courses.map((course) => {
@@ -87,10 +86,7 @@
                   : `/${course.id}/${course.firstLesson.id}`;
     
                 return (
-                  <Link href={href} key={course.id} passHref className='flex flex-col w-fit bg-white text-black rounded-xl p-4'>
-                    <p>{truncateText(course.name, 35)}</p>
-                    <p>{truncateText(course.description, 40)}</p>
-                  </Link>
+                  <Course image={course.image} key={course.name} href={href} name={course.name} description={course.description}/>
                 );
               })}
             </>
