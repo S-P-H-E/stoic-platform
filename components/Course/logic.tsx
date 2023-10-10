@@ -73,7 +73,7 @@ const CourseLogic: FC<CourseLogicProps> = () => {
                 ...lessonDoc.data(),
               }));
 
-              if (userId) {
+              if (userId && isPremium ) {
                 const AeLastLessonId = await fetchLastLessonId(userId, '0E5D3rrDvLtdJfPHqFUB');
                 const ShortFormlastLessonId = await fetchLastLessonId(userId, 'hypnDNVZXujeVT8pwkL6');
               }

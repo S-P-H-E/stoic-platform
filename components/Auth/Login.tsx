@@ -45,8 +45,8 @@ export default function Login() {
   const handleLogin = async () => {
       try {
         // Google Auth
-        const res = await signInWithPopup(auth, googleProvider);
-        message.success("Signed in successfully");
+          const res = await signInWithPopup(auth, googleProvider);
+          message.success("Signed in successfully");
 
         //Router
         router.push('/dashboard');

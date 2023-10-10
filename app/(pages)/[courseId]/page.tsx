@@ -8,6 +8,7 @@ import Script from 'next/script';
 import Lesson from '@/components/Course/Lesson';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import Link from 'next/link';
+import GoBack from '@/components/UI Elements/GoBack';
 
 type Course = {
   name: string;
@@ -141,10 +142,7 @@ export default function CourseLessons() {
   return (
     <div className='flex flex-col justify-center items-center'>
       <div className="px-10 pt-10 flex justify-between items-center gap-6 w-full">
-        <Link href={'/dashboard'} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
-            <BsChevronLeft/>
-            <h1 className="text-lg">Go back</h1>
-        </Link>
+        <GoBack/>
       </div>
 
       <div className="flex p-10">
@@ -168,7 +166,7 @@ export default function CourseLessons() {
               {/* <Comments courseId={courseId as string} /> Pass courseId to the Comments component */}
             </>
           ) : (
-            <p>No active lessons found</p>
+            <p>No page found</p>
           )}
         </div>
 
