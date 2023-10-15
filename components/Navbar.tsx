@@ -6,13 +6,13 @@ import CreateCourse from "@/components/Course/CreateCourse/page";
 
 export default function Navbar() {
   return (
-    <div className=" px-8 pt-7 p-4 md:p-8 md:px-36 flex justify-between items-center gap-6 w-full lg:w-full bg-[--bg] border-b border-[--border]">
+    <div className="hidden md:flex px-[12%] mx-auto justify-between items-center gap-6 w-full lg:w-full py-3">
       <Greeting/>
       <div className="flex justify-center items-center gap-3">
         <div className="hidden md:flex">
           <CreateCourse />
           </div>
-          <Search />
+          {/* <Search /> */}
           <Link href={'/settings'} className="rounded-full transition duration-200 w-[50px] h-[50px] cursor-pointer hover:ring-4 hover:ring-offset-4 ring-[--border] ring-offset-[--bg]">
             <UserImage />
           </Link>

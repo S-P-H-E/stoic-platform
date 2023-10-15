@@ -75,7 +75,7 @@
       }, [fetchCourses, userId]);
     
       return (
-        <div className='flex md:flex-row flex-col gap-8 md:items-start items-center w-full'>
+        <div className='flex sm:flex-row flex-col gap-8 sm:items-start items-center w-full'>
           {!loading ? (
             <>
               {courses.map((course) => {

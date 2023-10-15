@@ -3,20 +3,19 @@
 import { db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { doc, onSnapshot } from 'firebase/firestore';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 export default function Continue() {
   const { generalLastCourse, generalLastLesson, userStatus, userId, fetching, userName } = UserDataFetcher();
 
-  const [lastLessonName, setLastLessonName] = useState<string | null>(null);
-  const [lastLessonDescription, setLastLessonDescription] = useState<string | null>(null);
-
-  const [lastCourseName, setLastCourseName] = useState<string | null>(null);
-  const [lastCourseDescription, setLastCourseDescription] = useState<string | null>(null)
-
   const router = useRouter()
   const isPremium = userStatus === 'user' || userStatus === 'admin'
+
+  const [courseData, setCourseData] = useState<any>(null);
+  const [lessonData, setLessonData] = useState<any>(null);
 
   function truncateText(text: string, maxLength: number) {
     if (text.length > maxLength) {
@@ -33,22 +32,16 @@ export default function Continue() {
       const lessonUnsubscribe = onSnapshot(lessonDocRef, (lessonDocSnap) => {
         if (lessonDocSnap.exists()) {
           const lessonData = lessonDocSnap.data();
-          const lessonName = lessonData.title;
-          const lessonDescription = lessonData.description;
 
-          setLastLessonName(lessonName);
-          setLastLessonDescription(lessonDescription);
+          setLessonData(lessonData)
         }
       });
 
       const courseUnsubscribe = onSnapshot(courseDocRef, (courseDocSnap) => {
         if (courseDocSnap.exists()) {
           const courseData = courseDocSnap.data();
-          const courseName = courseData.name;
-          const courseDescription = courseData.description;
 
-          setLastCourseName(courseName);
-          setLastCourseDescription(courseDescription);
+          setCourseData(courseData)
         }
       });
 
@@ -60,24 +53,23 @@ export default function Continue() {
   }, [userId, generalLastCourse, generalLastLesson, isPremium]);
 
   return (
-    <div>
-    {lastLessonName ? 
-        <div
-        >
-          <h1 className='text-xl md:text-2xl font-medium text-start pb-4'>Continue Learning for {userName ? userName : '...'}</h1>
-          <button onClick={() => router.push(`/${generalLastCourse}/${generalLastLesson}`)} className='w-full'>
-            <div className='bg-white text-black font-semibold border border-[#3030307a] to-50% p-4 rounded-2xl w-full h-[200px] flex flex-col cursor-pointer transition-all active:scale-105 md:hover:scale-105'>
-              
-              
-              <div className="justify-end md:w-[500px] h-[200px] flex flex-col">
-                <h1 className='text-2xl md:text-3xl font-medium text-start'>{lastLessonName ? truncateText(lastLessonName, 30) : null}</h1>
-                {/* <p className='text-[#8c8c8c]'>{lastLessonDescription ? lastLessonDescription : null}</p>  */}
-                <h1 className='text-md font-medium text-start'>{lastCourseName ? truncateText(lastCourseName, 50) : null}</h1>
+    <>
+    {courseData && lessonData ? 
+        <Link href={`/${generalLastCourse}/${generalLastLesson}`} className='group rounded-xl flex border-2 border-[--border] transition duration-200 bg-[#161515] hover:border-[#585757] hover:scale-105'>
+          <div className='w-full flex flex-col items-center gap-2 px-2 py-4 overflow-hidden'>
+            <h1 className='text-lg md:text-xl font-medium text-center'>Continue learning for {userName ? userName : '...'}</h1>
+            <div className="relative rounded-xl overflow-hidden w-full">
+              <div className="absolute top-8 left-0 w-full h-full bg-gradient-to-b from-transparent via-black/70 to-[--bg]"/>
+                    <Image loading='lazy' alt='image' src={courseData.image} width={400} height={200} className='w-full'/>
+                    <div className='absolute bottom-4 left-4 gap-2 flex flex-col'>
+                      <h1 className='2xl:text-5xl text-4xl font-medium'>{lessonData.title}</h1>
+                      <p>{lessonData.description}</p>
+                    </div>
               </div>
-            </div>
-          </button>
-        </div>
+            <p>{courseData.name}</p>
+          </div>
+        </Link>
     : null}
-    </div>
+    </>
   )
 }

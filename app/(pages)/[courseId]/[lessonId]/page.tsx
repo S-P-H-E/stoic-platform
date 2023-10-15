@@ -3,7 +3,6 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { db } from '@/utils/firebase';
 import { collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
-import { BsChevronLeft } from 'react-icons/bs'
 import Link from 'next/link';
 import Script from 'next/script';
 import Comments from '@/components/Course/Comments';
@@ -21,7 +20,7 @@ import VimeoPlayer from '@vimeo/player';
 import clsx from 'clsx';
 import { FaCheckCircle, FaEyeSlash, FaTimesCircle } from 'react-icons/fa';
 import { AiOutlineCloseCircle, AiFillCheckCircle } from 'react-icons/ai';
-import SkeletonLesson from '../../../../components/SkeletonLesson';
+import SkeletonLesson from '../../../../components/Course/SkeletonLesson';
 import GoBack from '@/components/UI Elements/GoBack';
 
 
