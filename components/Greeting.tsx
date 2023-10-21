@@ -24,7 +24,7 @@ export default function Greeting() {
   }
 
   return (
-    <p className="text-xl">
+    <p className="text-2xl font-medium">
       {greeting}, {userName ? userName : '...'}
     </p>
   );

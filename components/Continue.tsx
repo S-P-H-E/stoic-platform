@@ -55,8 +55,8 @@ export default function Continue() {
   return (
     <>
     {courseData && lessonData ? 
-        <Link href={`/${generalLastCourse}/${generalLastLesson}`} className='group rounded-xl flex border-2 border-[--border] transition duration-200 bg-[#161515] hover:border-[#585757] hover:scale-105'>
-          <div className='w-full flex flex-col items-center gap-2 px-2 py-4 overflow-hidden'>
+        <Link href={`/${generalLastCourse}/${generalLastLesson}`} className='group rounded-xl flex border border-[--border] transition duration-200 bg-[#161515] hover:border-[#585757] hover:scale-105'>
+          <div className='w-full flex flex-col items-center gap-2 p-2 overflow-hidden'>
             <h1 className='text-lg md:text-xl font-medium text-center'>Continue learning for {userName ? userName : '...'}</h1>
             <div className="relative rounded-xl overflow-hidden w-full">
               <div className="absolute top-8 left-0 w-full h-full bg-gradient-to-b from-transparent via-black/70 to-[--bg]"/>
