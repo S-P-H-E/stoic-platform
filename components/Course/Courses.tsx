@@ -12,7 +12,7 @@
     } from 'firebase/firestore';
     import React, { useCallback, useEffect, useState } from 'react';
     import Course from './Course';
-    
+
     export default function Courses() {
       const { userId, userStatus } = UserDataFetcher();
       const isPremium = userStatus === 'user' || userStatus === 'admin';
@@ -75,7 +75,7 @@
       }, [fetchCourses, userId]);
     
       return (
-        <div className='flex md:flex-row flex-col gap-8 md:items-start items-center w-full'>
+        <div className='flex sm:flex-row flex-col gap-6 sm:items-start items-center w-full'>
           {!loading ? (
             <>
               {courses.map((course) => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import Comments from './Course/Comments'
+import Comments from './Comments'
 
 export default function SkeletonLesson() {
   return (
@@ -13,7 +13,7 @@ export default function SkeletonLesson() {
       </div>
     </div>
     </div>
-    <div className='my-5 md:mb-20 rounded-2xl p-5'>
+    <div className='my-5 md:mb-20 rounded-2xl p-5 animate-pulse'>
         <div className='h-[25px] w-[150px] bg-[#252525] rounded-lg mb-2'/>
         <div className='h-[20px] md:w-[400px] bg-[#252525] rounded-lg'></div>
       </div>
