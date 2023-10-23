@@ -29,6 +29,16 @@ export default function Chat() {
     }
   }, []);
 
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    handleSubmit(e);
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.overflowY = 'hidden';
+    }
+  };
+
   return (
     <main className="w-full h-screen p-12 flex flex-col items-center justify-end">
       {/* <div className="flex items-center justify-center w-full h-full font-medium text-5xl opacity-60">STOIC AI</div> */}
@@ -48,7 +58,7 @@ export default function Chat() {
             </div>
           ))}
         </section>
-        <form className="flex gap-2 w-full" onSubmit={handleSubmit}>
+        <form className="flex gap-2 w-full" onSubmit={handleFormSubmit}>
         <div className="flex border border-[--border] items-center w-full rounded-md">
           <textarea
             ref={textareaRef}
