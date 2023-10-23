@@ -31,11 +31,18 @@ export default function Chat() {
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     handleSubmit(e);
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.overflowY = 'hidden';
+    }
+  };
+
+  const handleTextareaKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); // Prevent a new line in the textarea
+      handleFormSubmit(e as any);
     }
   };
 
@@ -65,6 +72,7 @@ export default function Chat() {
             className="flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600"
             value={input}
             onChange={handleInputChange}
+            onKeyDown={handleTextareaKeyPress} // Handle Enter key press
             placeholder="Say something..."
             rows={1}
           />
