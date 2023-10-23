@@ -1,77 +1,72 @@
-"use client"
-import { IoSend } from 'react-icons/io5'
-import openai from '@/app/api/GPT';
-import { useState } from 'react';
+'use client';
 
-type Message = {
-    role: "function" | "user" | "system" | "assistant";
-    content: string;
-};
+import UserImage from '@/components/UserImage';
+import { useChat } from 'ai/react';
+import { useEffect, useRef } from 'react';
+import { IoSend } from 'react-icons/io5';
 
-export default function StoicAi() {
-    const [input, setInput] = useState('');
-    const [response, setResponse] = useState('');
-    const [conversation, setConversation] = useState<Message[]>([]);
-  
-    async function sendMessage(input: string, conversation: Message[]) {
-      try {
-        // Prepare the message with the user's input
-        const newMessage = {
-          role: 'user' as const,
-          content: input,
-        };
-  
-        // Include the new message in the conversation history
-        const updatedConversation = [...conversation, newMessage];
-  
-        // Make the request to GPT-3
-        const completion = await openai.chat.completions.create({
-          messages: updatedConversation, // This includes all conversation, with the new message
-          model: 'gpt-3.5-turbo',
-        });
-  
-        // Extract GPT-3's response
-        const modelResponse = completion.choices[0].message.content;
-  
-        // Update your state with the response
-        if (modelResponse) {
-          setResponse(modelResponse);
-          setConversation(updatedConversation);
-          setInput(''); // Clear the input field
+export default function Chat() {
+  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    const adjustRows = () => {
+      if (textareaRef.current) {
+        const currentTextarea = textareaRef.current;
+        currentTextarea.style.height = 'auto'; // Reset the height
+        currentTextarea.style.height = currentTextarea.scrollHeight + 'px';
+        if (currentTextarea.scrollHeight >= 200) {
+          currentTextarea.style.overflowY = 'auto'; // Add a scrollbar when the height is at least 200px
+        } else {
+          currentTextarea.style.overflowY = 'hidden'; // Remove the scrollbar when the height is less than 200px
         }
-      } catch (error) {
-        console.error('Error sending message to GPT-3:', error);
       }
+    };
+
+    if (textareaRef.current) {
+      textareaRef.current.addEventListener('input', adjustRows);
+      adjustRows();
     }
-  
-    return (
-      <div className="flex flex-col justify-center items-center h-screen">
-        <div className="bg-[#222224] px-4 py-2 rounded-full flex items-center">
-          <input
-            placeholder="Ask Stoic AI"
-            className="bg-transparent outline-none placeholder:text-[#97A1AA] w-[500px]"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <div
-            className="bg-white text-black w-fit p-3 rounded-full cursor-pointer"
-            onClick={() => sendMessage(input, conversation)} // Call the sendMessage function on click
-          >
-            <IoSend />
-          </div>
-        </div>
-  
-        <div className="mt-4 text-white text-left">
-          {/* Display the conversation */}
-          {conversation.map((message, index) => (
-            <div key={index} className={`text-${message.role} text-red-500`}>
-              {message.content}
+  }, []);
+
+  return (
+    <main className="w-full h-screen p-12 flex flex-col items-center justify-end">
+      {/* <div className="flex items-center justify-center w-full h-full font-medium text-5xl opacity-60">STOIC AI</div> */}
+      <div className='max-w-[50rem] w-full flex flex-col'>
+        <section className="flex flex-col gap-2">
+          {messages.map(m => (
+            <div className="mb-4 flex gap-2 items-center" key={m.id}>
+              {m.role === 'user' ? 
+
+              <div className="w-8 h-8">
+                <UserImage/>
+              </div> 
+
+              : 'AI: '}
+
+              {m.content}
             </div>
           ))}
-  
-          {/* Display GPT-3's response */}
-          {response && <div className="text-assistant">{response}</div>}
+        </section>
+        <form className="flex gap-2 w-full" onSubmit={handleSubmit}>
+        <div className="flex border border-[--border] items-center w-full rounded-md">
+          <textarea
+            ref={textareaRef}
+            className="flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600"
+            value={input}
+            onChange={handleInputChange}
+            placeholder="Say something..."
+            rows={1}
+          />
+          <button
+            className="p-4 rounded-full"
+            type="submit"
+          >
+            <IoSend />
+          </button>
         </div>
+        </form>
       </div>
-    );
-  }
+    </main>
+  );
+}
