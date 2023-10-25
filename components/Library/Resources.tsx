@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import CreateTag from './CreateTag';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '../ui/context-menu';
 import { message } from 'antd';
+import { motion } from 'framer-motion';
 
 interface ResourceData {
   id: string;
@@ -30,7 +31,39 @@ export default function Resources() {
 
   const { user, userId, userStatus } = UserDataFetcher();
   const isPremium = userStatus === 'user' || userStatus === 'admin'
-  
+
+  const fadeInAnimationVariants = { // for framer motion  
+    initial: {
+        opacity: 0,
+        x: -100,
+    },
+    animate: (index: number) => ({
+        opacity: 1,
+        x: 0,
+        transition: {
+            delay: 0.04 * index,
+        }
+    })
+  }
+
+  const fadeInAnimationVariants2 = { // for framer motion  
+    initial: {
+        opacity: 0,
+        scale: 0.7,
+        y: 10,
+    },
+    animate: (index: number) => ({
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        transition: {
+          delay: 0.05 * index,
+          type: "spring",
+          stiffness: 240,
+          damping: 20
+        }
+    })
+  }
 
   useEffect(() => {
     if (userId && isPremium) {
@@ -141,15 +174,26 @@ export default function Resources() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Input
-        type="text"
-        placeholder="Search resources..."
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-      />
+      <motion.div
+      initial={{y: -50, opacity:0}}
+      animate={{y: 0, opacity: 1}}
+      >
+        <Input
+          type="text"
+          placeholder="Search resources..."
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+      </motion.div>
       <div className="flex gap-2 flex-wrap">
-      {tags.map((tag) => (
-        <ContextMenu key={tag.name}>
+      {tags.map((tag, index) => (
+        <motion.div key={tag.name}
+        custom={index}
+        variants={fadeInAnimationVariants}
+        initial="initial"
+        whileInView="animate"
+        >
+        <ContextMenu>
           <ContextMenuTrigger>
           <ButtonShad
             variant="outline"
@@ -169,6 +213,7 @@ export default function Resources() {
           </ContextMenuContent>
           )}
         </ContextMenu>
+        </motion.div>
       ))}
       {userStatus == 'admin' ?
       <Dialog>
@@ -188,8 +233,15 @@ export default function Resources() {
       : null}
     </div>
       <div className="flex gap-4 flex-wrap items-center mt-4 justify-center sm:items-start sm:justify-start">
-        {filteredResources.map((resource) => (
-          <ContextMenu key={resource.resourceName}>
+        {filteredResources.map((resource, index) => (
+          <motion.div
+          key={resource.resourceName}
+          custom={index}
+          variants={fadeInAnimationVariants2}
+          initial="initial"
+          whileInView="animate"
+          >
+          <ContextMenu>
             <ContextMenuTrigger>
               <Resource
                 downloadLink={resource.downloadLink}
@@ -206,6 +258,7 @@ export default function Resources() {
               )}
             </ContextMenuTrigger>
           </ContextMenu>
+          </motion.div>
         ))}
       </div>
     </div>

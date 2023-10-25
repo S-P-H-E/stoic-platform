@@ -61,7 +61,7 @@ export default function Chat() {
 
               : 'AI: '}
 
-              {m.content}
+              <pre>{m.content}</pre>
             </div>
           ))}
         </section>

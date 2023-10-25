@@ -292,7 +292,7 @@ export default function CreateResource() {
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </ButtonShad>
         </PopoverTrigger>
-        <PopoverContent className="w-[25rem] p-0">
+        <PopoverContent>
           <Command>
             <CommandInput placeholder="Search tag..." />
             <CommandEmpty className="gap-2 flex flex-col items-center justify-center p-4">
