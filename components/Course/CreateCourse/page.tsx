@@ -18,7 +18,11 @@ import { Check, ChevronsUpDown } from 'lucide-react';
 import { ButtonShad } from '../../ui/buttonshad';
 import { message } from 'antd';
 
-export default function CreateCourse({className}: {className:string}) {
+interface Props {
+  className?: string
+}
+
+export default function CreateCourse({className}: {className:Props}) {
   const { userStatus } = UserDataFetcher();
   const [courses, setCourses] = useState<{ id: string; name: string }[]>([]);
   const [lessonTitle, setlessonTitle] = useState('');
