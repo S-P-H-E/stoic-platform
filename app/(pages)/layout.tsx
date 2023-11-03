@@ -1,9 +1,6 @@
 import AuthGuard from '@/utils/AuthGuard'
-import { Inter } from 'next/font/google'
 import Sidebar from '@/components/Sidebar';
 import MobileSidebar from './../../components/MobileSidebar';
-
-const inter = Inter({ subsets: ['latin'] })
 
 export default function PagesLayout({
   children,
