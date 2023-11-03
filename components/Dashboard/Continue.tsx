@@ -62,7 +62,7 @@ export default function Continue() {
             <h1 className='text-lg md:text-xl font-medium text-center'>Continue learning for {userName ? userName : '...'}</h1>
             <div className="relative rounded-xl overflow-hidden w-full">
               <div className="absolute top-8 left-0 w-full h-full bg-gradient-to-b from-transparent via-black/70 to-[--bg]"/>
-                    <Image loading='lazy' alt='image' src={courseData.image} width={400} height={200} className='w-full'/>
+                    <Image loading='lazy' alt='image' src={courseData.image} width={500} height={400} className='w-full'/>
                     <div className='absolute bottom-4 left-4 gap-2 flex flex-col'>
                       <h1 className='2xl:text-5xl text-4xl font-medium'>{lessonData.title}</h1>
                       <p>{lessonData.description}</p>
