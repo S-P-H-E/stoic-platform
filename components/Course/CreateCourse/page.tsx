@@ -22,7 +22,7 @@ interface Props {
   className?: string
 }
 
-export default function CreateCourse({className}: {className:Props}) {
+export default function CreateCourse({className}: Props) {
   const { userStatus } = UserDataFetcher();
   const [courses, setCourses] = useState<{ id: string; name: string }[]>([]);
   const [lessonTitle, setlessonTitle] = useState('');
