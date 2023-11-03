@@ -41,7 +41,7 @@ export default function Resources() {
         opacity: 1,
         x: 0,
         transition: {
-            delay: 0.04 * index,
+            delay: 0.03 * index,
         }
     })
   }
@@ -57,7 +57,7 @@ export default function Resources() {
         scale: 1,
         y: 0,
         transition: {
-          delay: 0.05 * index,
+          delay: 0.01 * index,
           type: "spring",
           stiffness: 240,
           damping: 20

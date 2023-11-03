@@ -18,7 +18,7 @@ import { Check, ChevronsUpDown } from 'lucide-react';
 import { ButtonShad } from '../../ui/buttonshad';
 import { message } from 'antd';
 
-export default function CreateCourse() {
+export default function CreateCourse({className}: {className:string}) {
   const { userStatus } = UserDataFetcher();
   const [courses, setCourses] = useState<{ id: string; name: string }[]>([]);
   const [lessonTitle, setlessonTitle] = useState('');
@@ -95,12 +95,12 @@ export default function CreateCourse() {
       <DialogTrigger>
         {userStatus === 'admin' ? (
           <>
-            <button className='hover:bg-[--highlight] transition hidden md:flex justify-center items-center px-2 py-1 border border-[--highlight] gap-1 rounded-xl cursor-pointer'>
+            <button className={clsx(className, 'hover:bg-[--highlight] transition hidden md:flex justify-center items-center px-2 py-1 border border-[--highlight] gap-1 rounded-xl cursor-pointer')}>
               <AiOutlineCloudUpload size={20} />
               Upload
             </button>
 
-            <div className='border border-dashed border-[#444444] w-full h-[70px] rounded-xl flex justify-center items-center gap-1 md:hidden'>
+            <div className={clsx(className, 'border border-dashed border-[#444444] w-full h-[70px] rounded-xl flex justify-center items-center gap-1 md:hidden')}>
               <AiOutlineCloudUpload size={20} />
               Upload
             </div>

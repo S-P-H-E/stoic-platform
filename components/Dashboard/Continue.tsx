@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import {motion} from 'framer-motion'
 
 export default function Continue() {
   const { generalLastCourse, generalLastLesson, userStatus, userId, fetching, userName } = UserDataFetcher();
@@ -54,8 +55,9 @@ export default function Continue() {
 
   return (
     <>
-    {courseData && lessonData ? 
-        <Link href={`/${generalLastCourse}/${generalLastLesson}`} className='group rounded-xl flex border border-[--border] transition duration-200 bg-[#161515] hover:border-[#585757] hover:scale-105'>
+    {courseData && lessonData ?
+    <motion.div initial={{y: 50, opacity: 0}} animate={{y: 0, opacity: 1}}>
+        <Link href={`/${generalLastCourse}/${generalLastLesson}`} className='h-full group rounded-xl flex border border-[--border] transition duration-200 bg-[--darkgray] hover:border-[#585757] hover:scale-105'>
           <div className='w-full flex flex-col items-center gap-2 p-2 overflow-hidden'>
             <h1 className='text-lg md:text-xl font-medium text-center'>Continue learning for {userName ? userName : '...'}</h1>
             <div className="relative rounded-xl overflow-hidden w-full">
@@ -69,7 +71,13 @@ export default function Continue() {
             <p>{courseData.name}</p>
           </div>
         </Link>
-    : null}
+    </motion.div>
+    : <div className='h-full w-full border border-[--border] rounded-xl bg-[--darkgray] p-2 flex flex-col gap-2 my-2 items-center justify-center'>
+        <p className='w-4/6 h-8 rounded-xl bg-[--border] animate-pulse'/>
+        <div className='bg-[--border] rounded-xl animate-pulse w-full h-full'/>
+        <p className='w-2/6 h-8 rounded-xl bg-[--border] animate-pulse'/>
+      </div>
+    }
     </>
   )
 }

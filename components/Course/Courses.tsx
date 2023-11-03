@@ -13,6 +13,7 @@
     import React, { useCallback, useEffect, useState } from 'react';
     import Course from './Course';
 import { motion } from 'framer-motion';
+import CourseLoading from './CourseLoading';
 
     export default function Courses() {
       const { userId, userStatus } = UserDataFetcher();
@@ -117,7 +118,10 @@ import { motion } from 'framer-motion';
               })}
             </>
           ) : (
-            <p>Loading...</p>
+            <>
+              <CourseLoading/>
+              <CourseLoading/>
+            </>
           )}
         </div>
       );
