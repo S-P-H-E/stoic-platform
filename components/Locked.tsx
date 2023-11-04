@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 import { AiFillLock } from 'react-icons/ai'
 
@@ -8,8 +9,8 @@ export default function Locked() {
         <div className="bg-[--bg] opacity-80 absolute inset-0 z-10" />
         <div className="w-full h-60 text-white text-center p-4 rounded-lg z-20 flex items-center justify-center flex-col">
         <AiFillLock size={64} className="text-yellow-500" />
-        <p className="text-4xl"><span className="text-yellow-500 hover:underline font-medium">Upgrade</span> to get access</p>
-        <button className="upgrade bg-yellow-500 !text-black">UPGRADE</button>
+        <p className="text-4xl"><Link href={'/upgrade'} className="text-yellow-500 hover:underline font-medium">Upgrade</Link> to get access</p>
+        <Link href={'/upgrade'} className="upgrade bg-yellow-500 !text-black">UPGRADE</Link>
         </div>
     </div>
     </>
