@@ -19,9 +19,13 @@ function AuthGuard({ children }: AuthGuardProps) {
   useEffect(() => {
     if (!loading && !user) {
       router.push('/');
-    } else if (userStatus === 'free' && pathname !== '/upgrade') {
-      router.push('/upgrade');
+    } 
+    else if (userStatus !== 'free' && pathname == '/') {
+      router.push('/dashboard')
     }
+/*  else if (userStatus === 'free' && pathname !== '/upgrade') {
+      router.push('/upgrade');
+    } */
     console.log(userStatus)
   }, [loading, user, userStatus, router, pathname]);
 

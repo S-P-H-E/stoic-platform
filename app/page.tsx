@@ -7,7 +7,7 @@ import { BiLoader } from 'react-icons/bi';
 
 export default function Home() {
   const router = useRouter()
-  const { user, fetching } = UserDataFetcher();
+  const { user, fetching, userStatus } = UserDataFetcher();
 
   if (fetching ) {
     return (
@@ -23,7 +23,10 @@ export default function Home() {
         <Login />
       </main>
     )
-  } else {
+  } else if (userStatus && userStatus == 'free') {
+    router.push('/upgrade')
+  }
+  else {
     router.push('/dashboard')
     return (
       <div className='h-screen flex flex-col justify-center items-center text-2xl'>

@@ -10,7 +10,7 @@ import { auth } from '@/utils/firebase'
 import { useRouter } from 'next/navigation'
 
 export default function Upgrade() {
-  const { userName, userStatus, fetching } = UserDataFetcher()
+  const { userName, userStatus } = UserDataFetcher()
   const router = useRouter()
 
   const fadeInAnimationVariants = { // for framer motion  
@@ -65,8 +65,8 @@ export default function Upgrade() {
     }, [router, userStatus]);
 
   return (
-    <div className='flex flex-col gap-4 justify-center items-center h-full'>
-      <motion.div className='border border-[#1C1C1D] w-[450px] rounded-3xl p-8 flex flex-col items-center gap-2 bg-gradient-to-tl from-[white]/5'
+    <div className="flex items-center justify-center py-24 px-3">
+      <motion.div className=' border border-[#1C1C1D] w-[450px] rounded-3xl p-8 flex flex-col items-center gap-2 bg-gradient-to-tl from-[white]/5'
         custom={1}
         variants={fadeInAnimationVariants}
         initial="initial"
@@ -86,9 +86,9 @@ export default function Upgrade() {
             </div>
           : 
           <div className='flex items-center gap-1 bg-[--upgrade] rounded-full px-4 py-1 text-black my-2'>
-          <BsFillPersonFill />
+            <BsFillPersonFill />
           <h2 className='text-black'>Loading...</h2>
-        </div>
+          </div>
           }
           <h1 className='text-2xl uppercase'>Upgrade to premium</h1>
         </div>
@@ -122,7 +122,6 @@ export default function Upgrade() {
           <FaStripe size={35}/>
         </div>
       </motion.div>
-
     </div>
   )
 }

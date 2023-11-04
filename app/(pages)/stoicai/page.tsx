@@ -4,10 +4,14 @@ import UserImage from '@/components/UserImage';
 import { useChat } from 'ai/react';
 import { useEffect, useRef } from 'react';
 import { IoSend } from 'react-icons/io5';
+import { UserDataFetcher } from './../../../utils/userDataFetcher';
+import { message } from 'antd';
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const { userStatus, user } = UserDataFetcher();
 
   useEffect(() => {
     const adjustRows = () => {
@@ -30,13 +34,18 @@ export default function Chat() {
   }, []);
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    if(user && userStatus !== 'free') {
+      e.preventDefault();
 
-    handleSubmit(e);
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.overflowY = 'hidden';
+      handleSubmit(e);
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+        textareaRef.current.style.overflowY = 'hidden';
+      }
+    } else {
+      message.error('Encountered an issue with the user, please try again')
     }
+
   };
 
   const handleTextareaKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -47,8 +56,8 @@ export default function Chat() {
   };
 
   return (
-    <main className="w-full h-full flex flex-col items-center justify-end p-12">
-      <div className="h-screen w-full flex flex-col items-center justify-end ">
+    <main className="w-full h-full flex flex-col items-center justify-end">
+      <div className="h-screen w-full flex flex-col items-center justify-end p-12">
       {/* <div className="flex items-center justify-center w-full h-full font-medium text-5xl opacity-60">STOIC AI</div> */}
       <div className='max-w-[50rem] w-full flex flex-col'>
         <section className="flex flex-col gap-2">

@@ -59,9 +59,9 @@ export default function DateTime() {
       <div className='flex relative gap-2 w-full text-5xl 2xl:text-[5rem] text-end justify-end items-end'>
         {loading ?
         <>
-          <p className='w-[35%] h-20 bg-[--border] rounded-xl flex animate-pulse'/>
+          <p className='w-[30%] h-20 bg-[--border] rounded-xl flex animate-pulse'/>
           <p className='my-auto text-[--border] animate-pulse'>:</p>
-          <p className='w-[35%] h-20 bg-[--border] rounded-xl flex animate-pulse'/>
+          <p className='w-[30%] h-20 bg-[--border] rounded-xl flex animate-pulse'/>
         </>
         :
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}}>
