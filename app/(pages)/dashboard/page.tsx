@@ -8,6 +8,7 @@ import AllCourses from "@/components/Dashboard/AllCourses";
 import { UserDataFetcher } from "@/utils/userDataFetcher";
 import { AiFillLock } from 'react-icons/ai';
 import { BiLoader } from "react-icons/bi";
+import Locked from "@/components/Locked";
 
 export default function Dashboard() {
   const { userStatus } = UserDataFetcher();
@@ -16,14 +17,7 @@ export default function Dashboard() {
   if (userStatus === 'free') {
     return (
       <div className="relative flex flex-col h-full w-full md:py-8 py-2 px-8 gap-4 overflow-hidden justify-center max-w-[1700px] mx-auto">
-        <div className="absolute inset-0 backdrop-blur-xl flex items-center justify-center z-10 rounded-xl">
-          <div className="bg-[--bg] opacity-50 absolute inset-0 rounded-lg blur-2xl z-10" />
-          <div className="w-full h-60 text-white text-center p-4 rounded-lg z-20 flex items-center justify-center flex-col">
-            <AiFillLock size={64} className="text-yellow-500" />
-            <p className="text-4xl"><span className="text-yellow-500 hover:underline font-medium">Upgrade</span> to get access</p>
-            <button className="upgrade bg-yellow-500 !text-black">UPGRADE</button>
-          </div>
-        </div>
+        <Locked/>
 
         <Navbar />
         <div className="md:flex-row flex-col flex gap-4 justify-center">
@@ -52,6 +46,8 @@ export default function Dashboard() {
             <AllCourses />
           </div>
         </div>
+
+        {/* HAVE THIS ALL WRAPPED UP IN A COMPONENT */}
       </div>
     );
   } else {
