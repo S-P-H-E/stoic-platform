@@ -59,6 +59,19 @@ export default function StoicAI() {
     
   }
 
+  const regex = /```python([\s\S]*?)```/;
+  const firstMessage = messages[0];
+  let returnContent = '';
+
+  if (firstMessage && firstMessage.content) {
+    const match = firstMessage.content.match(regex);
+    
+
+    if (match) {
+      returnContent = match[1].trim();
+    }
+  }
+
   return (
     <main className="w-full h-full flex flex-col items-center justify-end">
       <div className="h-screen w-full flex flex-col items-center justify-end p-12">
@@ -75,7 +88,10 @@ export default function StoicAI() {
 
               : 'AI: '}
 
-              <pre>{m.content}</pre>
+              <code>{m.content}</code>
+                <div className='bg-white'>
+                  <p>{returnContent}</p>
+                </div>
             </div>
           ))}
         </section>
