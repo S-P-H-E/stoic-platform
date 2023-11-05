@@ -40,7 +40,7 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
         </div>
         <Dialog>
           <DialogTrigger>
-            <div className="absolute top-[30%] left-2 group border-[6px] border-[--darkgray] rounded-full">
+            <div className="absolute top-[5rem] left-2 group border-[6px] border-[--darkgray] rounded-full">
               <Avatar className="w-[4.7rem] h-[4.7rem]">
                 <AvatarImage src={src ?? undefined} />
                 {/* Display the first letter of the userName */}
@@ -57,10 +57,22 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
         <DialogContent>
         </DialogContent>
       </Dialog>
-      <div className='p-4 w-full h-full rounded-lg'>
+      <div className='p-4 flex flex-col w-full h-full rounded-lg gap-2'>
           <div className="flex flex-col w-full h-full">
             <h1 className="text-2xl leading-6">{userName ? userName : 'Loading...'}</h1>
             <h2 className={clsx("text-lg leading-6", statusClass)}>{userStatusEdited}</h2>
+          </div>
+
+          <hr className='border-[--border]'/>
+
+          <div className='flex flex-col'>
+            <h1 className='text-lg font-medium'>Info</h1>
+
+            <div className='border border-[--border] rounded-lg h-20 p-1'>
+              <ul className='flex flex-wrap'>
+                <li className='bg-yellow-600 rounded-full p-1 text-xs'>Admin</li>
+              </ul>
+            </div>
           </div>
       </div>
     </div>
