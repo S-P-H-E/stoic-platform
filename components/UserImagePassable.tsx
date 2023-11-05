@@ -19,7 +19,7 @@ export default function UserImagePassable({ userImage, userName, userStatus, use
           <AvatarFallback className='uppercase select-none text-base w-full h-full'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='bg-[--darkgray] border-[--border]' side='right' >
+      <DropdownMenuContent className='bg-[black] border-[--border]' side='right' >
         <UserProfile userBannerUrl={userBannerUrl} userStatus={userStatus ?? undefined} userName={userName} src={userImage ?? undefined}/>
       </DropdownMenuContent>
     </DropdownMenu>
