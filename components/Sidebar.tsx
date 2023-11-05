@@ -11,6 +11,8 @@ import UserImage from './UserImage';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { BiLogOut } from 'react-icons/bi';
 import { useFirebase } from '@/utils/authContext';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu';
+import UserProfile from './UserProfile';
 
 const montserrat = Montserrat({ weight: '600', subsets: ['latin'] });
 
@@ -53,7 +55,7 @@ const routes = [
 ];
 
 const Sidebar = () => {
-  const { userName, userId } = UserDataFetcher();
+  const { userName, userId, userStatus, userProfileImageUrl, userProfileBannerUrl } = UserDataFetcher();
   const pathname = usePathname();
   const { signOut } = useFirebase()
   
@@ -97,7 +99,14 @@ const Sidebar = () => {
         <div className="px-2 flex justify-between items-center">
           <div className='flex items-center gap-2'>
             <div className="h-10 w-10">
-              <UserImage/>
+            <DropdownMenu>
+              <DropdownMenuTrigger className='w-full h-full'>
+                <UserImage/>
+              </DropdownMenuTrigger>
+                <DropdownMenuContent className='absolute -left-10 bottom-1 bg-[--darkgray] border-[--border]' side='top' >
+                  <UserProfile userStatus={userStatus ?? ''} userName={userName ?? ''} src={userProfileImageUrl ?? undefined} userBannerUrl={userProfileBannerUrl}/>
+                </DropdownMenuContent>
+            </DropdownMenu>
             </div>
             {userId ? <p className='font-medium'>{userName}</p>:null}
           </div>
