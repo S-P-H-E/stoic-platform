@@ -1,4 +1,3 @@
-import Search from "@/components/Search/page";
 import UserImage from "@/components/UserImage";
 import Link from "next/link";
 import Greeting from "@/components/Dashboard/Greeting";

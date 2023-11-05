@@ -58,14 +58,13 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
             </div>
           </DialogTrigger>
         <DialogContent>
-          <UserProfileDialog userBannerUrl={userBannerUrl} userStatus={userStatus ?? undefined} userName={userName} src={src}/>
+          <UserProfileDialog userBannerUrl={userBannerUrl} userStatus={userStatusEdited ?? undefined} userName={userName} src={src}/>
         </DialogContent>
       </Dialog>
       <div className='p-4 px-7 mt-8 flex flex-col w-full h-full rounded-lg gap-2'>
           <div className="flex flex-col w-full h-full">
             <h1 className="text-2xl leading-6 font-semibold">{userName ? userName : 'Loading...'}</h1>
             <h2 className={clsx("text-md leading-6 py-1", statusClass)}>{userStatusEdited}</h2>
-            <p></p>
           </div>
 
           <hr className='border-[--border]'/>
