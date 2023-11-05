@@ -52,22 +52,6 @@ export default function Login() {
         //Router
         router.push('/dashboard');
 
-        // User
-        const userRef = collection(db, "users");
-        const q = query(userRef, where("email", "==", res.user.email));
-        const querySnapshot = await getDocs(q);
-
-        // Firestore
-        if (querySnapshot.empty) {
-          const docRef = await addDoc(userRef, {
-            name: res.user.displayName,
-            email: res.user.email,
-            status: 'user',
-          });
-          /* console.log("Document written with ID:", docRef.id); */
-        } else {
-          /* console.log("User exists"); */
-        }
       } catch (err) {
         message.error("Error signing in");
         /* alert(err); // for debug */

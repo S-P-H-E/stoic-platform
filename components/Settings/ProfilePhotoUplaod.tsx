@@ -21,7 +21,7 @@ type Accept = string | string[];
 
 export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [photoUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { user, userId } = UserDataFetcher();
@@ -53,7 +53,7 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
         message.success('Profile picture uploaded successfully!');
   
         const userDocRef = doc(db, 'users', userId);
-        await setDoc(userDocRef, { profileImageUrl: imageUrl }, { merge: true });
+        await setDoc(userDocRef, { photoUrl: imageUrl }, { merge: true });
       } catch (error) {
         console.error('Error uploading profile picture:', error);
         message.error('Failed to upload profile picture.');

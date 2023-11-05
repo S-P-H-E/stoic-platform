@@ -41,7 +41,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
             return {
               id: doc.id,
               ...commentData,
-              userProfilePic: userProfileData.profileImageUrl || '',
+              userProfilePic: userProfileData.photoUrl || '',
               userBannerPic: userProfileData.bannerUrl || '',
               userName: userProfileData.userName || '',
               userStatus: userProfileData.userStatus || ''
@@ -107,7 +107,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data();
         return {
-          profileImageUrl: userData.profileImageUrl,
+          photoUrl: userData.photoUrl,
           bannerUrl: userData.bannerUrl,
           userName: userData.name,
           userStatus: userData.status
@@ -117,7 +117,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
       console.error('Error fetching user profile data:', error);
     }
     return {
-      profileImageUrl: null, // Return a default profile image URL or handle missing images here
+      photoUrl: null, // Return a default profile image URL or handle missing images here
       bannerUrl: null, // Return a default banner URL or handle missing banners here
     };
   };

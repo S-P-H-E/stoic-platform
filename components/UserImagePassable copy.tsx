@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 
 export default function UserImagePassable({ userImage, userName }: { userImage: string, userName: string }) {
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [photoUrl, setProfileImageUrl] = useState<string | null>(null);
 
   // Extract the first letter of the userName
   const userChar: string = userName ? userName : '';

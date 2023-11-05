@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './ui/dro
 import UserProfile from './UserProfile';
 
 export default function UserImagePassable({ userImage, userName, userStatus, userBannerUrl }: { userBannerUrl: string, userImage: string, userName: string, userStatus:string }) {
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [photoUrl, setProfileImageUrl] = useState<string | null>(null);
 
   // Extract the first letter of the userName
   const userChar: string = userName ? userName : '';

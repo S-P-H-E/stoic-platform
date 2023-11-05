@@ -8,7 +8,7 @@ import { onSnapshot, doc } from 'firebase/firestore';
 import { db } from '@/utils/firebase'; // Import your Firestore instance
 
 export default function UserImage() {
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [photoUrl, setProfileImageUrl] = useState<string | null>(null);
   const { user, userId, userName } = UserDataFetcher();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function UserImage() {
       const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
           const userData = docSnapshot.data();
-          const imageUrl = userData?.profileImageUrl || null;
+          const imageUrl = userData?.photoUrl || null;
           setProfileImageUrl(imageUrl);
         }
       });
@@ -36,7 +36,7 @@ export default function UserImage() {
 
   return (
     <Avatar className="w-full h-full">
-      <AvatarImage src={profileImageUrl ?? undefined} />
+      <AvatarImage src={photoUrl ?? undefined} />
       {/* Display the first letter of the userName */}
       <AvatarFallback className='uppercase select-none'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
     </Avatar>

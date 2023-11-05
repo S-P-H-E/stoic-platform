@@ -39,7 +39,7 @@ export function UserDataFetcher() {
             setUserProfileBannerUrl(userData.bannerUrl);
             setUserStatus(userData.status);
             setUserId(querySnapshot.docs[0].id);
-            setUserProfileImageUrl(userData.profileImageUrl)
+            setUserProfileImageUrl(userData.photoUrl)
             setGeneralLastCourse(userData.generalLastCourse);
             setGeneralLastLesson(userData.generalLastLesson)
 
