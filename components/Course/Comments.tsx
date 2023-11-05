@@ -13,7 +13,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState('');
 
-  const { userName, userId, userStatus } = UserDataFetcher();
+  const { userName, userId, userStatus, userProfileBannerUrl } = UserDataFetcher();
 
   const fadeInAnimationVariants = { // for framer motion  
     initial: {
@@ -81,7 +81,9 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
         timestamp: Timestamp.fromDate(new Date()),
         userId: userId,
         userName: userName,
+        userStatus: userStatus,
         userProfilePic: user.photoURL,
+        userBannerPic: userProfileBannerUrl || ''
       });
 
       setNewComment('');
@@ -187,7 +189,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
             <div className='flex justify-between items-center'>
               <div className='flex justify-center items-center'>
                 <div className="w-10 h-10 mr-1">
-                <UserImagePassable userImage={comment.userProfilePic} userName={comment.userName}/>
+                <UserImagePassable userBannerUrl={comment.userBannerPic} userImage={comment.userProfilePic} userName={comment.userName} userStatus={comment.userStatus}/>
                 </div>
                 {/* <Image width={500} height={500} src={comment.userProfilePic} alt="Profile Picture" className='w-10 object-cover rounded-full mr-2 aspect-square'/> */}
                 <h1 className='text-2xl'>{comment.userName}</h1>

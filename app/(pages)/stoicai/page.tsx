@@ -6,7 +6,7 @@ import { UserDataFetcher } from "@/utils/userDataFetcher";
 import { BiLoader } from "react-icons/bi";
 
 export default function Chat() {
-  const { userStatus, user } = UserDataFetcher();
+  const { userStatus } = UserDataFetcher();
   
   if (userStatus == 'free') {
     return(
