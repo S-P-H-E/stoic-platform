@@ -58,7 +58,7 @@ export default function Upgrade() {
   ]
 
     useEffect(() => {
-      if (userStatus == 'user') {
+      if (userStatus != 'free') {
         console.log(userStatus)
       router.push('/dashboard');
       }
