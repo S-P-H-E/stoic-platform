@@ -24,7 +24,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
         opacity: 1,
         y: 0,
         transition: {
-            delay: 0.05 * index,
+          delay: 0.05 * index,
         }
     })
 }
@@ -37,16 +37,17 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
         const unsubscribe = onSnapshot(q, async (snapshot) => {
           const commentsData = await Promise.all(snapshot.docs.map(async (doc) => {
             const commentData = doc.data();
-            const userProfilePic = await getUserProfilePic(commentData.userId);
+            const userProfileData = await getUserProfileData(commentData.userId);
             return {
               id: doc.id,
               ...commentData,
-              userProfilePic: userProfilePic || '/default-profile-pic-url',
+              userProfilePic: userProfileData.profileImageUrl || '',
+              userBannerPic: userProfileData.bannerUrl || '',
             };
           }));
           setComments(commentsData);
         });
-
+    
         return () => unsubscribe();
       } catch (error) {
         console.error('Error fetching comments:', error);
@@ -82,8 +83,6 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
         userId: userId,
         userName: userName,
         userStatus: userStatus,
-        userProfilePic: user.photoURL,
-        userBannerPic: userProfileBannerUrl || ''
       });
 
       setNewComment('');
@@ -101,18 +100,24 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
     }
   };
 
-  const getUserProfilePic = async (userId: string) => {
+  const getUserProfileData = async (userId: string) => {
     try {
       const userDocRef = doc(db, 'users', userId);
       const userDocSnapshot = await getDoc(userDocRef);
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data();
-        return userData.profileImageUrl;
+        return {
+          profileImageUrl: userData.profileImageUrl,
+          bannerUrl: userData.bannerUrl,
+        };
       }
     } catch (error) {
-      console.error('Error fetching user profile picture:', error);
+      console.error('Error fetching user profile data:', error);
     }
-    return null; // Return a default image URL or handle missing images here
+    return {
+      profileImageUrl: null, // Return a default profile image URL or handle missing images here
+      bannerUrl: null, // Return a default banner URL or handle missing banners here
+    };
   };
 
   const detectAndStyleLinks = (comment: string) => {
@@ -171,9 +176,6 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
           onChange={(e) => setNewComment(e.target.value)}
           className='w-full outline-none py-3 bg-transparent text-lg border-b transition duration-200 focus:border-[--highlight] border-[--border] placeholder:text-[#b9b9b9]'
         />
-        {/* <button type="submit" className='bg-[white] text-black m-1 p-4 rounded-full font-medium w-full md:w-fit'>
-          <HiMiniPencilSquare size={20}/>
-        </button> */}
       </form>
       <ul>
         {filteredComments.map((comment) => (
@@ -214,33 +216,3 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
     </>
   );
 }
-
-
-/* export async function getServerSideProps(context: any) {
-  try {
-    const { courseId } = context.params;
-
-    const commentsRef = collection(db, 'comments');
-    const q = query(commentsRef, orderBy('timestamp'));
-    const snapshot = await getDocs(q);
-    const commentsData = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    return {
-      props: {
-        courseId,
-        comments: commentsData,
-      },
-    };
-  } catch (error) {
-    console.error('Error fetching comments:', error);
-    return {
-      props: {
-        courseId: null,
-        comments: [],
-      },
-    };
-  }
-} */
