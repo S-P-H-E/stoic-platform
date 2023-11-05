@@ -44,7 +44,7 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
         <Dialog>
           <DialogTrigger>
             <div className="absolute top-[6rem] left-4 group border-[9px] border-[black] rounded-full">
-              <Avatar className="w-[6rem] h-[6rem] bg-black">
+              <Avatar className="w-[6rem] h-[6rem]">
                 <AvatarImage src={src ?? undefined} />
                 {/* Display the first letter of the userName */}
                 <AvatarFallback className='uppercase select-none text-base'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
@@ -57,7 +57,7 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
               </div>
             </div>
           </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="bg-[--background]">
           <UserProfileDialog userBannerUrl={userBannerUrl} userStatus={userStatusEdited ?? undefined} userName={userName} src={src}/>
         </DialogContent>
       </Dialog>

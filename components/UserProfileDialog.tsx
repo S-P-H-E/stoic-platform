@@ -13,12 +13,12 @@ export default function UserProfileDialog({src, userName, userStatus, userBanner
     });
 
     return(
-        <div className="rounded-2xl h-96 p-2 relative">
+        <div className="rounded-xl h-96 p-2 relative">
             <div className="w-full h-40 relative">
-                <Image alt="User Banner" fill className="rounded-2xl object-cover" src={userBannerUrl} />
+                <Image alt="User Banner" fill className="rounded-lg object-cover" src={userBannerUrl} />
             </div>
             <div className="h-[4.5rem]">
-                <Avatar className="w-[7.5rem] h-[7.5rem] absolute top-28 left-5 bg-black border-[9px] border-black">
+                <Avatar className="w-[7.5rem] h-[7.5rem] absolute top-28 left-5 border-[9px] border-[--background]">
                         <AvatarImage src={src ?? undefined} />
                         <AvatarFallback className='uppercase select-none text-base'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
                 </Avatar>
