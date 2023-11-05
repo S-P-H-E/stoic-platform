@@ -55,6 +55,7 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
             </div>
           </DialogTrigger>
         <DialogContent>
+          
         </DialogContent>
       </Dialog>
       <div className='p-4 flex flex-col w-full h-full rounded-lg gap-2'>

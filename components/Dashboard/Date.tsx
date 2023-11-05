@@ -40,8 +40,10 @@ export default function DateTime() {
     };
   }, []);
 
+  const displayTime = currentTime.replace(/\s[APap][Mm]/, ''); // Remove "AM" or "PM"
+
   return (
-    <div className='h-[23%] 2xl:text-4xl text-2xl rounded-xl p-4 flex border border-[--border] items-center gap-4 transition duration-200 bg-[--darkgray] hover:border-[#585757] hover:scale-105'>
+    <div className='h-[23%] max-h-[10rem] 2xl:text-4xl text-2xl rounded-xl p-4 flex border border-[--border] items-center gap-4 transition duration-200 bg-[--darkgray] hover:border-[#585757] hover:scale-105'>
       <div className='flex flex-col w-full h-full justify-center'>
         {loading ?
         <div className='flex flex-col gap-3 w-full h-full'>
@@ -65,7 +67,7 @@ export default function DateTime() {
         </>
         :
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}}>
-          {currentTime}
+          {displayTime}
         </motion.div>
         }
       </div>
