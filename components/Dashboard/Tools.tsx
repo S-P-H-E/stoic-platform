@@ -13,14 +13,14 @@ const tools = [
   {
     title: 'Library',
     icon: <BiBookAlt size={24} />,
-    href: '/converters'
+    href: '/library'
   },
 ]
 
 export default function Tools() {
   return (
     <div className='grid grid-cols-2 gap-3'>
-        {tools.map((tool, index)=> (
+        {tools.map((tool)=> (
           <Tool key={tool.title} title={tool.title} href={tool.href} icon={tool.icon} />
         ))}
     </div>

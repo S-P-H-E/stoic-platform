@@ -1,24 +1,19 @@
 import { useState, useEffect } from 'react';
-import { collection, addDoc, query, orderBy, onSnapshot, doc, deleteDoc, getDocs, Timestamp, getDoc } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, doc, deleteDoc, Timestamp, getDoc } from 'firebase/firestore';
 import { db, auth } from '@/utils/firebase';
 import { MdDelete } from 'react-icons/md'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { Dropdown } from 'antd';
-import Image from 'next/image';
-import { useParams } from 'next/navigation';
 import UserImage from '../UserImage';
 import { UserDataFetcher } from '../../utils/userDataFetcher';
-import { HiMiniPencilSquare } from 'react-icons/hi2'
 import {motion} from 'framer-motion'
-import Head from 'next/head';
 import UserImagePassable from '../UserImagePassable';
 
 export default function Comments({ courseId, lessonId }: { courseId: string, lessonId: any }) {
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState('');
 
-  const { userName, user, userId, fetching, userStatus } = UserDataFetcher();
-  const { currentCourse } = useParams();
+  const { userName, userId, userStatus } = UserDataFetcher();
 
   const fadeInAnimationVariants = { // for framer motion  
     initial: {
@@ -154,9 +149,6 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
 
   return (
     <>
-    <Head>
-      
-    </Head>
     <div className='flex flex-col gap-2'>
       <h1 className='text-lg p-4 pb-1'>
         {filteredComments.length === 1
@@ -165,13 +157,6 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
       </h1>
       <form onSubmit={handleSubmitComment} className='flex justify-between items-center w-full gap-2 px-4'>
         {comments.length > 0 && (
-          // <Image
-          //   width={400}
-          //   height={400}
-          //   src={comments[0].userProfilePic} // Access the first comment's userProfilePic
-          //   alt="Profile Picture"
-          //   className='w-8 h-8 rounded-full mx-4'
-          // />
           
           <div className='h-[40px] md:h-[50px] aspect-square'>
             <UserImage />
@@ -182,7 +167,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
           type="text"
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          className='w-full outline-none py-3 bg-transparent text-lg border-b border-[#3f3f3f] placeholder:text-[#b9b9b9]'
+          className='w-full outline-none py-3 bg-transparent text-lg border-b transition duration-200 focus:border-[--highlight] border-[--border] placeholder:text-[#b9b9b9]'
         />
         {/* <button type="submit" className='bg-[white] text-black m-1 p-4 rounded-full font-medium w-full md:w-fit'>
           <HiMiniPencilSquare size={20}/>
@@ -229,7 +214,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
 }
 
 
-export async function getServerSideProps(context: any) {
+/* export async function getServerSideProps(context: any) {
   try {
     const { courseId } = context.params;
 
@@ -256,4 +241,4 @@ export async function getServerSideProps(context: any) {
       },
     };
   }
-}
+} */

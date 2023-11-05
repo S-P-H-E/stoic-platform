@@ -13,11 +13,13 @@ export async function POST(req: Request) {
 
   const { messages } = await req.json();
  
-
   const response = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
     stream: true,
-    messages,
+    messages/* :
+        [
+            {"role": "system", "content": "You are a assistant named STOIC AI, designed to help users on their content creation journey."},
+        ], */
   });
 
   const stream = OpenAIStream(response);

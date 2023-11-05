@@ -1,9 +1,7 @@
-
 import Image from 'next/image'
 import Link from 'next/link'
 
 export default function Course({ href, name, description, image}: { name: string, description: string, href: string, image:string}) {
-  
   return (
     <Link href={href} passHref className='group bg-[--bg] pb-6 group relative flex flex-col w-full sm:w-80 h-[25.5rem] items-center text-center border border-[--border] rounded-xl hover:scale-105 transition duration-200 overflow-hidden'>
       <div className="relative group-hover:scale-110 transition duration-200 rounded-xl">

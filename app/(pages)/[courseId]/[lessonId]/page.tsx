@@ -2,7 +2,7 @@
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { db } from '@/utils/firebase';
-import { collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, increment, limit, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import Link from 'next/link';
 import Script from 'next/script';
 import Comments from '@/components/Course/Comments';
@@ -42,6 +42,11 @@ export default function LessonPage() {
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [userCompleted ,setUserCompleted] = useState<boolean>(false)
   const [lessonCompletionStatusMap, setLessonCompletionStatusMap] = useState(new Map());
+  const [completedLessonCount, setCompletedLessonCount] = useState(null);
+
+  const [lessonCompleted, setLessonCompleted] = useState(false);
+  const [lessonCompletionFlag, setLessonCompletionFlag] = useState(false);
+
   
   const { userId, userStatus } = UserDataFetcher()
   const isPremium = userStatus === 'user' || userStatus === 'admin'
@@ -142,6 +147,7 @@ export default function LessonPage() {
         console.error('Error fetching lesson:' + error);
       }
     };
+    
 
     const fetchLessonsForCourse = () => {
       try {
@@ -182,6 +188,54 @@ export default function LessonPage() {
 
   
   useEffect(() => {
+    const CompleteLesson = async () => {
+      try {
+        const lessonCompletionRef = doc(
+          db,
+          'users',
+          String(userId),
+          'courses',
+          String(courseId),
+          'lessons',
+          String(lessonId)
+        );
+
+        const lessonCompletionSnapshot = await getDoc(lessonCompletionRef);
+        const isCompleted = lessonCompletionSnapshot.data()?.completed === true;
+
+        if(!isCompleted) {
+          const userCourseLessonsRef = collection(
+            db,
+            'users',
+            String(userId),
+            'courses',
+            String(courseId),
+            'lessons'
+          );
+  
+          const userCourseRef = doc(
+            db,
+            'users',
+            String(userId),
+            'courses',
+            String(courseId),
+          );
+  
+          await setDoc(
+            doc(userCourseLessonsRef, String(lessonId)),
+            { completed: true },
+            { merge: true }
+          );
+  
+          await updateDoc(userCourseRef, {
+            completedLessonCount: increment(1),
+          });
+        }
+      } catch (error) {
+        
+      }
+    }
+
     const handleVimeoMessageAsync = async (event: MessageEvent) => {
       if (event.origin === 'https://player.vimeo.com' && userId && isPremium) {
         var iframe = document.querySelector('iframe');
@@ -197,22 +251,15 @@ export default function LessonPage() {
           console.log("VIDEO PAUSED")
         })
 
-        player.on('ended', async function () {
-          const userCourseLessonsRef = collection(
-            db,
-            'users',
-            String(userId),
-            'courses',
-            String(courseId),
-            'lessons'
-          );
-  
-          const lessonIdStr = String(lessonId);
-          await setDoc(
-            doc(userCourseLessonsRef, lessonIdStr),
-            { completed: true },
-            { merge: true }
-          );
+        let completedFlag = false
+        player.on('ended', async function() {
+        if (!completedFlag) {
+          completedFlag = true; // Set the flag to true
+          if (!lessonCompletionFlag) {
+            setLessonCompletionFlag(true); // Set the flag to true to mark completion
+            CompleteLesson();
+          }
+        }
         });
       }
     };
@@ -226,7 +273,7 @@ export default function LessonPage() {
         window.removeEventListener('message', handleVimeoMessageAsync);
       };
     }
-  }, [vimeoUrl, userId, courseId, lessonId, isPremium]);
+  }, [vimeoUrl, userId, courseId, lessonId, isPremium, lessonCompleted, lessonCompletionFlag]);
 
   useEffect(() => {
     const fetchUserCompletion = () => {
@@ -268,6 +315,25 @@ export default function LessonPage() {
     fetchUserCompletion();
   }, [userId, courseId, lessonId, isPremium]);
   
+  useEffect(() => {
+    const userCompletedLessonsRef = doc(
+      db, 'users', String(userId), 'courses', String(courseId)
+    );
+
+    const unsubscribe = onSnapshot(userCompletedLessonsRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        setCompletedLessonCount(data.completedLessonCount);
+      } else {
+        setCompletedLessonCount(null);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [userId, courseId]);
+
   useEffect(() => {
     const fetchLessonCompletionStatus = async () => {
       try {
@@ -401,6 +467,7 @@ export default function LessonPage() {
 
         <div>
           <div className='flex flex-col gap-5'>
+          <p className='p-4'>{completedLessonCount}</p>
           {lessons.map((lessonItem, index) => (
             <motion.div key={index}
             custom={index}
@@ -471,7 +538,7 @@ export default function LessonPage() {
             </motion.div>
             ))}
             <div className='visible md:hidden'>
-                <Comments courseId={courseId as string} lessonId={lessonId as string}/>
+              <Comments courseId={courseId as string} lessonId={lessonId as string}/>
             </div>
           </div>
         </div>

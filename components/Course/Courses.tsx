@@ -12,6 +12,8 @@
     } from 'firebase/firestore';
     import React, { useCallback, useEffect, useState } from 'react';
     import Course from './Course';
+import { motion } from 'framer-motion';
+import CourseLoading from './CourseLoading';
 
     export default function Courses() {
       const { userId, userStatus } = UserDataFetcher();
@@ -27,6 +29,20 @@
         }
         return text;
       }
+
+      const fadeInAnimationVariants = { // for framer motion  
+        initial: {
+            opacity: 0,
+            y: 100,
+        },
+        animate: (index: number) => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: 0.05 * index,
+            }
+        })
+    }
     
       const fetchCourses = useCallback(async () => {
         if (userId && isPremium) {
@@ -78,7 +94,7 @@
         <div className='flex sm:flex-row flex-col gap-6 sm:items-start items-center w-full'>
           {!loading ? (
             <>
-              {courses.map((course) => {
+              {courses.map((course, index) => {
                 const lastLessonId = course.userCourseData ? course.userCourseData.lastLessonId : null;
     
                 const href = lastLessonId
@@ -86,12 +102,26 @@
                   : `/${course.id}/${course.firstLesson.id}`;
     
                 return (
-                  <Course image={course.image} key={course.name} href={href} name={course.name} description={course.description}/>
+                  <motion.div 
+                  key={course.name}
+                  custom={index}
+                  variants={fadeInAnimationVariants}
+                  initial="initial"
+                  whileInView="animate"
+                  viewport={{
+                    once: true,
+                  }}
+                  >
+                    <Course image={course.image} href={href} name={course.name} description={course.description}/>
+                  </motion.div>
                 );
               })}
             </>
           ) : (
-            <p>Loading...</p>
+            <>
+              <CourseLoading/>
+              <CourseLoading/>
+            </>
           )}
         </div>
       );

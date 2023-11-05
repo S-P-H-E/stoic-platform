@@ -11,10 +11,11 @@ import {
   query,
 } from 'firebase/firestore';
 import React, { useCallback, useEffect, useState } from 'react';
-import { clsx } from 'clsx';
+import { motion } from 'framer-motion';
 import DashboardCourse from './DashboardCourse';
+import CourseLoading from '../Course/CourseLoading';
 
-export default function DashboardCourses({className}: {className: string}) {
+export default function DashboardCourses() {
   const { userId, userStatus } = UserDataFetcher();
   const isPremium = userStatus === 'user' || userStatus === 'admin';
 
@@ -22,12 +23,19 @@ export default function DashboardCourses({className}: {className: string}) {
 
   const [courses, setCourses] = useState<Array<any>>([]);
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
+  const fadeInAnimationVariants = {
+    initial: {
+        opacity: 0,
+        y: 50,
+    },
+    animate: (index: number) => ({
+        opacity: 1,
+        y: 0,
+        transition: {
+          delay: 0.05 * index,
+        }
+    })
+}
 
   const fetchCourses = useCallback(async () => {
     if (userId && isPremium) {
@@ -76,10 +84,10 @@ export default function DashboardCourses({className}: {className: string}) {
   }, [fetchCourses, userId]);
 
   return (
-    <div className={clsx('w-full h-full grid grid-cols-1 md:grid-cols-2 pb-4 gap-4', className)}>
+    <div className='w-full h-full grid grid-cols-1 md:grid-cols-2 pb-4 gap-4'>
       {!loading ? (
         <>
-          {courses.map((course) => {
+          {courses.map((course, index) => {
             const lastLessonId = course.userCourseData ? course.userCourseData.lastLessonId : null;
 
             const href = lastLessonId
@@ -87,12 +95,26 @@ export default function DashboardCourses({className}: {className: string}) {
               : `/${course.id}/${course.firstLesson.id}`;
 
             return (
-              <DashboardCourse image={course.image} key={course.name} href={href} name={course.name} description={course.description}/>
+              <motion.div 
+                key={course.name}
+                custom={index}
+                variants={fadeInAnimationVariants}
+                initial="initial"
+                whileInView="animate"
+                viewport={{
+                  once: true,
+                }}
+              >
+                <DashboardCourse image={course.image} href={href} name={course.name} description={course.description}/>
+              </motion.div>
             );
           })}
         </>
       ) : (
-        <p>Loading...</p>
+        <>
+        <div className='flex flex-col w-full h-full items-center justify-center text-center bg-[--border] animate-pulse rounded-xl'/>
+        <div className='flex flex-col w-full h-full items-center justify-center text-center bg-[--border] animate-pulse rounded-xl'/>
+        </>
       )}
     </div>
   );

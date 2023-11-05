@@ -41,9 +41,9 @@ export function UserDataFetcher() {
 
             const newUserStatus = userData.status;
             setUserStatus(newUserStatus);
-            if (newUserStatus === "free") {
+/*          if (newUserStatus === "free") {
             router.push('/upgrade');
-            }
+            } */
         }
       });
 

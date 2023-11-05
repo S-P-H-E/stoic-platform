@@ -20,10 +20,12 @@ import { useRouter } from "next/navigation";
 import { validateEmail, validateNameLength, validatePassword } from '@/utils/validation'
 import InputResponse from '../InputResponse';
 import ForgotPassword from "./ForgotPassword";
+import { UserDataFetcher } from '@/utils/userDataFetcher';
 
 export default function Login() {
   const router = useRouter()
   const [user, loading] = useAuthState(auth);
+  const { userStatus } = UserDataFetcher();
 
 
   type FirebaseError = {
@@ -49,7 +51,15 @@ export default function Login() {
           message.success("Signed in successfully");
 
         //Router
-        router.push('/dashboard');
+        if(user && userStatus) {
+          if (userStatus == 'free') {
+            router.push('/upgrade');
+          }
+
+          else if (userStatus !== 'free') {
+            router.push('/dashboard');
+          }
+        }
 
         // User
         const userRef = collection(db, "users");
@@ -133,7 +143,16 @@ export default function Login() {
             });
 
 
-            router.push('/dashboard');
+            if(user && userStatus) {
+              if (userStatus == 'free') {
+                router.push('/upgrade');
+              }
+    
+              else if (userStatus !== 'free') {
+                router.push('/dashboard');
+              }
+            }
+
             message.success("Signed up successfully");
           } catch (error) {
             const firebaseError = error as FirebaseError;
@@ -147,7 +166,15 @@ export default function Login() {
         try {
             const user = await signInWithEmailAndPassword(auth, registerEmail, registerPassword)
             message.success("Signed in successfully");
-            router.push('/dashboard');
+            if(user && userStatus) {
+              if (userStatus == 'free') {
+                router.push('/upgrade');
+              }
+
+              else if (userStatus !== 'free') {
+                router.push('/dashboard');
+              }
+          }
           } catch (error) {
             const firebaseError = error as FirebaseError;
             const errorCode = firebaseError.code as keyof typeof firebaseErrorMessages;
