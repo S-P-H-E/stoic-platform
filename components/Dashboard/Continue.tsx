@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import {motion} from 'framer-motion'
+import placeholderImage from '@/public/placeholder.jpg'
 
 export default function Continue() {
   const { generalLastCourse, generalLastLesson, userStatus, userId, fetching, userName } = UserDataFetcher();
@@ -62,7 +63,11 @@ export default function Continue() {
             <h1 className='text-lg md:text-xl font-medium text-center'>Continue learning for {userName ? userName : '...'}</h1>
             <div className="relative rounded-xl overflow-hidden w-full">
               <div className="absolute top-8 left-0 w-full h-full bg-gradient-to-b from-transparent via-black/70 to-[--bg]"/>
+                  {lessonData.thumbnail ? 
                   <Image loading='lazy' alt='Lesson Thumbnail' src={lessonData.thumbnail} width={500} height={400} className='w-full object-cover'/>
+                  :
+                  <Image loading='lazy' alt="Lesson Thumbnail" src={placeholderImage} placeholder='blur' width={500} height={400} className='w-full object-cover'/>
+                  }
                   <div className='absolute bottom-4 left-4 gap-2 flex flex-col'>
                     <h1 className='2xl:text-5xl text-4xl font-medium'>{lessonData.title}</h1>
                     <p>{lessonData.description}</p>

@@ -120,6 +120,7 @@ export default function AccountSettings() {
                 <div>
                   <h1 className="2xl:text-4xl lg:text-3xl md:text-2xl font-medium">{userName ? userName : 'loading...'}</h1>
                   <h2 className='text-light text-[--highlight] 2xl:text-lg lg:text-base text-sm'>{userName ? user?.email : "loading..."}</h2>
+                  
                 </div>
               </div>
 
