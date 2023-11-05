@@ -49,7 +49,7 @@ export default function LessonPage() {
 
   
   const { userId, userStatus } = UserDataFetcher()
-  const isPremium = userStatus === 'user' || userStatus === 'admin'
+  const isPremium = userStatus === 'premium' || userStatus === 'admin'
   
   const pathname = usePathname();
 

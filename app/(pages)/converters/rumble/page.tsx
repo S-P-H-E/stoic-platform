@@ -36,7 +36,7 @@ export default function Home() {
   const [quality2160p, setQuality2160p] = useState<string | null>(null);
 
   const { userId, userStatus } = UserDataFetcher();
-  const isPremium = userStatus === 'user' || userStatus === 'admin'
+  const isPremium = userStatus === 'premium' || userStatus === 'admin'
 
   // updates the input value everytime the input changes
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -23,7 +23,7 @@ export default function Home() {
         <Login />
       </main>
     )
-  } else if (userStatus && userStatus == 'free') {
+  } else if (userStatus && userStatus == 'user') {
     router.push('/upgrade')
   }
   else {

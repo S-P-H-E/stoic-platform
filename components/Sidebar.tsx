@@ -87,8 +87,8 @@ const Sidebar = () => {
                 pathname === route.href
                   ? 'text-white bg-white/10'
                   : 'text-zinc-400',
-                 /*  userStatus === 'free' ? 'blur-sm' : '' */
-                // Add a conditional class to blur the label if userStatus is 'free'
+                 /*  userStatus === 'user' ? 'blur-sm' : '' */
+                // Add a conditional class to blur the label if userStatus is 'user'
 
               )}
             >

@@ -9,7 +9,7 @@ import { BiLoader } from 'react-icons/bi';
 export default function CoursesPage() {
   const { userStatus } = UserDataFetcher();
 
-    if (userStatus == 'free') {
+    if (userStatus == 'user') {
       return (
         <div className='h-full flex p-10 md:p-16 justify-between items-start w-full'>
           <Locked/>

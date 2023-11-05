@@ -20,10 +20,10 @@ function AuthGuard({ children }: AuthGuardProps) {
     if (!loading && !user) {
       router.push('/');
     } 
-    else if (userStatus !== 'free' && pathname == '/') {
+    else if (userStatus !== 'premium' && pathname == '/') {
       router.push('/dashboard')
     }
-/*  else if (userStatus === 'free' && pathname !== '/upgrade') {
+/*  else if (userStatus === 'user' && pathname !== '/upgrade') {
       router.push('/upgrade');
     } */
     console.log(userStatus)

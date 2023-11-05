@@ -34,7 +34,7 @@ export default function StoicAI() {
   }, []);
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    if(user && userStatus !== 'free') {
+    if(user && userStatus !== 'user') {
       e.preventDefault();
 
       handleSubmit(e);
@@ -54,10 +54,6 @@ export default function StoicAI() {
       handleFormSubmit(e as any);
     }
   };
-
-  if (userStatus == 'free') {
-    
-  }
 
   const regex = /```python([\s\S]*?)```/;
   const firstMessage = messages[0];

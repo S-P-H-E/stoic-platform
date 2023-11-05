@@ -8,7 +8,7 @@ import { BiLoader } from "react-icons/bi";
 export default function Settings() {
     const { userStatus } = UserDataFetcher();
 
-    if (userStatus == "free") {
+    if (userStatus == "user") {
       return (
         <div className="h-full flex flex-col py-2 px-6 md:py-8 md:px-16 w-full">
           <Locked/>

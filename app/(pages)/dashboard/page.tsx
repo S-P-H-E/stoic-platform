@@ -13,8 +13,8 @@ import Locked from "@/components/Locked";
 export default function Dashboard() {
   const { userStatus } = UserDataFetcher();
 
-  // Check if userStatus is 'free' and userStatus is loaded before rendering.
-  if (userStatus === 'free') {
+  // Check if userStatus is 'user' and userStatus is loaded before rendering.
+  if (userStatus === 'user') {
     return (
       <div className="relative flex flex-col h-full w-full md:py-8 py-2 px-8 gap-4 overflow-hidden justify-center max-w-[1700px] mx-auto">
         <Locked/>

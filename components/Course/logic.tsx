@@ -25,7 +25,7 @@ const CourseLogic: FC<CourseLogicProps> = () => {
   const [shortformLastLesson, setShortformLastLesson] = useState<string | null>(null);
 
   const { userId, userStatus } = UserDataFetcher()
-  const isPremium = userStatus === 'user' || userStatus === 'admin'
+  const isPremium = userStatus === 'premium' || userStatus === 'admin'
 
   const fetchLastLessonId = async (userId: string, courseId: string) => {
     try {

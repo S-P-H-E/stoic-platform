@@ -25,7 +25,6 @@ import { UserDataFetcher } from '@/utils/userDataFetcher';
 export default function Login() {
   const router = useRouter()
   const [user, loading] = useAuthState(auth);
-  const { userStatus } = UserDataFetcher();
 
 
   type FirebaseError = {
@@ -51,15 +50,7 @@ export default function Login() {
           message.success("Signed in successfully");
 
         //Router
-        if(user && userStatus) {
-          if (userStatus == 'free') {
-            router.push('/upgrade');
-          }
-
-          else if (userStatus !== 'free') {
-            router.push('/dashboard');
-          }
-        }
+        router.push('/dashboard');
 
         // User
         const userRef = collection(db, "users");
@@ -71,7 +62,7 @@ export default function Login() {
           const docRef = await addDoc(userRef, {
             name: res.user.displayName,
             email: res.user.email,
-            status: 'free',
+            status: 'user',
           });
           /* console.log("Document written with ID:", docRef.id); */
         } else {
@@ -138,20 +129,12 @@ export default function Login() {
               name: userName,
               email: userEmail,
               password: registerPassword,
-              status: 'free',
+              status: 'user',
               social: registerSocial,
             });
 
 
-            if(user && userStatus) {
-              if (userStatus == 'free') {
-                router.push('/upgrade');
-              }
-    
-              else if (userStatus !== 'free') {
-                router.push('/dashboard');
-              }
-            }
+            router.push('/dashboard');
 
             message.success("Signed up successfully");
           } catch (error) {
@@ -166,15 +149,7 @@ export default function Login() {
         try {
             const user = await signInWithEmailAndPassword(auth, registerEmail, registerPassword)
             message.success("Signed in successfully");
-            if(user && userStatus) {
-              if (userStatus == 'free') {
-                router.push('/upgrade');
-              }
-
-              else if (userStatus !== 'free') {
-                router.push('/dashboard');
-              }
-          }
+            router.push('/dashboard');
           } catch (error) {
             const firebaseError = error as FirebaseError;
             const errorCode = firebaseError.code as keyof typeof firebaseErrorMessages;

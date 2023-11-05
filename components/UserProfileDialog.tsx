@@ -8,7 +8,7 @@ export default function UserProfileDialog({src, userName, userStatus, userBanner
     
     const statusClass = clsx({
         'text-yellow-500': userStatus === 'Admin',
-        'text-orange-500': userStatus === 'User',
+        'text-orange-500': userStatus === 'Premium',
         'text-gray-500': userStatus === 'Free'
     });
 

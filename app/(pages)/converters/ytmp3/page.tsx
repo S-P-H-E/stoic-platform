@@ -25,7 +25,7 @@ export default function Home() {
   const RumbleIcon = '/RumbleIcon.svg'
 
   const { userId, userStatus } = UserDataFetcher();
-  const isPremium = userStatus === 'user' || userStatus === 'admin'
+  const isPremium = userStatus === 'premium' || userStatus === 'admin'
 
   const isYouTubeUrlValid = (url: string): boolean => {
     // Use a regular expression to check if the URL is a valid YouTube video URL

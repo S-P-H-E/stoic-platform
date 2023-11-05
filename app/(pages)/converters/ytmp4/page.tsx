@@ -65,7 +65,7 @@ export default function Home() {
   const RumbleIcon = '/RumbleIcon.svg'
 
   const { userId, userStatus } = UserDataFetcher();
-  const isPremium = userStatus === 'user' || userStatus === 'admin'
+  const isPremium = userStatus === 'premium' || userStatus === 'admin'
 
   function formatInteractionCount(count: number) {
     if (count < 1000) {

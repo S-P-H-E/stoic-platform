@@ -13,11 +13,10 @@ import {
 import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import DashboardCourse from './DashboardCourse';
-import CourseLoading from '../Course/CourseLoading';
 
 export default function DashboardCourses() {
   const { userId, userStatus } = UserDataFetcher();
-  const isPremium = userStatus === 'user' || userStatus === 'admin';
+  const isPremium = userStatus === 'premium' || userStatus === 'admin';
 
   const [loading, isLoading] = useState(true);
 

@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 import CreateResource from './CreateResource'
 
 export default function CreateButton() {
-    const {userId, userStatus} = UserDataFetcher()
+    const {userStatus} = UserDataFetcher()
   return (
     <Dialog>
       <DialogTrigger>

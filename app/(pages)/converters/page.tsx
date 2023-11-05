@@ -7,7 +7,7 @@ import { BiLoader } from "react-icons/bi";
 export default function Converters() {
   const { userStatus } = UserDataFetcher();
 
-  if (userStatus == 'free') {
+  if (userStatus == 'user') {
     return (
       <>
       <Locked/>

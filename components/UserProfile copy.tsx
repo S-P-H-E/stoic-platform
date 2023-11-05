@@ -9,9 +9,9 @@ export default function UserProfile({src, userName, userStatus}: {src: string, u
   const [userStatusEdited, setUserStatusEdited] = useState('Loading...')
 
   useEffect(() => {
-    if (userStatus === 'free') {
+    if (userStatus === 'user') {
       setUserStatusEdited('Free')
-    } else if (userStatus === 'user') {
+    } else if (userStatus === 'premium') {
       setUserStatusEdited('Premium')
     } else if (userStatus === 'admin') {
       setUserStatusEdited('Admin')
@@ -22,8 +22,8 @@ export default function UserProfile({src, userName, userStatus}: {src: string, u
 
   const statusClass = clsx({
     'text-yellow-500': userStatus === 'admin',
-    'text-orange-500': userStatus === 'user',
-    'text-gray-500': userStatus === 'free'
+    'text-orange-500': userStatus === 'premium',
+    'text-gray-500': userStatus === 'user'
   });
     
   return (

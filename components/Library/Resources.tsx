@@ -30,7 +30,7 @@ export default function Resources() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const { user, userId, userStatus } = UserDataFetcher();
-  const isPremium = userStatus === 'user' || userStatus === 'admin'
+  const isPremium = userStatus === 'premium' || userStatus === 'admin'
 
   const fadeInAnimationVariants = { // for framer motion  
     initial: {

@@ -14,7 +14,7 @@ export default function Continue() {
   const { generalLastCourse, generalLastLesson, userStatus, userId, fetching, userName } = UserDataFetcher();
 
   const router = useRouter()
-  const isPremium = userStatus === 'user' || userStatus === 'admin'
+  const isPremium = userStatus === 'premium' || userStatus === 'admin'
 
   const [courseData, setCourseData] = useState<any>(null);
   const [lessonData, setLessonData] = useState<any>(null);
