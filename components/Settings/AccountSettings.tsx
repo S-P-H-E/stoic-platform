@@ -59,16 +59,6 @@ export default function AccountSettings() {
 
       try {
         await updateDoc(doc(db, 'users', userId), { name: displayName });
-        
-        const commentsRef = collection(db, 'comments');
-        const q = query(commentsRef, where('userId', '==', userId));
-        const querySnapshot = await getDocs(q);
-
-        querySnapshot.forEach(async (commentDoc) => {
-          const commentId = commentDoc.id;
-          const commentRef = doc(commentsRef, commentId);
-          await updateDoc(commentRef, { userName: displayName });
-        });
 
         message.success("Display name changed successfully!");
         setDisplayName('');

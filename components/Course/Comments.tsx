@@ -43,6 +43,8 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
               ...commentData,
               userProfilePic: userProfileData.profileImageUrl || '',
               userBannerPic: userProfileData.bannerUrl || '',
+              userName: userProfileData.userName || '',
+              userStatus: userProfileData.userStatus || ''
             };
           }));
           setComments(commentsData);
@@ -81,8 +83,6 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
         comment: newComment,
         timestamp: Timestamp.fromDate(new Date()),
         userId: userId,
-        userName: userName,
-        userStatus: userStatus,
       });
 
       setNewComment('');
@@ -109,6 +109,8 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
         return {
           profileImageUrl: userData.profileImageUrl,
           bannerUrl: userData.bannerUrl,
+          userName: userData.name,
+          userStatus: userData.status
         };
       }
     } catch (error) {
