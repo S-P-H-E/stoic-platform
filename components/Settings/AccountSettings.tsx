@@ -1,15 +1,11 @@
 "use client"
-
-import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { BsChevronLeft } from 'react-icons/bs'
 import Input from '../UI Elements/Input'
 import Button from '../UI Elements/Button'
 import {BiLogOut} from 'react-icons/bi'
 import { UserDataFetcher } from '@/utils/userDataFetcher'
-import { auth } from '@/utils/firebase'
 import { db } from '@/utils/firebase'
-import { collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { message } from 'antd';
 import PasswordModal from './PasswordModal'
 import ProfilePhotoUplaod from './ProfilePhotoUplaod'
@@ -21,7 +17,6 @@ import { useFirebase } from '@/utils/authContext'
 export default function AccountSettings() {
   const { userName, user, userId } = UserDataFetcher();
   const {signOut} = useFirebase();
-  const router = useRouter()
 
   const [displayName, setDisplayName] = useState("")
   const [MenuOpen, setMenuOpen] = useState(false)
@@ -103,13 +98,7 @@ export default function AccountSettings() {
         </div>
       )}
 
-    <h1 className="font-semibold text-xl sm:text-2xl md:text-3xl 2xl:text-4xl">Account Setings</h1>
-      <div>
-        <button onClick={() => router.back()} className=" mb-4 cursor-pointer flex gap-1 items-center text-[--highlight] hover:text-stone-200 transition md:gap:2">
-        <BsChevronLeft/>
-            <h3 className="text-lg">Go back</h3>
-        </button>
-      </div>
+    <h1 className="font-semibold text-xl sm:text-2xl md:text-3xl 2xl:text-4xl pb-8">Account Setings</h1>
       <div className="border-[--border] border rounded-lg">
         <div className="w-full h-2/6 px-4 md:px-12">
           <div className='2xl:py-8 md:py-4 py-4 px-0 flex items-center justify-between gap-4'>

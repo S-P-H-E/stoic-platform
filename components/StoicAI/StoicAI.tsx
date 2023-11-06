@@ -70,7 +70,7 @@ export default function StoicAI() {
 
   return (
     <main className="w-full h-full flex flex-col items-center justify-end">
-      <div className="h-screen w-full flex flex-col items-center justify-end p-12">
+      <div className="w-full h-screen flex flex-col items-center justify-end p-12">
       {/* <div className="flex items-center justify-center w-full h-full font-medium text-5xl opacity-60">STOIC AI</div> */}
       <div className='max-w-[50rem] w-full flex flex-col'>
         <section className="flex flex-col gap-2">

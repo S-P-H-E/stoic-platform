@@ -22,6 +22,7 @@ import { FaCheckCircle, FaEyeSlash, FaTimesCircle } from 'react-icons/fa';
 import { AiOutlineCloseCircle, AiFillCheckCircle } from 'react-icons/ai';
 import SkeletonLesson from '../../../../components/Course/SkeletonLesson';
 import GoBack from '@/components/UI Elements/GoBack';
+import { BsChevronLeft } from 'react-icons/bs';
 
 
 interface LessonItem {
@@ -411,8 +412,8 @@ export default function LessonPage() {
 
   return (
     <div className='flex flex-col w-full'>
-      <div className="px-4 md:px-10 pt-10 flex justify-between items-center gap-6 w-full">
-        <GoBack/>
+      <div className="px-4 md:px-10 md:pt-10 flex justify-between items-center gap-6 w-full">
+      <Link href={'/courses'} className="text-[#D5d6d6] text-lg hover:text-stone-200 transition gap-1 flex items-center"><BsChevronLeft/>Go Back</Link>
       </div>
 
       <div className="flex flex-col md:flex-row p-5 md:p-10 w-full">
@@ -428,7 +429,7 @@ export default function LessonPage() {
               </div>
               <Script src="https://player.vimeo.com/api/player.js" />
 
-              <div className='my-5 md:mb-20 border border-[--border] rounded-2xl p-5'>
+              <div className='my-5 border border-[--border] rounded-2xl p-5 relative'>
                 <div className='flex flex-col md:flex-row justify-between'>
                   <button className='border border-[--border] flex w-fit md:hidden gap-1 h-fit items-center rounded-xl mb-5 px-2' onClick={handleLinkCopy}>
                     <BiCopy />
@@ -440,7 +441,7 @@ export default function LessonPage() {
                   <h1 className='text-3xl font-medium'>
                     {truncateText(lesson.title, 40)}
                   </h1>
-                  <div className='flex justify-center items-center gap-2'>
+                  <div className='flex justify-between items-center gap-2'>
                     <button className='hidden border border-[--border] md:flex gap-1 h-fit items-center rounded-xl px-2' onClick={handleLinkCopy}>
                       <BiCopy />
                       {copied ? 
@@ -448,11 +449,13 @@ export default function LessonPage() {
                       : <p>Copy</p>
                       }
                     </button>
+                    <div className='md:static absolute right-6 top-6'>
                     {userCompleted === true ? (
                           <AiFillCheckCircle className="text-green-500"/>
                         ) : ( 
                           <AiOutlineCloseCircle className="text-red-500" />
                     )}
+                    </div>
                   </div>
                   
                 </div>
@@ -466,29 +469,32 @@ export default function LessonPage() {
         </div>
 
         <div>
-          <div className='flex flex-col gap-5'>
-          <p className='p-4'>{completedLessonCount}</p>
+
+        {/* DESKTOP LESSON LIST */}
+
+        <div className="hidden md:flex flex-col gap-5">
           {lessons.map((lessonItem, index) => (
-            <motion.div key={index}
-            custom={index}
-            variants={fadeInAnimationVariants}
-            initial="initial"
-            whileInView="animate"
-            viewport={{
-              once: true,
-            }}
-            whileHover={{
-              scale: 1.08
-            }}
-            whileTap={{
-              scale: 1
-            }}
+            <motion.div
+              key={index}
+              custom={index}
+              variants={fadeInAnimationVariants}
+              initial="initial"
+              whileInView="animate"
+              viewport={{
+                once: true,
+              }}
+              whileHover={{
+                scale: 1.05,
+              }}
+              whileTap={{
+                scale: 1,
+              }}
             >
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
                   <ContextMenuTrigger>
-                  <div className={`w-full lg:w-[250px] 2xl:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
-                  ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black' : ''}
+                  <div className={`hover:bg-[--border] w-full lg:w-[250px] 2xl:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
+                  ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black hover:bg-neutral-200' : ''}
                   ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'animate-pulse' : ''}`}>
                     <div className="flex items-center">
                       <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
@@ -537,10 +543,79 @@ export default function LessonPage() {
             </Link>
             </motion.div>
             ))}
+        </div>
+        
+        {/* MOBILE LESSON LIST */}
+
+        <div className="visible md:hidden max-h-[300px] overflow-y-scroll flex flex-col overflow-x-hidden gap-3 relative">
+          {lessons.map((lessonItem, index) => (
+            <motion.div
+              key={index}
+              custom={index}
+              variants={fadeInAnimationVariants}
+              initial="initial"
+              whileInView="animate"
+              viewport={{
+                once: true,
+              }}
+            >
+            <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
+                <ContextMenu>
+                  <ContextMenuTrigger>
+                  <div className={`hover:bg-[--border] w-full lg:w-[250px] 2xl:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all duration-200 bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
+                  ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black hover:bg-neutral-200' : ''}
+                  ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'animate-pulse' : ''}`}>
+                    <div className="flex items-center">
+                      <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
+                      <h1 className={clsx('text-xl font-medium', {
+                        'text-black': String(lessonpath.lessonId) === String(lessonItem.id),
+                        'hidden md:flex': true,
+                      })}>
+                        {truncateText(lessonItem.title, 14)}
+                      </h1>
+                      <h1 className={clsx('text-xl font-medium', {
+                        'text-black': String(lessonpath.lessonId) === String(lessonItem.id),
+                        'md:hidden flex': true,
+                      })}>
+                        {truncateText(lessonItem.title, 29)}
+                      </h1>
+                    </div>
+                    {lessonCompletionStatusMap.has(lessonItem.id) ? (
+                      lessonCompletionStatusMap.get(lessonItem.id) ? (
+                        <>
+                          {/* <p className="text-green-500 text-sm">Completed</p> */}
+                          <FaCheckCircle className="text-green-500" />
+                        </>
+                      ) : (
+                        <>
+                        {/* <p className="text-red-500 text-sm">Incomplete</p> */}
+                        <FaTimesCircle className="text-red-500" />
+                        </>
+                      )
+                    ) : (
+                      <>
+                        {/* <p className="text-gray-500 text-sm">Unwatched</p> */}
+                        <FaEyeSlash className="text-gray-500" />
+                      </>
+                    )}
+                  </div>
+                  </ContextMenuTrigger>
+                
+                {userStatus == 'admin' &&
+                  <ContextMenuContent className="w-64">
+                    <ContextMenuCheckboxItem className="cursor-pointer" onClick={() => deleteLesson(lessonItem.id)}>
+                      Delete
+                    </ContextMenuCheckboxItem>
+                  </ContextMenuContent>
+                }
+                </ContextMenu>
+            </Link>
+            </motion.div>
+            ))}
+            </div>
             <div className='visible md:hidden'>
               <Comments courseId={courseId as string} lessonId={lessonId as string}/>
             </div>
-          </div>
         </div>
       </div>
     </div>
