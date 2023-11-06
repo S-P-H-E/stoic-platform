@@ -13,6 +13,7 @@ import { BiLogOut } from 'react-icons/bi';
 import { useFirebase } from '@/utils/authContext';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu';
 import UserProfile from './UserProfile';
+import StoicLogo from '@/public/stoicWhite.webp'
 
 const montserrat = Montserrat({ weight: '600', subsets: ['latin'] });
 
@@ -61,11 +62,11 @@ const Sidebar = () => {
   
   return (
     <div className="flex h-full z-50">
-    <div className="top-0 left-0 h-full md:border-r border-[--border] p-4 w-full md:w-72 md:fixed bg-[--bg] text-white">
+    <div className="top-0 left-0 h-full md:border-r border-[--border] py-8 px-2 md:p-4 w-full md:w-72 md:fixed bg-[--bg] text-white">
       <div className="px-3 py-2 flex flex-col h-full">
         <Link href="/dashboard" className="w-fit flex items-center pl-3 mb-14">
           <div className="relative w-8 h-11 mr-4">
-            <Image fill alt="Logo" src="/stoicWhite.png" />
+            <Image fill alt="Stoic Logo" priority src={StoicLogo} placeholder="blur" />
           </div>
           <h1
             className={clsx(

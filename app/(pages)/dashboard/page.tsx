@@ -16,7 +16,7 @@ export default function Dashboard() {
   // Check if userStatus is 'user' and userStatus is loaded before rendering.
   if (userStatus === 'user') {
     return (
-      <div className="relative flex flex-col h-full w-full md:py-8 py-2 px-8 gap-4 overflow-hidden justify-center max-w-[1700px] mx-auto">
+      <div className="relative flex flex-col h-full w-full md:py-8 pb-10 px-6 gap-4 overflow-hidden justify-center max-w-[1700px] mx-auto">
         <Locked/>
 
         <Navbar />
@@ -34,7 +34,7 @@ export default function Dashboard() {
     );
   } else if (userStatus !== undefined && userStatus !== null) {
     return (
-      <div className="relative flex flex-col h-full w-full md:py-8 py-2 px-8 gap-4 overflow-hidden justify-center max-w-[1700px] mx-auto">
+      <div className="relative flex flex-col h-full w-full md:py-8 pb-10 px-6 gap-4 overflow-hidden justify-center max-w-[1700px] mx-auto">
         <Navbar />
         <div className="md:flex-row flex-col flex gap-4 justify-center">
           <div className="flex flex-col w-full max-w-[40rem] md:w-[37%] gap-4">
