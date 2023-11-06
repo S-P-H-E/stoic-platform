@@ -16,7 +16,7 @@ export default function Converters() {
       </div>
       </>
     )
-  } else if (userStatus !== undefined && userStatus !== null) {
+  } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
     return (
       <div className='h-screen flex flex-col gap-10 p-8 md:px-16'>
         <h1 className='text-3xl font-semibold'>Converters - wip</h1>

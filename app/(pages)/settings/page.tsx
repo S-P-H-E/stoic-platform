@@ -15,7 +15,7 @@ export default function Settings() {
           <AccountSettings />
         </div>
       );
-    } else if (userStatus !== undefined && userStatus !== null) {
+    } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
       return (
         <div className="h-full flex flex-col py-2 px-6 md:py-8 md:px-16 w-full">
           <AccountSettings />

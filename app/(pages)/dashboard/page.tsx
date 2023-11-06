@@ -32,7 +32,7 @@ export default function Dashboard() {
         </div>
       </div>
     );
-  } else if (userStatus !== undefined && userStatus !== null) {
+  } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
     return (
       <div className="relative flex flex-col h-full w-full md:py-8 pb-10 px-6 gap-4 overflow-hidden justify-center max-w-[1700px] mx-auto">
         <Navbar />

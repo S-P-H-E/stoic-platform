@@ -22,7 +22,7 @@ export default function Library() {
           </div>
         </section>
       </>
-      )} else if (userStatus !== undefined && userStatus !== null) {
+      )} else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
         return (
           <section className="md:py-10 md:px-16 p-8 flex flex-col gap-4 w-full">
             <div className="flex justify-between">

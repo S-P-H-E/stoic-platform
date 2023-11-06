@@ -15,7 +15,7 @@ export default function Chat() {
         <StoicAI/>
       </>
     )
-  } else if (userStatus !== undefined && userStatus !== null) {
+  } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
     return(
       <StoicAI/>
     )
