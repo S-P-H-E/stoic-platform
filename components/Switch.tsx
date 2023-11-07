@@ -54,9 +54,9 @@ const Switch: React.FC<SwitchProps> = ({
         <motion.div
           key={activeTab}
           variants={switchVariants}
-          initial={{ opacity: 0, x: activeTab === 'first' ? -50 : 50 }}
+          initial={{ opacity: 0, x: activeTab === 'first' ? -30 : 30 }}
           animate={activeTab}
-          exit={{ opacity: 0, x: activeTab === 'first' ? -50 : 50 }}
+          exit={{ opacity: 0, x: activeTab === 'first' ? -30 : 30 }}
           transition={{ duration: 0.3 }}
         >
           {activeTab === 'first' ? firstComponent : secondComponent}
