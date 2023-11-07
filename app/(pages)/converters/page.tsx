@@ -11,14 +11,14 @@ export default function Converters() {
     return (
       <>
       <Locked/>
-      <div className='h-screen flex flex-col gap-10 p-8 md:px-16'>
+      <div className='h-full flex md:p-10 md:px-16 p-8 justify-between items-start w-full'>
         <h1 className='text-3xl font-semibold'>Converters - wip</h1>
       </div>
       </>
     )
   } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
     return (
-      <div className='h-screen flex flex-col gap-10 p-8 md:px-16'>
+      <div className='h-full flex md:p-10 md:px-16 p-8 justify-between items-start w-full'>
         <h1 className='text-3xl font-semibold'>Converters - wip</h1>
       </div>
     );

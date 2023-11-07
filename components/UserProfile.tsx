@@ -38,7 +38,7 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
           {userBannerUrl ? 
             <Image src={userBannerUrl} fill alt='image' className='object-cover rounded-2xl w-[500px]'/>
           : 
-            <div className='w-full h-full bg-white rounded'/>
+            <div className='w-full h-full bg-white rounded-2xl'/>
           }
         </div>
         <Dialog>
