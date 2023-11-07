@@ -295,7 +295,7 @@ export default function CreateResource() {
         <PopoverContent>
           <Command>
             <CommandInput placeholder="Search tag..." />
-            <CommandEmpty className="gap-2 flex flex-col items-center justify-center p-4">
+            <CommandEmpty className="gap-2 flex flex-col items-center justify-center">
               <p>No tags found.</p>
               <Dialog>
                 <DialogTrigger>

@@ -1,6 +1,6 @@
 "use client"
 
-import CreateCourse from '@/components/Course/CreateCourse/page';
+import CreateCourse from '@/components/Course/Create/page';
 import Courses from './../../../components/Course/Courses';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import Locked from '@/components/Locked';
