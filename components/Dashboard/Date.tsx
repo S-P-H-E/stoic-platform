@@ -43,7 +43,7 @@ export default function DateTime() {
   const displayTime = currentTime.replace(/\s[APap][Mm]/, ''); // Remove "AM" or "PM"
 
   return (
-    <div className='h-[23%] max-h-[10rem] 2xl:text-4xl text-2xl rounded-xl p-4 flex border border-[--border] items-center gap-4 transition duration-200 bg-[--darkgray] hover:border-[#585757] hover:scale-105'>
+    <div className='h-[23%] max-h-[10rem] w-full text-3xl md:text-2xl xl:text-2xl 2xl:text-3xl rounded-xl lg:p-4 p-2 flex border border-[--border] items-center gap-4 transition duration-200 bg-[--darkgray] hover:border-[#585757] hover:scale-105'>
       <div className='flex flex-col w-full h-full justify-center'>
         {loading ?
         <div className='flex flex-col gap-3 w-full h-full'>
@@ -53,12 +53,12 @@ export default function DateTime() {
         : 
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}}>
           <p>{currentDate}</p>
-          <p>{currentYear}</p>
+          <p className="md:hidden xl:flex flex">{currentYear}</p>
         </motion.div>
         }
       </div>
 
-      <div className='flex relative gap-2 w-full text-5xl 2xl:text-[5rem] text-end justify-end items-end'>
+      <div className='flex relative gap-2 w-full text-[4rem] md:text-[2.5rem] lg:text-[3rem] xl:text-[4rem] 2xl:text-[4rem] text-end justify-end items-end'>
         {loading ?
         <>
           <p className='w-[30%] h-20 bg-[--border] rounded-xl flex animate-pulse'/>
