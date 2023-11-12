@@ -48,7 +48,7 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
             ))}
           </ul>
           
-          <Link href={resource.downloadLink || ''} target="_blank" className="flex items-center justify-center px-4 py-2 bg-white text-black rounded-xl gap-2 hover:bg-white/90 font-medium hover:scale-110 active:scale-95 transition duration-200">
+          <Link href={resource.downloadLink || ''} target="_blank" className="flex items-center justify-center px-4 py-2 bg-white/90 bg-white text-black rounded-xl gap-2 hover:bg-white/90 font-medium hover:scale-110 active:scale-95 transition duration-200">
             <HiDownload/>
             <p>Download</p>
           </Link>
