@@ -14,7 +14,7 @@ export default function Library() {
         <Locked/>
         <section className="md:py-10 md:px-16 p-8 flex flex-col gap-4 w-full">
             <div className="flex justify-between">
-              <h1 className='text-3xl font-semibold'>Library - ui revamp soon</h1>
+              <h1 className='text-3xl font-semibold'>Library</h1>
               <CreateButton/>
             </div>
             <div>  
@@ -26,7 +26,7 @@ export default function Library() {
         return (
           <section className="md:py-10 md:px-16 p-8 flex flex-col gap-4 w-full">
             <div className="flex justify-between">
-              <h1 className='text-3xl font-semibold'>Library - ui revamp soon</h1>
+              <h1 className='text-3xl font-semibold'>Library</h1>
               <CreateButton/>
             </div>
             <div>  
