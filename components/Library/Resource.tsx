@@ -2,6 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HiDownload } from 'react-icons/hi'
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '../ui/context-menu';
+import { AiFillSound } from 'react-icons/ai';
+import { FaFileAudio } from 'react-icons/fa';
 
 interface Resource {
   id: string;
@@ -30,14 +32,20 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
     <ContextMenu>
       <ContextMenuTrigger>
       <div className='group relative flex flex-col gap-4 h-[27rem] items-center text-center border border-[--border] hover:border-white/80 rounded-xl transition duration-200 overflow-hidden'>
-        <div className="relative group-hover:scale-110 transition duration-200"> {/* w-full if fulscreen needed */}
+        <div className="relative group-hover:scale-110 transition duration-200">
 
           <div className="absolute top-44 left-0 w-full h-20 bg-gradient-to-b from-transparent via-transparent to-[--bg]"/>
-          {resource.image ? 
-          <Image loading='lazy' alt='image' src={resource.image} width={400} height={200} className='w-full h-[15.4rem] object-cover aspect-square rounded-b-lg' />
-          : 
-          <div className='h-[15.4rem] bg-[--border] aspect-square animate-pulse rounded-b-lg'/>
-          } {/* w-full if fulscreen needed */}
+          {resource.image ? (
+            <Image loading='lazy' alt='image' src={resource.image} width={400} height={200} className='w-full h-[15.4rem] object-cover aspect-square rounded-b-lg' />
+            ) : (
+            resource.tags.some(tag => tag.toLowerCase() === 'audio') ? (
+              <div className='h-[15.4rem] text-white aspect-square rounded-b-lg flex items-center justify-center'>
+                <FaFileAudio size={128} />
+              </div>
+            ) : (
+              <div className='h-[15.4rem] bg-[--border] aspect-square animate-pulse rounded-b-lg' />
+            )
+            )}
           </div>
           
         <div className="px-4 py-2 gap-4 flex flex-col relative z-10">
@@ -48,7 +56,7 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
             ))}
           </ul>
           
-          <Link href={resource.downloadLink || ''} target="_blank" className="flex items-center justify-center px-4 py-2 bg-white/90 bg-white text-black rounded-xl gap-2 hover:bg-white/90 font-medium hover:scale-110 active:scale-95 transition duration-200">
+          <Link href={resource.downloadLink || ''} target="_blank" className="flex items-center justify-center px-4 py-2 bg-white/90 hover:bg-white text-black rounded-xl gap-2 hover:bg-white/90 font-medium hover:scale-110 active:scale-95 transition duration-200">
             <HiDownload/>
             <p>Download</p>
           </Link>

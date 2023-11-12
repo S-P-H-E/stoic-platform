@@ -29,7 +29,7 @@ export default function CoursesPage() {
           <CreateCourse className="md:hidden"/>
           <Courses/>
           </div>
-{/*           <CreateCourse className='md:block hidden'/> */}
+          <CreateCourse className='md:block hidden'/>
         </div>
       )
     } else {
