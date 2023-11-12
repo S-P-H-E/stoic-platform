@@ -33,47 +33,58 @@ export default function Home() {
     return youtubeRegex.test(url);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+  
     if (inputUrlRef.current !== null) {
       const inputUrl = inputUrlRef.current.value;
-
+  
       if (!userId && !isPremium) {
-        message.error("You are not allowed to use this.")
-        return; // Return early to prevent further execution
-      }
-      
-      if (!isYouTubeUrlValid(inputUrl)) {
-        // Display an error message to the user or handle invalid URL case
-        message.error("This is not a valid link")
+        message.error("You are not allowed to use this.");
         return;
       }
-
-      const youtubeId = YoutubeParser(inputUrl)
+  
+      if (!isYouTubeUrlValid(inputUrl)) {
+        message.error("This is not a valid link");
+        return;
+      }
+  
+      const youtubeId = YoutubeParser(inputUrl);
+  
       setLoading(true);
-
+  
       const options: AxiosRequestConfig = {
         method: 'GET',
         url: 'https://youtube-mp36.p.rapidapi.com/dl',
         headers: {
           'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_KEY || '',
-          'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com'
+          'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com',
         },
         params: {
-          id: youtubeId
-        }
-      }
-      axios(options)
-       .then(res => {
-        setVideoTitle(res.data.title);
-        setUrlResult(res.data.link)
-      })
-       .catch(err => console.log(err))
-       .finally(() => {
-        setLoading(false);
-      })
+          id: youtubeId,
+        },
+      };
+  
+      try {
+        let res = await axios(options);
 
-       inputUrlRef.current.value = ""
+        while (res.data.status === "processing") {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          res = await axios(options);
+        }
+  
+        console.log(res.data.title);
+        console.log(res.data.link);
+  
+        setVideoTitle(res.data.title);
+        setUrlResult(res.data.link);
+      } catch (err) {
+        console.error(err);
+        message.error("An error occurred while fetching data");
+      } finally {
+        setLoading(false);
+        inputUrlRef.current.value = '';
+      }
     }
   };
 
