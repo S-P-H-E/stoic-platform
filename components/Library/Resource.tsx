@@ -48,7 +48,7 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
             )}
           </div>
           
-        <div className="px-4 py-2 gap-4 flex flex-col relative z-10">
+        <div className="px-4 py-2 gap-4 flex flex-col items-center justify-center relative z-10">
           <h1 className="text-3xl font-medium">{resource.name}</h1>
           <ul className='flex gap-2 justify-center'>
             {resource.tags.map((tag, index) => (
@@ -56,7 +56,7 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
             ))}
           </ul>
           
-          <Link href={resource.downloadLink || ''} target="_blank" className="flex items-center justify-center px-4 py-2 bg-white/90 hover:bg-white text-black rounded-xl gap-2 hover:bg-white/90 font-medium hover:scale-110 active:scale-95 transition duration-200">
+          <Link href={resource.downloadLink || ''} target="_blank" className="flex w-full items-center justify-center px-4 py-2 bg-white/90 hover:bg-white text-black rounded-xl gap-2 hover:bg-white/90 font-medium hover:scale-110 active:scale-95 transition duration-200">
             <HiDownload/>
             <p>Download</p>
           </Link>
