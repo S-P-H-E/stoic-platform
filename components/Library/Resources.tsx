@@ -1,52 +1,37 @@
-"use client";
+"use client"
 
-import React, { useEffect, useState } from 'react';
-import Resource from './Resource';
-import { collection, deleteDoc, doc, getDocs, onSnapshot } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react'
+import SearchBar from './Searchbar';
+import { collection, deleteDoc, doc, getDocs, onSnapshot, query } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
-import { StaticImport } from 'next/dist/shared/lib/get-img-props';
-import Input from '../UI Elements/Input';
-import { ButtonShad } from '../ui/buttonshad';
+import TagFilter from './TagFilter';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
-import {AiOutlinePlus} from 'react-icons/ai'
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
-import CreateTag from './CreateTag';
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '../ui/context-menu';
 import { message } from 'antd';
 import { motion } from 'framer-motion';
+import Resource from './Resource';
 
-interface ResourceData {
+interface Resource {
   id: string;
-  downloadLink: string | null;
-  resourceName: string | null;
-  resourceImage: string | StaticImport;
+  name: string;
+  image: string;
+  downloadLink: string;
   tags: string[];
 }
 
 export default function Resources() {
-  const [resourceData, setResourceData] = useState<ResourceData[]>([]);
-  const [searchInput, setSearchInput] = useState<string>('');
-  const [tags, setTags] = useState<{ id: string; name: string }[]>([]);
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [filteredResources, setFilteredResources] = useState<Resource[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<{ id: string; name: string }[]>([]);
 
-  const { user, userId, userStatus } = UserDataFetcher();
+  const [areResourcesLoading, setAreResourcesLoading] = useState(true);
+
+  const {userStatus, userId} = UserDataFetcher()
+
   const isPremium = userStatus === 'premium' || userStatus === 'admin'
 
   const fadeInAnimationVariants = { // for framer motion  
-    initial: {
-        opacity: 0,
-        x: -100,
-    },
-    animate: (index: number) => ({
-        opacity: 1,
-        x: 0,
-        transition: {
-            delay: 0.03 * index,
-        }
-    })
-  }
-
-  const fadeInAnimationVariants2 = { // for framer motion  
     initial: {
         opacity: 0,
         scale: 0.7,
@@ -57,101 +42,36 @@ export default function Resources() {
         scale: 1,
         y: 0,
         transition: {
-          delay: 0.01 * index,
+          delay: 0.05 * index,
           type: "spring",
-          stiffness: 240,
+          stiffness: 260,
           damping: 20
         }
     })
   }
 
-  useEffect(() => {
-    if (userId && isPremium) {
-      try {
-        const resourcesRef = collection(db, 'resources');
-    
-        const unsubscribe = onSnapshot(resourcesRef, async (querySnapshot) => {
-          const resources: ResourceData[] = [];
-          for (const doc of querySnapshot.docs) {
-            const data = doc.data();
-            
-            const tagsSnapshot = await getDocs(collection(doc.ref, 'tags'));
-            const tagsData = tagsSnapshot.docs.map((tagDoc) => tagDoc.data().name);
-    
-            resources.push({
-              id: doc.id,
-              downloadLink: data.downloadLink || "/null",
-              resourceName: data.name || "undefined",
-              resourceImage: data.resourceImage || "/null",
-              tags: tagsData, // Add tags to ResourceData
-            });
-          }
-          setResourceData(resources);
-        });
-          
-        return () => {
-          unsubscribe();
-        };
-      } catch(error) {
-        message.error("Unable to fetch resources")
-      }
-    }
-
-  }, [isPremium, userId]);
-
-
-  const handleTagClick = (tagName: any) => {
-    if (selectedTags.includes(tagName)) {
-      setSelectedTags(selectedTags.filter((name) => name !== tagName));
-    } else {
-      setSelectedTags([...selectedTags, tagName]);
-    }
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
   };
 
-  const filteredResources = resourceData.filter((resource) => {
-    const resourceName = resource.resourceName?.toLowerCase();
-    const searchTerm = searchInput.toLowerCase();
+  const handleTagDelete = async (tagId: string) => {
+    try {
+      const tagRef = doc(db, 'tags', tagId);
+      await deleteDoc(tagRef);
   
-    const resourceTags = resource.tags || [];
-    const hasSelectedTag = selectedTags.some((tagName) =>
-      resourceTags.includes(tagName)
-    );
-  
-    return (
-      (resourceName?.includes(searchTerm) || !searchTerm) &&
-      (hasSelectedTag || selectedTags.length === 0)
-    );
-  });
-
-  useEffect(() => {
-    if (userId && isPremium) {
-      try{    
-        const tagsRef = collection(db, 'tags');
-    
-        const unsubscribeTags = onSnapshot(tagsRef, (querySnapshot) => {
-          const tagsData = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            name: doc.data().name || 'undefined',
-          }));
-          setTags(tagsData);
-        });
-    
-        return () => {
-          unsubscribeTags();
-        };
-      } catch(error) {
-        message.error("Error fetching tags")
-      }
+      setTags((prevTags) =>
+        prevTags.filter((tag) => tag.id !== tagId)
+      );
+    } catch (error) {
+      console.error('Error deleting tag:', error);
     }
-
-  }, [userId, isPremium]);
-
-  const deleteResource = async (resourceId: string) => {
+  }
+  const handleResourceDelete = async (resourceId: string) => {
     try {
       const resourceRef = doc(db, 'resources', resourceId);
       await deleteDoc(resourceRef);
       
-      setResourceData((prevResources) =>
+      setResources((prevResources) =>
         prevResources.filter((resource) => resource.id !== resourceId)
       );
     } catch (error) {
@@ -159,108 +79,122 @@ export default function Resources() {
     }
   };
 
-  const deleteTag = async (tagId: string) => {
-    try {
-      const tagRef = doc(db, 'tags', tagId);
-      await deleteDoc(tagRef);
-      
-      setResourceData((prevResources) =>
-        prevResources.filter((tag) => tag.id !== tagId)
-      );
-    } catch (error) {
-      console.error('Error deleting tag:', error);
-    }
+  const handleTagFilter = (tagName: string) => {
+    setSelectedTags((prevSelectedTags) => {
+      if (prevSelectedTags.includes(tagName)) {
+        return prevSelectedTags.filter(selectedTag => selectedTag !== tagName);
+      } else {
+        return [...prevSelectedTags, tagName];
+      }
+    });
   };
 
+  useEffect(() => {
+      const filtered = resources.filter((resources) => {
+      const nameMatch = resources.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const tagMatch = selectedTags.every(tag => resources.tags.includes(tag));
+
+      return nameMatch && tagMatch;
+    });
+
+    setFilteredResources(filtered);
+  }, [resources, searchQuery, selectedTags]);
+
+  useEffect(() => {
+    const fetchResources = async () => {
+      if (isPremium && userId) {
+        const resourcesCollection = collection(db, 'resources');
+        const q = query(resourcesCollection);
+  
+        try {
+          const unsubscribe = onSnapshot(q, (snapshot) => {
+            const resourcesData = snapshot.docs.map((doc) => {
+              const data = doc.data();
+  
+              const resource: Resource = {
+                id: doc.id,
+                name: data.name,
+                image: data.image,
+                downloadLink: data.downloadLink,
+                tags: data.tags || [],
+              };
+              return resource;
+            });
+            setResources(resourcesData);
+          });
+          return () => unsubscribe();
+        }
+        
+        catch {
+          message.error('Error fetching resources');
+        }
+        
+        finally {
+          setAreResourcesLoading(false)
+        }
+
+      }
+    };
+    fetchResources();
+  }, [isPremium, userId]);
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      if (isPremium && userId) {
+        const tagsRef = collection(db, 'tags');
+        const q = query(tagsRef);
+  
+        try {
+          const unsubscribe = onSnapshot(q, (snapshot) => {
+            const tagsData = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              name: doc.data().name || undefined,
+            }));
+  
+            setTags(tagsData);
+          });
+  
+          return () => unsubscribe();
+        } catch (error) {
+          message.error('Error fetching tags');
+        }
+      }
+    };
+    fetchTags();
+  }, [userId, isPremium]);
+
   return (
-    <div className="flex flex-col gap-4">
-      <motion.div
-      initial={{y: -50, opacity:0}}
-      animate={{y: 0, opacity: 1}}
-      >
-        <Input
-          type="text"
-          placeholder="Search resources..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-      </motion.div>
-      <div className="flex gap-2 flex-wrap">
-      {tags.map((tag, index) => (
-        <motion.div key={tag.name}
-        custom={index}
-        variants={fadeInAnimationVariants}
-        initial="initial"
-        whileInView="animate"
+    <div className='flex flex-col gap-4'>
+      <TagFilter onDeleteTag={handleTagDelete} tags={tags} onTagFilter={handleTagFilter} selectedTags={selectedTags} userStatus={userStatus}/> 
+      <SearchBar onSearch={handleSearch}/>
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
+      {searchQuery && filteredResources.length === 0 ? (
+        <motion.div className="col-span-3"
+        initial={{y:100, opacity:0}}
+        animate={{y:0, opacity: 1}}
         >
-        <ContextMenu>
-          <ContextMenuTrigger>
-          <ButtonShad
-            variant="outline"
-            onClick={() => handleTagClick(tag.name)}
-            className={`px-2 py-1 whitespace-nowrap	${
-              selectedTags.includes(tag.name) ? 'hover:bg-white/80 bg-white text-black border-white' : ''
-            }`}
-            >
-            {tag.name}
-          </ButtonShad>
-          </ContextMenuTrigger>
-          {userStatus === 'admin' && (
-          <ContextMenuContent>
-            <ContextMenuItem onClick={() => deleteTag(tag.id)} className="cursor-pointer">
-              <button>Delete</button>
-            </ContextMenuItem>
-          </ContextMenuContent>
-          )}
-        </ContextMenu>
+          Not Found
         </motion.div>
-      ))}
-      {userStatus == 'admin' ?
-      <Dialog>
-        <DialogTrigger>
-        <ButtonShad
-        variant="outline"
-        className="group border-dotted px-2 py-1 gap-1"
-        >
-          Add a tag
-          <AiOutlinePlus className="group-hover:scale-110 transition"/>
-        </ButtonShad>
-        </DialogTrigger>
-        <DialogContent>
-          <CreateTag/>
-        </DialogContent>
-      </Dialog>
-      : null}
-    </div>
-      <div className="flex gap-4 flex-wrap items-center mt-4 justify-center sm:items-start sm:justify-start">
-        {filteredResources.map((resource, index) => (
-          <motion.div
-          key={resource.resourceName}
+        ) : (
+          filteredResources.map((resource, index) => (
+          <motion.div key={resource.id}
           custom={index}
-          variants={fadeInAnimationVariants2}
+          variants={fadeInAnimationVariants}
           initial="initial"
           whileInView="animate"
+          viewport={{
+            once: true
+          }}
           >
-          <ContextMenu>
-            <ContextMenuTrigger>
-              <Resource
-                downloadLink={resource.downloadLink}
-                resourceName={resource.resourceName}
-                resourceImage={resource.resourceImage}
-                onDelete={() => deleteResource(resource.id)}
-              />
-              {userStatus === 'admin' && (
-              <ContextMenuContent>
-                <ContextMenuItem onClick={() => deleteResource(resource.id)} className="cursor-pointer">
-                  <button>Delete</button>
-                </ContextMenuItem>
-              </ContextMenuContent>
-              )}
-            </ContextMenuTrigger>
-          </ContextMenu>
+            {areResourcesLoading ? 
+            <div className="h-[27rem] w-full animate-pulse bg-[--border]"/>
+            :
+            <Resource userStatus={userStatus} onDelete={handleResourceDelete} resource={resource} />
+            }
           </motion.div>
-        ))}
-      </div>
+        ))
+      )}
     </div>
-  );
+    </div>
+  )
 }

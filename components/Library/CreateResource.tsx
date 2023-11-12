@@ -51,31 +51,24 @@ export default function CreateResource() {
 
   const createResource = async () => {
     try {
-      if (user && userId && userStatus == 'admin') {
+      if (user && userId && userStatus === 'admin') {
         const resourcesCollectionRef = collection(db, 'resources');
   
         const resourceData = {
           name: resourceName,
-          resourceImage: resourceImageUrl,
+          image: resourceImageUrl,
           downloadLink: fileDownloadLink,
+          tags: selectedValues, // Store tags as an array
         };
   
-        const resourceDocRef = await addDoc(resourcesCollectionRef, resourceData);
-
-        const tagsSubcollectionRef = collection(resourceDocRef, 'tags');
-  
-        const tagPromises = selectedValues.map(async (tagName) => {
-          await addDoc(tagsSubcollectionRef, { name: tagName });
-        });
-  
-        await Promise.all(tagPromises);
-
+        await addDoc(resourcesCollectionRef, resourceData);
+        
         message.success('Resource created successfully!');
-      } else (
-        message.error('An error occured.. try again later')
-      )
+      } else {
+        message.error('An error occurred.. try again later');
+      }
     } catch (error) {
-      /* console.error('Error creating resource:', error); */
+      console.error('Error creating resource:', error);
       message.error('Failed to create resource.');
     }
   };

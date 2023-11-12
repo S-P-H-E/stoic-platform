@@ -24,12 +24,12 @@ export default function CoursesPage() {
     } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
       return (
         <div className='h-full flex md:p-10 md:px-16 p-8 justify-between items-start w-full'>
-          <div className='flex flex-col gap-4 md:gap-8 w-full'>
+          <div className='flex flex-col gap-4 w-full'>
           <h1 className='text-3xl font-semibold'>Courses</h1>
-          <CreateCourse className='md:hidden'/>
+          <CreateCourse className="md:hidden"/>
           <Courses/>
           </div>
-          <CreateCourse className='md:block hidden'/>
+{/*           <CreateCourse className='md:block hidden'/> */}
         </div>
       )
     } else {

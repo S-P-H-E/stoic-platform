@@ -12,14 +12,14 @@ export default function Library() {
       return (
         <>
         <Locked/>
-          <section className="md:p-10 md:px-16 p-8 flex flex-col gap-4 w-full">
-          <div className="flex justify-between">
-            <h1 className='text-3xl font-semibold'>Library - ui revamp soon</h1>
-            <CreateButton/>
-          </div>
-          <div>  
-            <Resources/>
-          </div>
+        <section className="md:py-10 md:px-16 p-8 flex flex-col gap-4 w-full">
+            <div className="flex justify-between">
+              <h1 className='text-3xl font-semibold'>Library - ui revamp soon</h1>
+              <CreateButton/>
+            </div>
+            <div>  
+              <Resources/>
+            </div>
         </section>
       </>
       )} else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
