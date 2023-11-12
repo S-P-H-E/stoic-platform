@@ -62,10 +62,13 @@ export default function Resources() {
       setTags((prevTags) =>
         prevTags.filter((tag) => tag.id !== tagId)
       );
+
+      message.success('Tag deleted successfully')
     } catch (error) {
       console.error('Error deleting tag:', error);
     }
   }
+
   const handleResourceDelete = async (resourceId: string) => {
     try {
       const resourceRef = doc(db, 'resources', resourceId);
@@ -74,6 +77,8 @@ export default function Resources() {
       setResources((prevResources) =>
         prevResources.filter((resource) => resource.id !== resourceId)
       );
+
+      message.success('Resource deleted successfully')
     } catch (error) {
       console.error('Error deleting resource:', error);
     }

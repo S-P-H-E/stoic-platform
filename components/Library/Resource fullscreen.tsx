@@ -29,14 +29,14 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
     {resource ? (
     <ContextMenu>
       <ContextMenuTrigger>
-      <div className='group relative flex flex-col gap-4 h-[27rem] items-center text-center border border-[--border] hover:border-white/80 rounded-xl transition duration-200 overflow-hidden'>
-        <div className="relative group-hover:scale-110 transition duration-200"> {/* w-full if fulscreen needed */}
+      <div className='group relative flex flex-col gap-4 w-full h-[25.7rem] items-center text-center border border-[--border] hover:border-white/80 rounded-xl transition duration-200 overflow-hidden'>
+        <div className="relative w-full group-hover:scale-110 transition duration-200"> {/* w-full if fulscreen needed */}
 
           <div className="absolute top-44 left-0 w-full h-20 bg-gradient-to-b from-transparent via-transparent to-[--bg]"/>
           {resource.image ? 
-          <Image loading='lazy' alt='image' src={resource.image} width={400} height={200} className='w-full h-[15.4rem] object-cover aspect-square rounded-b-lg' />
+          <Image loading='lazy' alt='image' src={resource.image} width={400} height={200} className='w-full h-[15.4rem] object-cover rounded-b-lg' />
           : 
-          <div className='h-[15.4rem] bg-[--border] aspect-square animate-pulse rounded-b-lg'/>
+          <div className='w-full h-[15.4rem] bg-[--border] animate-pulse rounded-b-lg'/>
           } {/* w-full if fulscreen needed */}
           </div>
           
@@ -48,8 +48,8 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
             ))}
           </ul>
           
-          <Link href={resource.downloadLink || ''} target="_blank" className="flex items-center justify-center px-4 py-2 bg-white text-black rounded-xl gap-2 hover:bg-white/90 font-medium hover:scale-110 active:scale-95 transition duration-200">
-            <HiDownload/>
+          <Link href={resource.downloadLink || ''} target="_blank" className="flex group w-[30.2rem] items-center justify-center px-4 py-2 bg-white text-black rounded-t-xl gap-2 hover:bg-white/90 font-medium hover:scale-110 active:scale-95 transition duration-200">
+            <HiDownload className="group-hover:-rotate-90 duration-200 transition"/>
             <p>Download</p>
           </Link>
 
