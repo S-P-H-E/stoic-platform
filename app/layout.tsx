@@ -1,11 +1,8 @@
 import { FirebaseProvider } from '@/utils/authContext'
 import './globals.css'
 import type { Metadata } from 'next'
-/* import { Inter } from 'next/font/google' */
 
 import { GeistSans, GeistMono } from "geist/font";
-
-/* const inter = Inter({ subsets: ['latin'] }) */
 
 export const metadata: Metadata = {
   title: 'S T O I C',
@@ -19,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body /*className={inter.className}*/ className={GeistSans.className}>
+      <body className={GeistSans.className}>
         <FirebaseProvider>
         {children}
         </FirebaseProvider>

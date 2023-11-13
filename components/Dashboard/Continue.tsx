@@ -64,7 +64,7 @@ export default function Continue() {
             <div className="relative rounded-xl overflow-hidden w-full">
               <div className="absolute top-8 left-0 w-full h-full bg-gradient-to-b from-transparent via-black/70 to-[--bg]"/>
                   {lessonData.thumbnail ? 
-                  <Image loading='lazy' alt='Lesson Thumbnail' src={lessonData.thumbnail} width={500} height={400} className='w-full object-cover'/>
+                  <Image loading='lazy' alt='Lesson Thumbnail' src={lessonData.thumbnail} width={500} height={400} className='w-full object-cover '/>
                   :
                   <Image loading='lazy' alt="Lesson Thumbnail" src={placeholderImage} placeholder='blur' width={500} height={400} className='w-full object-cover'/>
                   }
