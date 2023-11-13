@@ -12,7 +12,7 @@ export default function Tool({title, href, icon}: ToolProps) {
     <>
     <Link href={href} className='border border-[--border] rounded-xl p-4 justify-center flex gap-4 items-center transition duration-200 bg-[--darkgray] hover:border-[#585757] hover:scale-105 active:scale-100'>
         {icon}
-        <h1 className="text-xl">{title}</h1>
+        <h1 className="text-lg lg:text-xl">{title}</h1>
     </Link>
     </>
   )

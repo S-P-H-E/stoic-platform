@@ -13,7 +13,7 @@ export default function DashboardCourse({ image, href, name, description }: Dash
   return (
     <Link href={href} className="relative flex flex-col items-center w-full group overflow-hidden text-center border border-[--border] hover:border-[#585757] transition duration-300 h-full rounded-xl">
     <div className="relative group-hover:scale-110 transition duration-500 h-full">
-        <div className="absolute top-[60%] left-0 w-full h-48 group-hover:scale-105 bg-gradient-to-b from-transparent via-[--darkgray] to-[--darkgray] rounded-xl z-30"/>
+        <div className="absolute top-[55%] left-0 w-full h-48 group-hover:scale-105 bg-gradient-to-b from-transparent via-[--darkgray] to-[--darkgray] rounded-xl z-30"/>
         <Image loading='lazy' alt='image' src={image} width={400} height={300} className='h-full object-cover group-hover:scale-110 transition duration-300' />
       </div>
     <div className='flex items-center justify-center w-full h-full text-center p-4'>

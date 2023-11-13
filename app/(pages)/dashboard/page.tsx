@@ -34,20 +34,18 @@ export default function Dashboard() {
     );
   } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
     return (
-      <div className="relative flex flex-col h-full w-full md:py-8 pb-10 px-6 gap-4 overflow-hidden justify-center max-w-[1700px] mx-auto">
+      <div className="relative flex flex-col h-full w-full md:py-6 px-6 pb-10 gap-4 overflow-hidden justify-center max-w-[1700px] mx-auto">
         <Navbar />
         <div className="md:flex-row flex-col flex gap-4 justify-center">
-          <div className="flex flex-col w-full max-w-[40rem] md:w-[37%] gap-4">
+          <div className="flex flex-col w-full max-w-[40rem] md:w-[38%] 2xl:w-[43%] gap-4">
             <Continue />
             <DateTime />
           </div>
-          <div className="flex flex-col w-full md:w-6/12 gap-4 justify-center">
+          <div className="flex flex-col w-full md:w-7/12 2xl:w-[53%] max-w-[60rem] gap-4 justify-center">
             <Tools />
             <AllCourses />
           </div>
         </div>
-
-        {/* HAVE THIS ALL WRAPPED UP IN A COMPONENT */}
       </div>
     );
   } else {

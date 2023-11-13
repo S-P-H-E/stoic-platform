@@ -69,7 +69,7 @@ export default function Continue() {
                   <Image loading='lazy' alt="Lesson Thumbnail" src={placeholderImage} placeholder='blur' width={500} height={400} className='w-full object-cover'/>
                   }
                   <div className='absolute bottom-4 left-4 gap-2 flex flex-col'>
-                    <h1 className='2xl:text-5xl text-4xl font-medium'>{lessonData.title}</h1>
+                    <h1 className='2xl:text-5xl lg:text-4xl md:text-2xl text-3xl font-medium'>{lessonData.title}</h1>
                     <p>{lessonData.description}</p>
                   </div>
               </div>
