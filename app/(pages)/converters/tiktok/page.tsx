@@ -85,9 +85,6 @@ export default function Home() {
 
       const tiktokUrlPattern = /^.*https:\/\/(?:m|www|vm)?\.?tiktok\.com\/((?:.*\b(?:(?:usr|v|embed|user|video)\/|\?shareId=|\&item_id=)(\d+))|\w+)/;
 
-      const isMatch = tiktokUrlPattern.test("https://vm.tiktok.com/ZMj35t7CK/");
-      console.log(isMatch)
-
       if (!userId && !isPremium) {
         message.error("You are not allowed to use this.")
         return; // Return early to prevent further execution
