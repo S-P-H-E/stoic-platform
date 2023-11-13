@@ -2,7 +2,7 @@ import { FirebaseProvider } from '@/utils/authContext'
 import './globals.css'
 import type { Metadata } from 'next'
 
-import { GeistSans, GeistMono } from "geist/font";
+import { GeistSans } from "geist/font";
 
 export const metadata: Metadata = {
   title: 'S T O I C',

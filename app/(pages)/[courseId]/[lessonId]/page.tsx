@@ -562,7 +562,7 @@ export default function LessonPage() {
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
                   <ContextMenuTrigger>
-                  <div className={`hover:bg-[--border] w-full lg:w-[250px] 2xl:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all duration-200 bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
+                  <div className={`hover:bg-[--border] w-full lg:w-[250px] 2xl:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
                   ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black hover:bg-neutral-200' : ''}
                   ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'animate-pulse' : ''}`}>
                     <div className="flex items-center">
