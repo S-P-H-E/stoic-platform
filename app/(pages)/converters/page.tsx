@@ -26,7 +26,7 @@ export default function ConvertersPage() {
     )
   } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
     return (
-      <div className='h-full flex flex-col gap-16 justify-between items-start w-full'>
+      <div className='h-full flex flex-col md:gap-16 gap-8 justify-between items-start w-full'>
         <div className="relative flex w-full h-96">
           <Image alt="Background Cover" src={bgCover} fill className="object-cover" placeholder="blur"/>
           <div className="absolute h-64 w-full bottom-0 bg-gradient-to-b from-transparent via-transparent to-[--bg]"/>
