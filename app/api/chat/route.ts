@@ -30,7 +30,11 @@ export async function POST(req: Request) {
     messages
   });
 
-  const stream = OpenAIStream(response);
+  const stream = OpenAIStream(response, {
+    onCompletion: async (result) => {
+      console.log(result);
+    },
+  });
 
   return new StreamingTextResponse(stream);
 }

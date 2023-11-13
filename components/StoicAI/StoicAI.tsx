@@ -2,18 +2,18 @@
 
 import UserImage from '@/components/UserImage';
 import { useChat } from 'ai/react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IoSend } from 'react-icons/io5';
 import { message } from 'antd';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import Image from 'next/image';
 import StoicAIPicture from '@/public/stoicWhite.webp'
-import { doc } from 'firebase/firestore';
-import { db } from '@/utils/firebase';
 
 export default function StoicAI() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const [userMessage, setUserMessage] = useState<string>(''); // State to store the user's typed message
 
   const { userStatus, user } = UserDataFetcher();
 
@@ -21,6 +21,7 @@ export default function StoicAI() {
     const adjustRows = () => {
       if (textareaRef.current) {
         const currentTextarea = textareaRef.current;
+
         currentTextarea.style.height = 'auto'; // Reset the height
         currentTextarea.style.height = currentTextarea.scrollHeight + 'px';
         if (currentTextarea.scrollHeight >= 200) {
@@ -43,7 +44,9 @@ export default function StoicAI() {
       e.preventDefault();
 
       handleSubmit(e);
-      
+
+      console.log(input)
+
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';
         textareaRef.current.style.overflowY = 'hidden';
@@ -60,18 +63,6 @@ export default function StoicAI() {
       handleFormSubmit(e as any);
     }
   };
-
-  const regex = /```python([\s\S]*?)```/;
-  const firstMessage = messages[0];
-  let returnContent = '';
-
-  if (firstMessage && firstMessage.content) {
-    const match = firstMessage.content.match(regex);
-
-    if (match) {
-      returnContent = match[1].trim();
-    }
-  }
 
   return (
     <main className="w-full h-full flex flex-col items-center justify-end">
@@ -91,9 +82,7 @@ export default function StoicAI() {
               }
 
               <h2>{m.content}</h2>
-                <div className='bg-white'>
-                  <p>{returnContent}</p>
-                </div>
+
             </div>
           ))}
         </section>
