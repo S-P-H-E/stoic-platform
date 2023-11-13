@@ -72,7 +72,7 @@ export default function StoicAI() {
     <main className="w-full h-full flex flex-col items-center justify-end">
       <div className="w-full h-screen flex flex-col items-center justify-end p-12">
       {/* <div className="flex items-center justify-center w-full h-full font-medium text-5xl opacity-60">STOIC AI</div> */}
-      <div className='max-w-[50rem] w-full flex flex-col'>
+      <div className='w-full flex flex-col'>
         <section className="flex flex-col gap-2">
           {messages.map(m => (
             <div className="mb-4 flex gap-2 items-center" key={m.id}>

@@ -11,13 +11,17 @@ export default function Chat() {
   if (userStatus == 'user') {
     return(
       <>
+      <div className="flex flex-col gap-4 w-full">
         <Locked/>
         <StoicAI/>
+      </div>
       </>
     )
   } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
     return(
-      <StoicAI/>
+      <div className="flex flex-col gap-4 w-full">
+        <StoicAI/>
+      </div>
     )
   }
   else {

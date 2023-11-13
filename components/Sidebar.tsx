@@ -62,7 +62,7 @@ const Sidebar = () => {
   
   return (
     <div className="flex h-full z-50">
-    <div className="top-0 left-0 h-full md:border-r border-[--border] py-8 px-2 md:p-4 w-full md:w-72 md:fixed bg-[--bg] text-white">
+    <div className="top-0 left-0 h-full md:border-r border-[--border] py-8 px-2 lg:p-4 w-full md:w-60 lg:w-72 md:fixed bg-[--bg] text-white">
       <div className="px-3 py-2 flex flex-col h-full">
         <Link href="/dashboard" className="w-fit flex items-center pl-3 mb-14">
           <div className="relative w-8 h-11 mr-4">
@@ -84,12 +84,11 @@ const Sidebar = () => {
               href={route.href}
               key={route.href}
               className={clsx(
-                'text-base group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
+                'text-base group flex p-3 w-full justify-start lg:font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
                 pathname === route.href
                   ? 'text-white bg-white/10'
                   : 'text-zinc-400',
                  /*  userStatus === 'user' ? 'blur-sm' : '' */
-                // Add a conditional class to blur the label if userStatus is 'user'
 
               )}
             >

@@ -10,14 +10,14 @@ export default function Settings() {
 
     if (userStatus == "user") {
       return (
-        <div className="h-full flex flex-col py-2 px-6 md:py-8 md:px-16 w-full">
+        <div className="h-full flex lg:p-10 lg:px-16 p-6 justify-between items-start w-full">
           <Locked/>
           <AccountSettings />
         </div>
       );
     } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
       return (
-        <div className="h-full flex flex-col py-2 px-6 md:py-8 md:px-16 w-full">
+        <div className="h-full flex lg:p-10 lg:px-16 p-6 justify-between items-start w-full">
           <AccountSettings />
         </div>
       );

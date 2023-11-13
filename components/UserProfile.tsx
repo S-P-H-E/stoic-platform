@@ -32,7 +32,7 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
   });
     
   return (
-    <div className='flex flex-col w-[450px] gap-4 p-1'>
+    <div className='flex flex-col md:w-[450px] w-[350px] gap-4 p-1'>
       <div className='flex flex-col gap-4 w-full items-start'>
         <div className='h-[140px] w-full relative rounded aspect-auto'>
           {userBannerUrl ? 
@@ -61,7 +61,7 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
           <UserProfileDialog userBannerUrl={userBannerUrl} userStatus={userStatusEdited ?? undefined} userName={userName} src={src}/>
         </DialogContent>
       </Dialog>
-      <div className='p-4 px-7 mt-8 flex flex-col w-full h-full rounded-lg gap-2'>
+      <div className='py-4 md:px-7 px-2 mt-8 flex flex-col w-full h-full rounded-lg gap-2'>
           <div className="flex flex-col w-full h-full">
             <h1 className="text-2xl leading-6 font-semibold">{userName ? userName : 'Loading...'}</h1>
             <h2 className={clsx("text-md leading-6 py-1", statusClass)}>{userStatusEdited}</h2>
@@ -72,15 +72,15 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
           <div className='flex flex-col'>
             <h1 className='text-lg font-medium'>INFO</h1>
             <div className='flex justify-between pb-5 pt-2'>
-              <div className='bg-white text-black w-fit p-1 px-3 rounded-full flex items-center gap-2 text-[13px] font-semibold'>
+              <div className='bg-white text-black w-fit py-1 px-2 md:py-1 md:px-3 rounded-full flex items-center gap-2 text-xs md:text-sm font-semibold'>
                 <BiFilm size={15}/>
                 After Effects
               </div>
-              <div className='bg-white text-black w-fit p-1 px-3 rounded-full flex items-center gap-2 text-[13px] font-semibold'>
+              <div className='bg-white text-black w-fit py-1 px-2 md:py-1 md:px-3 rounded-full flex items-center gap-2 text-xs md:text-sm font-semibold'>
                 <BiLogoInstagram size={15}/>
                 Instagram
               </div>
-              <div className='bg-white text-black w-fit p-1 px-3 rounded-full flex items-center gap-2 text-[13px] font-semibold'>
+              <div className='bg-white text-black w-fit py-1 px-2 md:py-1 md:px-3 rounded-full flex items-center gap-2 text-xs md:text-sm font-semibold'>
                 <BiVideo size={15}/>
                 Short Form
               </div>

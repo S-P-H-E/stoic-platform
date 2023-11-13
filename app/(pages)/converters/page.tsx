@@ -10,7 +10,7 @@ export default function ConvertersPage() {
 
   if (userStatus == 'user') {
     return (
-      <div className='h-full flex md:p-10 md:px-16 p-6 justify-between items-start w-full'>
+      <div className='h-full flex lg:p-10 lg:px-16 p-6 justify-between items-start w-full'>
         <Locked/>
         <div className='flex flex-col gap-4 md:gap-8 w-full'>
         <h1 className='text-3xl font-semibold'>Converters - wip</h1>
@@ -20,7 +20,7 @@ export default function ConvertersPage() {
     )
   } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
     return (
-      <div className='h-full flex md:p-10 md:px-16 p-6 justify-between items-start w-full'>
+      <div className='h-full flex lg:p-10 lg:px-16 p-6 justify-between items-start w-full'>
         <div className='flex flex-col gap-4 md:gap-8 w-full'>
         <h1 className='text-3xl font-semibold'>Converters - wip</h1>
         <Converters/>
