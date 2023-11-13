@@ -28,7 +28,7 @@ export default function ConvertersPage() {
     return (
       <div className='h-full flex flex-col gap-16 justify-between items-start w-full'>
         <div className="relative flex w-full h-96">
-          <Image alt="Background Cover" src={bgCover} fill className="object-cover"/>
+          <Image alt="Background Cover" src={bgCover} fill className="object-cover" placeholder="blur"/>
           <div className="absolute h-64 w-full bottom-0 bg-gradient-to-b from-transparent via-transparent to-[--bg]"/>
           <h1 className="absolute -bottom-4 px-8 text-5xl md:text-7xl font-medium">Converters</h1>
         </div>
