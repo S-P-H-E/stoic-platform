@@ -6,6 +6,10 @@ import { useEffect, useRef } from 'react';
 import { IoSend } from 'react-icons/io5';
 import { message } from 'antd';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
+import Image from 'next/image';
+import StoicAIPicture from '@/public/stoicWhite.webp'
+import { doc } from 'firebase/firestore';
+import { db } from '@/utils/firebase';
 
 export default function StoicAI() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
@@ -33,11 +37,13 @@ export default function StoicAI() {
     }
   }, []);
 
+
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if(user && userStatus !== 'user') {
       e.preventDefault();
 
       handleSubmit(e);
+      
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';
         textareaRef.current.style.overflowY = 'hidden';
@@ -61,7 +67,6 @@ export default function StoicAI() {
 
   if (firstMessage && firstMessage.content) {
     const match = firstMessage.content.match(regex);
-    
 
     if (match) {
       returnContent = match[1].trim();
@@ -81,10 +86,11 @@ export default function StoicAI() {
               <div className="w-8 h-8">
                 <UserImage/>
               </div> 
+              : 
+                <Image alt='Stoic AI Icon' src={StoicAIPicture} placeholder='blur' className='h-8 w-6'/>
+              }
 
-              : 'AI: '}
-
-              <code>{m.content}</code>
+              <h2>{m.content}</h2>
                 <div className='bg-white'>
                   <p>{returnContent}</p>
                 </div>
