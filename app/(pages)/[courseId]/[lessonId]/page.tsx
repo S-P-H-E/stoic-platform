@@ -550,17 +550,6 @@ export default function LessonPage() {
                     <ContextMenuCheckboxItem className="cursor-pointer" onClick={() => deleteLesson(lessonItem.id)}>
                       Delete
                     </ContextMenuCheckboxItem>
-{/* 
-                    <ContextMenuCheckboxItem className="cursor-pointer" onClick={() => editLesson(lessonItem.id)}>
-                        <Dialog>
-                          <DialogTrigger>
-                          Edit
-                          </DialogTrigger>
-                          <DialogContent>
-                            <Lesson/>
-                          </DialogContent>
-                        </Dialog>
-                    </ContextMenuCheckboxItem> */}
 
                   </ContextMenuContent>
                 }
@@ -609,6 +598,7 @@ export default function LessonPage() {
           {lessons.map((lessonItem, index) => (
             <motion.div
               key={index}
+              className="flex gap-2 items-center"
               custom={index}
               variants={fadeInAnimationVariants}
               initial="initial"
@@ -665,6 +655,18 @@ export default function LessonPage() {
                 }
                 </ContextMenu>
             </Link>
+            {userStatus == 'admin' && userId && (
+                <Dialog>
+                  <DialogTrigger>
+                    <button>
+                      <IoMdCreate/>
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <Edit courseId={courseId as string} lesson={lessonItem}/>
+                  </DialogContent>
+                </Dialog>
+              )}
             </motion.div>
             ))}
             {userStatus == 'admin' && userId && (
