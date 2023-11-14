@@ -16,7 +16,6 @@ export default function ImageUpload({ onComplete, customPath }: ImageUploadProps
   const [isLoading, setIsLoading] = useState(false);
 
   const onFileSelected = useCallback(async (file: File) => {
-    console.log('File selected:', file);
     setSelectedImage(file);
 
     try {

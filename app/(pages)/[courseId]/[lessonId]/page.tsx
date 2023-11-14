@@ -26,6 +26,8 @@ import { BsChevronLeft } from 'react-icons/bs';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { DialogTrigger } from '@radix-ui/react-dialog';
 import Lesson from '@/components/Course/Create/Lesson';
+import { IoMdCreate } from 'react-icons/io';
+import Edit from '@/components/Course/Edit';
 
 
 interface LessonItem {
@@ -34,6 +36,7 @@ interface LessonItem {
   description: string;
   order: number;
   url: string;
+  thumbnail: string;
 }
 
 export default function LessonPage() {
@@ -51,7 +54,6 @@ export default function LessonPage() {
 
   const [lessonCompleted, setLessonCompleted] = useState(false);
   const [lessonCompletionFlag, setLessonCompletionFlag] = useState(false);
-
   
   const { userId, userStatus } = UserDataFetcher()
   const isPremium = userStatus === 'premium' || userStatus === 'admin'
@@ -172,7 +174,8 @@ export default function LessonPage() {
               title: doc.data().title,
               description: doc.data().description,
               order: doc.data().order,
-              url: doc.data().url
+              url: doc.data().url,
+              thumbnail: doc.data().thumbnail
             }));
             lessonsData.sort((a, b) => a.order - b.order);
 
@@ -486,6 +489,7 @@ export default function LessonPage() {
         <div className="hidden md:flex flex-col gap-5 md:mx-5">
           {lessons.map((lessonItem, index) => (
             <motion.div
+              className="flex gap-2 items-center"
               key={index}
               custom={index}
               variants={fadeInAnimationVariants}
@@ -542,13 +546,38 @@ export default function LessonPage() {
                 
                 {userStatus == 'admin' &&
                   <ContextMenuContent className="w-64">
+
                     <ContextMenuCheckboxItem className="cursor-pointer" onClick={() => deleteLesson(lessonItem.id)}>
                       Delete
                     </ContextMenuCheckboxItem>
+{/* 
+                    <ContextMenuCheckboxItem className="cursor-pointer" onClick={() => editLesson(lessonItem.id)}>
+                        <Dialog>
+                          <DialogTrigger>
+                          Edit
+                          </DialogTrigger>
+                          <DialogContent>
+                            <Lesson/>
+                          </DialogContent>
+                        </Dialog>
+                    </ContextMenuCheckboxItem> */}
+
                   </ContextMenuContent>
                 }
                 </ContextMenu>
             </Link>
+              {userStatus == 'admin' && userId && (
+                <Dialog>
+                  <DialogTrigger>
+                    <button>
+                      <IoMdCreate/>
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <Edit courseId={courseId as string} lesson={lessonItem}/>
+                  </DialogContent>
+                </Dialog>
+              )}
             </motion.div>
             ))}
             {userStatus == 'admin' && userId && (

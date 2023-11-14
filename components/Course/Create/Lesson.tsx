@@ -23,7 +23,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
     const [courses, setCourses] = useState<{ id: string; name: string }[]>([]);
     const [lessonTitle, setLessonTitle] = useState('');
     const [lessonDescription, setLessonDescription] = useState('');
-    const [lessonImage, setLessonImage] = useState<string | null>(null);
+    const [lessonThumbnail, setLessonThumbnail] = useState<string | null>(null);
     const [lessonURL, setLessonURL] = useState('');
     const [lessonOrder, setLessonOrder] = useState('');
     const [error, setError] = useState('');
@@ -33,7 +33,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
     const [selectedValues, setSelectedValues] = useState('');
   
     const handleImageUpload = (imageUrl: string) => {
-      setLessonImage(imageUrl);
+      setLessonThumbnail(imageUrl);
     };
 
     useEffect(() => {
@@ -94,7 +94,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
         description: lessonDescription,
         url: lessonURL,
         order: lessonOrder,
-        image: lessonImage
+        thumbnail: lessonThumbnail
       };
   
       // Add the lesson to the selected course's 'lessons' collection
@@ -106,7 +106,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
           setLessonDescription('');
           setLessonURL('');
           setLessonOrder('');
-          setLessonImage('')
+          setLessonThumbnail('')
           setError('');
     
           message.success("Successfully added lesson: " + lessonTitle)
