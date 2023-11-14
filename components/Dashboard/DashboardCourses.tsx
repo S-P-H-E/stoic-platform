@@ -86,7 +86,7 @@ export default function DashboardCourses() {
     <div className='w-full h-full grid grid-cols-1 md:grid-cols-2 pb-4 gap-4'>
       {!loading ? (
         <>
-          {courses.map((course, index) => {
+          {courses.map((course, index) => { 
             const lastLessonId = course.userCourseData ? course.userCourseData.lastLessonId : null;
 
             const href = lastLessonId

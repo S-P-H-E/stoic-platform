@@ -555,11 +555,11 @@ export default function LessonPage() {
                 <Dialog>
                   <DialogTrigger>
                     <motion.div
-                      className="hover:bg-[--border] h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] border-2 border-dotted 
+                      className="hover:bg-[--border] h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] !border-2 border-dotted 
                       border-[--border] group cursor-pointer flex justify-center items-center gap-2 text-center"
                       initial={{opacity: 0 }}
                       animate={{opacity: 1}}
-                      transition={{delay: 0.5}}
+                      transition={{delay: 0.35}}
                       >
                       <span className='group-hover:scale-x-110 transition flex gap-2 items-center'>
                         <AiFillPlusCircle/>
@@ -642,11 +642,11 @@ export default function LessonPage() {
                 <Dialog>
                   <DialogTrigger>
                     <motion.div
-                      className="hover:bg-[--border] h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] border-2 border-dotted 
+                      className="hover:bg-[--border] h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] !border-2 border-dotted 
                       border-[--border] group cursor-pointer flex justify-center items-center gap-2 text-center"
                       initial={{opacity: 0 }}
                       animate={{opacity: 1}}
-                      transition={{delay: 0.5}}
+                      transition={{delay: 0.4}}
                       >
                       <span className='group-hover:scale-x-110 transition flex gap-2 items-center'>
                         <AiFillPlusCircle/>
