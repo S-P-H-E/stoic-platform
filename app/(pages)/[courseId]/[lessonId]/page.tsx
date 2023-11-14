@@ -19,10 +19,13 @@ import { message } from 'antd';
 import VimeoPlayer from '@vimeo/player';
 import clsx from 'clsx';
 import { FaCheckCircle, FaEyeSlash, FaTimesCircle } from 'react-icons/fa';
-import { AiOutlineCloseCircle, AiFillCheckCircle } from 'react-icons/ai';
+import { AiOutlineCloseCircle, AiFillCheckCircle, AiFillPlusCircle } from 'react-icons/ai';
 import SkeletonLesson from '../../../../components/Course/SkeletonLesson';
 import GoBack from '@/components/UI Elements/GoBack';
 import { BsChevronLeft } from 'react-icons/bs';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { DialogTrigger } from '@radix-ui/react-dialog';
+import Lesson from '@/components/Course/Create/Lesson';
 
 
 interface LessonItem {
@@ -40,6 +43,7 @@ export default function LessonPage() {
   const [lessons, setLessons] = useState<LessonItem[]>([]);
   const [copied, setCopied] = useState<boolean>(false)
   const [vimeoUrl, setVimeoUrl] = useState<string>("")
+  const [courseName, setCourseName] = useState('');
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [userCompleted ,setUserCompleted] = useState<boolean>(false)
   const [lessonCompletionStatusMap, setLessonCompletionStatusMap] = useState(new Map());
@@ -98,15 +102,21 @@ export default function LessonPage() {
           const userCourseRef = doc(db, 'users', String(userId), 'courses', String(courseId));
           setDoc(userCourseRef, { lastLessonId: lessonId }, { merge: true })
 
+          const courseDocRef = doc(db, 'courses', courseId as string);
+          const courseDocSnap = await getDoc(courseDocRef);
+          
+          if (courseDocSnap.exists()) {
+            const courseData = courseDocSnap.data();
+            const courseName = courseData.name;
+
+            setCourseName(courseName)
+          }
+
           const userRef = doc(db, 'users', userId)
           updateDoc(userRef, {
             generalLastCourse: courseId,
             generalLastLesson: lessonId,
           });
-
-
-      /* const userLessonRef = doc(db, 'users', userId, 'courses', courseId, 'lessons', lessonId)
-          const userLessonDocSnap = await getDoc(lessonDocRef); */
 
           if (lessonDocSnap.exists()) {
             const lessonData = lessonDocSnap.data();
@@ -383,13 +393,13 @@ export default function LessonPage() {
     return (
       <>
       <div className='flex flex-col justify-center items-center w-full'>
-      <div className="px-10 pt-10 flex justify-between items-center gap-6 w-full">
+      <div className="lg:p-10 lg:px-16 p-6 pt-10 flex justify-between items-center gap-6 w-full">
         <GoBack/>
        <div className='flex gap-3 items-center'>
        </div>
       </div>
 
-      <div className="flex flex-col p-10 w-full h-screen">
+      <div className="flex flex-col lg:p-10 lg:px-16 p-6 w-full h-screen">
         <div>
           <SkeletonLesson/>
         </div>
@@ -411,12 +421,14 @@ export default function LessonPage() {
   };
 
   return (
-    <div className='flex flex-col w-full'>
-      <div className="px-4 md:px-10 md:pt-10 flex justify-between items-center gap-6 w-full">
+    <div className='flex flex-col w-full gap-4 lg:p-10 lg:px-16 p-6'>
+      <div className="flex justify-between items-center gap-6 w-full">
       <Link href={'/courses'} className="text-[#D5d6d6] text-lg hover:text-stone-200 transition gap-1 flex items-center"><BsChevronLeft/>Go Back</Link>
       </div>
 
-      <div className="flex flex-col md:flex-row p-5 md:p-10 w-full">
+      <h1 className="text-3xl font-medium">{courseName} - Episode {lesson.order}</h1>
+
+      <div className="flex flex-col md:flex-row w-full">
         <div className='w-full'>
             <>
               <div className='sm:w-full rounded-3xl shadow-2xl shadow-white/10 aspect-video'>
@@ -424,7 +436,6 @@ export default function LessonPage() {
                   src={lesson.url}
                   allow="autoplay; fullscreen; picture-in-picture"
                   style={{ width: '100%', height: '100%', borderRadius: '24px' }}
-                  /* title="AE - Episode 1" */
                 />
               </div>
               <Script src="https://player.vimeo.com/api/player.js" />
@@ -472,7 +483,7 @@ export default function LessonPage() {
 
         {/* DESKTOP LESSON LIST */}
 
-        <div className="hidden md:flex flex-col gap-5">
+        <div className="hidden md:flex flex-col gap-5 md:mx-5">
           {lessons.map((lessonItem, index) => (
             <motion.div
               key={index}
@@ -493,7 +504,7 @@ export default function LessonPage() {
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
                   <ContextMenuTrigger>
-                  <div className={`hover:bg-[--border] w-full lg:w-[250px] 2xl:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
+                  <div className={`hover:bg-[--border] w-full lg:w-[250px] 2xl:w-[300px] p-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
                   ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black hover:bg-neutral-200' : ''}
                   ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'animate-pulse' : ''}`}>
                     <div className="flex items-center">
@@ -514,18 +525,15 @@ export default function LessonPage() {
                     {lessonCompletionStatusMap.has(lessonItem.id) ? (
                       lessonCompletionStatusMap.get(lessonItem.id) ? (
                         <>
-                          {/* <p className="text-green-500 text-sm">Completed</p> */}
                           <FaCheckCircle className="text-green-500" />
                         </>
                       ) : (
                         <>
-                        {/* <p className="text-red-500 text-sm">Incomplete</p> */}
                         <FaTimesCircle className="text-red-500" />
                         </>
                       )
                     ) : (
                       <>
-                        {/* <p className="text-gray-500 text-sm">Unwatched</p> */}
                         <FaEyeSlash className="text-gray-500" />
                       </>
                     )}
@@ -543,6 +551,27 @@ export default function LessonPage() {
             </Link>
             </motion.div>
             ))}
+            {userStatus == 'admin' && userId && (
+                <Dialog>
+                  <DialogTrigger>
+                    <motion.div
+                      className="hover:bg-[--border] h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] border-2 border-dotted 
+                      border-[--border] group cursor-pointer flex justify-center items-center gap-2 text-center"
+                      initial={{opacity: 0 }}
+                      animate={{opacity: 1}}
+                      transition={{delay: 0.5}}
+                      >
+                      <span className='group-hover:scale-x-110 transition flex gap-2 items-center'>
+                        <AiFillPlusCircle/>
+                        <p>Add a lesson</p>
+                      </span>
+                    </motion.div>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <Lesson predefinedCourse={courseId} predefinedCourseName={courseName}/>
+                </DialogContent>
+              </Dialog>
+            )}
         </div>
         
         {/* MOBILE LESSON LIST */}
@@ -562,7 +591,7 @@ export default function LessonPage() {
             <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
                   <ContextMenuTrigger>
-                  <div className={`hover:bg-[--border] w-full lg:w-[250px] 2xl:w-[300px] md:mx-5 px-3 py-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
+                  <div className={`hover:bg-[--border] w-full md:w-[200px] xl:w-[250px] 2xl:w-[300px] md:mx-5 p-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
                   ${String(lessonpath.lessonId) === String(lessonItem.id) ? 'bg-white text-black hover:bg-neutral-200' : ''}
                   ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'animate-pulse' : ''}`}>
                     <div className="flex items-center">
@@ -583,18 +612,15 @@ export default function LessonPage() {
                     {lessonCompletionStatusMap.has(lessonItem.id) ? (
                       lessonCompletionStatusMap.get(lessonItem.id) ? (
                         <>
-                          {/* <p className="text-green-500 text-sm">Completed</p> */}
                           <FaCheckCircle className="text-green-500" />
                         </>
                       ) : (
                         <>
-                        {/* <p className="text-red-500 text-sm">Incomplete</p> */}
                         <FaTimesCircle className="text-red-500" />
                         </>
                       )
                     ) : (
                       <>
-                        {/* <p className="text-gray-500 text-sm">Unwatched</p> */}
                         <FaEyeSlash className="text-gray-500" />
                       </>
                     )}
@@ -612,6 +638,27 @@ export default function LessonPage() {
             </Link>
             </motion.div>
             ))}
+            {userStatus == 'admin' && userId && (
+                <Dialog>
+                  <DialogTrigger>
+                    <motion.div
+                      className="hover:bg-[--border] h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] border-2 border-dotted 
+                      border-[--border] group cursor-pointer flex justify-center items-center gap-2 text-center"
+                      initial={{opacity: 0 }}
+                      animate={{opacity: 1}}
+                      transition={{delay: 0.5}}
+                      >
+                      <span className='group-hover:scale-x-110 transition flex gap-2 items-center'>
+                        <AiFillPlusCircle/>
+                        <p>Add a lesson</p>
+                      </span>
+                    </motion.div>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <Lesson predefinedCourse={courseId} predefinedCourseName={courseName}/>
+                </DialogContent>
+              </Dialog>
+            )}
             </div>
             <div className='visible md:hidden'>
               <Comments courseId={courseId as string} lessonId={lessonId as string}/>

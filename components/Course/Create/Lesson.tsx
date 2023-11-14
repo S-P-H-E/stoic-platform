@@ -1,5 +1,6 @@
 import Button from '@/components/UI Elements/Button';
 import Input from '@/components/UI Elements/Input';
+import ImageUpload from '@/components/UI Elements/PhotoUploader';
 import { ButtonShad } from '@/components/ui/buttonshad';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -11,12 +12,18 @@ import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 
-export default function CreateLesson() {
+interface CreateLessonProps {
+  predefinedCourse?: string | string[];
+  predefinedCourseName?: string
+}
+
+export default function CreateLesson({predefinedCourse, predefinedCourseName}: CreateLessonProps) {
 
     const { userStatus } = UserDataFetcher();
     const [courses, setCourses] = useState<{ id: string; name: string }[]>([]);
-    const [lessonTitle, setlessonTitle] = useState('');
+    const [lessonTitle, setLessonTitle] = useState('');
     const [lessonDescription, setLessonDescription] = useState('');
+    const [lessonImage, setLessonImage] = useState<string | null>(null);
     const [lessonURL, setLessonURL] = useState('');
     const [lessonOrder, setLessonOrder] = useState('');
     const [error, setError] = useState('');
@@ -25,8 +32,11 @@ export default function CreateLesson() {
     const [open, setOpen] = React.useState(false);
     const [selectedValues, setSelectedValues] = useState('');
   
+    const handleImageUpload = (imageUrl: string) => {
+      setLessonImage(imageUrl);
+    };
+
     useEffect(() => {
-      // Fetch the list of courses from Firestore
       const fetchCourses = async () => {
         try {
           const querySnapshot = await getDocs(collection(db, 'courses'));
@@ -36,13 +46,31 @@ export default function CreateLesson() {
             ...doc.data(),
           }));
           setCourses(coursesData);
+
+          if (predefinedCourse) {
+            setSelectedCourse(String(predefinedCourse));
+            setSelectedValues(String(predefinedCourseName));
+          }
+
+          if(selectedCourse) {
+            const lessonsSnapshot = await getDocs(collection(db, 'courses', selectedCourse, 'lessons'));
+            const lessonsData = lessonsSnapshot.docs.map((lessonDoc) => lessonDoc.data());
+
+            const lastLessonOrder = lessonsData.reduce((maxOrder, lesson) => {
+              const lessonOrder = parseInt(lesson.order, 10);
+              return lessonOrder > maxOrder ? lessonOrder : maxOrder;
+            }, 0);
+
+            setLessonOrder((lastLessonOrder + 1).toString());
+          }
+
         } catch (error) {
           console.error('Error fetching courses:', error);
         }
       };
   
       fetchCourses();
-    }, []);
+    }, [selectedCourse, predefinedCourse, predefinedCourseName]);
     
     const toggleSelection = (value: string) => {
       if (selectedValues === value) {
@@ -66,6 +94,7 @@ export default function CreateLesson() {
         description: lessonDescription,
         url: lessonURL,
         order: lessonOrder,
+        image: lessonImage
       };
   
       // Add the lesson to the selected course's 'lessons' collection
@@ -73,10 +102,11 @@ export default function CreateLesson() {
         if (userStatus == 'admin' ) {
           const lessonsCollectionRef = collection(db, 'courses', selectedCourse, 'lessons');
           await addDoc(lessonsCollectionRef, lessonData);
-          setlessonTitle('');
+          setLessonTitle('');
           setLessonDescription('');
           setLessonURL('');
           setLessonOrder('');
+          setLessonImage('')
           setError('');
     
           message.success("Successfully added lesson: " + lessonTitle)
@@ -89,10 +119,10 @@ export default function CreateLesson() {
     };
 
   return (
-    <div className='flex flex-col justify-center items-center p-5 pt-3 gap-3'>
+    <div className='flex flex-col justify-center items-center p-5 pt-3 gap-1'>
         <h1 className='text-xl font-medium pb-3'>Upload Lesson</h1>
         <h1 className='text-lg font-medium w-full'>Course</h1>
-        <div className="w-full">
+        <div className="w-full flex flex-col gap-2">
             <Popover>
               <PopoverTrigger asChild>
                 <ButtonShad
@@ -131,13 +161,12 @@ export default function CreateLesson() {
                   </Command>
               </PopoverContent>
             </Popover>
-          </div>
           <h1 className='text-lg font-medium w-full text-start'>Name</h1>
           <Input
             type='text'
             placeholder='Enter the lesson name'
             value={lessonTitle}
-            onChange={(e) => setlessonTitle(e.target.value)}
+            onChange={(e) => setLessonTitle(e.target.value)}
           />
           <h1 className='text-lg font-medium w-full text-start'>Description</h1>
           <Input
@@ -146,13 +175,17 @@ export default function CreateLesson() {
             value={lessonDescription}
             onChange={(e) => setLessonDescription(e.target.value)}
           />
-          <h1 className='text-lg font-medium w-full text-start'>URL</h1>
+          <h1 className='text-lg font-medium w-full text-start'>Video URL</h1>
           <Input
             type='text'
-            placeholder='Enter the lesson URL'
+            placeholder='Enter the vimeo URL'
             value={lessonURL}
             onChange={(e) => setLessonURL(e.target.value)}
           />
+
+          <h1 className='text-lg font-medium w-full text-start'>Image</h1>
+          <ImageUpload onComplete={handleImageUpload} customPath={'lessons'}/>
+
           <h1 className='text-lg font-medium w-full text-start'>Order</h1>
           <Input
             type='number'
@@ -162,6 +195,7 @@ export default function CreateLesson() {
           />
         <Button onClick={handleUpload}>Upload</Button>
         {error && <p className="text-red-500">{error}</p>}
+        </div>
     </div>
   )
 }

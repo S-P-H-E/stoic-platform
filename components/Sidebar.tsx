@@ -56,9 +56,16 @@ const routes = [
 ];
 
 const Sidebar = () => {
-  const { userName, userId, userStatus, userProfileImageUrl, userProfileBannerUrl } = UserDataFetcher();
+  const { userName, userId, userStatus, userProfileImageUrl, userProfileBannerUrl, userEmail } = UserDataFetcher();
   const pathname = usePathname();
   const { signOut } = useFirebase()
+
+  function truncateText(text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  }
   
   return (
     <div className="flex h-full z-50">
@@ -111,7 +118,10 @@ const Sidebar = () => {
                 </DropdownMenuContent>
             </DropdownMenu>
             </div>
-            {userId ? <p className='font-medium'>{userName}</p>:null}
+            <div className='flex flex-col'>
+              {userName && userId ? <p className='font-medium'>{truncateText(userName, 14)}</p>:null}
+              {userEmail && userId ? <p className='text-xs tracking-tight text-[--highlight]'>{truncateText(userEmail, 20)}</p>:null}
+            </div>
           </div>
             
             <button onClick={()=> signOut()} className='hover:text-red-500 transition duration-200'>

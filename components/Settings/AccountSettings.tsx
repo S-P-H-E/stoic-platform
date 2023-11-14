@@ -8,7 +8,7 @@ import { db } from '@/utils/firebase'
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { message } from 'antd';
 import PasswordModal from './PasswordModal'
-import ProfilePhotoUplaod from './ProfilePhotoUplaod'
+import ProfilePhotoUplaod from './ProfilePhotoUpload'
 import UserImage from '../UserImage'
 import { validateNameLength } from '@/utils/validation'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'

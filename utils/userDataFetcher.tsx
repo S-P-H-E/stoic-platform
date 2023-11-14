@@ -12,6 +12,7 @@ export function UserDataFetcher() {
   const [userName, setUserName] = useState(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [userStatus, setUserStatus] = useState<string>();
+  const [userEmail, setUserEmail] = useState<string>();
   const [generalLastCourse, setGeneralLastCourse] = useState('')
   const [generalLastLesson, setGeneralLastLesson] = useState('')
   const [userProfileImageUrl, setUserProfileImageUrl] = useState('')
@@ -36,6 +37,7 @@ export function UserDataFetcher() {
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
             setUserName(userData.name);
+            setUserEmail(userData.email);
             setUserProfileBannerUrl(userData.bannerUrl);
             setUserStatus(userData.status);
             setUserId(querySnapshot.docs[0].id);
@@ -62,5 +64,5 @@ export function UserDataFetcher() {
     return unsubscribeAuth;
   }, [user, router]);
 
-  return { generalLastCourse, generalLastLesson, userName, userStatus, user, userId, fetching, userProfileImageUrl, userProfileBannerUrl};
+  return { generalLastCourse, userEmail, generalLastLesson, userName, userStatus, user, userId, fetching, userProfileImageUrl, userProfileBannerUrl};
 }

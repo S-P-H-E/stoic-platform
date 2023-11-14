@@ -7,7 +7,6 @@ import { UserDataFetcher } from '@/utils/userDataFetcher';
 import Image from 'next/image';
 import { updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { CgClose } from 'react-icons/cg';
 import { useDropzone } from 'react-dropzone'; // Import useDropzone
 import { BsImageFill } from 'react-icons/bs'
 import { MdDelete } from 'react-icons/md';
@@ -17,9 +16,7 @@ interface PasswordModalProps {
   onClose: () => void;
 }
 
-type Accept = string | string[];
-
-export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
+export default function PhotoUpload({ onClose }: PasswordModalProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [photoUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -69,10 +66,10 @@ export default function ProfilePhotoUpload({ onClose }: PasswordModalProps) {
   });
 
   return (
-    <div className="relative py-16 bg-[--bg] border-[--border] border flex flex-col gap-2 p-8 rounded-lg text-center">
+    <div className="relative py-16  border-[--border] border flex flex-col gap-2 p-8 rounded-lg text-center">
       <div
         {...getRootProps()}
-        className='border-dashed border-2 border-[--border] bg-[--bg] hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer'
+        className='border-dashed border-2 border-[--border]  hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer'
       >
         <input {...getInputProps()} />
         {selectedImage ? (
