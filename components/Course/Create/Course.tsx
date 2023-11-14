@@ -34,7 +34,7 @@ export default function CreateCourse() {
           setCourseName('');
           setCourseDescription('');
           setCourseImage(null);
-          message.success('Successfully added course: ' + courseName + ' Refresh the page to see it.');
+          message.success('Successfully added course: ' + courseName + '. (refresh the page to see it)');
         } else {
           message.error('Unauthorized');
         }
