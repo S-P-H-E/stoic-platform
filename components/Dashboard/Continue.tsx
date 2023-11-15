@@ -5,7 +5,6 @@ import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { doc, onSnapshot } from 'firebase/firestore';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import {motion} from 'framer-motion'
 import placeholderImage from '@/public/placeholder.jpg'
@@ -13,7 +12,6 @@ import placeholderImage from '@/public/placeholder.jpg'
 export default function Continue() {
   const { generalLastCourse, generalLastLesson, userStatus, userId, fetching, userName } = UserDataFetcher();
 
-  const router = useRouter()
   const isPremium = userStatus === 'premium' || userStatus === 'admin'
 
   const [courseData, setCourseData] = useState<any>(null);
@@ -69,8 +67,9 @@ export default function Continue() {
                   <Image loading='lazy' alt="Lesson Thumbnail" src={placeholderImage} placeholder='blur' width={500} height={400} className='w-full object-cover'/>
                   }
                   <div className='absolute bottom-4 left-4 gap-2 flex flex-col'>
-                    <h1 className='2xl:text-5xl lg:text-4xl md:text-2xl text-3xl font-medium'>{lessonData.title}</h1>
-                    <p>{lessonData.description}</p>
+                    <h1 className='2xl:text-5xl lg:text-4xl md:text-2xl text-3xl font-medium hidden md:hidden 2xl:block'>{truncateText(lessonData.title, 18)}</h1>
+                    <h1 className='2xl:text-5xl lg:text-4xl md:text-2xl text-3xl font-medium block 2xl:hidden'>{truncateText(lessonData.title, 14)}</h1>
+                    <p>{truncateText(lessonData.description, 125)}</p>
                   </div>
               </div>
             <p>{courseData.name}</p>
