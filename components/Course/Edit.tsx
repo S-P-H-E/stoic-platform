@@ -9,6 +9,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone';
 import { BsTextLeft } from 'react-icons/bs';
 import { FiLayout, FiImage } from 'react-icons/fi';
+import { IoIosLink } from 'react-icons/io';
+import { RiListOrdered2 } from "react-icons/ri";
 
 interface LessonItem {
   id: string;
@@ -34,8 +36,23 @@ export default function Edit({lesson, courseId}: EditProps) {
   const [editedDescription, setEditedDescription] = useState(lesson.description);
   const descriptionRef = useRef<HTMLTextAreaElement | null>(null);
 
+  const [isEditingUrl, setIsEditingUrl] = useState(false);
+  const [editedUrl, setEditedUrl] = useState(lesson.url);
+  const urlRef = useRef<HTMLInputElement | null>(null);
+
+  const [isEditingOrder, setIsEditingOrder] = useState(false);
+  const [editedOrder, setEditedOrder] = useState(lesson.order);
+  const orderRef = useRef<HTMLInputElement | null>(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  function truncateText(text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  }
 
   const onFileSelected = useCallback(async (file: File) => {
     setSelectedImage(file);
@@ -118,6 +135,8 @@ export default function Edit({lesson, courseId}: EditProps) {
     }
   }, [isEditingTitle]);
 
+  /* ------ */
+
   const enableEditingDescription = () => {
     setIsEditingDescription(true);
   };
@@ -158,6 +177,90 @@ export default function Edit({lesson, courseId}: EditProps) {
     }
   }, [isEditingDescription]);
 
+    /* ------ */
+
+    const enableEditingUrl = () => {
+      setIsEditingUrl(true);
+    };
+  
+    const disableEditingUrl = () => {
+      setIsEditingUrl(false);
+    };
+  
+    const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEditedUrl(e.target.value);
+    };
+  
+    const handleUrlBlur = () => {
+      disableEditingUrl();
+      saveUrl();
+    };
+  
+    const handleKeyDownUrl = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        saveUrl();
+      }
+    };
+  
+    const saveUrl = async () => {
+      disableEditingUrl();
+  
+      const lessonRef = doc(db, 'courses', courseId, 'lessons', lesson.id)
+      await updateDoc(lessonRef, {
+        url: editedUrl,
+      });
+  
+      message.success('Video URL updated successfully!')
+    };
+  
+    useEffect(() => {
+      if (isEditingUrl && urlRef.current) {
+        urlRef.current.focus();
+      }
+    }, [isEditingUrl]);
+
+    /* ------ */
+
+    const enableEditingOrder = () => {
+      setIsEditingOrder(true);
+    };
+  
+    const disableEditingOrder = () => {
+      setIsEditingOrder(false);
+    };
+  
+    const handleOrderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEditedOrder(parseInt(e.target.value, 10));
+    };
+  
+    const handleOrderBlur = () => {
+      disableEditingOrder();
+      saveOrder();
+    };
+  
+    const handleKeyDownOrder = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        saveOrder();
+      }
+    };
+  
+    const saveOrder = async () => {
+      disableEditingOrder();
+  
+      const lessonRef = doc(db, 'courses', courseId, 'lessons', lesson.id)
+      await updateDoc(lessonRef, {
+        order: editedOrder,
+      });
+  
+      message.success('Lesson order updated successfully!')
+    };
+  
+    useEffect(() => {
+      if (isEditingOrder && orderRef.current) {
+        orderRef.current.focus();
+      }
+    }, [isEditingOrder]);
+
   return (
     <div className="p-4 flex flex-col gap-2">
       <h1 className='text-2xl font-medium justify-center flex'>Edit Lesson</h1>
@@ -178,13 +281,13 @@ export default function Edit({lesson, courseId}: EditProps) {
           className='h-full bg-white/5 hover:bg-white/10 transition rounded-xl px-1 outline-none'
           onClick={enableEditingTitle}
         >
-          {editedTitle || lesson.title || "Add a title..."}
+          { truncateText(editedTitle, 25) || truncateText(lesson.title, 25) || "Add a title..."}
         </h1>
         )}
 
       </div>
       <div className='flex gap-3'>
-        <div className='w-40 aspect-square relative object-cover rounded-xl overflow-hidden'>
+        <div className='w-52 h-fit aspect-square relative object-cover rounded-xl overflow-hidden'>
           <div
           {...getRootProps()}
           className='outline-none border-dashed rounded-xl border-2 border-[--border] hover:bg-black/40 transition p-4 text-center justify-center items-center flex cursor-pointer w-full aspect-square'
@@ -207,12 +310,12 @@ export default function Edit({lesson, courseId}: EditProps) {
                   <FiImage size={60} />
                 </div>
               ) : (
-                <div className='flex flex-col justify-center items-center'>
+                <div className='flex flex-col justify-center items-center h-'>
                   {lesson && lesson.thumbnail ? (
-                    <div className='group'>
+                    <div className='group aspect-square'>
                       <Image fill alt="Lesson Image" src={lesson.thumbnail}/>
                       <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex justify-center items-center transition duration-300 rounded-xl">
-                      <div className="flex flex-col items-center">
+                      <div className="flex flex-col items-center aspect-square">
                         <FiImage size={48} className="text-white" />
                         <p className="text-white text-sm mt-2">Change image</p>
                       </div>
@@ -233,10 +336,8 @@ export default function Edit({lesson, courseId}: EditProps) {
           )}
           </div>
           
-
-        
         </div>
-      <div className='flex flex-col gap-1 items-start w-full'>
+      <div className='flex flex-col gap-1 items-start w-64'>
           <div className='flex gap-2 items-center'>
             <BsTextLeft/>
             <h1>Description</h1>
@@ -256,9 +357,56 @@ export default function Edit({lesson, courseId}: EditProps) {
           className='h-full bg-white/5 hover:bg-white/10 transition ring-offset-[#0F0F10] rounded-xl p-2 outline-none w-full'
           onClick={enableEditingDescription}
         >
-          {editedDescription || lesson.description || "Add a description..."}
+          { truncateText(editedDescription,100) || truncateText(lesson.description,100) || "Add a description..."}
         </h1>
         )}
+
+
+        <div className='flex gap-2'>
+        <div className="gap-2 pt-2 flex items-center">
+          <IoIosLink/>
+          {isEditingUrl ? (
+            <input
+            ref={urlRef}
+            value={editedUrl}
+            onBlur={handleUrlBlur}
+            onChange={handleUrlChange}
+            onKeyDown={handleKeyDownUrl}
+            className='h-full bg-transparent transition rounded-xl px-1 outline-none w-full'
+          />
+          ) : (
+            <h1
+            ref={urlRef}
+            className='h-full bg-white/5 hover:bg-white/10 transition rounded-xl px-1 outline-none'
+            onClick={enableEditingUrl}
+          >
+            { truncateText(editedUrl, 22) || truncateText(lesson.url, 22) || "Add a video url..."}
+          </h1>
+          )}
+        </div>
+
+        <div className="gap-2 pt-2 flex items-center ">
+          <RiListOrdered2/>
+          {isEditingOrder ? (
+            <input
+            ref={orderRef}
+            value={editedOrder}
+            onBlur={handleOrderBlur}
+            onChange={handleOrderChange}
+            onKeyDown={handleKeyDownOrder}
+            className='bg-transparent transition rounded-xl px-1 outline-none'
+          />
+          ) : (
+            <h1
+            ref={orderRef}
+            className='h-full bg-white/5 hover:bg-white/10 transition rounded-xl px-1 outline-none'
+            onClick={enableEditingOrder}
+          >
+            { editedOrder || lesson.order || "Specify the lesson order..."}
+          </h1>
+          )}
+        </div>
+        </div>
         </div>
       </div>
     </div>
