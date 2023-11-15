@@ -119,7 +119,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
     };
 
   return (
-    <div className='flex flex-col justify-center items-center p-5 pt-3 gap-1'>
+    <div className='flex flex-col justify-center items-center p-5 pt-3 gap-1 w-[200px]'>
         <h1 className='text-xl font-medium pb-3'>Upload Lesson</h1>
         <h1 className='text-lg font-medium w-full'>Course</h1>
         <div className="w-full flex flex-col gap-2">

@@ -452,8 +452,11 @@ export default function LessonPage() {
                     : <p>Copy</p>
                     }
                   </button>
-                  <h1 className='text-3xl font-medium'>
+                  <h1 className='text-3xl font-medium hidden md:block '>
                     {truncateText(lesson.title, 40)}
+                  </h1>
+                  <h1 className='text-3xl font-medium md:hidden block'>
+                    {truncateText(lesson.title, 20)}
                   </h1>
                   <div className='flex justify-between items-center gap-2'>
                     <button className='hidden border border-[--border] md:flex gap-1 h-fit items-center rounded-xl px-2' onClick={handleLinkCopy}>
@@ -655,18 +658,6 @@ export default function LessonPage() {
                 }
                 </ContextMenu>
             </Link>
-            {userStatus == 'admin' && userId && (
-                <Dialog>
-                  <DialogTrigger>
-                    <button>
-                      <IoMdCreate/>
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <Edit courseId={courseId as string} lesson={lessonItem}/>
-                  </DialogContent>
-                </Dialog>
-              )}
             </motion.div>
             ))}
             {userStatus == 'admin' && userId && (
