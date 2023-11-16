@@ -12,7 +12,7 @@ export default function UserImagePassable({ userImage, userName, userStatus, use
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className='w-full h-full'>
+      <DropdownMenuTrigger className='w-full h-full aspect-square'>
         <Avatar className="w-full h-full">
           <AvatarImage src={userImage ?? undefined} />
           {/* Display the first letter of the userName */}

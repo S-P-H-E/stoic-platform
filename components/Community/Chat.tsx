@@ -3,7 +3,7 @@
 import { db } from '@/utils/firebase';
 import {  collection, doc, getDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import type {Timestamp} from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import UserImagePassable from '../UserImagePassable';
 import clsx from 'clsx';
 
@@ -21,7 +21,41 @@ interface Message {
 
 export default function Chat({channelId}: {channelId: string | string[]}) {
   const [messages, setMessages] = useState<Message[]>([]); // fix the type later
-  const [prevMessageUserId, setPrevMessageUserId] = useState<string | null>(null);
+  const chatContainerRef = useRef<HTMLUListElement | null>(null);
+
+  function truncateText(text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  }
+
+  useLayoutEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+
+  const detectAndStyleLinks = (comment: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const matches = comment.match(urlRegex);
+
+    if (!matches) {
+      return comment;
+    }
+
+    let styledComment = comment;
+
+    matches.forEach((match) => {
+      styledComment = styledComment.replace(
+        match,
+        `<a href="${match}" class="text-blue-500 underline" target="_blank" rel="noopener noreferrer">${match}</a>`
+      );
+    });
+
+    return styledComment;
+  };
 
     const getUserProfileData = async (userId: string) => {
         try {
@@ -81,6 +115,7 @@ export default function Chat({channelId}: {channelId: string | string[]}) {
             });
   
             setMessages(updatedMessages);
+
           });
   
           return () => unsubscribe();
@@ -93,9 +128,8 @@ export default function Chat({channelId}: {channelId: string | string[]}) {
         fetchMessages();
       }
     }, [channelId]);
-  return (
-    <div>
-      <ul className='flex flex-col'>
+    return (
+      <ul ref={chatContainerRef} className='flex flex-col overflow-y-auto p-3'>
         {messages.map((message) => (
           <li key={message.id} className={clsx('flex gap-2 items-center', message.sameUser ? 'mt-0' : 'mt-4')}>
             {!message.sameUser && (
@@ -112,11 +146,15 @@ export default function Chat({channelId}: {channelId: string | string[]}) {
                   <h1 className="text-sm font-light text-[--highlight]">{message.timestamp.toDate().toLocaleString()}</h1>
                 </div>
               )}
-              <h1 className={clsx(message.sameUser && 'ml-14 ')}>{message.message}</h1>
+              <h1
+                className={clsx('flex flex-wrap', message.sameUser && 'ml-14 ')}
+                dangerouslySetInnerHTML={{
+                  __html: detectAndStyleLinks(truncateText(message.message, 100)), // Adjust the maxLength as needed
+                }}
+              ></h1>
             </div>
           </li>
         ))}
       </ul>
-    </div>
   )
 }

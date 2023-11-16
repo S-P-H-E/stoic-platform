@@ -116,22 +116,26 @@ export default function CommunityPage() {
   return (
     <main className='h-full flex items-end w-full'>
 
-      <section className="h-screen w-3/12 border-r border-[--border] flex flex-col gap-4 p-2">
+      <section className="h-screen w-2/12 border-r border-[--border] flex flex-col gap-4 p-2">
         <h1 className="text-2xl font-medium justify-center flex">Community</h1>
         <Channels channelId={currentChannelIdString} channels={channels} userStatus={userStatus}/>
       </section>
       
-      <section className="h-screen w-full border-r border-[--border] flex flex-col gap-4">
-        <div className="text-2xl py-2 font-medium justify-center flex border-b border-[--border]">
-          <h1>{currentChannel ? truncateText(currentChannel.name, 30) : 'Loading...'}</h1>
-        </div>
-        <div className='flex flex-col p-3 h-full'>
+      <section className="h-screen w-8/12 border-r border-[--border] flex flex-col gap-4">
+
+        <div className='flex flex-col h-full w-full relative'>
+          <div className="text-2xl py-2 font-medium justify-center flex border-b border-[--border]">
+            <h1>{currentChannel ? truncateText(currentChannel.name, 30) : 'Loading...'}</h1>
+          </div>
+          
           <Chat channelId={channelId}/>
-          <Chatbox currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
+          <div className="sticky w-full p-2">
+            <Chatbox currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
+          </div>
         </div>
       </section>
 
-      <section className="h-screen w-3/12 flex flex-col gap-4 p-2">
+      <section className="h-screen w-2/12 flex flex-col gap-4 p-2">
         <h1 className="text-2xl font-medium justify-center flex">Members</h1>
         <Members members={members}/>
       </section>

@@ -23,7 +23,7 @@ export default function Members({ members }: { members: Member[]}) {
 
   return (
     <>
-      <ul className="flex flex-col gap-2">
+      <ul className="flex flex-col gap-2 h-screen overflow-y-auto">
       {members.map((member) => (
         <li 
           key={member.id}
