@@ -9,6 +9,7 @@ import UserImagePassable from '../UserImagePassable';
     photoUrl: string;
     status: string;
     bannerUrl: string;
+    canMessage: boolean;
   }
   
 export default function Members({ members }: { members: Member[]}) {
@@ -33,7 +34,7 @@ export default function Members({ members }: { members: Member[]}) {
             </div>
             <div className='flex flex-col justify-center'>
               <h1>{truncateText(member.name, 20)}</h1>
-              <p>Status: {member.status}</p>
+              <p>can message: {member.canMessage ? 'true' : 'false'}</p>
             </div>
           </li>
         ))}

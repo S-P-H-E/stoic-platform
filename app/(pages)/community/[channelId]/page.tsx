@@ -7,8 +7,7 @@ import { db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { useParams } from 'next/navigation'
-import React, { useEffect, useRef, useState } from 'react'
-import { IoSend } from 'react-icons/io5';
+import React, { useEffect, useState } from 'react'
 
 interface Channel {
   id: string;
@@ -32,6 +31,7 @@ interface Member {
   photoUrl: string;
   bannerUrl: string;
   status: string;
+  canMessage: boolean;
 }
 
 export default function CommunityPage() {
@@ -42,6 +42,7 @@ export default function CommunityPage() {
   const [currentChannel, setCurrentChannel] = useState<Channel>();
   
   const [members, setMembers] = useState<Member[]>([]);
+  const [currentUser, setCurrentUser] = useState<Member | undefined>();
 
   const { channelId } = useParams();
   const currentChannelIdString = channelId || '';
@@ -65,23 +66,26 @@ export default function CommunityPage() {
               email: data.email,
               photoUrl: data.photoUrl,
               bannerUrl: data.bannerUrl,
-              status: data.status
+              status: data.status,
+              canMessage: currentChannel.permissions[data.status]?.canMessage || false,
             };
           });
-  
+          
           const filteredMembers = membersData.filter((member) => {
-            const hasPermission =
+            const hasPermissionToSee =
               currentChannel.permissions[member.status]?.canSeeChannel || false;
-  
-            return member.status === 'admin' || (member.status === 'premium' && hasPermission);
+            return member.status === 'admin' || (member.status === 'premium' && hasPermissionToSee);
           });
 
           setMembers(filteredMembers);
+
+          const currentUserData = membersData.find((member) => member.id === userId);
+          setCurrentUser(currentUserData);
         });
   
         return () => unsubscribe();
       }
-    }, [currentChannel]);
+    }, [currentChannel, userId]);
 
     useEffect(() => {
       const channelsCollection = collection(db, 'channels');
@@ -123,7 +127,7 @@ export default function CommunityPage() {
         </div>
         <div className='flex flex-col p-3 h-full'>
           <Chat channelId={channelId}/>
-          <Chatbox userStatus={userStatus} userId={userId} channelId={channelId}/>
+          <Chatbox currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
         </div>
       </section>
 

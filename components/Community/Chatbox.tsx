@@ -1,11 +1,12 @@
 "use client"
 
 import { auth, db } from '@/utils/firebase';
+import clsx from 'clsx';
 import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import React, { useEffect, useRef, useState } from 'react'
 import { IoSend } from 'react-icons/io5'
 
-export default function Chatbox({userStatus, userId, channelId}: {userStatus:string | undefined, userId: string | null, channelId: string | string[]}) {
+export default function Chatbox({userStatus, userId, channelId, messagePermission, currentChannelName}: {userStatus:string | undefined, userId: string | null, channelId: string | string[], messagePermission: boolean, currentChannelName: string | undefined}) {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
     const [newMessage, setNewMessage] = useState('');
@@ -14,15 +15,15 @@ export default function Chatbox({userStatus, userId, channelId}: {userStatus:str
         try {
         const user = auth.currentUser;
         if (!user) {
-            console.error('User not logged in');
-            return;
+          console.error('User not logged in');
+          return;
         }
       
         const messagesRef = collection(db, 'channels', channelId as string, 'messages');
         await addDoc(messagesRef, {
-            message: newMessage,
-            timestamp: Timestamp.fromDate(new Date()),
-            userId: userId,
+          message: newMessage,
+          timestamp: Timestamp.fromDate(new Date()),
+          userId: userId,
         });
       
         setNewMessage('');
@@ -83,11 +84,12 @@ export default function Chatbox({userStatus, userId, channelId}: {userStatus:str
             <div className="flex border border-[--border] items-center w-full rounded-md">
               <textarea
                 ref={textareaRef}
-                className="flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600"
+                className={clsx('flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600', !messagePermission && 'cursor-not-allowed')}
                 onKeyDown={handleTextareaKeyPress}
                 value={newMessage}
+                disabled={!messagePermission || false}
                 onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Say something..."
+                placeholder={messagePermission ? `Message ${currentChannelName}` : 'You are not allowed to send messages.'}
                 rows={1}
               />
               <button
