@@ -30,6 +30,7 @@ interface Member {
   name: string;
   email: string;
   photoUrl: string;
+  bannerUrl: string;
   status: string;
 }
 
@@ -63,6 +64,7 @@ export default function CommunityPage() {
               name: data.name,
               email: data.email,
               photoUrl: data.photoUrl,
+              bannerUrl: data.bannerUrl,
               status: data.status
             };
           });
