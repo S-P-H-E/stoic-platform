@@ -15,7 +15,7 @@ export default function Settings() {
           <AccountSettings />
         </div>
       );
-    } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
+    } else if (userStatus == 'premium' || userStatus == 'admin' && userStatus !== null) {
       return (
         <div className="h-full flex lg:p-10 lg:px-16 p-6 justify-between items-start w-full">
           <AccountSettings />

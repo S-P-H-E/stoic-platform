@@ -32,7 +32,7 @@ export default function Dashboard() {
         </div>
       </div>
     );
-  } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
+  } else if (userStatus == 'premium' || userStatus == 'admin' && userStatus !== null) {
     return (
       <div className="relative flex flex-col h-full w-full md:py-6 px-6 pb-10 gap-4 overflow-hidden justify-center max-w-[1600px] mx-auto">
         <Navbar />

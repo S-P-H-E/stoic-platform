@@ -27,12 +27,12 @@ interface Member {
   bannerUrl: string;
   status: string;
   canMessage: boolean;
+  canReadMessages: boolean;
 }
 
-export default function Chat({channelId, members}: {channelId: string | string[], members: Member[]}) {
+export default function Chat({channelId, members, canFetch, readPermission}: {channelId: string | string[], members: Member[], canFetch: boolean, readPermission: boolean}) {
   const [messages, setMessages] = useState<Message[]>([]); // fix the type later
   const chatContainerRef = useRef<HTMLUListElement | null>(null);
-  const [hasMore, setHasMore] = useState(true); // Indicates if there are more messages to fetch
 
   function truncateText(text: string, maxLength: number) {
     if (text.length > maxLength && text.indexOf(' ') === -1) {
@@ -113,12 +113,12 @@ export default function Chat({channelId, members}: {channelId: string | string[]
         }
       };
     
-      if (channelId) {
+      if (channelId && canFetch && readPermission) {
         fetchMessages();
       }
-    }, [channelId, members]);
+    }, [channelId, members, canFetch, readPermission]);
     return (
-      <ul ref={chatContainerRef} className='flex flex-col overflow-y-auto p-3'>
+      <ul ref={chatContainerRef} className='flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600 p-3'>
         {messages.map((message) => (
           <li key={message.id} className={clsx('flex gap-2 items-center', message.sameUser ? 'mt-0' : 'mt-4')}>
             {!message.sameUser && (

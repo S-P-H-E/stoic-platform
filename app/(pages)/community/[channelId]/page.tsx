@@ -6,7 +6,7 @@ import Members from '@/components/Community/Members';
 import { db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { collection, onSnapshot } from 'firebase/firestore';
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 interface Channel {
@@ -32,9 +32,12 @@ interface Member {
   bannerUrl: string;
   status: string;
   canMessage: boolean;
+  canReadMessages: boolean;
 }
 
 export default function CommunityPage() {
+
+  const router = useRouter()
 
   const { userId, userStatus } = UserDataFetcher()
 
@@ -46,16 +49,23 @@ export default function CommunityPage() {
 
   const { channelId } = useParams();
   const currentChannelIdString = channelId || '';
+  
 
-    function truncateText(text: string, maxLength: number) {
-      if (text.length > maxLength) {
-        return text.substring(0, maxLength) + '...';
-      }
-      return text;
+  if (userStatus == 'user') {
+    router.push('/')
+  }
+
+  function truncateText(text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
     }
+    return text;
+  }
+
+  const isAdminOrPremium = userStatus === 'admin' || userStatus === 'premium';
 
     useEffect(() => {
-      if (currentChannel) {
+      if (currentChannel && isAdminOrPremium) {
         const usersCollection = collection(db, 'users');
         const unsubscribe = onSnapshot(usersCollection, (querySnapshot) => {
           const membersData: Member[] = querySnapshot.docs.map((doc) => {
@@ -68,6 +78,7 @@ export default function CommunityPage() {
               bannerUrl: data.bannerUrl,
               status: data.status,
               canMessage: currentChannel.permissions[data.status]?.canMessage || false,
+              canReadMessages: currentChannel.permissions[data.status]?.canMessage || false,
             };
           });
           
@@ -85,9 +96,10 @@ export default function CommunityPage() {
   
         return () => unsubscribe();
       }
-    }, [currentChannel, userId]);
+    }, [currentChannel, userId, isAdminOrPremium  ]);
 
     useEffect(() => {
+      if (isAdminOrPremium) {
       const channelsCollection = collection(db, 'channels');
   
       const unsubscribe = onSnapshot(channelsCollection, (querySnapshot) => {
@@ -109,9 +121,11 @@ export default function CommunityPage() {
         console.log(currentChannelData)
         setCurrentChannel(currentChannelData);
       });
+    
   
       return () => unsubscribe();
-    }, [currentChannelIdString]);
+    }
+    }, [currentChannelIdString, isAdminOrPremium]);
 
   return (
     <main className='h-full flex items-end w-full'>
@@ -128,8 +142,8 @@ export default function CommunityPage() {
             <h1>{currentChannel ? truncateText(currentChannel.name, 30) : 'Loading...'}</h1>
           </div>
           
-          <Chat channelId={channelId} members={members}/>
-          <div className="sticky w-full p-2">
+          <Chat canFetch={isAdminOrPremium} channelId={channelId} members={members} readPermission={currentUser?.canReadMessages || false}/>
+          <div className="sticky w-full p-2 mt-auto">
             <Chatbox currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
           </div>
         </div>

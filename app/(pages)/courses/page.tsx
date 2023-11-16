@@ -12,7 +12,9 @@ export default function CoursesPage() {
     if (userStatus == 'user') {
       return (
         <div className='h-full flex lg:p-10 lg:px-16 p-6 justify-between items-start w-full'>
-          <Locked/>
+          {userStatus == 'user' && (
+            <Locked/>
+          )}
           <div className='flex flex-col gap-4 md:gap-8 w-full'>
           <h1 className='text-3xl font-semibold'>Courses</h1>
           <CreateCourse className='md:hidden'/>
@@ -21,7 +23,7 @@ export default function CoursesPage() {
           <CreateCourse className='md:block hidden'/>
         </div>
       )
-    } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
+    } else if (userStatus == 'premium' || userStatus == 'admin' && userStatus !== null) {
       return (
         <div className='h-full flex lg:p-10 lg:px-16 p-6 justify-between items-start w-full'>
           <div className='flex flex-col gap-4 w-full'>

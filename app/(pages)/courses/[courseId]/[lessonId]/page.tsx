@@ -28,6 +28,7 @@ import Lesson from '@/components/Course/Create/Lesson';
 import { IoMdCreate } from 'react-icons/io';
 import Edit from '@/components/Course/Edit';
 import SkeletonLesson from '@/components/Course/SkeletonLesson';
+import Locked from '@/components/Locked';
 
 
 interface LessonItem {
@@ -75,8 +76,11 @@ export default function LessonPage() {
         }
     })
 }
- 
-/*   console.log("lastLesson" + userLastLesson) */
+
+  if (userStatus == 'user') {
+    router.push('/')
+  }
+
   const deleteLesson = async (lessonIdToDelete: string) => {
     try {
       if (lessonIdToDelete) {
@@ -394,21 +398,15 @@ export default function LessonPage() {
 
   if (!lesson || !lessons) {
     return (
-      <>
       <div className='flex flex-col justify-center items-center w-full'>
-      <div className="lg:p-10 lg:px-16 p-6 pt-10 flex justify-between items-center gap-6 w-full">
+      <div className="px-16 pt-10 flex justify-between items-center gap-6 w-full">
         <GoBack/>
-       <div className='flex gap-3 items-center'>
-       </div>
       </div>
 
-      <div className="flex flex-col lg:p-10 lg:px-16 p-6 w-full h-screen">
-        <div>
-          <SkeletonLesson/>
-        </div>
+      <div className="flex flex-col lg:px-16 p-6 w-full h-screen">
+        <SkeletonLesson/>
       </div>
     </div>
-      </>
     );
   }
 
@@ -508,7 +506,7 @@ export default function LessonPage() {
                 scale: 1,
               }}
             >
-            <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
+            <Link href={`/courses/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
                   <ContextMenuTrigger>
                   <div className={`hover:bg-[--border] w-full lg:w-[250px] 2xl:w-[300px] p-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
@@ -610,7 +608,7 @@ export default function LessonPage() {
                 once: true,
               }}
             >
-            <Link href={`/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
+            <Link href={`/courses/${courseId}/${lessonItem.id}`} key={index} className='cursor-pointer w-full'>
                 <ContextMenu>
                   <ContextMenuTrigger>
                   <div className={`hover:bg-[--border] w-full md:w-[200px] xl:w-[250px] 2xl:w-[300px] md:mx-5 p-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 

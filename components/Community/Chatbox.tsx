@@ -55,7 +55,7 @@ export default function Chatbox({userStatus, userId, channelId, messagePermissio
   
   
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-      if(userStatus !== 'user') {
+      if(userStatus !== 'user' && messagePermission) {
         e.preventDefault();
   
         if (textareaRef.current) {

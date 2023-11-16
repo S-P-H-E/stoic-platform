@@ -24,7 +24,7 @@ export default function ConvertersPage() {
         </div>
       </div>
     )
-  } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
+  } else if (userStatus == 'premium' || userStatus == 'admin' && userStatus !== null) {
     return (
       <div className='h-full flex flex-col md:gap-16 gap-8 justify-between items-start w-full'>
         <div className="relative flex w-full h-96">

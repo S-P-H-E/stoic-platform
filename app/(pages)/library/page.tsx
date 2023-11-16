@@ -22,7 +22,8 @@ export default function Library() {
             </div>
         </section>
       </>
-      )} else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
+      )
+    } else if (userStatus == 'premium' || userStatus == 'admin' && userStatus !== null) {
         return (
           <section className="lg:py-10 lg:px-16 p-6 flex flex-col gap-4 w-full">
             <div className="flex justify-between">

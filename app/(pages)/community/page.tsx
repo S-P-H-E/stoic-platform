@@ -1,29 +1,51 @@
-import Channels from "@/components/Community/Channels";
-import Link from "next/link";
+"use client"
+import Locked from "@/components/Locked";
+import { UserDataFetcher } from "@/utils/userDataFetcher";
+import { useRouter } from "next/navigation";
+import { BiLoader } from "react-icons/bi";
 
 
 export default function Community() {
-  return (
-    <main className='h-full flex items-end w-full'>
-      <Link href={'community/3lAzKHqOktOkzO4O4Nan'}>Go</Link>
 
-{/*       <section className="h-screen w-3/12 border-r border-[--border] flex flex-col gap-4 p-2">
-        <h1 className="text-2xl font-medium justify-center flex">Community</h1>
-        <Channels/>
-      </section>
-      
-      <section className="h-screen w-full border-r border-[--border] flex flex-col gap-4">
-        <div className="text-2xl py-2 font-medium justify-center flex border-b border-[--border]">
-          <h1>ChatName</h1>
-            
+  const router = useRouter()
+
+  const { userStatus} = UserDataFetcher()
+
+  const randomMessages = [
+    "Preparing your experience...",
+    "Connecting you to the community...",
+    "Elevating your presence in the community...",
+    "Syncing with the STOIC members...",
+    "Forging connections...",
+    "Preparing your experience...",
+    "Connecting with like-minded individuals..."
+  ];
+  
+
+  if (userStatus == 'user') {
+    return (
+      <div className='h-screen flex flex-col justify-center items-center text-2xl'>
+        <Locked/>
+        <h3>Loading...</h3>
+        <div className='text-lg flex gap-2 items-center justify-center text-[--highlight]'>
+        <p>{randomMessages[Math.floor(Math.random() * randomMessages.length)]}</p>
+          <BiLoader className="animate-spin" />
         </div>
-      </section>
-
-      <section className="h-screen w-3/12 flex flex-col gap-4 p-2">
-        <h1 className="text-2xl font-medium justify-center flex">Members</h1>
-
-      </section> */}
-
-    </main>
-  )
+      </div>
+    )
+  } else if (userStatus == 'premium' || userStatus == 'admin' && userStatus !== null) {
+    router.push('community/3lAzKHqOktOkzO4O4Nan')
+    return(
+      <div className='h-screen flex flex-col justify-center items-center text-2xl'>
+        <h3>Loading...</h3>
+        <div className='text-lg flex gap-2 items-center justify-center text-[--highlight]'>
+        <p>{randomMessages[Math.floor(Math.random() * randomMessages.length)]}</p>
+          <BiLoader className="animate-spin" />
+        </div>
+      </div>
+    )
+  } else {
+    // Handle the case when userStatus is still loading or unavailable.
+    return <div className="h-screen flex items-center justify-center"><BiLoader size={72} className="animate-spin"/></div>;
+  }
 }

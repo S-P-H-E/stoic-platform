@@ -17,7 +17,7 @@ export default function Chat() {
       </div>
       </>
     )
-  } else if (userStatus !== undefined && userStatus !== null && userStatus !== 'user') {
+  } else if (userStatus == 'premium' || userStatus == 'admin' && userStatus !== null) {
     return(
       <div className="flex flex-col gap-4 w-full">
         <StoicAI/>
