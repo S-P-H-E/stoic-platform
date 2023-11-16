@@ -6,7 +6,7 @@ import { Montserrat } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 import { clsx } from 'clsx';
 
-import {BrainCircuit,LayoutDashboard,GraduationCap,Book,Settings,Video} from 'lucide-react';
+import {BrainCircuit,LayoutDashboard,GraduationCap,Book,Settings,Video, Users} from 'lucide-react';
 import UserImage from './UserImage';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { BiLogOut } from 'react-icons/bi';
@@ -28,6 +28,12 @@ const routes = [
     label: 'Courses',
     icon: GraduationCap,
     href: '/courses',
+    color: 'text-white',
+  },
+  {
+    label: 'Community',
+    icon: Users,
+    href: '/community',
     color: 'text-white',
   },
   {

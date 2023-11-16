@@ -76,7 +76,7 @@ export default function Continue() {
           </div>
         </Link>
     </motion.div>
-    : <div className='h-[53vh] w-full border border-[--border] hover:border-[#585757] transition duration-200 rounded-xl bg-[--darkgray] p-2 flex flex-col gap-2 my-2 items-center justify-center'>
+    : <div className='h-[55vh] w-full border border-[--border] hover:border-[#585757] transition duration-200 rounded-xl bg-[--darkgray] p-2 flex flex-col gap-2 my-2 items-center justify-center'>
         <p className='w-4/6 h-8 rounded-xl bg-[--border] animate-pulse'/>
         <div className='bg-[--border] rounded-xl animate-pulse w-full h-full'/>
         <p className='w-2/6 h-8 rounded-xl bg-[--border] animate-pulse'/>

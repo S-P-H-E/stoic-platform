@@ -26,7 +26,6 @@ function AuthGuard({ children }: AuthGuardProps) {
 /*  else if (userStatus === 'user' && pathname !== '/upgrade') {
       router.push('/upgrade');
     } */
-    console.log(userStatus)
   }, [loading, user, userStatus, router, pathname]);
 
   return <>{children}</>;

@@ -9,11 +9,24 @@ import { UserDataFetcher } from '../../utils/userDataFetcher';
 import {motion} from 'framer-motion'
 import UserImagePassable from '../UserImagePassable';
 
+interface Comment {
+  id: string,
+  comment: string,
+  courseId: string,
+  lessonId: string,
+  timestamp: Timestamp,
+  userId: string,
+  userProfilePic: string,
+  userBannerPic: string,
+  userStatus: string,
+  userName: string
+}
+
 export default function Comments({ courseId, lessonId }: { courseId: string, lessonId: any }) {
-  const [comments, setComments] = useState<any[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
 
-  const { userName, userId, userStatus, userProfileBannerUrl } = UserDataFetcher();
+  const { userId, userStatus } = UserDataFetcher();
 
   const fadeInAnimationVariants = { // for framer motion  
     initial: {
@@ -40,7 +53,11 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
             const userProfileData = await getUserProfileData(commentData.userId);
             return {
               id: doc.id,
-              ...commentData,
+              comment: commentData.comment,
+              courseId: commentData.courseId,
+              lessonId: commentData.lessonId,
+              timestamp: commentData.timestamp,
+              userId: commentData.userId,
               userProfilePic: userProfileData.photoUrl || '',
               userBannerPic: userProfileData.bannerUrl || '',
               userName: userProfileData.userName || '',
