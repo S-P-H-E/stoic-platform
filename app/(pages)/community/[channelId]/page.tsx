@@ -128,7 +128,7 @@ export default function CommunityPage() {
             <h1>{currentChannel ? truncateText(currentChannel.name, 30) : 'Loading...'}</h1>
           </div>
           
-          <Chat channelId={channelId}/>
+          <Chat channelId={channelId} members={members}/>
           <div className="sticky w-full p-2">
             <Chatbox currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
           </div>
