@@ -35,7 +35,7 @@ export default function Chat({channelId, members}: {channelId: string | string[]
   const [hasMore, setHasMore] = useState(true); // Indicates if there are more messages to fetch
 
   function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
+    if (text.length > maxLength && text.indexOf(' ') === -1) {
       return text.substring(0, maxLength) + '...';
     }
     return text;
@@ -138,7 +138,7 @@ export default function Chat({channelId, members}: {channelId: string | string[]
               <h1
                 className={clsx('flex flex-wrap', message.sameUser && 'ml-14 ')}
                 dangerouslySetInnerHTML={{
-                  __html: detectAndStyleLinks(truncateText(message.message, 100)), // Adjust the maxLength as needed
+                  __html: detectAndStyleLinks(truncateText(message.message, 50)), // Adjust the maxLength as needed
                 }}
               ></h1>
             </div>

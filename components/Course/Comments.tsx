@@ -139,6 +139,13 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
     };
   };
 
+  function truncateText(text: string, maxLength: number) {
+    if (text.length > maxLength && text.indexOf(' ') === -1) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  }
+
   const detectAndStyleLinks = (comment: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const matches = comment.match(urlRegex);
@@ -175,7 +182,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
 
   return (
     <>
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-2 max-w-3/6'>
       <h1 className='text-lg p-4 pb-1'>
         {filteredComments.length === 1
           ? `${filteredComments.length} Comment`
@@ -225,7 +232,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
                 </Dropdown>
               ) : null}
             </div>
-            <p className='py-3 max-w-[1000px]' dangerouslySetInnerHTML={{ __html: detectAndStyleLinks(comment.comment) }}></p>
+            <p className='py-3' dangerouslySetInnerHTML={{ __html: detectAndStyleLinks(truncateText(comment.comment, 70)) }}></p>
             <div className='flex items-center'></div>
             <p className='text-[#5e5e5e]'>{comment.timestamp.toDate().toLocaleString()}</p>
           </motion.li>

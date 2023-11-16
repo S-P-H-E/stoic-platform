@@ -56,7 +56,7 @@ export default function Continue() {
     <>
     {courseData && lessonData ?
     <motion.div initial={{y: 50, opacity: 0}} animate={{y: 0, opacity: 1}}>
-        <Link href={`/${generalLastCourse}/${generalLastLesson}`} className='max-h-[34.5rem] h-full group rounded-xl flex border border-[--border] transition duration-200 bg-[--darkgray] hover:border-[#585757] hover:scale-105 active:scale-100'>
+        <Link href={`courses/${generalLastCourse}/${generalLastLesson}`} className='max-h-[34.5rem] h-full group rounded-xl flex border border-[--border] transition duration-200 bg-[--darkgray] hover:border-[#585757] hover:scale-105 active:scale-100'>
           <div className='w-full h-full flex flex-col items-center gap-2 p-2 overflow-hidden'>
             <h1 className='text-lg md:text-xl font-medium text-center'>Continue learning for {userName ? userName : '...'}</h1>
             <div className="relative rounded-xl overflow-hidden w-full">

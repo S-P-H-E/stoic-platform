@@ -98,10 +98,10 @@ import CourseLoading from './CourseLoading';
                 const lastLessonId = course.userCourseData ? course.userCourseData.lastLessonId : null;
     
                 const href = lastLessonId
-                ? `/${course.id}/${lastLessonId}`
+                ? `/courses/${course.id}/${lastLessonId}`
                 : course.firstLesson
-                ? `/${course.id}/${course.firstLesson.id}`
-                : `/${course.id}/404`;
+                ? `/courses/${course.id}/${course.firstLesson.id}`
+                : `/courses/${course.id}/404`;
     
                 return (
                   <motion.div 

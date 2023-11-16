@@ -20,7 +20,6 @@ import VimeoPlayer from '@vimeo/player';
 import clsx from 'clsx';
 import { FaCheckCircle, FaEyeSlash, FaTimesCircle } from 'react-icons/fa';
 import { AiOutlineCloseCircle, AiFillCheckCircle, AiFillPlusCircle } from 'react-icons/ai';
-import SkeletonLesson from '../../../../components/Course/SkeletonLesson';
 import GoBack from '@/components/UI Elements/GoBack';
 import { BsChevronLeft } from 'react-icons/bs';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
@@ -28,6 +27,7 @@ import { DialogTrigger } from '@radix-ui/react-dialog';
 import Lesson from '@/components/Course/Create/Lesson';
 import { IoMdCreate } from 'react-icons/io';
 import Edit from '@/components/Course/Edit';
+import SkeletonLesson from '@/components/Course/SkeletonLesson';
 
 
 interface LessonItem {
