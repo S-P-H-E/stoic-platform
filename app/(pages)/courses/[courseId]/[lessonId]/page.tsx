@@ -51,8 +51,6 @@ export default function LessonPage() {
   const [userCompleted ,setUserCompleted] = useState<boolean>(false)
   const [lessonCompletionStatusMap, setLessonCompletionStatusMap] = useState(new Map());
   const [completedLessonCount, setCompletedLessonCount] = useState(null)
-
-  const [lessonCompleted, setLessonCompleted] = useState(false);
   
   const { userId, userStatus } = UserDataFetcher()
   const isPremium = userStatus === 'premium' || userStatus === 'admin'
@@ -243,11 +241,9 @@ export default function LessonPage() {
             { merge: true }
           );
             
-          if (!lessonCompleted) {
-            await updateDoc(userCourseRef, {
-              completedLessonCount: increment(1),
-            });
-          }
+          await updateDoc(userCourseRef, {
+            completedLessonCount: increment(1),
+          });
         }
       } catch (error) {
         
@@ -270,10 +266,7 @@ export default function LessonPage() {
         })
 
         player.on('ended', async function() {; // Set the flag to true
-        if(!lessonCompleted) {
           CompleteLesson();
-        }
-          setLessonCompleted(true)
         });
       }
     };
@@ -287,7 +280,7 @@ export default function LessonPage() {
         window.removeEventListener('message', handleVimeoMessageAsync);
       };
     }
-  }, [vimeoUrl, userId, courseId, lessonId, isPremium, lessonCompleted]);
+  }, [vimeoUrl, userId, courseId, lessonId, isPremium]);
 
   useEffect(() => {
     const fetchUserCompletion = () => {

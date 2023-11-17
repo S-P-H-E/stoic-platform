@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import React from 'react'
-import { clsx } from 'clsx';
+import DraggableChannel from './DraggableChannel';
+import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 interface Channel {
     id: string;
@@ -15,16 +15,10 @@ interface Channel {
         [key: string]: boolean; // additional dynamic permissions
       };
     };
+    order: number;
   }
   
-export default function Channels({ channels, channelId, userStatus }: { channels: Channel[], channelId: string | string[], userStatus:string | undefined}) {
-
-    function truncateText(text: string, maxLength: number) {
-        if (text.length > maxLength) {
-          return text.substring(0, maxLength) + '...';
-        }
-        return text;
-    }
+export default function Channels({ channels, channelId, onDragEnd, userStatus, router }: {channels: Channel[], channelId: string | string[], userStatus:string | undefined, onDragEnd: (id: string, order: number) => void; router: AppRouterInstance}) {
 
   return (
     <>
@@ -32,13 +26,9 @@ export default function Channels({ channels, channelId, userStatus }: { channels
         {channels
           .filter((channel) => channel.permissions[userStatus || 'premium']?.canSeeChannel || false) // Add this line to filter channels based on user's permission
           .map((channel => (
-            <Link
-              href={`/community/${channel.id}` ? `${channel.id}` : `/community/${channel.id}`}
-              key={channel.id}
-              className={clsx('px-4 py-2 text-lg bg-[--darkgray] border border-[--border] rounded-xl hover:bg-[--border] transition', channelId == channel.id && 'bg-white hover:bg-white/80 text-black')}
-            >
-              {truncateText(channel.name, 20)}
-            </Link>
+            <div key={channel.id}>
+            <DraggableChannel userStatus={userStatus} channelId={channelId as string} onClick={() => router.push(`/community/${channel.id}` ? `${channel.id}` : `/community/${channel.id}`)} channel={channel} onDragEnd={onDragEnd} />
+            </div>
           )))}
       </ul>
     </>

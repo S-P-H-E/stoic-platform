@@ -5,7 +5,7 @@ import Chatbox from '@/components/Community/Chatbox';
 import Members from '@/components/Community/Members';
 import { db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, doc, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
@@ -22,6 +22,7 @@ interface Channel {
       [key: string]: boolean; // additional dynamic permissions
     };
   };
+  order: number;
 }
 
 interface Member {
@@ -96,43 +97,60 @@ export default function CommunityPage() {
   
         return () => unsubscribe();
       }
-    }, [currentChannel, userId, isAdminOrPremium  ]);
+    }, [currentChannel, userId, isAdminOrPremium]);
 
     useEffect(() => {
       if (isAdminOrPremium) {
-      const channelsCollection = collection(db, 'channels');
-  
-      const unsubscribe = onSnapshot(channelsCollection, (querySnapshot) => {
-        const channelsData: Channel[] = querySnapshot.docs.map((doc) => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            name: data.name,
-            description: data.description,
-            icon: data.icon,
-            permissions: data.permissions,
-          };
-        });
-  
-        setChannels(channelsData);
-
-        const currentChannelData = channelsData.find((channel) => channel.id === currentChannelIdString);
-
-        console.log(currentChannelData)
-        setCurrentChannel(currentChannelData);
-      });
+        const channelsCollection = collection(db, 'channels');
+      
+        const unsubscribe = onSnapshot(
+          query(channelsCollection, orderBy('order')),
+          (querySnapshot) => {
+            const channelsData: Channel[] = querySnapshot.docs.map((doc) => {
+              const data = doc.data();
+              return {
+                id: doc.id,
+                name: data.name,
+                description: data.description,
+                icon: data.icon,
+                permissions: data.permissions,
+                order: data.order,
+              };
+            });
+      
+            setChannels(channelsData);
     
-  
-      return () => unsubscribe();
-    }
+            const currentChannelData = channelsData.find((channel) => channel.id === currentChannelIdString);
+    
+            console.log(currentChannelData)
+            setCurrentChannel(currentChannelData);
+          }
+        );
+        
+        return () => unsubscribe();
+      }
     }, [currentChannelIdString, isAdminOrPremium]);
+
+    const handleDragEnd = async (id: string, newOrder: number) => {
+      try { 
+        const channelRef = doc(db, 'channels', id);
+    
+        await updateDoc(channelRef, {
+          order: newOrder,
+        });
+    
+        /* console.log(`Dropped channel with id ${id} to new order ${newOrder}`); */
+      } catch (error) {
+        console.error('Error updating channel order:', error);
+      }
+    };
 
   return (
     <main className='h-full flex items-end w-full'>
 
       <section className="h-screen w-2/12 border-r border-[--border] flex flex-col gap-4 p-2">
         <h1 className="text-2xl font-medium justify-center flex">Community</h1>
-        <Channels channelId={currentChannelIdString} channels={channels} userStatus={userStatus}/>
+          <Channels router={router} channelId={currentChannelIdString} channels={channels} userStatus={userStatus} onDragEnd={handleDragEnd} />
       </section>
       
       <section className="h-screen w-8/12 border-r border-[--border] flex flex-col gap-4">
