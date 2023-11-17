@@ -28,7 +28,6 @@ import Lesson from '@/components/Course/Create/Lesson';
 import { IoMdCreate } from 'react-icons/io';
 import Edit from '@/components/Course/Edit';
 import SkeletonLesson from '@/components/Course/SkeletonLesson';
-import Locked from '@/components/Locked';
 
 
 interface LessonItem {
@@ -51,10 +50,9 @@ export default function LessonPage() {
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [userCompleted ,setUserCompleted] = useState<boolean>(false)
   const [lessonCompletionStatusMap, setLessonCompletionStatusMap] = useState(new Map());
-  const [completedLessonCount, setCompletedLessonCount] = useState(null);
+  const [completedLessonCount, setCompletedLessonCount] = useState(null)
 
   const [lessonCompleted, setLessonCompleted] = useState(false);
-  const [lessonCompletionFlag, setLessonCompletionFlag] = useState(false);
   
   const { userId, userStatus } = UserDataFetcher()
   const isPremium = userStatus === 'premium' || userStatus === 'admin'
@@ -244,10 +242,12 @@ export default function LessonPage() {
             { completed: true },
             { merge: true }
           );
-  
-          await updateDoc(userCourseRef, {
-            completedLessonCount: increment(1),
-          });
+            
+          if (!lessonCompleted) {
+            await updateDoc(userCourseRef, {
+              completedLessonCount: increment(1),
+            });
+          }
         }
       } catch (error) {
         
@@ -269,15 +269,11 @@ export default function LessonPage() {
           console.log("VIDEO PAUSED")
         })
 
-        let completedFlag = false
-        player.on('ended', async function() {
-        if (!completedFlag) {
-          completedFlag = true; // Set the flag to true
-          if (!lessonCompletionFlag) {
-            setLessonCompletionFlag(true); // Set the flag to true to mark completion
-            CompleteLesson();
-          }
+        player.on('ended', async function() {; // Set the flag to true
+        if(!lessonCompleted) {
+          CompleteLesson();
         }
+          setLessonCompleted(true)
         });
       }
     };
@@ -291,7 +287,7 @@ export default function LessonPage() {
         window.removeEventListener('message', handleVimeoMessageAsync);
       };
     }
-  }, [vimeoUrl, userId, courseId, lessonId, isPremium, lessonCompleted, lessonCompletionFlag]);
+  }, [vimeoUrl, userId, courseId, lessonId, isPremium, lessonCompleted]);
 
   useEffect(() => {
     const fetchUserCompletion = () => {
@@ -427,7 +423,7 @@ export default function LessonPage() {
       <Link href={'/courses'} className="text-[#D5d6d6] text-lg hover:text-stone-200 transition gap-1 flex items-center"><BsChevronLeft/>Go Back</Link>
       </div>
 
-      <h1 className="text-3xl font-medium">{courseName} - Episode {lesson.order}</h1>
+      <h1 className="text-3xl font-medium">{courseName} - Episode {lesson.order} - {completedLessonCount}</h1>
 
       <div className="flex flex-col md:flex-row w-full">
         <div className='w-full'>
