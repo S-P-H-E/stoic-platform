@@ -77,7 +77,7 @@ const Sidebar = () => {
     <div className="flex h-full z-50">
     <div className="top-0 left-0 h-full md:border-r border-[--border] py-8 px-2 lg:p-4 w-full md:w-60 lg:w-72 md:fixed bg-[--bg] text-white">
       <div className="px-3 py-2 flex flex-col h-full">
-        <Link href="/dashboard" className="w-fit flex items-center pl-3 mb-14">
+        <Link href="/dashboard" className="w-fit flex items-center pl-3 mb-8">
           <div className="relative w-8 h-11 mr-4">
             <Image fill alt="Stoic Logo" priority src={StoicLogo} placeholder="blur" />
           </div>
