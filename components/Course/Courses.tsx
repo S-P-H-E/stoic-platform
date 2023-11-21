@@ -99,7 +99,7 @@ import CourseLoading from './CourseLoading';
     
                 const href = lastLessonId
                 ? `/courses/${course.id}/${lastLessonId}`
-                : course.firstLesson
+                : `/courses${course.firstLesson}`
                 ? `/courses/${course.id}/${course.firstLesson.id}`
                 : `/courses/${course.id}/404`;
     

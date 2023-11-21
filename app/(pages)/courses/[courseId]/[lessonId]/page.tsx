@@ -152,7 +152,7 @@ export default function LessonPage() {
               const firstLessonData = firstLessonSnapshot.docs[0].data();
               const firstLessonId = firstLessonSnapshot.docs[0].id;
               
-              router.push(`/${courseId}/${firstLessonId}`);
+              router.push(`/courses/${courseId}/${firstLessonId}`);
             }
           }
         }
