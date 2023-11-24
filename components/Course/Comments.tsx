@@ -180,6 +180,24 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
   const filteredComments = comments.filter(comment => comment.courseId === courseId);
   
 
+  const CommentTimestamp = ({ createdAt }: { createdAt: Date }) => {
+    const commentDate = new Date(createdAt);
+    const currentDate = new Date();
+
+    // Check if the comment was made today
+    const isToday = commentDate.toDateString() === currentDate.toDateString();
+
+    // Format date & time
+    const formattedDate = commentDate.toLocaleDateString();
+    const formattedTime = commentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    return (
+      <p className="text-sm opacity-50">
+        {isToday ? 'Today at ' + formattedTime : formattedDate}
+      </p>
+    );
+  };
+
   return (
     <>
     <div className='flex flex-col gap-2 max-w-3/6'>
@@ -215,12 +233,13 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
           }}
           >
             <div className='flex justify-between items-center'>
-              <div className='flex justify-center items-center'>
-                <div className="w-10 h-10 mr-1">
+              <div className='flex gap-2 justify-center items-center'>
+                <div className="w-12 h-12">
                 <UserImagePassable userBannerUrl={comment.userBannerPic} userImage={comment.userProfilePic} userName={comment.userName} userStatus={comment.userStatus}/>
                 </div>
                 {/* <Image width={500} height={500} src={comment.userProfilePic} alt="Profile Picture" className='w-10 object-cover rounded-full mr-2 aspect-square'/> */}
                 <h1 className='text-2xl'>{comment.userName}</h1>
+                <CommentTimestamp createdAt={comment.timestamp.toDate()} />
               </div>
               {userId === comment.userId || userStatus === 'admin' ? (
                 <Dropdown
@@ -232,9 +251,8 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
                 </Dropdown>
               ) : null}
             </div>
-            <p className='py-3' dangerouslySetInnerHTML={{ __html: detectAndStyleLinks(truncateText(comment.comment, 70)) }}></p>
+            <p className='py-3 break-all' dangerouslySetInnerHTML={{ __html: detectAndStyleLinks(comment.comment) }}></p>
             <div className='flex items-center'></div>
-            <p className='text-[#5e5e5e]'>{comment.timestamp.toDate().toLocaleString()}</p>
           </motion.li>
         ))}
       </ul>

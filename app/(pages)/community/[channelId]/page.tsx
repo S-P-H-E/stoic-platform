@@ -3,11 +3,14 @@ import Channels from '@/components/Community/Channels'
 import Chat from '@/components/Community/Chat';
 import Chatbox from '@/components/Community/Chatbox';
 import Members from '@/components/Community/Members';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { collection, doc, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
+import { ChevronLeft } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { BsPersonFill } from 'react-icons/bs';
 
 interface Channel {
   id: string;
@@ -153,7 +156,7 @@ export default function CommunityPage() {
           <Channels router={router} channelId={currentChannelIdString} channels={channels} userStatus={userStatus} onDragEnd={handleDragEnd} />
       </section>
       
-      <section className="h-screen w-8/12 border-r border-[--border] flex flex-col gap-4">
+      <section className="h-screen w-full 2xl:w-8/12 border-r border-[--border] flex flex-col gap-4">
 
         <div className='flex flex-col h-full w-full relative'>
           <div className="text-2xl py-2 font-medium justify-center flex border-b border-[--border]">
@@ -161,17 +164,33 @@ export default function CommunityPage() {
           </div>
           
           <Chat canFetch={isAdminOrPremium} channelId={channelId} members={members} readPermission={currentUser?.canReadMessages || false}/>
-          <div className="sticky w-full p-2 mt-auto">
+          <div className="sticky w-full p-2 ">
             <Chatbox currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
           </div>
         </div>
       </section>
 
-      <section className="h-screen w-2/12 flex flex-col gap-4 p-2">
+     <section className="h-screen w-2/12 flex-col gap-4 p-2 2xl:flex hidden">
         <h1 className="text-2xl font-medium justify-center flex">Members</h1>
         <Members members={members}/>
       </section>
 
+    <div className='2xl:hidden'>
+      <Sheet>
+        <SheetTrigger>
+          <button className="h-screen w-16 rounded-l-xl flex items-center justify-center">
+            <ChevronLeft/>
+            <BsPersonFill size={32}/>
+          </button>
+        </SheetTrigger>
+        <SheetContent side="right" className='border-[--border] bg-[--bg]'>
+          <section className="h-screen w-full flex flex-col gap-4 p-2">
+            <h1 className="text-2xl font-medium justify-center flex">Members</h1>
+            <Members members={members}/>
+          </section>
+        </SheetContent>
+      </Sheet>
+      </div>
     </main>
   )
 }

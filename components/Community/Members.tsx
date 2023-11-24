@@ -21,8 +21,7 @@ export default function Members({ members }: { members: Member[]}) {
     }
 
   return (
-    <>
-      <ul className="flex flex-col gap-2 h-screen overflow-y-auto">
+      <ul className="flex flex-col gap-2 h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-800">
       {members.map((member) => (
         <li 
           key={member.id}
@@ -38,6 +37,5 @@ export default function Members({ members }: { members: Member[]}) {
           </li>
         ))}
       </ul>
-    </>
   )
 }

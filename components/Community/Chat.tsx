@@ -34,13 +34,6 @@ export default function Chat({channelId, members, canFetch, readPermission}: {ch
   const [messages, setMessages] = useState<Message[]>([]); // fix the type later
   const chatContainerRef = useRef<HTMLUListElement | null>(null);
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength && text.indexOf(' ') === -1) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
-
   useLayoutEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -66,6 +59,24 @@ export default function Chat({channelId, members, canFetch, readPermission}: {ch
     });
 
     return styledComment;
+  };
+
+  const MessageTimestamp = ({ createdAt }: { createdAt: Date }) => {
+    const commentDate = new Date(createdAt);
+    const currentDate = new Date();
+
+    // Check if the comment was made today
+    const isToday = commentDate.toDateString() === currentDate.toDateString();
+
+    // Format date & time
+    const formattedDate = commentDate.toLocaleDateString();
+    const formattedTime = commentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    return (
+      <p className="text-xs opacity-50">
+        {isToday ? 'Today at ' + formattedTime : formattedDate}
+      </p>
+    );
   };
 
     useEffect(() => {
@@ -118,7 +129,7 @@ export default function Chat({channelId, members, canFetch, readPermission}: {ch
       }
     }, [channelId, members, canFetch, readPermission]);
     return (
-      <ul ref={chatContainerRef} className='flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600 p-3'>
+      <ul ref={chatContainerRef} className='mt-auto flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-800 p-3'>
         {messages.map((message) => (
           <li key={message.id} className={clsx('flex gap-2 items-center', message.sameUser ? 'mt-0' : 'mt-4')}>
             {!message.sameUser && (
@@ -132,13 +143,14 @@ export default function Chat({channelId, members, canFetch, readPermission}: {ch
               {!message.sameUser && (
                 <div className="flex gap-2 items-center">
                   <h1 className="text-lg font-medium">{message.userName}</h1>
-                  <h1 className="text-sm font-light text-[--highlight]">{message.timestamp.toDate().toLocaleString()}</h1>
+                  <MessageTimestamp createdAt={message.timestamp.toDate()} />
+{/*                   <h1 className="text-sm font-light text-[--highlight]">{message.timestamp.toDate().toLocaleString()}</h1> */}
                 </div>
               )}
               <h1
-                className={clsx('flex flex-wrap', message.sameUser && 'ml-14 ')}
+                className={clsx('flex flex-wrap break-all', message.sameUser && 'ml-14 ')}
                 dangerouslySetInnerHTML={{
-                  __html: detectAndStyleLinks(truncateText(message.message, 50)), // Adjust the maxLength as needed
+                  __html: detectAndStyleLinks(message.message), // Adjust the maxLength as needed
                 }}
               ></h1>
             </div>
