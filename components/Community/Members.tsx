@@ -25,7 +25,7 @@ export default function Members({ members }: { members: Member[]}) {
       {members.map((member) => (
         <li 
           key={member.id}
-          className="px-4 py-2 border border-[--border] rounded-xl flex gap-2"
+          className="animate-pop px-4 py-2 border border-[--border] rounded-xl flex gap-2"
           >
             <div className="w-12 h-12">
               <UserImagePassable userBannerUrl={member.bannerUrl} userImage={member.photoUrl} userName={member.name} userStatus={member.status}/>

@@ -163,8 +163,8 @@ export default function CommunityPage() {
             <h1>{currentChannel ? truncateText(currentChannel.name, 30) : 'Loading...'}</h1>
           </div>
           
-          <Chat canFetch={isAdminOrPremium} channelId={channelId} members={members} readPermission={currentUser?.canReadMessages || false}/>
-          <div className="sticky w-full p-2 ">
+          <Chat userId={userId} userStatus={userStatus} canFetch={isAdminOrPremium} channelId={channelId} members={members} readPermission={currentUser?.canReadMessages || false}/>
+          <div className="sticky w-full p-2">
             <Chatbox currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
           </div>
         </div>
@@ -177,7 +177,7 @@ export default function CommunityPage() {
 
     <div className='2xl:hidden'>
       <Sheet>
-        <SheetTrigger>
+        <SheetTrigger asChild>
           <button className="h-screen w-16 rounded-l-xl flex items-center justify-center">
             <ChevronLeft/>
             <BsPersonFill size={32}/>
