@@ -8,7 +8,7 @@ import { db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { collection, doc, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
 import { ChevronLeft } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { BsPersonFill } from 'react-icons/bs';
 
@@ -39,7 +39,15 @@ interface Member {
   canReadMessages: boolean;
 }
 
-export default function CommunityPage() {
+interface CommunityPageProps {
+  params: {
+    channelId: string;
+  };
+}
+
+export default function CommunityPage(
+  { params: { channelId } }: CommunityPageProps
+) {
 
   const router = useRouter()
 
@@ -51,7 +59,7 @@ export default function CommunityPage() {
   const [members, setMembers] = useState<Member[]>([]);
   const [currentUser, setCurrentUser] = useState<Member | undefined>();
 
-  const { channelId } = useParams();
+
   const currentChannelIdString = channelId || '';
   
 
@@ -118,6 +126,7 @@ export default function CommunityPage() {
                 icon: data.icon,
                 permissions: data.permissions,
                 order: data.order,
+                activeTyping: data.activeTyping
               };
             });
       
@@ -148,8 +157,6 @@ export default function CommunityPage() {
       }
     };
 
-    
-
   return (
     <main className='h-full flex items-end w-full'>
 
@@ -159,16 +166,11 @@ export default function CommunityPage() {
       </section>
       
       <section className="h-screen w-full 2xl:w-8/12 border-r border-[--border] flex flex-col gap-4">
-
         <div className='flex flex-col h-full w-full relative'>
-          <div className="text-2xl py-2 font-medium justify-center flex border-b border-[--border]">
-            <h1>{currentChannel ? truncateText(currentChannel.name, 30) : 'Loading...'}</h1>
-          </div>
-          
-          <Chat userId={userId} userStatus={userStatus} canFetch={isAdminOrPremium} channelId={channelId} members={members} readPermission={currentUser?.canReadMessages || false}/>
-          <div className="sticky w-full p-2">
+          <Chat currentChannel={currentChannel} currentUser={currentUser} userId={userId} userStatus={userStatus} canFetch={isAdminOrPremium} channelId={channelId} members={members} readPermission={currentUser?.canReadMessages || false}/>
+          {/*<div className="sticky w-full p-2">
             <Chatbox userName={currentUser?.name} currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
-          </div>
+          </div> */}
         </div>
       </section>
 

@@ -2,19 +2,20 @@
 
 import { auth, db } from '@/utils/firebase';
 import clsx from 'clsx';
-import { Timestamp, addDoc, arrayRemove, arrayUnion, collection, doc, updateDoc} from 'firebase/firestore';
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Timestamp, addDoc, collection} from 'firebase/firestore';
+import React, { useEffect, useRef, useState } from 'react'
 import { IoSend } from 'react-icons/io5'
 
 
-export default function Chatbox({userName, userStatus, userId, channelId, messagePermission, currentChannelName}: {userName: string | undefined, userStatus:string | undefined, userId: string | null, channelId: string | string[], messagePermission: boolean, currentChannelName: string | undefined}) {
+export default function Chatbox({ userName, userStatus, userId, channelId, messagePermission, currentChannelName}: { userName: string | undefined, userStatus:string | undefined, userId: string | null, channelId: string | string[], messagePermission: boolean, currentChannelName: string | undefined}) {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
     const [newMessage, setNewMessage] = useState('');
 
-    const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
+/*  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
 
     const [isTyping, setIsTyping] = useState(false)
+ */
 
     const sendMessageToFirestore = async () => {
         try {
@@ -71,14 +72,14 @@ export default function Chatbox({userName, userStatus, userId, channelId, messag
         sendMessageToFirestore()
         
       } else {
-        /* message.error('Encountered an issue with the user, please try again') */
+        console.log('Encountered an issue with the user, please try again')
       }
   
     };
 
     const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setNewMessage(e.target.value);
-      setIsTyping(e.target.value !== '');
+/*       setIsTyping(e.target.value !== '');
 
       if (typingTimeout) {
         clearTimeout(typingTimeout);
@@ -90,14 +91,14 @@ export default function Chatbox({userName, userStatus, userId, channelId, messag
         }, 10000)
       );
 
-      updateTypingStatus(true)
+      updateTypingStatus(true) */
     };
   
     const handleTextareaKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault(); // Prevent a new line in the textarea
         handleFormSubmit(e as any);
-      } else {
+      } /* else {
         if (typingTimeout) {
           clearTimeout(typingTimeout);
         }
@@ -107,10 +108,10 @@ export default function Chatbox({userName, userStatus, userId, channelId, messag
             setIsTyping(false);
           }, 10000)
         );
-      }
+      } */
     };
 
-    const updateTypingStatus = useCallback(
+/*     const updateTypingStatus = useCallback(
       async (isTyping: boolean) => {
         try {
           const channelRef = doc(db, 'channels', channelId as string);
@@ -133,12 +134,12 @@ export default function Chatbox({userName, userStatus, userId, channelId, messag
           updateTypingStatus(false);
         }
       };
-    }, [userName, channelId, updateTypingStatus]);
+    }, [userName, channelId, updateTypingStatus]); */
 
   return (
     <>
         <form className="flex gap-2 w-full justify-end items-end mt-auto" onSubmit={handleFormSubmit}>
-            <div className="flex border border-[--border] items-center w-full rounded-md">
+            <div className="flex border border-[--border] items-center w-full rounded-md bg-[--bg]">
               <textarea
                 ref={textareaRef}
                 className={clsx('flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600', !messagePermission && 'cursor-not-allowed')}
@@ -149,7 +150,7 @@ export default function Chatbox({userName, userStatus, userId, channelId, messag
                 placeholder={messagePermission ? `Message ${currentChannelName}` : 'You are not allowed to send messages.'}
                 rows={1}
               />
-              <p>{isTyping ? 'Typing...' : null}</p>
+              {/* <p>{isTyping ? 'Typing...' : null}</p> */}
               <button
                 className="p-4 rounded-full"
                 type="submit"
