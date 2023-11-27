@@ -17,9 +17,7 @@ export default function Library() {
               <h1 className='text-3xl font-semibold'>Library</h1>
               <CreateButton/>
             </div>
-            <div>  
               <Resources/>
-            </div>
         </section>
       </>
       )
@@ -30,9 +28,7 @@ export default function Library() {
               <h1 className='text-3xl font-semibold'>Library</h1>
               <CreateButton/>
             </div>
-            <div>  
               <Resources/>
-            </div>
           </section>
         )
     } else {

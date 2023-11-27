@@ -41,6 +41,9 @@ export default function Chat({channelId, members, canFetch, readPermission, user
   const chatContainerRef = useRef<HTMLUListElement | null>(null);
   const editedMessageRef = useRef<HTMLLIElement | null>(null); // Ref for the edited message
 
+  const [currentlyTyping, setCurrentlyTyping] = useState<string[]>([]);
+  const [currentChannel, setCurrentChannel] = useState<any>()
+
   useLayoutEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -161,7 +164,7 @@ export default function Chat({channelId, members, canFetch, readPermission, user
 
     const editMessage = async (messageId: string, messageUserId: string) => {
       try {
-        if (userId === messageUserId || userStatus === 'admin') {
+        if (userId === messageUserId) {
           setEditedMessage({ id: messageId, message: messages.find((msg) => msg.id === messageId)?.message || '' });
         } else {
           console.log('Unauthorized. (unlucky)');
@@ -193,7 +196,7 @@ export default function Chat({channelId, members, canFetch, readPermission, user
     };
 
     return (
-      <ul ref={chatContainerRef} className='flex flex-col h-full justify-end overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-800 p-3'>
+      <ul ref={chatContainerRef} className='flex flex-col mt-auto overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 hover:scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 p-3'>
         {messages.map((message) => (
           <li 
           key={message.id} 
@@ -249,12 +252,14 @@ export default function Chat({channelId, members, canFetch, readPermission, user
                     </TooltipContent>
                   </Tooltip>
                   
+                  { (userId === message.userId) && 
                   <Tooltip>
                     <TooltipTrigger onClick={() => editMessage(message.id, message.userId)} className="hover:bg-[--highlight] h-full p-2 rounded-lg transition duration-200"><FaPen/></TooltipTrigger>
                     <TooltipContent className="bg-[--border] border-[--highlight]">
                       <p>Edit</p>
                     </TooltipContent>
                   </Tooltip>
+                  }
                   
                   { (userId === message.userId || userStatus === 'admin') && 
                     <Tooltip>

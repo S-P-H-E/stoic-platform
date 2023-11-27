@@ -2,14 +2,19 @@
 
 import { auth, db } from '@/utils/firebase';
 import clsx from 'clsx';
-import { Timestamp, addDoc, collection } from 'firebase/firestore';
-import React, { useEffect, useRef, useState } from 'react'
+import { Timestamp, addDoc, arrayRemove, arrayUnion, collection, doc, updateDoc} from 'firebase/firestore';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { IoSend } from 'react-icons/io5'
 
-export default function Chatbox({userStatus, userId, channelId, messagePermission, currentChannelName}: {userStatus:string | undefined, userId: string | null, channelId: string | string[], messagePermission: boolean, currentChannelName: string | undefined}) {
+
+export default function Chatbox({userName, userStatus, userId, channelId, messagePermission, currentChannelName}: {userName: string | undefined, userStatus:string | undefined, userId: string | null, channelId: string | string[], messagePermission: boolean, currentChannelName: string | undefined}) {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
     const [newMessage, setNewMessage] = useState('');
+
+    const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
+
+    const [isTyping, setIsTyping] = useState(false)
 
     const sendMessageToFirestore = async () => {
         try {
@@ -70,13 +75,65 @@ export default function Chatbox({userStatus, userId, channelId, messagePermissio
       }
   
     };
+
+    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setNewMessage(e.target.value);
+      setIsTyping(e.target.value !== '');
+
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+      }
+  
+      setTypingTimeout(
+        setTimeout(() => {
+          setIsTyping(false);
+        }, 10000)
+      );
+
+      updateTypingStatus(true)
+    };
   
     const handleTextareaKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault(); // Prevent a new line in the textarea
         handleFormSubmit(e as any);
+      } else {
+        if (typingTimeout) {
+          clearTimeout(typingTimeout);
+        }
+  
+        setTypingTimeout(
+          setTimeout(() => {
+            setIsTyping(false);
+          }, 10000)
+        );
       }
     };
+
+    const updateTypingStatus = useCallback(
+      async (isTyping: boolean) => {
+        try {
+          const channelRef = doc(db, 'channels', channelId as string);
+          await updateDoc(channelRef, {
+            activeTyping: isTyping
+              ? arrayUnion(userName)
+              : arrayRemove(userName),
+          });
+        } catch (error) {
+          console.error('Error updating typing status:', error);
+        }
+      },
+      [userName, channelId]
+    );
+    
+    useEffect(() => {
+      // Cleanup function to remove user from typing list when component unmounts
+      return () => {
+        if (userName) {
+          updateTypingStatus(false);
+        }
+      };
+    }, [userName, channelId, updateTypingStatus]);
 
   return (
     <>
@@ -85,13 +142,14 @@ export default function Chatbox({userStatus, userId, channelId, messagePermissio
               <textarea
                 ref={textareaRef}
                 className={clsx('flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600', !messagePermission && 'cursor-not-allowed')}
-                onKeyDown={handleTextareaKeyPress}
                 value={newMessage}
                 disabled={!messagePermission || false}
-                onChange={(e) => setNewMessage(e.target.value)}
+                onKeyDown={handleTextareaKeyPress}
+                onChange={handleTextareaChange}
                 placeholder={messagePermission ? `Message ${currentChannelName}` : 'You are not allowed to send messages.'}
                 rows={1}
               />
+              <p>{isTyping ? 'Typing...' : null}</p>
               <button
                 className="p-4 rounded-full"
                 type="submit"

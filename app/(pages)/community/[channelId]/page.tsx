@@ -148,6 +148,8 @@ export default function CommunityPage() {
       }
     };
 
+    
+
   return (
     <main className='h-full flex items-end w-full'>
 
@@ -165,7 +167,7 @@ export default function CommunityPage() {
           
           <Chat userId={userId} userStatus={userStatus} canFetch={isAdminOrPremium} channelId={channelId} members={members} readPermission={currentUser?.canReadMessages || false}/>
           <div className="sticky w-full p-2">
-            <Chatbox currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
+            <Chatbox userName={currentUser?.name} currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
           </div>
         </div>
       </section>

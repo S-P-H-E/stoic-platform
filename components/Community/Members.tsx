@@ -21,18 +21,18 @@ export default function Members({ members }: { members: Member[]}) {
     }
 
   return (
-      <ul className="flex flex-col gap-2 h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-800">
+      <ul className="flex flex-col gap-2 h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 hover:scrollbar-thumb-neutral-500 scrollbar-track-neutral-800">
       {members.map((member) => (
         <li 
           key={member.id}
-          className="animate-pop px-4 py-2 border border-[--border] rounded-xl flex gap-2"
+          className="group animate-pop px-4 py-2 border border-[--border] rounded-xl flex gap-3 hover:bg-[--border] transition duration-200"
           >
-            <div className="w-12 h-12">
+            <div className="w-12 h-12 relative">
               <UserImagePassable userBannerUrl={member.bannerUrl} userImage={member.photoUrl} userName={member.name} userStatus={member.status}/>
+              <div className='bg-green-500 w-4 h-4 right-0 bottom-0 absolute rounded-full border-[--bg] group-hover:border-[--border] border-[3px] transition duration-200'/>
             </div>
             <div className='flex flex-col justify-center'>
               <h1>{truncateText(member.name, 20)}</h1>
-              <p>can message: {member.canMessage ? 'true' : 'false'}</p>
             </div>
           </li>
         ))}

@@ -68,7 +68,7 @@ const DraggableChannel: React.FC<DraggableChannelProps> = ({ channel, channelId,
   animate={controls}
   style={{ width: '100%' }}
 >
-  <div onClick={() => {if (!isDragging) {onClick();}}} className={clsx('animate-pop px-4 hover:cursor-pointer py-2 text-lg bg-[--darkgray] border border-[--border] rounded-xl hover:bg-[--border] transition', channelId == channel.id && 'bg-white hover:bg-white/80 text-black')}>
+  <div onClick={() => {if (!isDragging) {onClick();}}} className={clsx('animate-pop px-4 hover:cursor-pointer py-2 text-lg bg-[--darkgray] border border-[--border] rounded-xl hover:bg-[--border] transition', channelId == channel.id && 'bg-white hover:bg-white/80 text-black', isDragging && '!cursor-grabbing')}>
     {truncateText(channel.name, 20)}
   </div>
 </motion.div>

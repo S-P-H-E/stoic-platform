@@ -172,7 +172,7 @@ export default function Resources() {
     <div className='flex flex-col gap-4'>
       <TagFilter onDeleteTag={handleTagDelete} tags={tags} onTagFilter={handleTagFilter} selectedTags={selectedTags} userStatus={userStatus}/> 
       <SearchBar onSearch={handleSearch}/>
-      <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 5xl:grid-cols-6 gap-4'>
+      <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 5xl:grid-cols-6 gap-4 '>
       {searchQuery && filteredResources.length === 0 ? (
         <motion.div className="col-span-3"
         initial={{y:100, opacity:0}}
