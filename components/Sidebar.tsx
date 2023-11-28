@@ -67,8 +67,8 @@ const routes = [
 interface Role {
   id: string;
   name: string;
-  order: number;
   color: string;
+  order: number;
 }
 
 const Sidebar = () => {
@@ -93,6 +93,7 @@ const Sidebar = () => {
         id: doc.id,
         name: doc.data().name,
         color: doc.data().color,
+        order: doc.data().order,
       }));
       setRoles(rolesData);
     });
