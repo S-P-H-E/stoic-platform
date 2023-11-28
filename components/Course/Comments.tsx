@@ -28,6 +28,7 @@ interface Role {
   id: string;
   name: string;
   color: string;
+  order: number;
 }
 
 export default function Comments({ courseId, lessonId }: { courseId: string, lessonId: any }) {
@@ -60,6 +61,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
         id: doc.id,
         name: doc.data().name,
         color: doc.data().color,
+        order: doc.data().order
       }));
       setRoles(rolesData);
     });

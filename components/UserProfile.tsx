@@ -210,7 +210,7 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
                       </div>
                     ))}
                     <div className="bg-white text-black flex px-4 py-2 h-10 rounded-md gap-2 items-center">
-                      <HiMiniCheckBadge />
+                    <HiMiniCheckBadge />
                       <h1>User</h1>
                     </div>
                   </>
