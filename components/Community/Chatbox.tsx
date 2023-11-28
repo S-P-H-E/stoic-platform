@@ -11,21 +11,26 @@ import { z } from 'zod';
 
 export default function Chatbox({ userName, userStatus, userId, channelId, messagePermission, currentChannelName}: { userName: string | undefined, userStatus:string | undefined, userId: string | null, channelId: string | string[], messagePermission: boolean, currentChannelName: string | undefined}) {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+    const [messageTimestamps, setMessageTimestamps] = useState<number[]>([]);
+    const [currentLimit, setCurrentLimit] = useState<number>(2); // Initial message limit in seconds
+    const [isRateLimitedBefore, setIsRateLimitedBefore] = useState(false);
+
+    const messageLimit = 8; // Adjust the limit as needed
 
     const [newMessage, setNewMessage] = useState('');
-
-/*  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
-
-    const [isTyping, setIsTyping] = useState(false)
- */
-
+    
     const sendMessageToFirestore = async () => {
         try {
         const user = auth.currentUser;
         if (!user) {
           console.error('User not logged in');
           return;
+        } else if (isRateLimited()) {
+          console.error('Message rate limit exceeded');
+          return;
         }
+
+        setIsRateLimitedBefore(false);
       
         const messagesRef = collection(db, 'channels', channelId as string, 'messages');
         await addDoc(messagesRef, {
@@ -39,6 +44,33 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
         console.error('Error adding comment:', error);
         }
     }
+
+    const isRateLimited = () => {
+      const now = Date.now();
+  
+      if (isRateLimitedBefore) {
+        console.error('Message rate limit exceeded');
+        return true;
+      }
+  
+      const recentMessages = messageTimestamps.filter((timestamp) => now - timestamp < currentLimit * 1000);
+  
+      if (recentMessages.length >= messageLimit) {
+        setCurrentLimit(currentLimit + 2);
+  
+        setTimeout(() => {
+          setIsRateLimitedBefore(false);
+        }, currentLimit * 1000);
+  
+        setIsRateLimitedBefore(true);
+        return true;
+      }
+  
+      return false;
+    };
+  
+  
+  
 
     useEffect(() => {
       const adjustRows = () => {
@@ -69,7 +101,7 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
           messageSchema.parse(newMessage); // Validate the message using Zod schema
         } catch (error: any) {
           const errorMessage = error.errors[0]?.message; // Access the "message" property
-          message.error(`Validation error: ${errorMessage}`);
+          /* message.error(`Validation error: ${errorMessage}`); */
           return; // Do not send the message if validation fails
         }
     
@@ -77,7 +109,8 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
           textareaRef.current.style.height = 'auto';
           textareaRef.current.style.overflowY = 'hidden';
         }
-    
+        
+        setMessageTimestamps([...messageTimestamps, Date.now()]);
         sendMessageToFirestore();
       } else {
         console.log('Encountered an issue with the user, please try again');
@@ -143,10 +176,13 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
       };
     }, [userName, channelId, updateTypingStatus]); */
     
-    const messageSchema = z.string().min(1, 'Message must be at least 1 character').max(2000, 'Message must be at most 2000 characters');
+    const messageSchema = z.string().min(1, 'Message must be at least 1 character').max(1000, 'Message must be at most 1000 characters');
 
   return (
     <>
+      {isRateLimitedBefore && (
+        <div className="text-red-500">You are currently rate-limited. Please wait before sending another message. {}</div>
+      )}
         <form className="relative flex gap-2 w-full justify-end items-end mt-auto" onSubmit={handleFormSubmit}>
             <div className="flex border border-[--border] items-center w-full rounded-md bg-[--bg]">
               <textarea
@@ -167,9 +203,9 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
                 <IoSend />
               </button>
             </div>
-            {newMessage.length > 1500 &&
+            {newMessage.length > 850 &&
             <div className="absolute bottom-2 right-16">
-              <p className={clsx('border-[--border] border bg-[--bg] px-2 py-1 rounded-xl', (newMessage.length) > 2000 && 'text-red-500 border-red-600/50')}>{newMessage.length}</p>
+              <p className={clsx('border-[--border] border bg-[--bg] px-2 py-1 rounded-xl', (newMessage.length) > 1000 && 'text-red-500 border-red-600/50')}>{newMessage.length}</p>
             </div>
             }
         </form>

@@ -247,7 +247,7 @@
           {messages.map((message) => (
             <li 
             key={message.id} 
-            className={clsx('relative group flex gap-2 items-center py-0.5 px-2 hover:bg-white/5 rounded-lg transition duration-200', message.sameUser ? 'mt-0' : 'mt-4')}
+            className={clsx('relative group flex gap-2 items-start py-0.5 px-2 hover:bg-white/5 rounded-lg transition duration-200', message.sameUser ? 'mt-0' : 'mt-4')}
             ref={(ref) => {
               if (editedMessage && message.id === editedMessage.id) {
                 editedMessageRef.current = ref;
