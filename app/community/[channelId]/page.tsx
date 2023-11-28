@@ -201,21 +201,6 @@ export default function CommunityPage(
     <section className="h-screen w-2/12 border-r border-[--border] flex flex-col gap-4 p-2">
         <h1 className="text-2xl font-medium justify-center flex">Community</h1>
         <Channels router={router} channelId={currentChannelIdString} channels={channels} userStatus={userStatus} onDragEnd={handleDragEnd} />
-
-        {/* Display user roles for testing */}
-        {currentUser && currentUser.roles && (
-          <div className="mt-4">
-            <h2 className="text-lg font-semibold">User Roles:</h2>
-            <ul>
-              {currentUser.roles.map((role, index) => (
-                <li key={index} className="flex items-center gap-2">
-                  <p>{role.name}</p>
-                  <p>{role.color}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </section>
       
       <section className="h-screen w-full 2xl:w-8/12 border-r border-[--border] flex flex-col gap-4">
