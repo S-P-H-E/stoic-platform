@@ -288,7 +288,7 @@ export default function CreateResource() {
         <PopoverContent>
           <Command>
             <CommandInput placeholder="Search tag..." />
-            <CommandEmpty className="gap-2 flex flex-col items-center justify-center">
+            <CommandEmpty className="gap-2 flex flex-col items-center justify-center py-4">
               <p>No tags found.</p>
               <Dialog>
                 <DialogTrigger>

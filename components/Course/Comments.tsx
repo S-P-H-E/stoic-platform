@@ -8,6 +8,7 @@ import UserImage from '../UserImage';
 import { UserDataFetcher } from '../../utils/userDataFetcher';
 import {motion} from 'framer-motion'
 import UserImagePassable from '../UserImagePassable';
+import clsx from 'clsx';
 
 interface Comment {
   id: string,
@@ -20,11 +21,20 @@ interface Comment {
   userBannerPic: string,
   userStatus: string,
   userName: string
+  userRoles: Role[]
+}
+
+interface Role {
+  id: string;
+  name: string;
+  color: string;
 }
 
 export default function Comments({ courseId, lessonId }: { courseId: string, lessonId: any }) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
+
+  const [roles, setRoles] = useState<Role[]>([]);
 
   const { userId, userStatus } = UserDataFetcher();
 
@@ -43,6 +53,21 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
 }
 
   useEffect(() => {
+    const rolesCollection = collection(db, 'roles');
+
+    const unsubscribe = onSnapshot(rolesCollection, (snapshot) => {
+      const rolesData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        name: doc.data().name,
+        color: doc.data().color,
+      }));
+      setRoles(rolesData);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
     const fetchComments = async () => {
       try {
         const commentsRef = collection(db, 'comments');
@@ -51,6 +76,12 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
           const commentsData = await Promise.all(snapshot.docs.map(async (doc) => {
             const commentData = doc.data();
             const userProfileData = await getUserProfileData(commentData.userId);
+
+            const userRoles = userProfileData.userRoles && userProfileData.userRoles.map((roleName: string) => {
+              const role = roles.find((r) => r.name === roleName);
+              return role || { name: roleName, color: 'white' }; // Default color if role not found
+            });
+
             return {
               id: doc.id,
               comment: commentData.comment,
@@ -61,7 +92,8 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
               userProfilePic: userProfileData.photoUrl || '',
               userBannerPic: userProfileData.bannerUrl || '',
               userName: userProfileData.userName || '',
-              userStatus: userProfileData.userStatus || ''
+              userStatus: userProfileData.userStatus || '',
+              userRoles: userRoles || "User",
             };
           }));
           setComments(commentsData);
@@ -76,8 +108,7 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
     if (courseId) {
       fetchComments();
     }
-  }, [courseId]);
-
+  }, [courseId, roles]);
 
 
   const handleSubmitComment = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -127,7 +158,8 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
           photoUrl: userData.photoUrl,
           bannerUrl: userData.bannerUrl,
           userName: userData.name,
-          userStatus: userData.status
+          userStatus: userData.status,
+          userRoles: userData.roles
         };
       }
     } catch (error) {
@@ -235,10 +267,10 @@ export default function Comments({ courseId, lessonId }: { courseId: string, les
             <div className='flex justify-between items-center'>
               <div className='flex gap-2 justify-center items-center'>
                 <div className="w-12 h-12">
-                <UserImagePassable userBannerUrl={comment.userBannerPic} userImage={comment.userProfilePic} userName={comment.userName} userStatus={comment.userStatus}/>
+                <UserImagePassable userId={userId} roles={roles} userRoles={comment.userRoles} userBannerUrl={comment.userBannerPic} userImage={comment.userProfilePic} userName={comment.userName} userStatus={comment.userStatus}/>
                 </div>
                 {/* <Image width={500} height={500} src={comment.userProfilePic} alt="Profile Picture" className='w-10 object-cover rounded-full mr-2 aspect-square'/> */}
-                <h1 className='text-2xl'>{comment.userName}</h1>
+                <h1 className={clsx("text-2xl font-medium", comment.userRoles && comment.userRoles.length > 0 && comment.userRoles[0]?.color && `text-${comment.userRoles[0].color}`)}>{comment.userName}</h1>
                 <CommentTimestamp createdAt={comment.timestamp.toDate()} />
               </div>
               {userId === comment.userId || userStatus === 'admin' ? (

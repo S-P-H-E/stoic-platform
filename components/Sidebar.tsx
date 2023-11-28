@@ -14,6 +14,9 @@ import { useFirebase } from '@/utils/authContext';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu';
 import UserProfile from './UserProfile';
 import StoicLogo from '@/public/stoicWhite.webp'
+import { useEffect, useState } from 'react';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { db } from '@/utils/firebase';
 
 const montserrat = Montserrat({ weight: '600', subsets: ['latin'] });
 
@@ -61,10 +64,19 @@ const routes = [
   },
 ];
 
+interface Role {
+  id: string;
+  name: string;
+  order: number;
+  color: string;
+}
+
 const Sidebar = () => {
-  const { userName, userId, userStatus, userProfileImageUrl, userProfileBannerUrl, userEmail } = UserDataFetcher();
+  const { userRoles, userName, userId, userStatus, userProfileImageUrl, userProfileBannerUrl, userEmail } = UserDataFetcher();
   const pathname = usePathname();
   const { signOut } = useFirebase()
+
+  const [roles, setRoles] = useState<Role[]>([]);
 
   function truncateText(text: string, maxLength: number) {
     if (text.length > maxLength) {
@@ -72,6 +84,21 @@ const Sidebar = () => {
     }
     return text;
   }
+
+  useEffect(() => {
+    const rolesCollection = collection(db, 'roles');
+
+    const unsubscribe = onSnapshot(rolesCollection, (snapshot) => {
+      const rolesData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        name: doc.data().name,
+        color: doc.data().color,
+      }));
+      setRoles(rolesData);
+    });
+
+    return () => unsubscribe();
+  }, []);
   
   return (
     <div className="flex h-full z-50">
@@ -120,12 +147,19 @@ const Sidebar = () => {
                 <UserImage/>
               </DropdownMenuTrigger>
                 <DropdownMenuContent className='absolute -left-10 bottom-1 bg-[--background] border-[--border]' side='top' >
-                  <UserProfile userStatus={userStatus ?? ''} userName={userName ?? ''} src={userProfileImageUrl ?? undefined} userBannerUrl={userProfileBannerUrl}/>
+                  <UserProfile userId={userId} roles={roles} userRoles={userRoles ?? 'User'} userStatus={userStatus ?? ''} userName={userName ?? ''} src={userProfileImageUrl ?? undefined} userBannerUrl={userProfileBannerUrl}/>
                 </DropdownMenuContent>
             </DropdownMenu>
             </div>
             <div className='flex flex-col'>
-              {userName && userId ? <p className='font-medium'>{truncateText(userName, 14)}</p>:null}
+              {userName && userId && (
+                <h1 className={clsx(
+                "text-lg font-medium",
+                userRoles && userRoles !== "User" && userRoles.length > 0 && userRoles[0]?.color && `text-${userRoles[0].color}`
+                )}>
+                {truncateText(userName, 16)}
+                </h1>
+              )}
               {userEmail && userId ? <p className='text-xs tracking-tight text-[--highlight]'>{truncateText(userEmail, 20)}</p>:null}
             </div>
           </div>

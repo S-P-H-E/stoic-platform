@@ -1,7 +1,6 @@
 "use client"
 
 import { auth, db } from '@/utils/firebase';
-import { message } from 'antd';
 import clsx from 'clsx';
 import { Timestamp, addDoc, collection} from 'firebase/firestore';
 import React, { useEffect, useRef, useState } from 'react'

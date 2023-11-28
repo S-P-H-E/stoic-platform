@@ -6,12 +6,29 @@ import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 import Image from 'next/image';
 import { IoMdCheckmarkCircle } from 'react-icons/io';
 import { HiMiniCheckBadge } from 'react-icons/hi2';
-import { BiFilm, BiLogoInstagram, BiVideo } from 'react-icons/bi';
+import { BiFilm, BiLogoInstagram, BiVideo, BiX } from 'react-icons/bi';
 import UserProfileDialog from './UserProfileDialog';
+import { ButtonShad } from './ui/buttonshad';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from './ui/command';
+import { Check } from 'lucide-react';
+import { message } from 'antd';
+import { addDoc, doc, updateDoc } from 'firebase/firestore';
+import { db } from '@/utils/firebase';
+import { UserDataFetcher } from '@/utils/userDataFetcher';
 
-export default function UserProfile({src, userName, userStatus, userBannerUrl}: {src: string, userName: string, userStatus: string, userBannerUrl: string}) {
+interface Role {
+  id: string;
+  name: string;
+  color: string;
+  order: number;
+}
+
+export default function UserProfile({src, userName, userId, userStatus, userBannerUrl, userRoles, roles}: {userId: string | null, roles: Role[], src: string, userName: string, userStatus: string, userBannerUrl: string, userRoles: Role[] | "User"}) {
   const userChar: string = userName ? userName : '';
   const [userStatusEdited, setUserStatusEdited] = useState('Loading...')
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
   useEffect(() => {
     if (userStatus === 'user') {
@@ -30,6 +47,70 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
     'text-orange-500': userStatus === 'premium',
     'text-gray-500': userStatus === 'user'
   });
+
+  const toggleSelection = (value: string) => {
+    if (selectedValues.includes(value)) {
+      setSelectedValues(selectedValues.filter((v) => v !== value));
+    } else {
+      setSelectedValues([...selectedValues, value]);
+    }
+  };
+
+  const { userStatus: currentUserStatus } = UserDataFetcher();
+  
+  const addRole = async () => {
+    try {
+      if (currentUserStatus === 'admin' && userId) {
+        const userDocRef = doc(db, 'users', userId);
+
+        let updatedRoles = [];
+
+        if (userRoles === "User") {
+          updatedRoles = [...selectedValues];
+        } else {
+          const userRoleNames = userRoles.map((role) => role.name);
+
+          // Combine the extracted names with selectedValues
+          updatedRoles = [...userRoleNames, ...selectedValues];
+        }
+  
+        const userData = {
+          roles: updatedRoles, // Store roles as a flat array
+        };
+  
+        await updateDoc(userDocRef, userData);
+        message.success('Role added successfully!');
+
+        setSelectedValues([]);
+      } else {
+        message.error('An error occurred.. try again later');
+      }
+    } catch (error) {
+      console.log(error)
+      message.error('Failed to add role.');
+    }
+  };
+
+  function handleRemoveRole(roleName: string) {
+    try {
+      if (Array.isArray(userRoles)) {
+        const updatedRoles = userRoles.filter((role: Role) => role.name !== roleName);
+  
+        const userDocRef = doc(db, 'users', userId as string);
+  
+        const userData = {
+          roles: updatedRoles.map((role) => role.name), // Store roles as a flat array of names
+        };
+  
+        // Update the user document by deleting the specified role
+        updateDoc(userDocRef, userData);
+        message.success('Role removed successfully!');
+      }
+    } catch (error) {
+      console.error(error);
+      message.error('Failed to remove role.');
+    }
+  }
     
   return (
     <div className='flex flex-col md:w-[450px] w-[350px] gap-4 p-1'>
@@ -57,13 +138,21 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
               </div>
             </div>
           </DialogTrigger>
-        <DialogContent className="bg-[--background]">
-          <UserProfileDialog userBannerUrl={userBannerUrl} userStatus={userStatusEdited ?? undefined} userName={userName} src={src}/>
-        </DialogContent>
+          <DialogContent className="bg-[--background]">
+            <UserProfileDialog userBannerUrl={userBannerUrl} userStatus={userStatusEdited ?? undefined} userName={userName} src={src}/>
+          </DialogContent>
       </Dialog>
       <div className='py-4 md:px-7 px-2 mt-8 flex flex-col w-full h-full rounded-lg gap-2'>
           <div className="flex flex-col w-full h-full">
-            <h1 className="text-2xl leading-6 font-semibold">{userName ? userName : 'Loading...'}</h1>
+
+
+          <h1 className={clsx(
+              "text-2xl leading-6 font-semibold",
+              userRoles && userRoles !== "User" && userRoles.length > 0 && userRoles[0]?.color && `text-${userRoles[0].color}`
+              )}>
+              {userName ? userName : 'Loading...'}
+            </h1>
+            
             <h2 className={clsx("text-md leading-6 py-1", statusClass)}>{userStatusEdited}</h2>
           </div>
 
@@ -88,19 +177,97 @@ export default function UserProfile({src, userName, userStatus, userBannerUrl}: 
 
             <div className='border border-[#2C2C2C] bg-[#0f0f0f] rounded-xl p-3 gap-3 flex flex-col'>
               <h1>ROLES</h1>
-              <div className='flex flex-wrap gap-3'>
-                <div className='flex bg-[#dcb000] w-fit px-3 py-1 rounded-md gap-1 items-center'>
-                  <HiMiniCheckBadge />
-                  <h1>Admin</h1>
-                </div>
-                <div className='flex bg-[#ca0000] w-fit px-3 py-1 rounded-md gap-1 items-center'>
-                  <HiMiniCheckBadge />
-                  <h1>Professor</h1>
-                </div>
-                <div className='flex bg-[#1d00cc] w-fit px-3 py-1 rounded-md gap-1 items-center'>
-                  <HiMiniCheckBadge />
-                  <h1>After Effects Course</h1>
-                </div>
+              <div className='flex flex-wrap gap-3 items-center text-lg'>
+              {userRoles && (
+              <>
+                {userRoles === 'User' ? (
+                  <div className="bg-white text-black flex px-4 py-2 h-10 rounded-md gap-2 items-center">
+                    <HiMiniCheckBadge />
+                    <h1>User</h1>
+                  </div>
+                ) : (
+                  <>
+                  {userRoles
+                    .sort((a, b) => {
+                      const orderA = roles.find(role => role.name === a.name)?.order || 0;
+                      const orderB = roles.find(role => role.name === b.name)?.order || 0;
+                      return orderA - orderB;
+                    })
+                    .map((role) => (
+                      <div
+                        className={clsx(`bg-${role.color} flex px-4 py-2 h-10 rounded-md gap-2 items-center`)}
+                        key={role.id}
+                      >
+                        <HiMiniCheckBadge />
+                        <h1>{role.name}</h1>
+                        <BiX
+                          className="cursor-pointer"
+                          onClick={() => handleRemoveRole(role.name)} // Implement the function to remove the role
+                        />
+                      </div>
+                    ))}
+                    <div className="bg-white text-black flex px-4 py-2 h-10 rounded-md gap-2 items-center">
+                      <HiMiniCheckBadge />
+                      <h1>User</h1>
+                    </div>
+                  </>
+                )}
+              </>
+              )}
+              {currentUserStatus == "admin" &&
+                <Popover>
+                <PopoverTrigger asChild>
+                <ButtonShad
+                   variant="outline"
+                    className="group border-dotted border-2 px-4 py-2 gap-1 h-10"
+                  >
+                    Add roles
+                    <AiOutlinePlus className="group-hover:scale-110 transition"/>
+                 </ButtonShad>
+                </PopoverTrigger>
+                <PopoverContent>
+                <Command>
+                <CommandInput placeholder="Search role..." />
+                  <CommandEmpty className="gap-2 flex flex-col items-center justify-center py-4">
+                     <p>No role found.</p>
+                      <Dialog>
+                        <DialogTrigger>
+                          <ButtonShad variant="outline">Create role</ButtonShad>
+                         </DialogTrigger>
+                         <DialogContent>
+                         {/* <CreateRole/> */}
+                         </DialogContent>
+                      </Dialog>
+                       </CommandEmpty>
+                       <CommandGroup>
+                       {Array.isArray(userRoles) && 
+                       
+                        roles
+                          .filter((role) => !userRoles.map((userRole: Role) => userRole.name).includes(role.name))
+                          .map((role) => (
+                            <CommandItem
+                              key={role.id}
+                              onSelect={() => toggleSelection(role.name)}
+                              className="cursor-pointer"
+                            >
+                              <Check
+                                className={clsx(
+                                  "mr-2 h-4 w-4",
+                                  selectedValues.includes(role.name) ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              <h1 className={clsx(`text-${role.color}`)}>{role.name}</h1>
+                            </CommandItem>
+                          ))
+                      }
+                      </CommandGroup>
+                  <div className="w-full items-center justify-center px-4 py-2 flex">
+                    <ButtonShad disabled={selectedValues.length <= 0} className='w-60' variant="outline" onClick={addRole}>Apply</ButtonShad>
+                  </div>
+                </Command>
+                </PopoverContent>
+                </Popover>
+              }
               </div>
             </div>
           </div>

@@ -1,11 +1,16 @@
-"use client"
-import React, { useState } from 'react';
+import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu';
 import UserProfile from './UserProfile';
 
-export default function UserImagePassable({ userImage, userName, userStatus, userBannerUrl }: { userBannerUrl: string, userImage: string, userName: string, userStatus:string }) {
-  const [photoUrl, setProfileImageUrl] = useState<string | null>(null);
+interface Role {
+  id: string;
+  name: string;
+  color: string;
+  order: number;
+}
+
+export default function UserImagePassable({ roles, userId, userRoles, userImage, userName, userStatus, userBannerUrl }: { roles:Role[], userId: string | null, userBannerUrl: string, userImage: string, userName: string, userStatus:string, userRoles: Role[] | "User"}) {
 
   // Extract the first letter of the userName
   const userChar: string = userName ? userName : '';
@@ -20,7 +25,7 @@ export default function UserImagePassable({ userImage, userName, userStatus, use
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='bg-[--background] border-[--border]' side='right' >
-        <UserProfile userBannerUrl={userBannerUrl} userStatus={userStatus ?? undefined} userName={userName} src={userImage ?? undefined}/>
+        <UserProfile userId={userId} roles={roles} userRoles={userRoles} userBannerUrl={userBannerUrl} userStatus={userStatus ?? undefined} userName={userName} src={userImage ?? undefined}/>
       </DropdownMenuContent>
     </DropdownMenu>
   );

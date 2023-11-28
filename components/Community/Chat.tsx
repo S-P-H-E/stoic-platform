@@ -23,8 +23,16 @@
     timestamp: Timestamp
     userId: string
     sameUser: boolean
+    userRoles: Role[] | "User"
   }
 
+  interface Role {
+    id: string;
+    name: string;
+    color: string;
+    order: number;
+  }
+  
   interface Member {
     id: string;
     name: string;
@@ -34,6 +42,7 @@
     status: string;
     canMessage: boolean;
     canReadMessages: boolean;
+    roles: Role[] | "User";
   }
   interface Channel {
     id: string;
@@ -51,7 +60,7 @@
     order: number;
   }
 
-  export default function Chat({currentChannel, currentUser, channelId, members, canFetch, readPermission, userId, userStatus}: {currentChannel: Channel | undefined, currentUser: Member | undefined, channelId: string | string[], members: Member[], canFetch: boolean, readPermission: boolean, userId: string | null, userStatus: string | undefined}) {
+  export default function Chat({roles, currentChannel, currentUser, channelId, members, canFetch, readPermission, userId, userStatus}: {currentChannel: Channel | undefined, currentUser: Member | undefined, channelId: string | string[], members: Member[], canFetch: boolean, readPermission: boolean, userId: string | null, userStatus: string | undefined, roles: Role[]}) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [editedMessage, setEditedMessage] = useState<{ id: string; message: string } | null>(null);
 
@@ -130,7 +139,7 @@
 
       return (
         <p className="text-xs opacity-50">
-{isToday && !noContext ? 'Today at ' + formattedTime : (noContext ? formattedTime : formattedDate)}
+          {isToday && !noContext ? 'Today at ' + formattedTime : (noContext ? formattedTime : formattedDate)}
         </p>
       );
     };
@@ -156,6 +165,7 @@
                   userBannerPic: userProfileData?.bannerUrl || '',
                   userName: userProfileData?.name || '',
                   userStatus: userProfileData?.status || '',
+                  userRoles: userProfileData?.roles || 'User'
                 };
               }));
       
@@ -258,10 +268,10 @@
 
       return (
         <div className='flex flex-col h-full w-full relative'>
-            <div className="text-2xl py-2 font-medium justify-center flex border-b border-[--border]">
-              <h1>{currentChannel ? truncateText(currentChannel.name, 30) : 'Loading...'}</h1>
-            </div> 
-        <ul ref={chatContainerRef} className='flex flex-col mt-auto overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 hover:scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 p-3'>
+          <div className="text-2xl py-2 font-medium justify-center flex border-b border-[--border]">
+            <h1>{currentChannel ? truncateText(currentChannel.name, 30) : 'Loading...'}</h1>
+          </div> 
+          <ul ref={chatContainerRef} className='flex flex-col mt-auto overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 hover:scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 p-3'>
           {messages.map((message) => (
             <li 
             key={message.id} 
@@ -278,14 +288,17 @@
               {!message.sameUser && (
                 <div className="flex gap-2">
                   <div className="w-12 h-12">
-                    <UserImagePassable userBannerUrl={message.userBannerPic} userImage={message.userProfilePic} userName={message.userName} userStatus={message.userStatus}/>
+                    <UserImagePassable userId={userId} roles={roles} userRoles={message.userRoles} userBannerUrl={message.userBannerPic} userImage={message.userProfilePic} userName={message.userName} userStatus={message.userStatus}/>
                   </div>
                 </div>
               )}
               <div className="flex flex-col w-full">
                   {!message.sameUser && (
-                    <div className="flex gap-2 items-center">
-                      <h1 className="text-lg font-medium">{message.userName}</h1>
+                  <div className="flex gap-2 items-center">
+                      <h1 
+                      className={clsx("text-lg font-medium", message.userRoles && message.userRoles.length > 0 && message.userRoles != "User" && message.userRoles[0]?.color && `text-${message.userRoles[0].color}`)}>
+                        {message.userName}
+                      </h1>
                       <MessageTimestamp noContext={false} createdAt={message.timestamp.toDate()} />
                     </div>
                   )}
@@ -350,9 +363,7 @@
                         </TooltipContent>
                       </Tooltip>
                     }
-
                   </TooltipProvider>
-
               </div>
             </li>
           ))}
@@ -360,7 +371,7 @@
         <div className="sticky w-full p-2 bottom-0 flex flex-col gap-2">
           {isReplying && replyingTo ?
           <span className='flex justify-between items-center'>
-            <p>You are replying to {replyingTo.userName}</p>
+            <p>You are replying to <span className={clsx("font-medium", replyingTo.userRoles && replyingTo.userRoles.length > 0 && replyingTo.userRoles != "User" && replyingTo.userRoles[0]?.color && `text-${replyingTo.userRoles[0].color}`)}>{replyingTo.userName}</span></p>
             <div className="px-4 flex gap-2">
               <button className="hover:text-red-500 transition" onClick={() => {handleCloseReply()}}>
                 <IoIosCloseCircle size={24}/>
