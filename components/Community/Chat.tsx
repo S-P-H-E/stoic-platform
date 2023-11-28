@@ -80,6 +80,7 @@
         // Check if the replied message has changed
         if (replyingTo !== prevRepliedMessage) {
           repliedMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
           setPrevRepliedMessage(replyingTo);
         }
       }

@@ -1,10 +1,12 @@
 "use client"
 
 import { auth, db } from '@/utils/firebase';
+import { message } from 'antd';
 import clsx from 'clsx';
 import { Timestamp, addDoc, collection} from 'firebase/firestore';
 import React, { useEffect, useRef, useState } from 'react'
 import { IoSend } from 'react-icons/io5'
+import { z } from 'zod';
 
 
 export default function Chatbox({ userName, userStatus, userId, channelId, messagePermission, currentChannelName}: { userName: string | undefined, userStatus:string | undefined, userId: string | null, channelId: string | string[], messagePermission: boolean, currentChannelName: string | undefined}) {
@@ -59,22 +61,27 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
       }
     }, []);
   
-  
-    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-      if(userStatus !== 'user' && messagePermission) {
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      if (userStatus !== 'user' && messagePermission) {
         e.preventDefault();
-  
+    
+        try {
+          messageSchema.parse(newMessage); // Validate the message using Zod schema
+        } catch (error: any) {
+          const errorMessage = error.errors[0]?.message; // Access the "message" property
+          message.error(`Validation error: ${errorMessage}`);
+          return; // Do not send the message if validation fails
+        }
+    
         if (textareaRef.current) {
           textareaRef.current.style.height = 'auto';
           textareaRef.current.style.overflowY = 'hidden';
         }
-
-        sendMessageToFirestore()
-        
+    
+        sendMessageToFirestore();
       } else {
-        console.log('Encountered an issue with the user, please try again')
+        console.log('Encountered an issue with the user, please try again');
       }
-  
     };
 
     const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -135,10 +142,12 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
         }
       };
     }, [userName, channelId, updateTypingStatus]); */
+    
+    const messageSchema = z.string().min(1, 'Message must be at least 1 character').max(2000, 'Message must be at most 2000 characters');
 
   return (
     <>
-        <form className="flex gap-2 w-full justify-end items-end mt-auto" onSubmit={handleFormSubmit}>
+        <form className="relative flex gap-2 w-full justify-end items-end mt-auto" onSubmit={handleFormSubmit}>
             <div className="flex border border-[--border] items-center w-full rounded-md bg-[--bg]">
               <textarea
                 ref={textareaRef}
@@ -158,6 +167,11 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
                 <IoSend />
               </button>
             </div>
+            {newMessage.length > 1500 &&
+            <div className="absolute bottom-2 right-16">
+              <p className={clsx('border-[--border] border bg-[--bg] px-2 py-1 rounded-xl', (newMessage.length) > 2000 && 'text-red-500 border-red-600/50')}>{newMessage.length}</p>
+            </div>
+            }
         </form>
     </>
   )
