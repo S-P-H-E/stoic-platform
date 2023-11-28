@@ -75,14 +75,17 @@
       if (editedMessageRef.current && chatContainerRef.current) {
         editedMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
+    
       // Scroll to the replied message when replying
       if (repliedMessageRef.current && chatContainerRef.current && isReplying) {
-        // Check if the replied message has changed
         if (replyingTo !== prevRepliedMessage) {
           repliedMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
+  
           setPrevRepliedMessage(replyingTo);
         }
+      } else {
+        // Reset prevRepliedMessage when not replying
+        setPrevRepliedMessage(undefined);
       }
     }, [editedMessage, isReplying, replyingTo, prevRepliedMessage]);
   
@@ -114,7 +117,7 @@
       return text;
     }
 
-    const MessageTimestamp = ({ createdAt }: { createdAt: Date }) => {
+    const MessageTimestamp = ({ createdAt, noContext }: { createdAt: Date, noContext: boolean }) => {
       const commentDate = new Date(createdAt);
       const currentDate = new Date();
 
@@ -127,7 +130,7 @@
 
       return (
         <p className="text-xs opacity-50">
-          {isToday ? 'Today at ' + formattedTime : formattedDate}
+{isToday && !noContext ? 'Today at ' + formattedTime : (noContext ? formattedTime : formattedDate)}
         </p>
       );
     };
@@ -232,11 +235,26 @@
       };
 
       const handleReply = (message: Message) => {
-        console.log("reply")
-        setIsReplying(true)
-        setReplyingTo(message)
-
+        
+        const isAtBottom =
+        chatContainerRef.current &&
+        chatContainerRef.current.scrollHeight - chatContainerRef.current.scrollTop ===
+        chatContainerRef.current.clientHeight;
+    
+        setIsReplying(true);
+        setReplyingTo(message);
+    
+      // Scroll to the bottom if the user was already at the bottom
+      if (isAtBottom && chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
       }
+      }
+
+      const handleCloseReply = () => {
+        setIsReplying(false);
+        setReplyingTo(undefined);
+      };
+      
 
       return (
         <div className='flex flex-col h-full w-full relative'>
@@ -247,7 +265,7 @@
           {messages.map((message) => (
             <li 
             key={message.id} 
-            className={clsx('relative group flex gap-2 items-start py-0.5 px-2 hover:bg-white/5 rounded-lg transition duration-200', message.sameUser ? 'mt-0' : 'mt-4')}
+            className={clsx('relative group flex gap-2 items-start py-0.5 px-2 hover:bg-white/5 rounded-lg transition duration-200', message.sameUser ? 'mt-0' : 'mt-4 pt-1')}
             ref={(ref) => {
               if (editedMessage && message.id === editedMessage.id) {
                 editedMessageRef.current = ref;
@@ -268,17 +286,30 @@
                   {!message.sameUser && (
                     <div className="flex gap-2 items-center">
                       <h1 className="text-lg font-medium">{message.userName}</h1>
-                      <MessageTimestamp createdAt={message.timestamp.toDate()} />
+                      <MessageTimestamp noContext={false} createdAt={message.timestamp.toDate()} />
                     </div>
                   )}
-                  {editedMessage?.id !== message.id &&
-                    <h1
-                      className={clsx('animate-pop flex flex-wrap break-all', message.sameUser && 'ml-14 ')}
-                      dangerouslySetInnerHTML={{
-                      __html: detectAndStyleLinks(message.message), // Adjust the maxLength as needed
-                      }}
-                    />
-                  }
+                  {editedMessage?.id !== message.id && (
+                    <div className="relative flex items-center">
+                      {message.sameUser && (
+                        <div className="absolute left-4 opacity-0 group-hover:opacity-100 transition duration-200">
+                          <MessageTimestamp
+                            noContext={true}
+                            createdAt={message.timestamp.toDate()}
+                          />
+                        </div>
+                      )}
+                      <h1
+                        className={clsx(
+                          'animate-pop flex flex-wrap break-all',
+                          message.sameUser && 'ml-14 ',
+                        )}
+                        dangerouslySetInnerHTML={{
+                          __html: detectAndStyleLinks(message.message),
+                        }}
+                      />
+                    </div>
+                  )}
 
                   {editedMessage?.id === message.id && (
                     <div className={clsx("animate-pop flex gap-2 py-1", message.sameUser && 'ml-14 ')}>
@@ -331,10 +362,7 @@
           <span className='flex justify-between items-center'>
             <p>You are replying to {replyingTo.userName}</p>
             <div className="px-4 flex gap-2">
-              <button className="hover:text-red-500 transition" onClick={() => {
-                setIsReplying(false)
-                setReplyingTo(undefined)
-              }}>
+              <button className="hover:text-red-500 transition" onClick={() => {handleCloseReply()}}>
                 <IoIosCloseCircle size={24}/>
               </button>
             </div>

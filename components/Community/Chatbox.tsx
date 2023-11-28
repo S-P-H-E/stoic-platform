@@ -15,7 +15,7 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
     const [currentLimit, setCurrentLimit] = useState<number>(2); // Initial message limit in seconds
     const [isRateLimitedBefore, setIsRateLimitedBefore] = useState(false);
 
-    const messageLimit = 8; // Adjust the limit as needed
+    const messageLimit = 10; // Adjust the limit as needed
 
     const [newMessage, setNewMessage] = useState('');
     
@@ -69,9 +69,6 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
       return false;
     };
   
-  
-  
-
     useEffect(() => {
       const adjustRows = () => {
         if (textareaRef.current) {
