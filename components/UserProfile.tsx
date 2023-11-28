@@ -93,7 +93,7 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
 
   function handleRemoveRole(roleName: string) {
     try {
-      if (Array.isArray(userRoles)) {
+      if (Array.isArray(userRoles) && currentUserStatus == "admin" && userId) {
         const updatedRoles = userRoles.filter((role: Role) => role.name !== roleName);
   
         const userDocRef = doc(db, 'users', userId as string);
@@ -106,6 +106,7 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
         updateDoc(userDocRef, userData);
         message.success('Role removed successfully!');
       }
+
     } catch (error) {
       console.error(error);
       message.error('Failed to remove role.');
@@ -200,10 +201,12 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
                       >
                         <HiMiniCheckBadge />
                         <h1>{role.name}</h1>
-                        <BiX
-                          className="cursor-pointer"
-                          onClick={() => handleRemoveRole(role.name)} // Implement the function to remove the role
-                        />
+                        {currentUserStatus == "admin" &&
+                          <BiX
+                            className="cursor-pointer"
+                            onClick={() => handleRemoveRole(role.name)} // Implement the function to remove the role
+                          />
+                        }
                       </div>
                     ))}
                     <div className="bg-white text-black flex px-4 py-2 h-10 rounded-md gap-2 items-center">
