@@ -10,6 +10,7 @@ interface Role {
   id: string;
   name: string;
   color: string;
+  order: number;
 }
 // custom hook to get userName, userId, and user.email etc.
 export function UserDataFetcher() {
@@ -36,6 +37,7 @@ export function UserDataFetcher() {
         id: doc.id,
         name: doc.data().name,
         color: doc.data().color,
+        order: doc.data().order,
       }));
       setRoles(rolesData);
     });

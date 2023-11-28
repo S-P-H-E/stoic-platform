@@ -25,7 +25,7 @@ interface Role {
   order: number;
 }
 
-export default function UserProfile({src, userName, userId, userStatus, userBannerUrl, userRoles, roles}: {userId: string | null, roles: Role[], src: string, userName: string, userStatus: string, userBannerUrl: string, userRoles: Role[] | "User"}) {
+export default function UserProfile({src, userName, userId, userStatus, userBannerUrl, userRoles, roles}: {userId: string | null, roles: Role[], src: string, userName: string, userStatus: string, userBannerUrl: string, userRoles: Role[] |"User"}) {
   const userChar: string = userName ? userName : '';
   const [userStatusEdited, setUserStatusEdited] = useState('Loading...')
   const [selectedValues, setSelectedValues] = useState<string[]>([]);

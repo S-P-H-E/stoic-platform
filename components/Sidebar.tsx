@@ -148,7 +148,7 @@ const Sidebar = () => {
                 <UserImage/>
               </DropdownMenuTrigger>
                 <DropdownMenuContent className='absolute -left-10 bottom-1 bg-[--background] border-[--border]' side='top' >
-                  <UserProfile userId={userId} roles={roles} userRoles={userRoles ?? 'User'} userStatus={userStatus ?? ''} userName={userName ?? ''} src={userProfileImageUrl ?? undefined} userBannerUrl={userProfileBannerUrl}/>
+                  <UserProfile userId={userId} roles={roles} userRoles={userRoles ?? "User"} userStatus={userStatus ?? ''} userName={userName ?? ''} src={userProfileImageUrl ?? undefined} userBannerUrl={userProfileBannerUrl}/>
                 </DropdownMenuContent>
             </DropdownMenu>
             </div>
