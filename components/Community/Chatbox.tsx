@@ -20,7 +20,7 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
     const [newMessage, setNewMessage] = useState('');
     
     const sendMessageToFirestore = async () => {
-        try {
+      try {
         const user = auth.currentUser;
         if (!user) {
           console.error('User not logged in');
@@ -29,21 +29,29 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
           console.error('Message rate limit exceeded');
           return;
         }
-
+    
         setIsRateLimitedBefore(false);
-      
+    
+        const trimmedMessage = newMessage.trim(); // Remove leading and trailing spaces
+    
+        // Check if the trimmed message is empty
+        if (!trimmedMessage) {
+          console.error('Message cannot be just a space');
+          return;
+        }
+    
         const messagesRef = collection(db, 'channels', channelId as string, 'messages');
         await addDoc(messagesRef, {
-          message: newMessage,
+          message: trimmedMessage,
           timestamp: Timestamp.fromDate(new Date()),
           userId: userId,
         });
-      
+    
         setNewMessage('');
-        } catch (error) {
+      } catch (error) {
         console.error('Error adding comment:', error);
-        }
-    }
+      }
+    };
 
     const isRateLimited = () => {
       const now = Date.now();

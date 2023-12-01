@@ -139,13 +139,13 @@ export default function Comments({
 
   const handleSubmitComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true)
     if (newComment.trim() === '') {
       return;
     }
 
     try {
       const user = auth.currentUser;
+      setLoading(true)
       if (!user) {
         console.error('User not logged in');
         return;
