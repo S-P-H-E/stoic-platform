@@ -10,7 +10,7 @@ interface Role {
   order: number;
 }
 
-export default function UserImagePassable({ roles, userId, userRoles, userImage, userActivity, userName, userStatus, userBannerUrl }: { userActivity: string, roles:Role[], userId: string | null, userBannerUrl: string, userImage: string, userName: string, userStatus:string, userRoles: Role[] | "User"}) {
+export default function UserImagePassable({ roles, userId, userRoles, userImage, userName, userStatus, userBannerUrl }: { roles:Role[], userId: string | null, userBannerUrl: string, userImage: string, userName: string, userStatus:string, userRoles: Role[] | "User"}) {
 
   // Extract the first letter of the userName
   const userChar: string = userName ? userName : '';

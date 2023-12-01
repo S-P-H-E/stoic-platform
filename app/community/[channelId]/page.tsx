@@ -70,6 +70,8 @@ export default function CommunityPage(
   const [roles, setRoles] = useState<Role[]>([]);
 
   const currentChannelIdString = channelId || '';
+
+  const [activity, setActivity] = useState('offline')
   
 
   if (userStatus == 'user') {
@@ -90,10 +92,12 @@ export default function CommunityPage(
 
       const setOnlineStatus = () => {
         setUserOnlineStatus('online');
+        setActivity('online')
       };
 
       const setOfflineStatus = () => {
         setUserOnlineStatus('offline');
+        setActivity('offline')
       };
 
       const handleUserStatusChange = (isOnline: boolean) => {
@@ -253,7 +257,7 @@ export default function CommunityPage(
       
       <section className="h-screen w-full 2xl:w-8/12 border-r border-[--border] flex flex-col gap-4">
         <div className='flex flex-col h-full w-full relative'>
-          <Chat roles={roles} currentChannel={currentChannel} currentUser={currentUser} userId={userId} userStatus={userStatus} canFetch={isAdminOrPremium} channelId={channelId} members={members} readPermission={currentUser?.canReadMessages || false}/>
+          <Chat activity={activity} roles={roles} currentChannel={currentChannel} currentUser={currentUser} userId={userId} userStatus={userStatus} canFetch={isAdminOrPremium} channelId={channelId} members={members} readPermission={currentUser?.canReadMessages || false}/>
           {/*<div className="sticky w-full p-2">
             <Chatbox userName={currentUser?.name} currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
           </div> */}

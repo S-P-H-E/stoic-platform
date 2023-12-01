@@ -83,6 +83,7 @@ export default function Chat({
   readPermission,
   userId,
   userStatus,
+  activity
 }: {
   currentChannel: Channel | undefined;
   currentUser: Member | undefined;
@@ -93,6 +94,7 @@ export default function Chat({
   userId: string | null;
   userStatus: string | undefined;
   roles: Role[];
+  activity: string
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [editedMessage, setEditedMessage] = useState<{
@@ -111,11 +113,12 @@ export default function Chat({
   const repliedMessageRef = useRef<HTMLLIElement | null>(null); // Ref for the replied message
 
   useLayoutEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
+    if (activity === 'online') {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
     }
-  }, [messages]);
+  }, [activity, messages]);
 
   useEffect(() => {
     // Scroll to the bottom when editedMessage changes
