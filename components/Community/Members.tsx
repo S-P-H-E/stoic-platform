@@ -69,7 +69,7 @@ export default function Members({
               userStatus={member.status}
             />
             {member.activity == 'online' &&
-            <div className="bg-green-500 w-4 h-4 right-0 bottom-0 absolute rounded-full border-[--bg] group-hover:border-[--border] border-[3px] transition duration-200" />
+            <div className="animate-pop bg-green-500 w-4 h-4 right-0 bottom-0 absolute rounded-full border-[--bg] group-hover:border-[--border] border-[3px] transition duration-200" />
             }
             
           </div>
