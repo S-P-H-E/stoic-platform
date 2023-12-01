@@ -312,15 +312,18 @@
                           />
                         </div>
                       )}
-                      <h1
-                        className={clsx(
-                          'animate-pop flex flex-wrap break-all',
-                          message.sameUser && 'ml-14 ',
-                        )}
-                        dangerouslySetInnerHTML={{
-                          __html: detectAndStyleLinks(message.message),
-                        }}
-                      />
+<h1
+  className={clsx(
+    'animate-pop flex flex-wrap break-all',
+    message.sameUser && 'ml-14 ',
+  )}
+  dangerouslySetInnerHTML={{
+    __html: message.message
+      .split('\n')
+      .map((line, index) => `${line}<br />`)
+      .join(''),
+  }}
+/>
                     </div>
                   )}
 
