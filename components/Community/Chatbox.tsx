@@ -13,6 +13,7 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
     const [messageTimestamps, setMessageTimestamps] = useState<number[]>([]);
     const [currentLimit, setCurrentLimit] = useState<number>(2); // Initial message limit in seconds
     const [isRateLimitedBefore, setIsRateLimitedBefore] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const messageLimit = 10; // Adjust the limit as needed
 
@@ -92,6 +93,7 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       if (userStatus !== 'user' && messagePermission) {
         e.preventDefault();
+        setLoading(true)
     
         try {
           messageSchema.parse(newMessage); // Validate the message using Zod schema
@@ -99,6 +101,8 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
           const errorMessage = error.errors[0]?.message; // Access the "message" property
           /* message.error(`Validation error: ${errorMessage}`); */
           return; // Do not send the message if validation fails
+        } finally {
+          setLoading(false)
         }
     
         if (textareaRef.current) {
@@ -132,8 +136,15 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
   
     const handleTextareaKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault(); // Prevent a new line in the textarea
-        handleFormSubmit(e as any);
+        try {
+          setLoading(true)
+          e.preventDefault(); // Prevent a new line in the textarea
+          handleFormSubmit(e as any);
+        } catch(error) {
+          console.log(error)
+        } finally {
+          setLoading(false)
+        }
       } /* else {
         if (typingTimeout) {
           clearTimeout(typingTimeout);
@@ -171,7 +182,7 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
         }
       };
     }, [userName, channelId, updateTypingStatus]); */
-    
+  
     const messageSchema = z.string().min(1, 'Message must be at least 1 character').max(1000, 'Message must be at most 1000 characters');
 
   return (
@@ -180,12 +191,12 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
         <div className="text-red-500">You are currently rate-limited. Please wait before sending another message. {}</div>
       )}
         <form className="relative flex gap-2 w-full justify-end items-end mt-auto" onSubmit={handleFormSubmit}>
-            <div className="flex border border-[--border] items-center w-full rounded-md bg-[--bg]">
+            <div className={clsx("flex border border-[--border] items-center w-full rounded-md bg-[--bg]", loading && 'cursor-not-allowed opacity-50')}>
               <textarea
                 ref={textareaRef}
-                className={clsx('flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600', !messagePermission && 'cursor-not-allowed')}
+                className={clsx('flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600', !messagePermission && 'cursor-not-allowed', loading && 'cursor-not-allowed opacity-50')}
                 value={newMessage}
-                disabled={!messagePermission || false}
+                disabled={!messagePermission || loading || false}
                 onKeyDown={handleTextareaKeyPress}
                 onChange={handleTextareaChange}
                 placeholder={messagePermission ? `Message ${currentChannelName}` : 'You are not allowed to send messages.'}

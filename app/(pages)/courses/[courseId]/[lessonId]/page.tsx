@@ -416,7 +416,7 @@ export default function LessonPage() {
       <Link href={'/courses'} className="text-[#D5d6d6] text-lg hover:text-stone-200 transition gap-1 flex items-center"><BsChevronLeft/>Go Back</Link>
       </div>
 
-      <h1 className="text-3xl font-medium">{courseName} - Episode {lesson.order} - {completedLessonCount}</h1>
+      <h1 className="text-3xl font-medium">{courseName} - Episode {lesson.order}{/* - {completedLessonCount} */}</h1>
 
       <div className="flex flex-col md:flex-row w-full">
         <div className='w-full'>

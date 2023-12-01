@@ -30,6 +30,7 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
   const [userStatusEdited, setUserStatusEdited] = useState('Loading...')
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
+
   useEffect(() => {
     if (userStatus === 'user') {
       setUserStatusEdited('Free')
