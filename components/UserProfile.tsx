@@ -67,6 +67,7 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
 
         if (userRoles === "User") {
           updatedRoles = [...selectedValues];
+          console.log(updatedRoles)
         } else {
           const userRoleNames = userRoles.map((role) => role.name);
 
@@ -90,6 +91,7 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
       message.error('Failed to add role.');
     }
   };
+
 
   function handleRemoveRole(roleName: string) {
     try {
@@ -243,11 +245,25 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
                       </Dialog>
                        </CommandEmpty>
                        <CommandGroup>
-                       {Array.isArray(userRoles) && 
-                       
-                        roles
-                          .filter((role) => !userRoles.map((userRole: Role) => userRole.name).includes(role.name))
-                          .map((role) => (
+                       {Array.isArray(userRoles)
+                        ? roles
+                            .filter((role) => !userRoles.map((userRole: Role) => userRole.name).includes(role.name))
+                            .map((role) => (
+                              <CommandItem
+                                key={role.id}
+                                onSelect={() => toggleSelection(role.name)}
+                                className="cursor-pointer"
+                              >
+                                <Check
+                                  className={clsx(
+                                    "mr-2 h-4 w-4",
+                                    selectedValues.includes(role.name) ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                <h1 className={clsx(`text-${role.color}`)}>{role.name}</h1>
+                              </CommandItem>
+                            ))
+                        : roles.map((role) => (
                             <CommandItem
                               key={role.id}
                               onSelect={() => toggleSelection(role.name)}

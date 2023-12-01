@@ -1,6 +1,6 @@
 "use client"
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { db } from '@/utils/firebase';
 import { collection, deleteDoc, doc, getDoc, getDocs, increment, limit, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import Link from 'next/link';
@@ -463,7 +463,14 @@ export default function LessonPage() {
                   </div>
                   
                 </div>
-                <p className='rounded-xl mt-3 max-w-[950px] text-sm md:text-base'>{lesson.description}</p>
+                <p className='rounded-xl mt-3 max-w-[950px] text-sm md:text-base'>
+                {lesson.description.split('\n').map((line: number, index: number) => (
+                  <React.Fragment key={index}>
+                    {line}
+                    <br />
+                  </React.Fragment>
+                ))}
+              </p>
               </div>
               
               <div className='hidden md:block'>
