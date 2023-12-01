@@ -155,20 +155,24 @@ export default function Edit({lesson, courseId}: EditProps) {
   };
 
   const handleKeyDownDescription = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); // Prevents the default behavior of creating a new line
       saveDescription();
     }
   };
 
+  
   const saveDescription = async () => {
     disableEditingDescription();
-
-    const lessonRef = doc(db, 'courses', courseId, 'lessons', lesson.id)
+  
+    const lessonRef = doc(db, 'courses', courseId, 'lessons', lesson.id);
+  
+  
     await updateDoc(lessonRef, {
       description: editedDescription,
     });
-
-    message.success('Description updated successfully!')
+  
+    message.success('Description updated successfully!');
   };
 
   useEffect(() => {
@@ -352,13 +356,16 @@ export default function Edit({lesson, courseId}: EditProps) {
           className='h-full w-full bg-transparent transition ring-offset-[#0F0F10] rounded-xl p-2 outline-none resize-none'
         />
         ) : (
-          <h1
-          ref={descriptionRef as React.LegacyRef<HTMLHeadingElement>}
-          className='h-full bg-white/5 hover:bg-white/10 transition ring-offset-[#0F0F10] rounded-xl p-2 outline-none w-full'
-          onClick={enableEditingDescription}
-        >
-          { truncateText(editedDescription,100) || truncateText(lesson.description,100) || "Add a description..."}
-        </h1>
+<h1
+  ref={descriptionRef as React.LegacyRef<HTMLHeadingElement>}
+  className='h-full bg-white/5 hover:bg-white/10 transition ring-offset-[#0F0F10] rounded-xl p-2 outline-none w-full'
+  onClick={enableEditingDescription}
+  dangerouslySetInnerHTML={{
+    __html: editedDescription
+      ? editedDescription.replace(/\n/g, '<br/>')
+      : truncateText(lesson.description, 100) || "Add a description...",
+  }}
+/>
         )}
 
 
