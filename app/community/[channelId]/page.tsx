@@ -37,6 +37,7 @@ interface Member {
   roles: Array<Role>;
   canMessage: boolean;
   canReadMessages: boolean;
+  activity: string;
 }
 
 interface Role {
@@ -75,12 +76,57 @@ export default function CommunityPage(
     router.push('/')
   }
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
+  useEffect(() => {
+    if (userId) {
+      const userDoc = doc(db, 'users', userId as string);
+
+      const setUserOnlineStatus = async (status: string) => {
+        try {
+          await updateDoc(userDoc, { activity: status });
+        } catch (error) {
+          console.error('Error updating user activity:', error);
+        }
+      };
+
+      const setOnlineStatus = () => {
+        setUserOnlineStatus('online');
+      };
+
+      const setOfflineStatus = () => {
+        setUserOnlineStatus('offline');
+      };
+
+      const handleUserStatusChange = (isOnline: boolean) => {
+        if (isOnline) {
+          setOnlineStatus();
+        } else {
+          setOfflineStatus();
+        }
+      };
+
+      const handleWindowFocus = () => {
+        handleUserStatusChange(true);
+      };
+
+      const handleWindowBlur = () => {
+        handleUserStatusChange(false);
+      };
+
+      // Set initial status when the component mounts
+      setOnlineStatus();
+
+      // Add event listeners to detect user activity
+      window.addEventListener('focus', handleWindowFocus);
+      window.addEventListener('blur', handleWindowBlur);
+
+      // Cleanup event listeners on component unmount
+      return () => {
+        setOfflineStatus(); // Set offline when the component unmounts
+        window.removeEventListener('focus', handleWindowFocus);
+        window.removeEventListener('blur', handleWindowBlur);
+      };
     }
-    return text;
-  }
+  }, [userId]);
 
   useEffect(() => {
     const rolesCollection = collection(db, 'roles');
@@ -123,6 +169,7 @@ export default function CommunityPage(
               photoUrl: data.photoUrl,
               bannerUrl: data.bannerUrl,
               status: data.status,
+              activity: data.activity,
               roles: userRoles || "User",
               canMessage: currentChannel.permissions[data.status]?.canMessage || false,
               canReadMessages: currentChannel.permissions[data.status]?.canMessage || false,
@@ -201,6 +248,7 @@ export default function CommunityPage(
     <section className="h-screen w-2/12 border-r border-[--border] flex flex-col gap-4 p-2">
         <h1 className="text-2xl font-medium justify-center flex">Community</h1>
         <Channels router={router} channelId={currentChannelIdString} channels={channels} userStatus={userStatus} onDragEnd={handleDragEnd} />
+        <p>{currentUser?.activity}</p>
       </section>
       
       <section className="h-screen w-full 2xl:w-8/12 border-r border-[--border] flex flex-col gap-4">

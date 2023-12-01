@@ -18,6 +18,7 @@ interface Member {
   bannerUrl: string;
   canMessage: boolean;
   roles: Role[] | 'User';
+  activity: string;
 }
 
 export default function Members({
@@ -66,8 +67,12 @@ export default function Members({
               userImage={member.photoUrl}
               userName={member.name}
               userStatus={member.status}
+              userActivity={member.activity}
             />
+            {member.activity == 'online' &&
             <div className="bg-green-500 w-4 h-4 right-0 bottom-0 absolute rounded-full border-[--bg] group-hover:border-[--border] border-[3px] transition duration-200" />
+            }
+            
           </div>
           <div className="flex flex-col justify-center break-all">
             <h1
