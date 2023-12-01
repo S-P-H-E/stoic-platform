@@ -355,10 +355,12 @@ export default function Comments({
               <p
                 className="py-3 break-all"
                 dangerouslySetInnerHTML={{
-                  __html: comment.comment
-                    .split('\n')
-                    .map((line) => `${line}<br />`)
-                    .join(''),
+                  __html: detectAndStyleLinks(
+                    comment.comment
+                      .split('\n')
+                      .map((line) => `${line}<br />`)
+                      .join('')
+                  ),
                 }}
               ></p>
               <div className="flex items-center"></div>
