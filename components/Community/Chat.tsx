@@ -285,7 +285,7 @@ export default function Chat({
     if (channelId && canFetch && readPermission) {
       fetchMessages();
     }
-  }, [channelId, members, canFetch, readPermission, userStatus]);
+  }, [channelId, members, canFetch, readPermission, userStatus, activity, messages.length]);
 
   const deleteMessage = async (messageId: string, messageUserId: string) => {
     try {
