@@ -126,21 +126,7 @@ export default function Chat({
       }
     };
   }, []);
-  
-  useEffect(() => {
-    console.log('useEffect triggered');
-    // Play the message sound when a new message arrives and the user is offline
-    if (activity === 'offline' && messages.length > 0) {
-      const latestMessage = messages[messages.length - 1];
-      if (!latestMessage.sameUser) {
-        if (messageSoundRef.current) {
-          messageSoundRef.current.play().catch((error) => {
-            console.error('Error playing message sound:', error);
-          });
-        }
-      }
-    }
-  }, [activity, messages]);
+
 
   useLayoutEffect(() => {
     if (activity === 'online') {
@@ -279,6 +265,12 @@ export default function Chat({
                 };
               }
             });
+
+            if (activity === 'offline' && updatedMessages.length > messages.length) {
+              if (messageSoundRef.current) {
+                messageSoundRef.current.play();
+              }
+            }
 
             setMessages(updatedMessages);
           });
