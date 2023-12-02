@@ -112,6 +112,36 @@ export default function Chat({
   const editedMessageRef = useRef<HTMLLIElement | null>(null); // Ref for the edited message
   const repliedMessageRef = useRef<HTMLLIElement | null>(null); // Ref for the replied message
 
+  const messageSoundRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const audio = new Audio('/test.mp3');
+    messageSoundRef.current = audio;
+
+    // Clean up when the component unmounts
+    return () => {
+      if (messageSoundRef.current) {
+        messageSoundRef.current.pause();
+        messageSoundRef.current = null;
+      }
+    };
+  }, []);
+  
+  useEffect(() => {
+    console.log('useEffect triggered');
+    // Play the message sound when a new message arrives and the user is offline
+    if (activity === 'offline' && messages.length > 0) {
+      const latestMessage = messages[messages.length - 1];
+      if (!latestMessage.sameUser) {
+        if (messageSoundRef.current) {
+          messageSoundRef.current.play().catch((error) => {
+            console.error('Error playing message sound:', error);
+          });
+        }
+      }
+    }
+  }, [activity, messages]);
+
   useLayoutEffect(() => {
     if (activity === 'online') {
       if (chatContainerRef.current) {
