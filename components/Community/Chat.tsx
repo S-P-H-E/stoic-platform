@@ -408,52 +408,52 @@ export default function Chat({
         className="flex flex-col mt-auto overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 hover:scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 p-3"
       >
         {messages.map((message) => (
-          <div className={clsx("flex flex-col relative group py-0.5 px-2 hover:bg-white/5 rounded-lg transition duration-200", (message.sameUser ?? !message.repliedTo) ? 'mt-0' : 'mt-4 pt-1')} key={message.id}>
-              {message.repliedTo && (
-                  <>
-                    {messages.map((msg) => {
-      if (msg.id === message.repliedTo) {
-        const repliedUser = members.find((member) => member.id === msg.userId);
+          <div className={clsx("flex flex-col relative group py-0.5 px-2 hover:bg-white/5 rounded-lg transition duration-200", (message.sameUser && !message.repliedTo) ? 'mt-0' : 'mt-4 pt-1')} key={message.id}>
+          {message.repliedTo && (
+            <>
+              {messages.map((msg) => {
+              if (msg.id === message.repliedTo) {
+                const repliedUser = members.find((member) => member.id === msg.userId);
 
-        const userImagePassableProps = {
-          userId: repliedUser?.id ?? null,
-          roles: roles,
-          userRoles: repliedUser?.roles ?? 'User' as "User" | Role[], // Use type assertion
-          userBannerUrl: repliedUser?.bannerUrl || '',
-          userImage: repliedUser?.photoUrl || '',
-          userName: repliedUser?.name || '',
-          userStatus: repliedUser?.status || '',
-        };
+                const userImagePassableProps = {
+                  userId: repliedUser?.id ?? null,
+                  roles: roles,
+                  userRoles: repliedUser?.roles ?? 'User' as "User" | Role[], // Use type assertion
+                  userBannerUrl: repliedUser?.bannerUrl || '',
+                  userImage: repliedUser?.photoUrl || '',
+                  userName: repliedUser?.name || '',
+                  userStatus: repliedUser?.status || '',
+                };
 
-        return (
-          <div key={msg.id} className="flex items-center mb-2">
-            <div className="pl-4 flex gap-2 items-center">
-            <GoReply className="scale-x-[-1]" />
+                return (
+                  <div key={msg.id} className="flex items-center mb-2">
+                    <div className="pl-4 flex gap-2 items-center">
+                    <GoReply className="scale-x-[-1]" />
 
-              Replied to:{' '}
-              <div className="w-6 h-6">
-              <UserImagePassable {...userImagePassableProps} />
-              </div>
-              <span
-                className={clsx(
-                  'font-medium',
-                  repliedUser?.roles &&
-                    repliedUser?.roles.length > 0 &&
-                    repliedUser?.roles !== 'User' &&
-                    repliedUser?.roles[0]?.color &&
-                    `text-${getUserRoleColor(repliedUser.roles)}`
-                )}
-              >
-                {repliedUser ? ` ${repliedUser.name}` : 'Unknown User'}
-              </span>
-            </div>
-          </div>
-        );
-      }
-      return null;
-    })}
-                  </>
-              )}
+                      Replied to:{' '}
+                      <div className="w-6 h-6">
+                      <UserImagePassable {...userImagePassableProps} />
+                      </div>
+                      <span
+                        className={clsx(
+                          'font-medium',
+                          repliedUser?.roles &&
+                            repliedUser?.roles.length > 0 &&
+                            repliedUser?.roles !== 'User' &&
+                            repliedUser?.roles[0]?.color &&
+                            `text-${getUserRoleColor(repliedUser.roles)}`
+                        )}
+                      >
+                        {repliedUser ? ` ${repliedUser.name}` : 'Unknown User'}
+                      </span>
+                    </div>
+                  </div>
+                );
+              }
+          return null;
+          })}
+          </>
+          )}
           <li
             className='relative group flex gap-2 items-start'
             ref={(ref) => {
@@ -465,7 +465,7 @@ export default function Chat({
               }
             }}
           >
-            {(!message.sameUser) && (
+            {(!message.sameUser || message.repliedTo) && (
               <div className="flex gap-2">
                 <div className="w-12 h-12">
                   <UserImagePassable
@@ -481,7 +481,7 @@ export default function Chat({
               </div>
             )}
             <div className="flex flex-col w-full">
-              {(!message.sameUser) && (
+              {(!message.sameUser || message.repliedTo) && (
                 <div className="flex gap-2 items-center">
                   <h1 
                     className={clsx(
@@ -502,7 +502,7 @@ export default function Chat({
               )}
               {editedMessage?.id !== message.id && (
                 <div className="relative flex items-center">
-                { (message.sameUser) && (
+                { (message.sameUser && !message.repliedTo) && (
                     <div className="absolute left-3 items-start justify-start flex opacity-0 group-hover:opacity-100 transition duration-200">
                       <MessageTimestamp
                         noContext={true}
@@ -513,7 +513,7 @@ export default function Chat({
                   <h1
                     className={clsx(
                       'animate-pop flex flex-wrap break-all',
-                      (message.sameUser) && 'ml-14 '
+                      (message.sameUser && !message.repliedTo) && 'ml-14 '
                     )}
                     dangerouslySetInnerHTML={{
                       __html: detectAndStyleLinks(message.message)
@@ -529,7 +529,7 @@ export default function Chat({
                 <div
                   className={clsx(
                     'animate-pop flex gap-2 py-1',
-                    message.sameUser && 'ml-14 '
+                    message.sameUser && !message.repliedTo && 'ml-14 '
                   )}
                 >
                   <input
