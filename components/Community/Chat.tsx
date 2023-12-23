@@ -429,7 +429,7 @@ export default function Chat({
                   <div key={msg.id} className="flex items-center mb-2">
                     <div className="pl-4 flex gap-2 items-center opacity-80">
                     <GoReply className="scale-x-[-1]" />
-                      Replied to:{' '}
+                      {/* Replied to:{' '} */}
                       <div className="w-6 h-6">
                       <UserImagePassable {...userImagePassableProps} />
                       </div>
@@ -443,8 +443,9 @@ export default function Chat({
                             `text-${getUserRoleColor(repliedUser.roles)}`
                         )}
                       >
-                        {repliedUser ? ` ${repliedUser.name}` : 'Unknown User'}
+                        <p>{repliedUser ? ` ${repliedUser.name}` : 'Unknown User'}{/* <span className="text-white font-base">:</span> */}</p>
                       </span>
+                      <p>{truncateText(msg.message, 40)}</p>
                     </div>
                   </div>
                 );
