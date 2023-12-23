@@ -427,9 +427,8 @@ export default function Chat({
 
                 return (
                   <div key={msg.id} className="flex items-center mb-2">
-                    <div className="pl-4 flex gap-2 items-center">
+                    <div className="pl-4 flex gap-2 items-center opacity-80">
                     <GoReply className="scale-x-[-1]" />
-
                       Replied to:{' '}
                       <div className="w-6 h-6">
                       <UserImagePassable {...userImagePassableProps} />
