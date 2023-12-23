@@ -5,12 +5,15 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './firebase';
 import { UserDataFetcher } from './userDataFetcher';
+import { createCustomerIfNull } from './stripe';
 
 interface AuthGuardProps {
   children: React.ReactNode;
 }
 
 function AuthGuard({ children }: AuthGuardProps) {
+/*   createCustomerIfNull() */
+
   const router = useRouter();
   const pathname = usePathname();
   const [user, loading] = useAuthState(auth);

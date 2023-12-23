@@ -8,7 +8,7 @@ import { IoSend } from 'react-icons/io5'
 import { z } from 'zod';
 
 
-export default function Chatbox({ userName, userStatus, userId, channelId, messagePermission, currentChannelName}: { userName: string | undefined, userStatus:string | undefined, userId: string | null, channelId: string | string[], messagePermission: boolean, currentChannelName: string | undefined}) {
+export default function Chatbox({ replyingTo, userName, userStatus, userId, channelId, messagePermission, currentChannelName}: { userName: string | undefined, userStatus:string | undefined, userId: string | null, channelId: string | string[], messagePermission: boolean, currentChannelName: string | undefined, replyingTo: any}) {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [messageTimestamps, setMessageTimestamps] = useState<number[]>([]);
     const [currentLimit, setCurrentLimit] = useState<number>(2); // Initial message limit in seconds
@@ -39,13 +39,27 @@ export default function Chatbox({ userName, userStatus, userId, channelId, messa
           console.error('Message cannot be just a space');
           return;
         }
+
+        type Message = {
+          message: string;
+          timestamp: Timestamp;
+          userId: string | null;
+        };
+
+        type MessageWithReply = Message & { repliedTo?: string };
     
         const messagesRef = collection(db, 'channels', channelId as string, 'messages');
-        await addDoc(messagesRef, {
+        const messageData: MessageWithReply = {
           message: trimmedMessage,
           timestamp: Timestamp.fromDate(new Date()),
           userId: userId,
-        });
+        };
+    
+        if (replyingTo && replyingTo.id) {
+          messageData.repliedTo = replyingTo.id;
+        }
+    
+        await addDoc(messagesRef, messageData);
     
         setNewMessage('');
       } catch (error) {

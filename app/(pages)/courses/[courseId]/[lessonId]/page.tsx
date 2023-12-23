@@ -76,7 +76,7 @@ export default function LessonPage() {
   if (userStatus == 'user') {
     router.push('/')
   }
-
+  
   const deleteLesson = async (lessonIdToDelete: string) => {
     try {
       if (lessonIdToDelete) {
@@ -106,7 +106,7 @@ export default function LessonPage() {
 
           const courseDocRef = doc(db, 'courses', courseId as string);
           const courseDocSnap = await getDoc(courseDocRef);
-          
+
           if (courseDocSnap.exists()) {
             const courseData = courseDocSnap.data();
             const courseName = courseData.name;

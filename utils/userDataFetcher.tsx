@@ -24,6 +24,7 @@ export function UserDataFetcher() {
   const [generalLastLesson, setGeneralLastLesson] = useState('')
   const [userProfileImageUrl, setUserProfileImageUrl] = useState('')
   const [userProfileBannerUrl, setUserProfileBannerUrl] = useState('')
+  const [userStripeId, setUserStripeId] = useState('')
 
   const [roles, setRoles] = useState<Role[]>([]);
 
@@ -76,6 +77,7 @@ export function UserDataFetcher() {
             setUserProfileImageUrl(userData.photoUrl)
             setGeneralLastCourse(userData.generalLastCourse);
             setGeneralLastLesson(userData.generalLastLesson)
+            setUserStripeId(userData.stripe_customer_id)
 
             const newUserStatus = userData.status;
             setUserStatus(newUserStatus);
@@ -96,5 +98,5 @@ export function UserDataFetcher() {
     return unsubscribeAuth;
   }, [user, router, roles]);
 
-  return { userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, user, userId, fetching, userProfileImageUrl, userProfileBannerUrl};
+  return { userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, user, userId, fetching, userProfileImageUrl, userProfileBannerUrl};
 }

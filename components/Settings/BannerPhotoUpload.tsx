@@ -16,9 +16,9 @@ interface PasswordModalProps {
   onClose: () => void;
 }
 
-export default function PhotoUpload({ onClose }: PasswordModalProps) {
+export default function BannerUpload({ onClose }: PasswordModalProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [photoUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [photoUrl, setBannerImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { user, userId } = UserDataFetcher();
@@ -27,7 +27,7 @@ export default function PhotoUpload({ onClose }: PasswordModalProps) {
     setSelectedImage(file);
   }, []);
 
-  const uploadProfilePicture = async () => {
+  const uploadBannerPicture = async () => {
     if (selectedImage && user && userId) {
       const allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']; // Add any other allowed image types
   
@@ -39,21 +39,20 @@ export default function PhotoUpload({ onClose }: PasswordModalProps) {
       try {
         setIsLoading(true); // Set isLoading to true when the upload starts
   
-        const storageRef = ref(storage, `profilePictures/${userId}`);
+        const storageRef = ref(storage, `profileBanners/${userId}`);
         await uploadBytes(storageRef, selectedImage);
   
         const imageUrl = await getDownloadURL(storageRef);
-        setProfileImageUrl(imageUrl);
-        await updateProfile(user, { photoURL: imageUrl });
+        setBannerImageUrl(imageUrl);
   
         onClose();
-        message.success('Profile picture uploaded successfully!');
+        message.success('Profile banner uploaded successfully!');
   
         const userDocRef = doc(db, 'users', userId);
-        await setDoc(userDocRef, { photoUrl: imageUrl }, { merge: true });
+        await setDoc(userDocRef, { bannerUrl: imageUrl }, { merge: true });
       } catch (error) {
-        console.error('Error uploading profile picture:', error);
-        message.error('Failed to upload profile picture.');
+        console.error('Error uploading profile banner:', error);
+        message.error('Failed to upload profile banner.');
       } finally {
         setIsLoading(false); // Set isLoading back to false when the upload is complete or encounters an error
       }
@@ -74,9 +73,9 @@ export default function PhotoUpload({ onClose }: PasswordModalProps) {
         <input {...getInputProps()} />
         {selectedImage ? (
           <div className="flex justify-center items-center flex-col gap-4">
-            <p className="text-[--highlight]">You can click again to change the image</p>
+            <p className="text-[--highlight]">You can click again to change the banner</p>
              <Image
-              alt="Profile picture"
+              alt="Banner picture"
               src={URL.createObjectURL(selectedImage)}
               width={100}
               height={100}
@@ -105,10 +104,10 @@ export default function PhotoUpload({ onClose }: PasswordModalProps) {
          className={clsx({
           'text-[--highlight]': isLoading,
         }, 'font-lg text-base lg:text-xl')}
-         onClick={uploadProfilePicture}
+         onClick={uploadBannerPicture}
          disabled={isLoading}
         >
-         {isLoading ? 'Uploading...' : 'Upload Profile Picture'}
+         {isLoading ? 'Uploading...' : 'Upload Profile Banner'}
       </Button>
       : null}
       </div>

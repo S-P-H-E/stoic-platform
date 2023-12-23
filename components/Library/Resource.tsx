@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { HiDownload } from 'react-icons/hi'
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '../ui/context-menu';
 import { AiFillSound } from 'react-icons/ai';
-import { FaFileAudio } from 'react-icons/fa';
+import { FaFileAudio, FaFileVideo } from 'react-icons/fa';
 
 interface Resource {
   id: string;
@@ -36,17 +36,23 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
 
           <div className="absolute top-44 left-0 w-full h-20 bg-gradient-to-b from-transparent via-transparent to-[--bg]"/>
           {resource.image ? (
-            <Image loading='lazy' alt='image' src={resource.image} width={400} height={200} className='w-full h-[15.4rem] object-cover aspect-square rounded-b-lg' />
-            ) : (
-            resource.tags.some(tag => tag.toLowerCase() === 'audio') ? (
+          <Image loading='lazy' alt='image' src={resource.image} width={400} height={200} className='w-full h-[15.4rem] object-cover aspect-square rounded-b-lg' />
+        ) : (
+          resource.tags.some(tag => tag.toLowerCase() === 'audio') ? (
+            <div className='h-[15.4rem] text-white aspect-square rounded-b-lg flex items-center justify-center'>
+              <FaFileAudio size={128} />
+            </div>
+          ) : (
+            resource.tags.some(tag => tag.toLowerCase() === 'video') ? (
               <div className='h-[15.4rem] text-white aspect-square rounded-b-lg flex items-center justify-center'>
-                <FaFileAudio size={128} />
+                <FaFileVideo size={128} /> {/* Assuming you have a video icon component */}
               </div>
             ) : (
               <div className='h-[15.4rem] bg-[--border] aspect-square animate-pulse rounded-b-lg' />
             )
-            )}
-          </div>
+          )
+        )}
+      </div>
           
         <div className="px-4 py-2 gap-4 flex flex-col items-center justify-center relative z-10">
           <h1 className="text-3xl font-medium">{resource.name}</h1>
