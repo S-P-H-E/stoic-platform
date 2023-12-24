@@ -117,7 +117,7 @@ export default function Home() {
   const placeholderImageUrl = "/placeholder.jpg";
 
   return (
-    <main className="flex flex-col items-center w-full h-full text-center pt-64 gap-4 p-8">
+    <main className="flex flex-col items-center w-full text-center h-screen justify-center gap-4 p-8">
       <h1 className="text-5xl font-semibold text-green-500">
         Rumble <span className="text-white">Converter</span>
       </h1>

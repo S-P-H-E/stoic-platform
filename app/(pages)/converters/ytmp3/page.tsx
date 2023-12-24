@@ -93,7 +93,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col pt-64 items-center w-full h-full text-center gap-4 p-8">
+    <main className="flex flex-col h-screen justify-center items-center w-full text-center gap-4 p-8">
       <h1 className="text-5xl font-semibold text-red-600">
         Youtube MP3 <span className="text-white">Converter</span>
       </h1>

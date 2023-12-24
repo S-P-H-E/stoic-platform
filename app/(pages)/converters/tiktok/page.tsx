@@ -148,7 +148,7 @@ export default function Home() {
   const placeholderImageUrl = "/placeholder.jpg";
 
   return (
-    <main className="flex flex-col pt-64 items-center w-full h-full text-center gap-4 p-8">
+    <main className="flex flex-col items-center w-full h-screen justify-center text-center gap-4 p-8">
       <h1 className="text-5xl font-semibold text-blue-400">
         TikTok <span className="text-white">Converter</span>
       </h1>
