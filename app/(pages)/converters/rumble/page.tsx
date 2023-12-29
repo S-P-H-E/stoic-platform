@@ -71,7 +71,7 @@ export default function Home() {
           method: 'GET', // Specify the HTTP method as a string
           url: rumbleUrl,
           headers: {
-            'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_KEY || '', // Add a default value if process.env.NEXT_PUBLIC_RAPID_API_KEY might be undefined
+            'X-RapidAPI-Key': 'coming soon' || '', // Add a default value if process.env.NEXT_PUBLIC_RAPID_API_KEY might be undefined
             'X-RapidAPI-Host': 'rumble-videos.p.rapidapi.com',
           },
         };

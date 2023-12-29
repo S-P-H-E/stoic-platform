@@ -416,7 +416,7 @@ export default function LessonPage() {
       <Link href={'/courses'} className="text-[#D5d6d6] text-lg hover:text-stone-200 transition gap-1 flex items-center"><BsChevronLeft/>Go Back</Link>
       </div>
 
-      <h1 className="text-3xl font-medium">{courseName} - Episode {lesson.order}{/* - {completedLessonCount} */}</h1>
+      <h1 className="text-3xl font-medium">{courseName} - Episode {lesson.order}{/*  - {completedLessonCount}  */}</h1>
 
       <div className="flex flex-col md:flex-row w-full">
         <div className='w-full'>
@@ -432,7 +432,7 @@ export default function LessonPage() {
 
               <div className='my-5 border border-[--border] rounded-2xl p-5 relative'>
                 <div className='flex flex-col md:flex-row justify-between'>
-                  <button className='border border-[--border] flex w-fit md:hidden gap-1 h-fit items-center rounded-xl mb-5 px-2' onClick={handleLinkCopy}>
+                  <button aria-label='Copy Link' className='border border-[--border] flex w-fit md:hidden gap-1 h-fit items-center rounded-xl mb-5 px-2' onClick={handleLinkCopy}>
                     <BiCopy />
                     {copied ? 
                     <p>Copied!</p>

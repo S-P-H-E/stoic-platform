@@ -8,7 +8,7 @@ import { IoSend } from 'react-icons/io5'
 import { z } from 'zod';
 
 
-export default function Chatbox({ replyingTo, userName, userStatus, userId, channelId, messagePermission, currentChannelName}: { userName: string | undefined, userStatus:string | undefined, userId: string | null, channelId: string | string[], messagePermission: boolean, currentChannelName: string | undefined, replyingTo: any}) {
+export default function Chatbox({ resetReplyingTo, replyingTo, userName, userStatus, userId, channelId, messagePermission, currentChannelName}: { resetReplyingTo: () => void, userName: string | undefined, userStatus:string | undefined, userId: string | null, channelId: string | string[], messagePermission: boolean, currentChannelName: string | undefined, replyingTo: any}) {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [messageTimestamps, setMessageTimestamps] = useState<number[]>([]);
     const [currentLimit, setCurrentLimit] = useState<number>(2); // Initial message limit in seconds
@@ -62,6 +62,8 @@ export default function Chatbox({ replyingTo, userName, userStatus, userId, chan
         await addDoc(messagesRef, messageData);
     
         setNewMessage('');
+
+        resetReplyingTo();
       } catch (error) {
         console.error('Error adding comment:', error);
       }

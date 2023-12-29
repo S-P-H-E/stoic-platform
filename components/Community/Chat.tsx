@@ -116,6 +116,11 @@ export default function Chat({
 
   const messageSoundRef = useRef<HTMLAudioElement | null>(null);
 
+  const resetReplyingTo = () => {
+    setIsReplying(false);
+    setReplyingTo(undefined);
+  };
+
   useEffect(() => {
     const audio = new Audio('/test.mp3');
     messageSoundRef.current = audio;
@@ -639,6 +644,7 @@ export default function Chat({
           userId={userId}
           channelId={channelId}
           replyingTo={replyingTo}
+          resetReplyingTo={resetReplyingTo}
         />
       </div>
     </div>

@@ -1,0 +1,24 @@
+import { NextRequest } from "next/server";
+import Stripe from "stripe";
+
+export const stripe = new Stripe(String(process.env.STRIPE_SECRET), {
+    apiVersion: '2023-10-16',
+});
+
+export async function POST(request: NextRequest) {
+
+    const body = await request.json();
+
+    const { userName, userEmail, userStripeId } = body; //check user stripe id here too
+
+    if (userName && userEmail && !userStripeId) {
+        const customer = await stripe.customers.create({
+            email: String(userEmail),
+            name: String(userName)
+        });
+
+    return new Response(JSON.stringify(customer));
+    } else {
+        return new Response("User already is a stripe customer or user credentials are wrong.")
+    }
+}

@@ -5,7 +5,7 @@ import Button from '../UI Elements/Button'
 import {BiLogOut} from 'react-icons/bi'
 import { UserDataFetcher } from '@/utils/userDataFetcher'
 import { auth, db } from '@/utils/firebase'
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { message } from 'antd';
 import PasswordModal from './PasswordModal'
 import ProfilePhotoUplaod from './ProfilePhotoUpload'
@@ -14,17 +14,14 @@ import { validateNameLength } from '@/utils/validation'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 import { useFirebase } from '@/utils/authContext'
 import BannerUpload from './BannerPhotoUpload'
-import { AiOutlineCreditCard } from "react-icons/ai";
 import Manage from './Manage'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
 export default function AccountSettings() {
-  const { userName, user, userId, userStripeId } = UserDataFetcher();
+  const { userName, userEmail, user, userId, userStripeId } = UserDataFetcher();
   const {signOut} = useFirebase();
 
   const [customUser, fetching] = useAuthState(auth);
-
-  const [stripeId, setStripeId] = useState("")
 
   const [displayName, setDisplayName] = useState("")
   const [MenuOpen, setMenuOpen] = useState(false)
@@ -48,6 +45,47 @@ export default function AccountSettings() {
     setBannerMenuOpen(!bannerMenuOpen)
   }
 
+  useEffect(() => {
+    if(!userStripeId) {
+      const createCustomerIfNull = async () => {
+        if (userName && userEmail) {
+          const response = await fetch('/api/stripe/create-customer', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userName,
+              userEmail,
+              userStripeId
+            }),
+          });
+    
+          if (!response.ok) {
+            throw new Error('Failed to create customer');
+          }
+    
+          const data = await response.json();
+
+          await setDoc(
+            doc(db, 'users', userId as string),
+            {
+              stripe_customer_id: data.id,
+            },
+            { merge: true }
+          );
+        } else {
+          console.log("STRIPE CREDENTIALS ERROR")
+        }
+      }
+
+      createCustomerIfNull()
+    } else {
+      null
+    }
+
+  }, [userStripeId, userName, userId, userEmail])
+
 
   useEffect(() => {
     const getStripeId = async () => {
@@ -56,7 +94,6 @@ export default function AccountSettings() {
           const user = await getDoc(doc(db, 'users', customUser.uid));
           const stripeId = user.data()?.stripe_customer_id;
           console.log('Stripe ID:', stripeId);
-          setStripeId(stripeId)
         }
       } catch (error) {
         console.error('Error fetching Stripe ID:', error);
@@ -146,17 +183,7 @@ export default function AccountSettings() {
               </div>
 
               <div className="gap-3 lg:flex w-4/6 max-w-[35rem] h-32 items-center justify-end hidden">
-                <Dialog>
-                  <DialogTrigger asChild>
-                  <Button className='md:h-12 md:w-12 !p-0 w-full xl:w-full xl:h-14 bg-blue-600 hover:bg-blue-500 lg:font-medium 2xl:text-lg md:text-base gap-3 !ring-blue-500/50'>
-                  <p className='lg:hidden xl:block'>Manage Subscription</p>
-                  <AiOutlineCreditCard />
-                </Button>
-                  </DialogTrigger>
-                  <DialogContent>{/* 
-                    <Manage stripeCustomerId={userStripeId}/> */}
-                  </DialogContent>
-                </Dialog>
+                <Manage stripeCustomerId={userStripeId}/>
 
                 <Button onClick={() => signOut()} className='md:h-12 md:w-12 !p-0 w-full xl:w-full xl:h-14 bg-red-600 hover:bg-red-500 lg:font-medium 2xl:text-lg md:text-base gap-3 !ring-red-500/50'>
                 <p className='lg:hidden xl:block'>Log Out</p>

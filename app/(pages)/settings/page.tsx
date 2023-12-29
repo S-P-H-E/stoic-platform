@@ -22,7 +22,6 @@ export default function Settings() {
         </div>
       );
     }  else {
-      // Handle the case when userStatus is still loading or unavailable.
       return <div className="h-screen flex items-center justify-center"><BiLoader size={72} className="animate-spin"/></div>;
     }
   }
