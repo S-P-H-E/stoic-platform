@@ -1,23 +1,23 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import Input from '../UI Elements/Input'
-import Button from '../UI Elements/Button'
 import {BiLogOut} from 'react-icons/bi'
 import { UserDataFetcher } from '@/utils/userDataFetcher'
 import { auth, db } from '@/utils/firebase'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { message } from 'antd';
-import PasswordModal from './PasswordModal'
-import ProfilePhotoUplaod from './ProfilePhotoUpload'
-import UserImage from '../UserImage'
 import { validateNameLength } from '@/utils/validation'
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 import { useFirebase } from '@/utils/authContext'
-import BannerUpload from './BannerPhotoUpload'
-import Manage from './Manage'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import PasswordModal from '@/components/Settings/PasswordModal'
+import UserImage from '@/components/UserImage'
+import Manage from '@/components/Settings/Manage'
+import Button from '@/components/UI Elements/Button'
+import Input from '@/components/UI Elements/Input'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import PhotoUpload from '@/components/Settings/ProfilePhotoUpload'
+import BannerUpload from '@/components/Settings/BannerPhotoUpload'
 
-export default function AccountSettings() {
+export default function SettingsComponent() {
   const { userName, userEmail, user, userId, userStripeId } = UserDataFetcher();
   const {signOut} = useFirebase();
 
@@ -75,7 +75,7 @@ export default function AccountSettings() {
             { merge: true }
           );
         } else {
-          console.log("STRIPE CREDENTIALS ERROR")
+          /* console.log("STRIPE CREDENTIALS ERROR") */
         }
       }
 
@@ -217,7 +217,7 @@ export default function AccountSettings() {
                   <Button className='font-normal text-base lg:text-lg'>Update</Button>
                 </DialogTrigger>
                 <DialogContent>
-                  <ProfilePhotoUplaod onClose={closeImageModal}/>
+                  <PhotoUpload onClose={closeImageModal}/>
                 </DialogContent>
               </Dialog>
               :null

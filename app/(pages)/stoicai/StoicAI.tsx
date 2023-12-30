@@ -9,7 +9,7 @@ import { UserDataFetcher } from '@/utils/userDataFetcher';
 import Image from 'next/image';
 import StoicAIPicture from '@/public/stoicWhite.webp'
 
-export default function StoicAI() {
+export default function StoicAIComponent() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 

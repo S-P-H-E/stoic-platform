@@ -15,12 +15,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={GeistSans.className}>
-        <FirebaseProvider>
-        {children}
-        </FirebaseProvider>
-      </body>
-    </html>
+    <FirebaseProvider>
+      <html lang="en">
+        <body className={GeistSans.className}>
+          {children}
+        </body>
+      </html>
+    </FirebaseProvider>
   )
 }
