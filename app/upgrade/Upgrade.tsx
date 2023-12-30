@@ -1,16 +1,20 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaBook, FaGraduationCap, FaStripe } from 'react-icons/fa'
-import { BsFillPersonFill, BsStars, BsFillCheckCircleFill, BsPeopleFill } from 'react-icons/bs'
+import { BsFillPersonFill, BsStars, BsFillCheckCircleFill, BsPeopleFill, BsArrowLeftShort } from 'react-icons/bs'
 import { motion } from 'framer-motion'
 import { UserDataFetcher } from '@/utils/userDataFetcher'
-import { BiLogOut } from 'react-icons/bi'
+import { BiLoader, BiLogOut } from 'react-icons/bi'
 import { signOut } from 'firebase/auth'
 import { auth } from '@/utils/firebase'
 import { useRouter } from 'next/navigation'
+import clsx from 'clsx'
+import Link from 'next/link'
+import { ButtonShad } from '@/components/ui/buttonshad'
 
 export default function UpgradeComponent() {
-  const { userName, userStatus } = UserDataFetcher()
+  const { userName, userStatus, userStripeId } = UserDataFetcher()
+  const [loading,setLoading] = useState(false)
   const router = useRouter()
 
   const fadeInAnimationVariants = { // for framer motion  
@@ -55,6 +59,43 @@ export default function UpgradeComponent() {
     },
   ]
 
+  const generateCheckoutLink = async () => {
+    try {
+      setLoading(true)
+      if (userStripeId) {
+        const response = await fetch('/api/stripe/create-checkout-link', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userStripeId,
+          }),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to create portal');
+        }
+  
+        const data = await response.json();
+  
+        return data;
+      } else {
+        console.log('No stripe customer id found matching ur profile.');
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  };
+
+  const handleBuy = async () => {
+    const checkout = await generateCheckoutLink()
+
+    router.push(checkout)
+  }
+
 /*     useEffect(() => {
       if (userStatus == 'admin' || userStatus == 'premium') {
         console.log(userStatus)
@@ -63,8 +104,12 @@ export default function UpgradeComponent() {
     }, [router, userStatus]); */
 
   return (
-    <div className="flex items-center justify-center py-24 px-3">
-      <motion.div className=' border border-[#1C1C1D] w-[450px] rounded-3xl p-8 flex flex-col items-center gap-2 bg-gradient-to-tl from-[white]/5'
+    <div className="flex flex-col gap-4 items-center justify-center py-[8svh] px-3">
+      <Link className="group" href="/">
+        <ButtonShad variant={'outline'}><div className="flex gap-2 items-center"><BsArrowLeftShort className="transition duration-200 group-hover:-translate-x-1" size={20}/><p>Go back to homepage</p></div></ButtonShad>
+      </Link>
+      
+      <motion.div className='border border-[--border] w-[450px] rounded-3xl p-8 flex flex-col items-center gap-2 bg-gradient-to-tl from-[white]/5'
         custom={1}
         variants={fadeInAnimationVariants}
         initial="initial"
@@ -107,12 +152,15 @@ export default function UpgradeComponent() {
             <BsFillCheckCircleFill className='text-[--upgrade]'/>
           </motion.div>
         ))}
-        <motion.button className='upgrade mt-5'
+        <motion.button className={clsx('upgrade mt-5', loading && 'transition !opacity-50')}
         initial={{opacity: 0}}
         animate={{opacity: 1}}
         transition={{ delay: 0.5 }}
+        disabled={loading}
+
+        onClick={handleBuy}
         >
-          UPGRADE
+          {loading ? <div className="items-center justify-center w-full flex gap-2"><BiLoader className="animate-spin"/> <p>Processing</p> </div> : <p>UPGRADE</p>}
         </motion.button>
 
         <div className='flex items-center gap-1 border border-[--border] px-2 rounded-lg mt-6'>

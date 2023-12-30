@@ -38,7 +38,7 @@ export default function Continue() {
 
           isLoading(false)
 
-          console.log(lessonData.description)
+          /* console.log(lessonData.description) */
         }
       });
 
@@ -48,7 +48,7 @@ export default function Continue() {
 
           setCourseData(courseData)
 
-          console.log(courseData)
+          /* console.log(courseData) */
         }
       });
 

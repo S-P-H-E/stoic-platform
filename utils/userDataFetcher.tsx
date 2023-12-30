@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, updateDoc, doc, setDoc } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '@/utils/firebase';
 import { useRouter } from 'next/navigation';
@@ -29,6 +29,98 @@ export function UserDataFetcher() {
   const [roles, setRoles] = useState<Role[]>([]);
 
   const router = useRouter()
+
+  useEffect(() => {
+    const hasSubscription = async () => {
+      try {
+        if (userStripeId && user) {
+          const response = await fetch('/api/stripe/has-subscription', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userStripeId,
+            }),
+          });
+    
+          if (!response.ok) {
+            throw new Error('Issue with checking user subscription.');
+          }
+    
+          const data = await response.json();
+          return data;
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    };
+    
+    const checkSubscription = async () => {
+      const subscription = await hasSubscription();
+
+      console.log(subscription)
+
+      if (userId && subscription && userStatus === "user") {
+        const userRef = doc(db, 'users', userId);
+        
+        await updateDoc(userRef, {
+          status: 'premium',
+        });
+      } else if (userId && !subscription && userStatus === "premium") {
+        const userRef = doc(db, 'users', userId);
+        
+        await updateDoc(userRef, {
+          status: 'user',
+        });
+      }
+    };
+
+    if(userStripeId) {
+      checkSubscription();
+    }
+    
+  }, [userStripeId, user, userStatus, userId, router])
+
+  useEffect(() => {
+    if(!userStripeId && userName && userEmail && userId) {
+      const createCustomerIfNull = async () => {
+        if (userName && userEmail) {
+          const response = await fetch('/api/stripe/create-customer', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userName,
+              userEmail,
+              userStripeId
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to create customer');
+          }
+
+          const data = await response.json();
+
+          await setDoc(
+            doc(db, 'users', userId as string),
+            {
+              stripe_customer_id: data.id,
+            },
+            { merge: true }
+          );
+        } else {
+          // console.log("STRIPE CREDENTIALS ERROR");
+        }
+      }
+
+      createCustomerIfNull();
+    } else {
+      null
+    }
+  }, [userStripeId, userName, userId, userEmail]);
 
   useEffect(() => {
     const rolesCollection = collection(db, 'roles');

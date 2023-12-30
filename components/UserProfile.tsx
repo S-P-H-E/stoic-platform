@@ -4,7 +4,6 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { clsx } from 'clsx';
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 import Image from 'next/image';
-import { IoMdCheckmarkCircle } from 'react-icons/io';
 import { HiMiniCheckBadge } from 'react-icons/hi2';
 import { BiFilm, BiLogoInstagram, BiVideo, BiX } from 'react-icons/bi';
 import UserProfileDialog from './UserProfileDialog';
@@ -14,7 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from './ui/command';
 import { Check } from 'lucide-react';
 import { message } from 'antd';
-import { addDoc, doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 
@@ -128,8 +127,8 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
         </div>
         <Dialog>
           <DialogTrigger>
-            <div className="absolute top-[6rem] left-4 group border-[9px] border-[black] rounded-full">
-              <Avatar className="w-[6rem] h-[6rem]">
+            <div className="absolute top-[6rem] left-4 group border-[9px] bg-black border-[black] rounded-full">
+              <Avatar className="w-[6rem] h-[6rem] ">
                 <AvatarImage src={src ?? undefined} />
                 {/* Display the first letter of the userName */}
                 <AvatarFallback className='uppercase select-none text-base'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>

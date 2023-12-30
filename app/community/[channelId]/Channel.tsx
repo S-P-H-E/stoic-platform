@@ -245,7 +245,7 @@ export default function CommunityPage({channelId}: CommunityPageProps) {
     <section className="h-screen w-2/12 border-r border-[--border] flex flex-col gap-4 p-2">
         <h1 className="text-2xl font-medium justify-center flex">Community</h1>
         <Channels router={router} channelId={currentChannelIdString} channels={channels} userStatus={userStatus} onDragEnd={handleDragEnd} />
-        <p>{currentUser?.activity}</p>
+        {/* <p>{currentUser?.activity}</p> */}
       </section>
       
       <section className="h-screen w-full 2xl:w-8/12 border-r border-[--border] flex flex-col gap-4">

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import {BiLogOut} from 'react-icons/bi'
 import { UserDataFetcher } from '@/utils/userDataFetcher'
 import { auth, db } from '@/utils/firebase'
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { message } from 'antd';
 import { validateNameLength } from '@/utils/validation'
 import { useFirebase } from '@/utils/authContext'
@@ -16,9 +16,10 @@ import Input from '@/components/UI Elements/Input'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import PhotoUpload from '@/components/Settings/ProfilePhotoUpload'
 import BannerUpload from '@/components/Settings/BannerPhotoUpload'
+import Link from 'next/link'
 
 export default function SettingsComponent() {
-  const { userName, userEmail, user, userId, userStripeId } = UserDataFetcher();
+  const { userName, userEmail, userStatus, user, userId, userStripeId } = UserDataFetcher();
   const {signOut} = useFirebase();
 
   const [customUser, fetching] = useAuthState(auth);
@@ -45,46 +46,6 @@ export default function SettingsComponent() {
     setBannerMenuOpen(!bannerMenuOpen)
   }
 
-  useEffect(() => {
-    if(!userStripeId) {
-      const createCustomerIfNull = async () => {
-        if (userName && userEmail) {
-          const response = await fetch('/api/stripe/create-customer', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              userName,
-              userEmail,
-              userStripeId
-            }),
-          });
-    
-          if (!response.ok) {
-            throw new Error('Failed to create customer');
-          }
-    
-          const data = await response.json();
-
-          await setDoc(
-            doc(db, 'users', userId as string),
-            {
-              stripe_customer_id: data.id,
-            },
-            { merge: true }
-          );
-        } else {
-          /* console.log("STRIPE CREDENTIALS ERROR") */
-        }
-      }
-
-      createCustomerIfNull()
-    } else {
-      null
-    }
-
-  }, [userStripeId, userName, userId, userEmail])
 
 
   useEffect(() => {
@@ -93,7 +54,7 @@ export default function SettingsComponent() {
         if (customUser) {
           const user = await getDoc(doc(db, 'users', customUser.uid));
           const stripeId = user.data()?.stripe_customer_id;
-          console.log('Stripe ID:', stripeId);
+          /* console.log('Stripe ID:', stripeId); */
         }
       } catch (error) {
         console.error('Error fetching Stripe ID:', error);
@@ -183,7 +144,20 @@ export default function SettingsComponent() {
               </div>
 
               <div className="gap-3 lg:flex w-4/6 max-w-[35rem] h-32 items-center justify-end hidden">
-                <Manage stripeCustomerId={userStripeId}/>
+                {userStripeId && (userStatus == 'admin' || userStatus == 'premium') ?
+                  <Manage stripeCustomerId={userStripeId}/>
+
+                  :
+
+                  <Link className="w-full" href={'/upgrade'}>
+                    <Button
+                      className='md:h-12 md:w-12 !p-0 w-full xl:w-full xl:h-14 bg-yellow-600 hover:bg-yellow-500 lg:font-medium 2xl:text-lg md:text-base gap-3 !ring-yellow-500/50'
+                    >
+                      <p className="lg:hidden xl:block">Upgrade</p>
+                    </Button>
+                  </Link>
+                }
+                
 
                 <Button onClick={() => signOut()} className='md:h-12 md:w-12 !p-0 w-full xl:w-full xl:h-14 bg-red-600 hover:bg-red-500 lg:font-medium 2xl:text-lg md:text-base gap-3 !ring-red-500/50'>
                 <p className='lg:hidden xl:block'>Log Out</p>

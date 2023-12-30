@@ -93,12 +93,9 @@ export default function Login() {
       }
     
       if (validationErrors.length > 0) {
-        // Display all validation errors
         validationErrors.forEach((error) => {
           message.error(error);
         });
-    
-        // Optionally, set state variables like setEmailErrorUI and setPasswordErrorUI to true here if needed.
         return;
       }
       
@@ -152,7 +149,6 @@ export default function Login() {
     // switches between login and register
     const changeForm = () => {
         setIsLoginMode(!isLoginMode);
-
         setNameErrorUI(false);
         setPasswordErrorUI(false);
         setEmailErrorUI(false)
@@ -227,8 +223,8 @@ export default function Login() {
         <div>
             <h1 className='text-lg font-medium'>Username</h1>
             <Input value={registerName} type='text' placeholder="Enter your username here" eye={false} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setRegisterName(event.target.value)}/>
-            {(registerName.length > 21 || nameErrorUI) && (
-                <InputResponse>Name cannot be empty or longer than 21 characters.</InputResponse>
+            {(registerName.length > 50 || nameErrorUI) && (
+                <InputResponse>Name cannot be empty or longer than 50 characters.</InputResponse>
             )}
         </div>
         <div>
