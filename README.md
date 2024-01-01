@@ -37,6 +37,8 @@ Stoic-Platform offers a variety of powerful features tailored for content creato
 
 10. **Admin Management**: Admin capabilities ensure smooth operation and support for course members.
 
+11. **Other**: There are many other functionalities which we can't list here, but are existing.
+
 ## Overview
 
 Stoic-Platform is meticulously crafted to provide an exceptional learning and social experience. Whether you are enhancing your skills through video courses, engaging with AI-powered tools, or participating in the community, our platform is designed to empower you. Subscribe to premium content, explore the vast library, and leverage our strategies to go viral on social media.
