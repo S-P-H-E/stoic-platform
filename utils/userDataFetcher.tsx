@@ -85,7 +85,7 @@ export function UserDataFetcher() {
   useEffect(() => {
     if(!userStripeId && userName && userEmail && userId) {
       const createCustomerIfNull = async () => {
-        if (userName && userEmail) {
+        if (userName && userEmail && !userStripeId) {
           const response = await fetch('/api/stripe/create-customer', {
             method: 'POST',
             headers: {

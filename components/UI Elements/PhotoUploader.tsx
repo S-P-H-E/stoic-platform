@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useCallback } from 'react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { storage } from '@/utils/firebase';
@@ -49,6 +51,12 @@ export default function ImageUpload({ onComplete, customPath }: ImageUploadProps
       }
     },
     maxSize: 10 * 1024 * 1024,
+    accept: {
+      'image/jpeg': [],
+      'image/png': [],
+      'image/webp': [],
+      'image/gif': [],
+    }
   });
 
   return (

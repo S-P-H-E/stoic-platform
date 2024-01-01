@@ -63,6 +63,12 @@ export default function PhotoUpload({ onClose }: PasswordModalProps) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFiles) => onFileSelected(acceptedFiles[0]),
     maxSize: 8 * 1024 * 1024, 
+    accept: {
+      'image/jpeg': [],
+      'image/png': [],
+      'image/webp': [],
+      'image/gif': [],
+    }
   });
 
   return (

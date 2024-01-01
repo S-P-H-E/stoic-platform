@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Book,
   Settings,
+  ImagePlus,
   Video,
   Users,
 } from 'lucide-react';
@@ -61,6 +62,12 @@ const routes = [
     label: 'Stoic AI',
     icon: BrainCircuit,
     href: '/stoicai',
+    color: 'text-white',
+  },
+  {
+    label: 'Image AI',
+    icon: ImagePlus,
+    href: '/imageai',
     color: 'text-white',
   },
   {
