@@ -47,6 +47,18 @@ Stoic-Platform is meticulously crafted to provide an exceptional learning and so
 
 While you are encouraged to explore the features and functionalities for personal or educational purposes, note that Stoic-Platform is not intended for free use, commercial purposes, or distribution without explicit permission.
 
+## Development Team
+
+This project is a collaborative effort by a team of skilled coders:
+
+- **Dark**
+  - GitHub: [@DarKS4ys](https://github.com/DarKS4ys)
+  - Responsibilities: UI design, implemented most functionalities, managed backend development and assisted in project managament.
+
+- **Sphe**
+  - GitHub: [@S-P-H-E](https://github.com/S-P-H-E)
+  - Responsibilities: Contributed to UI design, provided creative ideas, assisted in various tasks, and supported project management.
+
 ## Deployed on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js. However, please note that this app is intended for commercial use. Users are not allowed to use or distribute the provided code for any purpose, including commercial use, without explicit permission.
