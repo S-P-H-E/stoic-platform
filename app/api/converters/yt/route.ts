@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import ytdl from 'ytdl-core';
+import { format } from 'date-fns';
 
 function extractNumericPart(quality: string) {
   const match = quality.match(/\d+/);
@@ -62,10 +63,16 @@ export async function POST(request: NextRequest, response: NextResponse) {
     };
 
     const videoUrl = info.videoDetails.video_url;
-    const uploadDate = info.videoDetails.uploadDate;
+    const videoTitle = info.videoDetails.title;
+
+    console.log(info)
+
+    const formattedDate = format(info.videoDetails.uploadDate, 'MM/dd/yyyy');
+
+    const uploadDate = formattedDate
     const lengthSeconds = info.videoDetails.lengthSeconds;
 
-    return new Response(JSON.stringify({ downloadLinks, thumbnailUrl, videoUrl, author, authorThumbnailUrl, uploadDate, lengthSeconds}));
+    return new Response(JSON.stringify({ videoTitle, downloadLinks, thumbnailUrl, videoUrl, author, authorThumbnailUrl, uploadDate, lengthSeconds}));
   } catch (error: any) {
     console.log(error)
     if (error.message.includes('No video id found')) {
