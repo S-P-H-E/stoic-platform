@@ -1,27 +1,31 @@
 "use client"
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 
 export default function Greeting() {
   const { userName } = UserDataFetcher();
 
-  const currentHour = new Date().getHours();
+  const [greeting, setGreeting] = useState('');
 
-  let greeting = 'Hello';
+  useEffect(() => {
+    const getGreeting = () => {
+      const currentDate = new Date();
+      const currentHour = currentDate.getHours();
 
-  if (currentHour >= 21) {
-    greeting = 'Good evening';
-  } else if (currentHour >= 5 && currentHour < 12) {
-    greeting = 'Good morning';
-  } else if (currentHour >= 12 && currentHour < 17) {
-    greeting = 'Good afternoon';
-  } else if (currentHour >= 17 && currentHour < 21) {
-    greeting = 'Good night';
-  }  
-  else {
-    greeting = 'Hello';
-  }
+      if (currentHour >= 5 && currentHour < 12) {
+        setGreeting('Good morning');
+      } else if (currentHour >= 12 && currentHour < 18) {
+        setGreeting('Good afternoon');
+      } else if (currentHour >= 18 && currentHour < 22) {
+        setGreeting('Good evening');
+      } else {
+        setGreeting('Good night');
+      }
+    };
+
+    getGreeting();
+  }, []);
 
   return (
     <p className="text-2xl font-medium">

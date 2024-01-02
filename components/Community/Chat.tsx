@@ -1,5 +1,6 @@
 'use client';
 
+import { FaExclamationTriangle } from "react-icons/fa";
 import { db } from '@/utils/firebase';
 import {
   collection,
@@ -297,6 +298,7 @@ export default function Chat({
     if (channelId && canFetch && readPermission) {
       fetchMessages();
     }
+
   }, [channelId, members, canFetch, readPermission, userStatus, activity, messages.length]);
 
   const deleteMessage = async (messageId: string, messageUserId: string) => {
@@ -412,7 +414,16 @@ export default function Chat({
         ref={chatContainerRef}
         className="flex flex-col mt-auto overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 hover:scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 p-3"
       >
-        {messages.map((message) => (
+        <>
+        {!readPermission && currentChannel && (
+          <div className="flex gap-1 justify-center items-center text-[--highlight]">
+            <FaExclamationTriangle/> 
+            <h1>You are not allowed to read messages in {currentChannel.name}</h1>
+          </div>
+          )
+        }
+        
+        {messages && messages.map((message) => (
           <div className={clsx("flex flex-col relative group py-0.5 px-2 hover:bg-white/5 rounded-lg transition duration-200", (message.sameUser && !message.repliedTo) ? 'mt-0' : 'mt-4 pt-1')} key={message.id}>
           {message.repliedTo && (
             <>
@@ -455,7 +466,6 @@ export default function Chat({
                   </div>
                 );
               }
-          return null;
           })}
           </>
           )}
@@ -605,6 +615,7 @@ export default function Chat({
           </li>
           </div>
         ))}
+        </>
       </ul>
       <div className="sticky w-full p-2 bottom-0 flex flex-col gap-2">
         {isReplying && replyingTo ? (

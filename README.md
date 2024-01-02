@@ -1,6 +1,6 @@
 # Stoic-Platform
 
-Welcome to Stoic-Platform, an advanced web application (also has a mobile app) designed for content creation and social media growth as part of the Stoic program.
+Welcome to Stoic-Platform, an advanced web application (also has a mobile and desktop app) designed for content creation and social media growth as part of the Stoic program.
 
 ## Tech Stack
 

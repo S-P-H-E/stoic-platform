@@ -11,9 +11,10 @@ interface InputProps {
     eye?: boolean;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     value?: string;
+    disabled?: boolean;
   }
 
-  const Input: React.FC<InputProps> = ({ placeholder, className, type, eye, onChange, value }) => {
+  const Input: React.FC<InputProps> = ({ disabled, placeholder, className, type, eye, onChange, value }) => {
     const [toggle, setToggle] = useState(true)
     const [inputFocused, setInputFocused] = useState(false);
 
@@ -34,8 +35,8 @@ interface InputProps {
     const inputType = toggle ? type : 'text';
 
     return (
-      <div className={`duration-200 transition-all flex border p-2 rounded-lg w-full ${borderClassName}`}>
-        <input value={value} type={inputType} onChange={onChange} className={`bg-transparent items-center focus:border-white-60 w-full placeholder:text-[--highlight] outline-none ${className}`}
+      <div className={`duration-200 transition-all flex border p-2 rounded-lg w-full disabled:cursor-not-allowed disabled:opacity-50 ${borderClassName}`}>
+        <input disabled={disabled} value={value} type={inputType} onChange={onChange} className={`bg-transparent items-center focus:border-white-60 w-full placeholder:text-[--highlight] outline-none ${className}`}
           placeholder={placeholder} autoComplete="new-password" onFocus={handleInputFocus} onBlur={handleInputBlur}   
           />
 

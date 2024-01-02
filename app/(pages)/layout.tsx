@@ -2,6 +2,7 @@ import AuthGuard from '@/utils/AuthGuard';
 import Sidebar from '@/components/Sidebar';
 import MobileSidebar from './../../components/MobileSidebar';
 
+
 export default function PagesLayout({
   children,
 }: {
@@ -11,6 +12,7 @@ export default function PagesLayout({
     <AuthGuard>
       <html lang="en">
         <body>
+
           <div className="hidden md:flex md:w-60 lg:w-72 h-full border-[--border] md:border-r">
             <Sidebar />
           </div>

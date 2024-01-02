@@ -1,14 +1,26 @@
-"use client"
-import Channels from '@/components/Community/Channels'
+'use client';
+import Channels from '@/components/Community/Channels';
 import Chat from '@/components/Community/Chat';
 import Members from '@/components/Community/Members';
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable"
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
-import { collection, doc, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  updateDoc,
+} from 'firebase/firestore';
 import { ChevronLeft } from 'lucide-react';
-import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import { BsPersonFill } from 'react-icons/bs';
 
 interface Channel {
@@ -47,32 +59,28 @@ interface Role {
   order: number;
 }
 
-
-
 interface CommunityPageProps {
   channelId: string;
 }
 
-export default function CommunityPage({channelId}: CommunityPageProps) {
+export default function CommunityPage({ channelId }: CommunityPageProps) {
+  const router = useRouter();
 
-  const router = useRouter()
-
-  const { userId, userStatus } = UserDataFetcher()
+  const { userId, userStatus } = UserDataFetcher();
 
   const [channels, setChannels] = useState<Channel[]>([]);
   const [currentChannel, setCurrentChannel] = useState<Channel>();
-  
+
   const [members, setMembers] = useState<Member[]>([]);
   const [currentUser, setCurrentUser] = useState<Member | undefined>();
-  
+
   const [roles, setRoles] = useState<Role[]>([]);
 
   const currentChannelIdString = channelId || '';
 
-  const [activity, setActivity] = useState('offline')
-  
+  const [activity, setActivity] = useState('offline');
 
-/*   if (userStatus == 'user') {
+  /*   if (userStatus == 'user') {
     router.push('/')
   } */
 
@@ -90,12 +98,12 @@ export default function CommunityPage({channelId}: CommunityPageProps) {
 
       const setOnlineStatus = () => {
         setUserOnlineStatus('online');
-        setActivity('online')
+        setActivity('online');
       };
 
       const setOfflineStatus = () => {
         setUserOnlineStatus('offline');
-        setActivity('offline')
+        setActivity('offline');
       };
 
       const handleUserStatusChange = (isOnline: boolean) => {
@@ -143,141 +151,183 @@ export default function CommunityPage({channelId}: CommunityPageProps) {
         setRoles(rolesData);
       }
     );
-  
 
     return () => unsubscribe();
   }, []);
 
   const isAdminOrPremium = userStatus === 'admin' || userStatus === 'premium';
 
-    useEffect(() => {
-      if (currentChannel && isAdminOrPremium) {
-        const usersCollection = collection(db, 'users');
-        const unsubscribe = onSnapshot(usersCollection, (querySnapshot) => {
-          const membersData: Member[] = querySnapshot.docs.map((doc) => {
-            const data = doc.data();
+  useEffect(() => {
+    if (currentChannel && isAdminOrPremium) {
+      const usersCollection = collection(db, 'users');
+      const unsubscribe = onSnapshot(usersCollection, (querySnapshot) => {
+        const membersData: Member[] = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
 
-            const userRoles = data.roles && data.roles.map((roleName: string) => {
+          const userRoles =
+            data.roles &&
+            data.roles.map((roleName: string) => {
               const role = roles.find((r) => r.name === roleName);
               return role || { name: roleName, color: 'white' }; // Default color if role not found
             });
-     
+
+          return {
+            id: doc.id,
+            name: data.name,
+            email: data.email,
+            photoUrl: data.photoUrl,
+            bannerUrl: data.bannerUrl,
+            status: data.status,
+            activity: data.activity,
+            roles: userRoles || 'User',
+            canMessage:
+              currentChannel.permissions[data.status]?.canMessage || false,
+            canReadMessages:
+              currentChannel.permissions[data.status]?.canMessage || false,
+          };
+        });
+
+        const filteredMembers = membersData.filter((member) => {
+          const hasPermissionToSee =
+            currentChannel.permissions[member.status]?.canSeeChannel || false;
+          return (
+            member.status === 'admin' ||
+            (member.status === 'premium' && hasPermissionToSee)
+          );
+        });
+
+        setMembers(filteredMembers);
+
+        const currentUserData = membersData.find(
+          (member) => member.id === userId
+        );
+        setCurrentUser(currentUserData);
+      });
+
+      return () => unsubscribe();
+    }
+  }, [currentChannel, userId, isAdminOrPremium, roles]);
+
+  useEffect(() => {
+    if (isAdminOrPremium) {
+      const channelsCollection = collection(db, 'channels');
+
+      const unsubscribe = onSnapshot(
+        query(channelsCollection, orderBy('order')),
+        (querySnapshot) => {
+          const channelsData: Channel[] = querySnapshot.docs.map((doc) => {
+            const data = doc.data();
             return {
               id: doc.id,
               name: data.name,
-              email: data.email,
-              photoUrl: data.photoUrl,
-              bannerUrl: data.bannerUrl,
-              status: data.status,
-              activity: data.activity,
-              roles: userRoles || "User",
-              canMessage: currentChannel.permissions[data.status]?.canMessage || false,
-              canReadMessages: currentChannel.permissions[data.status]?.canMessage || false,
+              description: data.description,
+              icon: data.icon,
+              permissions: data.permissions,
+              order: data.order,
+              activeTyping: data.activeTyping,
             };
           });
-          
-          const filteredMembers = membersData.filter((member) => {
-            const hasPermissionToSee =
-              currentChannel.permissions[member.status]?.canSeeChannel || false;
-            return member.status === 'admin' || (member.status === 'premium' && hasPermissionToSee);
-          });
 
-          setMembers(filteredMembers);
+          setChannels(channelsData);
 
-          const currentUserData = membersData.find((member) => member.id === userId);
-          setCurrentUser(currentUserData);
-        });
-  
-        return () => unsubscribe();
-      }
-    }, [currentChannel, userId, isAdminOrPremium, roles]);
+          const currentChannelData = channelsData.find(
+            (channel) => channel.id === currentChannelIdString
+          );
 
-    useEffect(() => {
-      if (isAdminOrPremium) {
-        const channelsCollection = collection(db, 'channels');
-      
-        const unsubscribe = onSnapshot(
-          query(channelsCollection, orderBy('order')),
-          (querySnapshot) => {
-            const channelsData: Channel[] = querySnapshot.docs.map((doc) => {
-              const data = doc.data();
-              return {
-                id: doc.id,
-                name: data.name,
-                description: data.description,
-                icon: data.icon,
-                permissions: data.permissions,
-                order: data.order,
-                activeTyping: data.activeTyping
-              };
-            });
-      
-            setChannels(channelsData);
-    
-            const currentChannelData = channelsData.find((channel) => channel.id === currentChannelIdString);
-    
-            console.log(currentChannelData)
-            setCurrentChannel(currentChannelData);
-          }
-        );
-        
-        return () => unsubscribe();
-      }
-    }, [currentChannelIdString, isAdminOrPremium]);
+          console.log(currentChannelData);
+          setCurrentChannel(currentChannelData);
+        }
+      );
 
-    const handleDragEnd = async (id: string, newOrder: number) => {
-      try { 
-        const channelRef = doc(db, 'channels', id);
-    
-        await updateDoc(channelRef, {
-          order: newOrder,
-        });
-    
-        /* console.log(`Dropped channel with id ${id} to new order ${newOrder}`); */
-      } catch (error) {
-        console.error('Error updating channel order:', error);
-      }
-    };
+      return () => unsubscribe();
+    }
+  }, [currentChannelIdString, isAdminOrPremium]);
 
+  const handleDragEnd = async (id: string, newOrder: number) => {
+    try {
+      const channelRef = doc(db, 'channels', id);
+
+      await updateDoc(channelRef, {
+        order: newOrder,
+      });
+
+      /* console.log(`Dropped channel with id ${id} to new order ${newOrder}`); */
+    } catch (error) {
+      console.error('Error updating channel order:', error);
+    }
+  };
+
+  // ! SAVING THE LAYOUT TO LOCALSTORAGE HAS TO BE ADDED SOON!!! ! ! ! !  IMPORTANT ! ! ! !
   return (
-    <main className='h-full flex items-end w-full'>
+    <main className="h-full flex items-end w-full">
+      <ResizablePanelGroup direction="horizontal">
+        <ResizablePanel minSize={15} className="h-screen w-2/12 border-r border-[--border] flex flex-col gap-4 p-2">
+          <>
+            <h1 className="text-2xl font-medium justify-center flex">Community</h1>
+            <Channels
+              router={router}
+              channelId={currentChannelIdString}
+              channels={channels}
+              userStatus={userStatus}
+              onDragEnd={handleDragEnd}
+            />
+            {/* <p>{currentUser?.activity}</p> */}
+          </>
+          </ResizablePanel>
 
-    <section className="h-screen w-2/12 border-r border-[--border] flex flex-col gap-4 p-2">
-        <h1 className="text-2xl font-medium justify-center flex">Community</h1>
-        <Channels router={router} channelId={currentChannelIdString} channels={channels} userStatus={userStatus} onDragEnd={handleDragEnd} />
-        {/* <p>{currentUser?.activity}</p> */}
-      </section>
-      
-      <section className="h-screen w-full 2xl:w-8/12 border-r border-[--border] flex flex-col gap-4">
-        <div className='flex flex-col h-full w-full relative'>
-          <Chat activity={activity} roles={roles} currentChannel={currentChannel} currentUser={currentUser} userId={userId} userStatus={userStatus} canFetch={isAdminOrPremium} channelId={channelId} members={members} readPermission={currentUser?.canReadMessages || false}/>
-          {/*<div className="sticky w-full p-2">
-            <Chatbox userName={currentUser?.name} currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
-          </div> */}
-        </div>
-      </section>
+          <ResizableHandle className="hover:border-primary-foreground border-transparent border transition"/>
 
-     <section className="h-screen w-2/12 flex-col gap-4 p-2 2xl:flex hidden">
-        <h1 className="text-2xl font-medium justify-center flex">Members</h1>
-        <Members userId={userId} roles={roles} members={members}/>
-      </section>
+          <ResizablePanel defaultSize={75} minSize={60} className="h-screen w-2/12 border-r border-[--border] flex flex-col gap-4">
+          <>
+            <div className="flex flex-col h-full w-full relative">
+              <Chat
+                activity={activity}
+                roles={roles}
+                currentChannel={currentChannel}
+                currentUser={currentUser}
+                userId={userId}
+                userStatus={userStatus}
+                canFetch={isAdminOrPremium}
+                channelId={channelId}
+                members={members}
+                readPermission={currentUser?.canReadMessages || false}
+              />
+              {/*<div className="sticky w-full p-2">
+                <Chatbox userName={currentUser?.name} currentChannelName={currentChannel?.name} messagePermission={currentUser?.canMessage || false} userStatus={userStatus} userId={userId} channelId={channelId}/>
+              </div> */}
+            </div>
+          </>
+        </ResizablePanel>
 
-    <div className='2xl:hidden'>
-      <Sheet>
-        <SheetTrigger asChild>
-          <button className="h-screen w-16 rounded-l-xl flex items-center justify-center">
-            <ChevronLeft/>
-            <BsPersonFill size={32}/>
-          </button>
-        </SheetTrigger>
-        <SheetContent side="right" className='border-[--border] bg-[--bg]'>
-          <section className="h-screen w-full flex flex-col gap-4 p-2">
+      <ResizableHandle className="2xl:flex hidden hover:border-primary-foreground border-transparent border transition"/>
+
+        <ResizablePanel minSize={12} defaultSize={15} className="h-screen w-2/12 flex-col gap-4 p-2 2xl:flex hidden">
+          <>
             <h1 className="text-2xl font-medium justify-center flex">Members</h1>
-            <Members userId={userId} roles={roles} members={members}/>
-          </section>
-        </SheetContent>
-      </Sheet>
+            <Members userId={userId} roles={roles} members={members} />
+          </>
+        </ResizablePanel>
+
+      </ResizablePanelGroup>
+
+      <div className="2xl:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <button className="h-screen w-16 rounded-l-xl flex items-center justify-center">
+              <ChevronLeft />
+              <BsPersonFill size={32} />
+            </button>
+          </SheetTrigger>
+          <SheetContent side="right" className="border-[--border] bg-[--bg]">
+            <section className="h-screen w-full flex flex-col gap-4 p-2">
+              <h1 className="text-2xl font-medium justify-center flex">
+                Members
+              </h1>
+              <Members userId={userId} roles={roles} members={members} />
+            </section>
+          </SheetContent>
+        </Sheet>
       </div>
     </main>
-  )
+  );
 }

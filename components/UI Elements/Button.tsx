@@ -12,7 +12,7 @@ interface ButtonProps {
 
 const Button: FC<ButtonProps> = ({ onClick, className, children, disabled, type }) => {
   const normalButtonClasses = clsx(
-    'flex justify-center items-center gap-1 w-full text-center p-2 px-6 rounded-lg ring-offset-[--bg] border ring-white/10 border-[--border] transition',
+    'disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-1 w-full text-center p-2 px-6 rounded-lg ring-offset-[--bg] border ring-white/10 border-[--border] transition',
     className
   );
 

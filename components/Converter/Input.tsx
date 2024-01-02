@@ -10,10 +10,11 @@ interface InputProps {
   eye?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string | null;
+  disabled?: boolean;
 }
 
 const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { placeholder, className, type, eye, onChange, value },
+  { disabled, placeholder, className, type, eye, onChange, value },
   ref
 ) => {
   const [toggle, setToggle] = useState(true);
@@ -42,11 +43,12 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
         value={value || ''}
         type={inputType}
         onChange={onChange}
-        className={`bg-transparent items-center focus:border-white-60 w-full placeholder:text-[--highlight] outline-none ${className}`}
+        className={`disabled:opacity-50 disabled:cursor-not-allowed bg-transparent items-center focus:border-white-60 w-full placeholder:text-[--highlight] outline-none ${className}`}
         placeholder={placeholder}
         autoComplete="new-password"
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
+        disabled={disabled}
       />
 
       {eye ? (

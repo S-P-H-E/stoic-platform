@@ -112,6 +112,7 @@ export function UserDataFetcher() {
             { merge: true }
           );
         } else {
+          return null
           // console.log("STRIPE CREDENTIALS ERROR");
         }
       }
