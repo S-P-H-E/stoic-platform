@@ -1,6 +1,6 @@
 import CreateButton from '@/components/Library/CreateButton'
 import Resources from '@/components/Library/Resources'
-import React from 'react'
+import { Toaster } from "@/components/ui/toaster"
 
 export default function LibraryComponent() {
   return (
@@ -10,6 +10,7 @@ export default function LibraryComponent() {
         <CreateButton/>
       </div>
       <Resources/>
+      <Toaster />
     </section>
   )
 }

@@ -7,7 +7,7 @@ import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } 
 import { FaFileAudio, FaFileVideo } from 'react-icons/fa';
 import clsx from 'clsx';
 import CustomAudioPlayer from './AudioPlayer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Resource {
   id: string;
@@ -20,15 +20,22 @@ interface ResourceProps {
   resource: Resource
   onDelete: (tag: string) => void;
   userStatus: string | undefined;
+  audioName: string;
+  playingAudio: (audioName: string, audioRef: React.RefObject<HTMLAudioElement>) => void,
+  isPlayingParent: boolean
+  onPauseAudio: () => void;
 }
 
-export default function Resource({resource , onDelete, userStatus}: ResourceProps) {
-
+export default function Resource({onPauseAudio, isPlayingParent, audioName, playingAudio, resource , onDelete, userStatus}: ResourceProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  
-  const audioPlaying = (isPlaying: boolean) => {
-    console.log("Audio triggered. Is playing:", isPlaying);
+
+  useEffect(() => {
+    setIsPlaying(audioName === resource.name);
+  }, [audioName, resource.name]);
+
+  const audioPlaying = (isPlaying: boolean, audioRef: React.RefObject<HTMLAudioElement>) => {
     setIsPlaying(isPlaying);
+    playingAudio(resource.name, audioRef);
   };
 
   return (
@@ -44,9 +51,9 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
         ) : (
           resource.tags.some(tag => tag.toLowerCase() === 'audio') ? (
             <div className='relative h-[15.4rem] grup text-white aspect-square rounded-b-lg flex items-center justify-center'>
-              <FaFileAudio className={clsx("group-hover:opacity-50 group-hover:scale-90 group-hover:blur-sm transition", isPlaying && 'animate-pulse')} size={128} />
-              <div className="absolute group-hover:scale-125 top-0 opacity-0 group-hover:opacity-100 scale-75 transition duration-300 w-full h-full flex items-center justify-center">
-                <CustomAudioPlayer audioPlaying={audioPlaying} audioSrc={resource.downloadLink} />
+              <FaFileAudio className={clsx("duration-300 group-hover:opacity-50 group-hover:scale-90 group-hover:blur transition", isPlaying && isPlayingParent && 'opacity-50 blur-sm')} size={128} />
+              <div className={clsx("absolute group-hover:scale-125 top-0 opacity-0 group-hover:opacity-100 scale-90 transition duration-300 w-full h-full flex items-center justify-center", isPlaying && isPlayingParent && 'opacity-100')}>
+                <CustomAudioPlayer onPauseAudio={onPauseAudio} isPlayingParent={isPlayingParent} isPlaying={isPlaying} audioPlaying={audioPlaying} audioSrc={resource.downloadLink} />
               </div>
             </div>
           ) : (
@@ -62,7 +69,7 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
       </div>
 
         <div className="px-4 py-2 gap-4 flex flex-col items-center justify-center relative z-10">
-        <h1 className={clsx('font-medium line-clamp-1', resource.name.length > 28 ? 'text-xl' : resource.name.length > 14 ? 'text-2xl' : 'text-3xl')}>{resource.name}</h1>
+        <h1 className={clsx('font-medium line-clamp-1', resource.name.length > 28 ? 'text-xl' : resource.name.length > 14 ? 'text-2xl' : 'text-2xl')}>{resource.name}</h1>
           <ul className='flex gap-2 justify-center'>
             {resource.tags.map((tag, index) => (
               <li className="bg-[--border] px-4 py-2 rounded-lg text-xs hover:bg-white/30 transition duration-200" key={index}>{tag}</li>
