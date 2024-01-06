@@ -43,7 +43,7 @@ export default function Resource({onPauseAudio, isPlayingParent, audioName, play
     {resource ? (
     <ContextMenu>
       <ContextMenuTrigger>
-      <div className='group relative flex flex-col gap-4 h-[27rem] items-center text-center border border-[--border] hover:border-white/80 rounded-xl transition duration-200 overflow-hidden'>
+      <div className={clsx('group relative flex flex-col gap-4 h-[27rem] items-center text-center border border-[--border] hover:border-white/80 rounded-xl transition  overflow-hidden', isPlaying && isPlayingParent && ' animate-pulse')}>
         <div className={clsx('relative', !resource.tags.some(tag => tag.toLowerCase() === 'audio') && 'group-hover:scale-110 transition duration-200')}>
           <div className="absolute top-44 left-0 w-full h-20 bg-gradient-to-b from-transparent via-transparent to-[--bg]"/>
           {resource.image ? (
@@ -76,7 +76,7 @@ export default function Resource({onPauseAudio, isPlayingParent, audioName, play
             ))}
           </ul>
           
-          <Link href={resource.downloadLink || ''} target="_blank" className="flex w-full items-center justify-center px-4 py-2 bg-white/90 hover:bg-white text-black rounded-xl gap-2 hover:bg-white/90 font-medium hover:scale-110 active:scale-95 transition duration-200">
+          <Link href={resource.downloadLink || ''} target="_blank" className="flex w-11/12 items-center justify-center px-4 py-2 bg-white/90 hover:bg-white text-black rounded-xl gap-2 hover:bg-white/90 font-medium hover:scale-110 active:scale-95 transition duration-200">
             <HiDownload/>
             <p>Download</p>
           </Link>
