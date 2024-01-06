@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from 'react';
-import { FaPause, FaPlay } from 'react-icons/fa';
+import { FaPause, FaPlay, FaForward, FaBackward } from 'react-icons/fa';
 import { MoonLoader } from 'react-spinners';
 
 interface CustomAudioPlayerProps {
@@ -64,10 +64,22 @@ const CustomAudioPlayer = ({ onPauseAudio, isPlayingParent, audioSrc, audioPlayi
       }
     }
   };
-  
 
+  const handleSkip = (seconds: number) => {
+    if (audioRef.current) {
+      const currentTime = audioRef.current.currentTime;
+      audioRef.current.currentTime = currentTime + seconds;
+    }
+  };
+  
   return (
-    <div className="w-16 h-16 shadow-lg">
+    <div className="w-full h-full shadow-lg flex gap-x-4 items-center justify-center">
+      <button
+        onClick={() => handleSkip(-5)}
+        className="p-2 text-black bg-white/80 hover:bg-white rounded-xl font-medium transition duration-200"
+      >
+        <FaBackward />
+      </button>
       <audio ref={audioRef}></audio>
       <button
         onClick={handleTogglePlay}
@@ -75,11 +87,17 @@ const CustomAudioPlayer = ({ onPauseAudio, isPlayingParent, audioSrc, audioPlayi
       >
         {isLoading ? (
           <MoonLoader size={30} loading={isLoading} />
-        ) : !isPlayingParent || !isPlaying  ? (
+        ) : !isPlayingParent || !isPlaying ? (
           <FaPlay size={28} />
         ) : (
           <FaPause size={28} />
         )}
+      </button>
+      <button
+        onClick={() => handleSkip(5)}
+        className="p-2 text-black bg-white/80 hover:bg-white rounded-xl font-medium transition duration-200"
+      >
+        <FaForward />
       </button>
     </div>
   );

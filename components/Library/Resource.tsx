@@ -43,7 +43,7 @@ export default function Resource({onPauseAudio, isPlayingParent, audioName, play
     {resource ? (
     <ContextMenu>
       <ContextMenuTrigger>
-      <div className={clsx('group relative flex flex-col gap-4 h-[27rem] items-center text-center border border-[--border] hover:border-white/80 rounded-xl transition  overflow-hidden', isPlaying && isPlayingParent && ' animate-pulse')}>
+      <div className={clsx('group relative flex flex-col gap-4 h-[27rem] items-center text-center border border-[--border] hover:border-white/80 rounded-xl transition  overflow-hidden', isPlaying && isPlayingParent && 'animate-pulse')}>
         <div className={clsx('relative', !resource.tags.some(tag => tag.toLowerCase() === 'audio') && 'group-hover:scale-110 transition duration-200')}>
           <div className="absolute top-44 left-0 w-full h-20 bg-gradient-to-b from-transparent via-transparent to-[--bg]"/>
           {resource.image ? (
@@ -52,7 +52,7 @@ export default function Resource({onPauseAudio, isPlayingParent, audioName, play
           resource.tags.some(tag => tag.toLowerCase() === 'audio') ? (
             <div className='relative h-[15.4rem] grup text-white aspect-square rounded-b-lg flex items-center justify-center'>
               <FaFileAudio className={clsx("duration-300 group-hover:opacity-50 group-hover:scale-90 group-hover:blur transition", isPlaying && isPlayingParent && 'opacity-50 blur-sm')} size={128} />
-              <div className={clsx("absolute group-hover:scale-125 top-0 opacity-0 group-hover:opacity-100 scale-90 transition duration-300 w-full h-full flex items-center justify-center", isPlaying && isPlayingParent && 'opacity-100')}>
+              <div className={clsx("absolute group-hover:scale-125 top-0 opacity-0 group-hover:opacity-100 scale-90 transition duration-300 w-full h-full flex items-center justify-center", isPlaying && isPlayingParent && 'scale-105 opacity-100')}>
                 <CustomAudioPlayer onPauseAudio={onPauseAudio} isPlayingParent={isPlayingParent} isPlaying={isPlaying} audioPlaying={audioPlaying} audioSrc={resource.downloadLink} />
               </div>
             </div>
