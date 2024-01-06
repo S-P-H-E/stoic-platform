@@ -33,34 +33,38 @@ const CustomAudioPlayer = ({ onPauseAudio, isPlayingParent, audioSrc, audioPlayi
         currentAudioRef.removeEventListener('ended', handleAudioEnded);
       }
     };
-  }, [audioPlaying]);
+  }, [audioPlaying, isLoading]);
 
-  const handleTogglePlay = async () => {
+  const handleTogglePlay = () => {
     if (audioRef.current) {
       if (!audioLoaded) {
         setIsLoading(true);
-        try {
-          await audioRef.current.load();
-          audioRef.current.src = audioSrc;
-
-          setAudioLoaded(true);
-        } catch (error) {
-          console.error('Error loading audio:', error);
-          setIsLoading(false);
-        }
+  
+        const handleCanPlayThrough = () => {
+          if( audioRef.current) {
+            setIsLoading(false);
+            audioRef.current.removeEventListener('canplaythrough', handleCanPlayThrough);
+          }
+        };
+  
+        audioRef.current.addEventListener('canplaythrough', handleCanPlayThrough);
+  
+        audioRef.current.src = audioSrc;
+        audioRef.current.load();
+        setAudioLoaded(true);
       }
-
+  
       if (isPlaying) {
         audioPlaying(false, audioRef);
         onPauseAudio();
-        audioRef.current.pause()
+        audioRef.current.pause();
       } else {
         audioPlaying(true, audioRef);
+        audioRef.current.play();
       }
-
-      setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="w-16 h-16 shadow-lg">

@@ -23,6 +23,8 @@ import {
   TooltipTrigger,
 } from '../ui/tooltip';
 import { HiSpeakerWave } from 'react-icons/hi2';
+import { Toaster } from "@/components/ui/toaster"
+
 
 interface Resource {
   id: string;
@@ -61,7 +63,7 @@ export default function Resources() {
     isSameAudio: boolean,
     audioRef: React.RefObject<HTMLAudioElement>
   ) => (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center justify-between space-x-4">
       <h1 className="text-sm font-medium">{`Paused Song: ${audioName}`}</h1>
       <button
         onClick={() => {
@@ -74,7 +76,7 @@ export default function Resources() {
             });
           }
         }}
-        className="bg-white text-black p-2 rounded-md"
+        className="bg-white text-black hover:bg-white/80 transition p-2 rounded-md"
       >
         Play
       </button>
@@ -86,7 +88,7 @@ export default function Resources() {
     isSameAudio: boolean,
     audioRef: React.RefObject<HTMLAudioElement>
   ) => (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center justify-between space-x-4">
       <h1 className="text-sm font-medium">{`Playing Song: ${audioName}`}</h1>
       <button
         onClick={() => {
@@ -99,7 +101,7 @@ export default function Resources() {
             });
           }
         }}
-        className="bg-white text-black p-2 rounded-md"
+        className="bg-white text-black hover:bg-white/80 transition p-2 rounded-md"
       >
         Pause
       </button>
@@ -365,6 +367,8 @@ export default function Resources() {
           ))
         )}
       </div>
+
+      <Toaster />
     </div>
   );
 }
