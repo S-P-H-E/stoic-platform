@@ -1,6 +1,7 @@
 import { FirebaseProvider } from '@/utils/authContext'
 import './globals.css'
 import type { Metadata } from 'next'
+import { Toaster } from 'sonner';
 
 import { GeistSans } from "geist/font";
 
@@ -19,6 +20,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={GeistSans.className}>
           {children}
+          <Toaster />
         </body>
       </html>
     </FirebaseProvider>

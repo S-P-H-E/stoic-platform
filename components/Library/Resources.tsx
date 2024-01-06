@@ -24,6 +24,7 @@ import {
 } from '../ui/tooltip';
 import { HiSpeakerWave } from 'react-icons/hi2';
 import { Toaster } from "@/components/ui/toaster"
+import { ButtonShad } from '../ui/buttonshad';
 
 
 interface Resource {
@@ -63,23 +64,23 @@ export default function Resources() {
     isSameAudio: boolean,
     audioRef: React.RefObject<HTMLAudioElement>
   ) => (
-    <div className="flex items-center justify-between space-x-4">
+    <div className="flex items-center w-full justify-between space-x-4">
       <h1 className="text-sm font-medium">{`Paused Song: ${audioName}`}</h1>
-      <button
+      <ButtonShad
+      variant="secondary"
         onClick={() => {
           if (audioRef?.current) {
             audioRef.current.play();
             setIsPlaying(true);
             toast({
-              duration: 10000,
+              duration: Infinity,
               render: renderToastContent(audioName, isSameAudio, audioRef),
             });
           }
         }}
-        className="bg-white text-black hover:bg-white/80 transition p-2 rounded-md"
       >
         Play
-      </button>
+      </ButtonShad>
     </div>
   );
 
@@ -88,15 +89,16 @@ export default function Resources() {
     isSameAudio: boolean,
     audioRef: React.RefObject<HTMLAudioElement>
   ) => (
-    <div className="flex items-center justify-between space-x-4">
+    <div className="flex items-center w-full justify-between space-x-4">
       <h1 className="text-sm font-medium">{`Playing Song: ${audioName}`}</h1>
-      <button
+      <ButtonShad
+      variant="secondary"
         onClick={() => {
           if (audioRef?.current) {
             audioRef.current.pause();
             setIsPlaying(false);
             toast({
-              duration: 10000,
+              duration: Infinity,
               render: renderToastContent2(audioName, isSameAudio, audioRef),
             });
           }
@@ -104,7 +106,7 @@ export default function Resources() {
         className="bg-white text-black hover:bg-white/80 transition p-2 rounded-md"
       >
         Pause
-      </button>
+      </ButtonShad>
 
     </div>
   );
