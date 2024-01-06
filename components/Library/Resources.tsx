@@ -205,7 +205,7 @@ export default function Resources() {
             {areResourcesLoading ? 
             <div className="h-[27rem] w-full animate-pulse bg-[--border]"/>
             :
-            <Resource onStop={onStop} userStatus={userStatus} onDelete={handleResourceDelete} resource={resource} />
+            <Resource userStatus={userStatus} onDelete={handleResourceDelete} resource={resource} />
             }
           </motion.div>
         ))
