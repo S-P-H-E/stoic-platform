@@ -24,12 +24,23 @@ export default function Resources() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<{ id: string; name: string }[]>([]);
-
   const [areResourcesLoading, setAreResourcesLoading] = useState(true);
 
   const {userStatus, userId} = UserDataFetcher()
 
   const isPremium = userStatus === 'premium' || userStatus === 'admin'
+
+  const [currentlyPlayingAudio, setCurrentlyPlayingAudio] = useState<HTMLAudioElement | null>(null);
+
+  const onStop = () => {
+    console.log('Hello');
+
+    // Stop all previously playing sounds
+    if (currentlyPlayingAudio) {
+      currentlyPlayingAudio.pause();
+      currentlyPlayingAudio.currentTime = 0;
+    }
+  };
 
   const fadeInAnimationVariants = { // for framer motion  
     initial: {
@@ -194,7 +205,7 @@ export default function Resources() {
             {areResourcesLoading ? 
             <div className="h-[27rem] w-full animate-pulse bg-[--border]"/>
             :
-            <Resource userStatus={userStatus} onDelete={handleResourceDelete} resource={resource} />
+            <Resource onStop={onStop} userStatus={userStatus} onDelete={handleResourceDelete} resource={resource} />
             }
           </motion.div>
         ))

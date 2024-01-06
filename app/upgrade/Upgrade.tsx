@@ -6,14 +6,15 @@ import { motion } from 'framer-motion'
 import { UserDataFetcher } from '@/utils/userDataFetcher'
 import { BiLoader, BiLogOut } from 'react-icons/bi'
 import { signOut } from 'firebase/auth'
-import { auth } from '@/utils/firebase'
+import { auth, db } from '@/utils/firebase'
 import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { ButtonShad } from '@/components/ui/buttonshad'
+import { doc, setDoc } from 'firebase/firestore'
 
 export default function UpgradeComponent() {
-  const { userName, userStatus, userStripeId } = UserDataFetcher()
+  const { userName, userId, userEmail, userStatus, userStripeId } = UserDataFetcher()
   const [loading,setLoading] = useState(false)
   const router = useRouter()
 
@@ -59,6 +60,39 @@ export default function UpgradeComponent() {
     },
   ]
 
+  const createCustomerIfNull = async () => {
+    if (userName && userEmail && !userStripeId) {
+      const response = await fetch('/api/stripe/create-customer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userName,
+          userEmail,
+          userStripeId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create customer');
+      }
+
+      const data = await response.json();
+
+      await setDoc(
+        doc(db, 'users', userId as string),
+        {
+          stripe_customer_id: data.id,
+        },
+        { merge: true }
+      );
+    } else {
+      return null;
+      // console.log("STRIPE CREDENTIALS ERROR");
+    }
+  };
+
   const generateCheckoutLink = async () => {
     try {
       setLoading(true)
@@ -90,11 +124,32 @@ export default function UpgradeComponent() {
     }
   };
 
-  const handleBuy = async () => {
+/*   const handleBuy = async () => {
     const checkout = await generateCheckoutLink()
 
     router.push(checkout)
-  }
+  } */
+
+  const handleBuy = async () => {
+    try {
+      setLoading(true);
+
+      if (!userStripeId) {
+        await createCustomerIfNull();
+      }
+
+      const checkout = await generateCheckoutLink();
+
+      if (checkout) {
+        router.push(checkout);
+      }
+
+    } catch (error) {
+      console.error('Error handling buy:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 /*     useEffect(() => {
       if (userStatus == 'admin' || userStatus == 'premium') {

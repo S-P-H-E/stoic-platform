@@ -1,9 +1,13 @@
+"use client"
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiDownload } from 'react-icons/hi'
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '../ui/context-menu';
-import { AiFillSound } from 'react-icons/ai';
 import { FaFileAudio, FaFileVideo } from 'react-icons/fa';
+import clsx from 'clsx';
+import CustomAudioPlayer from './AudioPlayer';
+import { useState } from 'react';
 
 interface Resource {
   id: string;
@@ -20,27 +24,30 @@ interface ResourceProps {
 
 export default function Resource({resource , onDelete, userStatus}: ResourceProps) {
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
+  const [isPlaying, setIsPlaying] = useState(false);
+  
+  const audioPlaying = (isPlaying: boolean) => {
+    console.log("Audio triggered. Is playing:", isPlaying);
+    setIsPlaying(isPlaying);
+  };
+
   return (
     <>
     {resource ? (
     <ContextMenu>
       <ContextMenuTrigger>
       <div className='group relative flex flex-col gap-4 h-[27rem] items-center text-center border border-[--border] hover:border-white/80 rounded-xl transition duration-200 overflow-hidden'>
-        <div className="relative group-hover:scale-110 transition duration-200">
-
+        <div className={clsx('relative', !resource.tags.some(tag => tag.toLowerCase() === 'audio') && 'group-hover:scale-110 transition duration-200')}>
           <div className="absolute top-44 left-0 w-full h-20 bg-gradient-to-b from-transparent via-transparent to-[--bg]"/>
           {resource.image ? (
           <Image loading='lazy' alt='image' src={resource.image} width={400} height={200} className='w-full h-[15.4rem] object-cover aspect-square rounded-b-lg' />
         ) : (
           resource.tags.some(tag => tag.toLowerCase() === 'audio') ? (
-            <div className='h-[15.4rem] text-white aspect-square rounded-b-lg flex items-center justify-center'>
-              <FaFileAudio size={128} />
+            <div className='relative h-[15.4rem] grup text-white aspect-square rounded-b-lg flex items-center justify-center'>
+              <FaFileAudio className={clsx("group-hover:opacity-50 group-hover:scale-90 group-hover:blur-sm transition", isPlaying && 'animate-pulse')} size={128} />
+              <div className="absolute group-hover:scale-125 top-0 opacity-0 group-hover:opacity-100 scale-75 transition duration-300 w-full h-full flex items-center justify-center">
+                <CustomAudioPlayer audioPlaying={audioPlaying} audioSrc={resource.downloadLink} />
+              </div>
             </div>
           ) : (
             resource.tags.some(tag => tag.toLowerCase() === 'video') ? (
@@ -53,9 +60,9 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
           )
         )}
       </div>
-          
+
         <div className="px-4 py-2 gap-4 flex flex-col items-center justify-center relative z-10">
-          <h1 className="text-3xl font-medium">{resource.name}</h1>
+        <h1 className={clsx('font-medium line-clamp-1', resource.name.length > 28 ? 'text-xl' : resource.name.length > 14 ? 'text-2xl' : 'text-3xl')}>{resource.name}</h1>
           <ul className='flex gap-2 justify-center'>
             {resource.tags.map((tag, index) => (
               <li className="bg-[--border] px-4 py-2 rounded-lg text-xs hover:bg-white/30 transition duration-200" key={index}>{tag}</li>

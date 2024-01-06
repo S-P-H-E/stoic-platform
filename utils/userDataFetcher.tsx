@@ -82,7 +82,7 @@ export function UserDataFetcher() {
     
   }, [userStripeId, user, userStatus, userId, router])
 
-  useEffect(() => {
+/*  useEffect(() => {
     if(!userStripeId && userName && userEmail && userId) {
       const createCustomerIfNull = async () => {
         if (userName && userEmail && !userStripeId) {
@@ -117,11 +117,11 @@ export function UserDataFetcher() {
         }
       }
 
-      createCustomerIfNull();
+       createCustomerIfNull();
     } else {
       null
     }
-  }, [userStripeId, userName, userId, userEmail]);
+  }, [userStripeId, userName, userId, userEmail]); */
 
   useEffect(() => {
     const rolesCollection = collection(db, 'roles');
