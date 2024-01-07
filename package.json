@@ -44,6 +44,7 @@
     "openai": "^4.4.0",
     "openai-edge": "^1.2.2",
     "openai-streams": "^6.2.0",
+    "plyr-react": "^5.3.0",
     "postcss": "8.4.28",
     "react": "^18.2.0",
     "react-confetti": "^6.1.0",

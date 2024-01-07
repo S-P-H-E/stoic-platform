@@ -8,6 +8,7 @@ import { FaFileAudio, FaFileVideo } from 'react-icons/fa';
 import clsx from 'clsx';
 import CustomAudioPlayer from './AudioPlayer';
 import { useState, useEffect } from 'react';
+import VideoPlayer from './VideoPlayer';
 
 interface Resource {
   id: string;
@@ -58,8 +59,11 @@ export default function Resource({onPauseAudio, isPlayingParent, audioName, play
             </div>
           ) : (
             resource.tags.some(tag => tag.toLowerCase() === 'video') ? (
-              <div className='h-[15.4rem] text-white aspect-square rounded-b-lg flex items-center justify-center'>
-                <FaFileVideo size={128} /> {/* Assuming you have a video icon component */}
+              <div className='group relative h-[15.4rem] text-white aspect-square rounded-b-lg flex items-center justify-center'>
+                <FaFileVideo size={128} className="duration-300 group-hover:opacity-50 group-hover:scale-90 group-hover:blur transition"/> {/* Assuming you have a video icon component */}
+                <div className={clsx("absolute group-hover:scale-125 top-0 opacity-0 group-hover:opacity-100 scale-90 transition duration-300 w-full h-full flex items-center justify-center", isPlaying && isPlayingParent && 'scale-105 opacity-100')}>
+                <VideoPlayer videoName={resource.name} videoUrl={resource.downloadLink} />
+              </div>
               </div>
             ) : (
               <div className='h-[15.4rem] bg-[--border] aspect-square animate-pulse rounded-b-lg' />
