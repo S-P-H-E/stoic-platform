@@ -4,9 +4,8 @@ import React from 'react';
 import { FaPause, FaPlay } from 'react-icons/fa';
 import { MoonLoader } from 'react-spinners';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
-import { Player, BigPlayButton } from 'video-react';
-import 'video-react/dist/video-react.css';
-
+import Plyr from "plyr-react"
+import "plyr-react/plyr.css"
 
 export default function VideoPlayer({
   videoUrl,
@@ -31,10 +30,32 @@ export default function VideoPlayer({
       <div className="flex flex-col gap-4 p-4 items-center w-full justify-between relative">
         <h1 className="text-sm font-medium">{`Playing Video: ${videoName}`}</h1>
         <div className="w-full h-full overflow-hidden rounded-lg">
-        <Player>
-          <source src={videoUrl} />
-          <BigPlayButton position="center" />
-        </Player>
+        <Plyr
+        source={{
+          type: 'video',
+          sources: [
+            {
+              src: videoUrl,
+              type: 'video/mp4',
+            },
+          ],
+        }}
+        options={{
+          controls: [
+            'rewind',
+            'play',
+            'fast-forward',
+            'progress',
+            'current-time',
+            'mute',
+            'volume',
+            'settings',
+            'fullscreen',
+          ],
+        }}
+          onPlay={handlePlay}
+          onPause={handlePause}
+        />
       </div>
       </div>
     );

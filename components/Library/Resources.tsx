@@ -16,13 +16,6 @@ import { message } from 'antd';
 import { motion } from 'framer-motion';
 import Resource from './Resource';
 import { useToast } from '@/components/ui/use-toast';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '../ui/tooltip';
-import { HiSpeakerWave } from 'react-icons/hi2';
 import { Toaster } from "@/components/ui/toaster"
 import { ButtonShad } from '../ui/buttonshad';
 
