@@ -135,6 +135,13 @@ const Sidebar = () => {
     return leastOrderRole.color;
   }
 
+  function truncateText(text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  }
+
   return (
     <div className="flex h-full z-50">
       <div className="top-0 left-0 h-full md:border-r border-[--border] py-8 px-2 lg:p-4 w-full md:w-60 lg:w-72 md:fixed bg-[--bg] text-white">
@@ -219,7 +226,7 @@ const Sidebar = () => {
                   )}
                   {userEmail && userId ? (
                     <p className="text-xs line-clamp-1 tracking-tight text-[--highlight]">
-                      {userEmail}
+                      {truncateText(userEmail, 18)}
                     </p>
                   ) : null}
                 </div>

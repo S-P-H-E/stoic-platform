@@ -62,7 +62,7 @@ export default function Resource({onPauseAudio, isPlayingParent, audioName, play
               <div className='group relative h-[15.4rem] text-white aspect-square rounded-b-lg flex items-center justify-center'>
                 <FaFileVideo size={128} className="duration-300 group-hover:opacity-50 group-hover:scale-90 group-hover:blur transition"/> {/* Assuming you have a video icon component */}
                 <div className={clsx("absolute group-hover:scale-125 top-0 opacity-0 group-hover:opacity-100 scale-90 transition duration-300 w-full h-full flex items-center justify-center", isPlaying && isPlayingParent && 'scale-105 opacity-100')}>
-                <VideoPlayer videoName={resource.name} videoUrl={resource.downloadLink} />
+                <VideoPlayer videoName={resource.name} videoUrl={resource.downloadLink} isShortForm={resource.tags.includes('Short-Form')} />
               </div>
               </div>
             ) : (

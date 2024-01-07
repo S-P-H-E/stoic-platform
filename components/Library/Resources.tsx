@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import SearchBar from './Searchbar';
 import {
   collection,
   deleteDoc,
@@ -10,7 +9,6 @@ import {
   query,
 } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
-import TagFilter from './TagFilter';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { message } from 'antd';
 import { motion } from 'framer-motion';
@@ -18,7 +16,7 @@ import Resource from './Resource';
 import { useToast } from '@/components/ui/use-toast';
 import { Toaster } from "@/components/ui/toaster"
 import { ButtonShad } from '../ui/buttonshad';
-
+import LibraryNavbar from '@/components/Library/Navbar';
 
 interface Resource {
   id: string;
@@ -316,14 +314,17 @@ export default function Resources() {
 
   return (
     <div className="flex flex-col gap-4">
-      <TagFilter
+      <LibraryNavbar
         onDeleteTag={handleTagDelete}
         tags={tags}
         onTagFilter={handleTagFilter}
         selectedTags={selectedTags}
         userStatus={userStatus}
+        onSearch={handleSearch}
+        handleTagDelete={handleTagDelete}
+        handleTagFilter={handleTagFilter}
+        handleSearch={handleSearch}
       />
-      <SearchBar onSearch={handleSearch} />
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 5xl:grid-cols-6 gap-4 ">
         {searchQuery && filteredResources.length === 0 ? (
           <motion.div
