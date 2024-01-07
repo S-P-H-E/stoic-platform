@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaPause, FaPlay, FaForward, FaBackward } from 'react-icons/fa';
 import { MoonLoader } from 'react-spinners';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HiMiniSpeakerWave } from 'react-icons/hi2';
+import { HiMiniSpeakerWave, HiMiniSpeakerXMark } from 'react-icons/hi2';
 
 interface CustomAudioPlayerProps {
   audioSrc: string;
@@ -27,6 +27,7 @@ const CustomAudioPlayer = ({
   const [audioLoaded, setAudioLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [volume, setVolume] = useState(100);
+  const [muted, setMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const mergedPlaying = isPlayingParent && isPlaying;
@@ -101,6 +102,14 @@ const CustomAudioPlayer = ({
     }
   };
 
+  useEffect(() => {
+    if(volume != 0) {
+      setMuted(false)
+    } else {
+      setMuted(true)
+    }
+  }, [volume])
+
   return (
     <div className="w-full relative h-full shadow-lg flex flex-col items-center justify-center">
       <div className="flex gap-x-4 items-center justify-center">
@@ -149,7 +158,7 @@ const CustomAudioPlayer = ({
       <div className="w-5/6 absolute bottom-[20%]">
         <AnimatePresence>
           {mergedPlaying && (
-            <motion.button
+            <motion.div
               initial={{ y: 40, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               exit={{ y: 40, opacity: 0 }}
@@ -161,7 +170,29 @@ const CustomAudioPlayer = ({
               }}
               className="w-full flex gap-2 items-center justify-center"
             >
+              <button
+              onClick={ () =>
+                {
+                  setMuted(!muted)
+                  if(audioRef?.current) {
+                    if(!muted) {
+                      setVolume(0)
+                      audioRef.current.volume = 0
+                    } else {
+                      setVolume(100)
+                      audioRef.current.volume = 1
+                    }
+                  }
+
+                }
+              }
+              >
+              {!muted ?
               <HiMiniSpeakerWave size={20} />
+              : <HiMiniSpeakerXMark size={20}/>
+              }
+              </button>
+              
               <input
                 type="range"
                 min="0"
@@ -191,7 +222,7 @@ const CustomAudioPlayer = ({
                   cursor: pointer;
                 }
               `}</style>
-            </motion.button>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>

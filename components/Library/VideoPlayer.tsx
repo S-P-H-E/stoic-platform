@@ -16,15 +16,6 @@ export default function VideoPlayer({
   videoName: string;
 }) {
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isPlaying, setIsPlaying] = React.useState(false);
-
-  const handlePlay = () => {
-    setIsPlaying(true);
-  };
-
-  const handlePause = () => {
-    setIsPlaying(false);
-  };
 
   const renderToastContent = (videoName: string, videoUrl: string) => {
     return (
