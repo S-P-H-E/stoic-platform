@@ -26,16 +26,6 @@ export default function VideoPlayer({
   };
 
   const renderToastContent = (videoName: string, videoUrl: string) => {
-    const controls = [
-      'play-large', // The large play button in the center
-      'play', // Play/pause playback button
-      'progress', // The progress bar and scrubber for playback and buffering
-      'current-time', // The current time of playback
-      'mute', // Toggle for mute/unmute
-      'volume', // Volume control
-      'fullscreen', // Toggle for fullscreen mode
-    ];
-
     return (
       <div className="flex flex-col gap-4 p-4 items-center w-full justify-between relative">
         <h1 className="text-sm font-medium">{`Playing Video: ${videoName}`}</h1>
