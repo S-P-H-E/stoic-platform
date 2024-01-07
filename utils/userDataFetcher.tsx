@@ -82,6 +82,8 @@ export function UserDataFetcher() {
     
   }, [userStripeId, user, userStatus, userId, router])
 
+  // ! MOVE TO MULTIPLE PLACES WHERE BUTTONS ARE
+
 /*  useEffect(() => {
     if(!userStripeId && userName && userEmail && userId) {
       const createCustomerIfNull = async () => {

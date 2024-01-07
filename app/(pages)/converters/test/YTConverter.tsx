@@ -80,7 +80,7 @@ export default function YTConverterComponent() {
   const correctYtUrl = isYoutubeUrl(vidUrl);
 
   return (
-    <div className="min-h-screen p-8 gap-4 flex flex-col items-center justify-center max-w-6xl w-full mx-auto">
+    <div className="min-h-screen p-12 gap-4 flex flex-col items-center justify-center max-w-6xl w-full mx-auto">
       <div className="text-center space-y-2">
         <h1 className="text-5xl font-semibold">
           <span className="text-red-600">YouTube</span> MP4 Converter
@@ -179,9 +179,9 @@ export default function YTConverterComponent() {
       <ScaleLoader width="10" height="60" color="white" loading={loading} />
 
       {videoInfo && (
-        <section className="flex justify-between w-full gap-4">
+        <section className="flex flex-col md:flex-row justify-between w-full gap-4 py-2">
           <div className="flex flex-col gap-2 h-full">
-            <div className="group aspect-video h-52 relative overflow-hidden rounded-lg">
+            <div className="group aspect-video h-full lg:h-40 2xl:h-[13.5rem] relative overflow-hidden rounded-lg">
               <Image
                 src={videoInfo.thumbnailUrl}
                 alt="Video Thumbnail"
@@ -226,17 +226,14 @@ export default function YTConverterComponent() {
               </div>
             </div>
           </div>
-          <div className="flex h-52 justify-between flex-col items-center gap-2 w-full">
-            <h1 className="line-clamp-1 text-3xl font-medium">
-              {videoInfo.videoTitle}
-            </h1>
-            <div className="grid grid-cols-2 gap-4 w-full">
+          <div className="flex h-full justify-between flex-col items-center gap-2 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               {videoInfo.downloadLinks.map((link, i) => (
                 <Link key={i} href={link.url}>
                   <Button className="gap-2 group">
                     <div className="flex gap-2 items-center group-hover:scale-110 transition-transform">
                       <HiDownload />
-                      Download {link.quality}
+                      <span className="xl:block hidden">Download</span> {link.quality}
                     </div>
                   </Button>
                 </Link>
