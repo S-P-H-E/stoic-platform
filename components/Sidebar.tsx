@@ -105,13 +105,6 @@ const Sidebar = () => {
 
   const [roles, setRoles] = useState<Role[]>([]);
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
-
   useEffect(() => {
     const rolesCollection = collection(db, 'roles');
 
@@ -213,7 +206,7 @@ const Sidebar = () => {
                   {userName && userId && (
                     <h1
                       className={clsx(
-                        'text-lg font-medium',
+                        'text-lg font-medium line-clamp-1',
                         userRoles &&
                         userRoles &&
                         userRoles.length > 0 &&
@@ -221,12 +214,12 @@ const Sidebar = () => {
                         `text-${getUserRoleColor(userRoles)}`
                       )}
                     >
-                      {truncateText(userName, 16)}
+                      {userName}
                     </h1>
                   )}
                   {userEmail && userId ? (
-                    <p className="text-xs tracking-tight text-[--highlight]">
-                      {truncateText(userEmail, 20)}
+                    <p className="text-xs line-clamp-1 tracking-tight text-[--highlight]">
+                      {userEmail}
                     </p>
                   ) : null}
                 </div>

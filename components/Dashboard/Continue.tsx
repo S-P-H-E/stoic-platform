@@ -18,13 +18,6 @@ export default function Continue() {
   const [lessonData, setLessonData] = useState<any>(null);
   const [loading, isLoading] = useState(true);
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
-
   useEffect(() => {
     if (userId && generalLastCourse && generalLastLesson && isPremium) {
       const lessonDocRef = doc(db, 'courses', generalLastCourse, 'lessons', generalLastLesson);
@@ -74,9 +67,9 @@ export default function Continue() {
                   <Image loading='lazy' alt="Lesson Thumbnail" src={placeholderImage} placeholder='blur' width={500} height={400} className='w-full object-cover'/>
                   }
                   <div className='absolute bottom-4 left-4 gap-2 flex flex-col'>
-                    <h1 className='2xl:text-5xl lg:text-4xl md:text-2xl text-3xl font-medium hidden md:hidden 2xl:block'>{truncateText(lessonData.title, 18)}</h1>
-                    <h1 className='2xl:text-5xl lg:text-4xl md:text-2xl text-3xl font-medium block 2xl:hidden'>{truncateText(lessonData.title, 14)}</h1>
-                    <p>{truncateText(lessonData.description, 125)}</p>
+                    <h1 className='2xl:text-5xl lg:text-4xl md:text-2xl text-3xl font-medium hidden md:hidden 2xl:block line-clamp-1'>{lessonData.title}</h1>
+                    <h1 className='2xl:text-5xl lg:text-4xl md:text-2xl text-3xl font-medium block 2xl:hidden line-clamp-1'>{lessonData.title}</h1>
+                    <p className="line-clamp-2 text-sm xl:text-base">{lessonData.description}</p>
                   </div>
               </div>
             <p>{courseData.name}</p>

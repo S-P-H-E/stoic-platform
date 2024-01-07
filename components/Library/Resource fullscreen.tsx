@@ -18,12 +18,6 @@ interface ResourceProps {
 
 export default function Resource({resource , onDelete, userStatus}: ResourceProps) {
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
   return (
     <>
     {resource ? (

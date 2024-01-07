@@ -22,13 +22,6 @@ import CourseLoading from './CourseLoading';
       const [loading, isLoading] = useState(true);
     
       const [courses, setCourses] = useState<Array<any>>([]);
-    
-      function truncateText(text: string, maxLength: number) {
-        if (text.length > maxLength) {
-          return text.substring(0, maxLength) + '...';
-        }
-        return text;
-      }
 
       const fadeInAnimationVariants = { // for framer motion  
         initial: {

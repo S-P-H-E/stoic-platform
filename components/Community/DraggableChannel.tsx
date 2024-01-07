@@ -33,13 +33,6 @@ interface DraggableChannelProps {
 const DraggableChannel: React.FC<DraggableChannelProps> = ({ channel, channelId, onDragEnd, onClick, userStatus }) => {
   const [isDragging, setIsDragging] = useState(false);
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
-
   const controls = useAnimation();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -68,8 +61,8 @@ const DraggableChannel: React.FC<DraggableChannelProps> = ({ channel, channelId,
   animate={controls}
   style={{ width: '100%' }}
 >
-  <div onClick={() => {if (!isDragging) {onClick();}}} className={clsx('animate-pop px-4 hover:cursor-pointer py-2 text-lg bg-[--darkgray] border border-[--border] rounded-xl hover:bg-[--border] transition', channelId == channel.id && 'bg-white hover:bg-white/80 text-black', isDragging && '!cursor-grabbing')}>
-    {truncateText(channel.name, 20)}
+  <div onClick={() => {if (!isDragging) {onClick();}}} className={clsx('line-clamp-1 animate-pop px-4 hover:cursor-pointer py-2 text-lg bg-[--darkgray] border border-[--border] rounded-xl hover:bg-[--border] transition', channelId == channel.id && 'bg-white hover:bg-white/80 text-black', isDragging && '!cursor-grabbing')}>
+    {channel.name}
   </div>
 </motion.div>
   );

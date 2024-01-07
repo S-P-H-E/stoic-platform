@@ -47,13 +47,6 @@ export default function Edit({lesson, courseId}: EditProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
-
   const onFileSelected = useCallback(async (file: File) => {
     setSelectedImage(file);
     try {
@@ -181,7 +174,12 @@ export default function Edit({lesson, courseId}: EditProps) {
     }
   }, [isEditingDescription]);
 
-    /* ------ */
+  function truncateText(text: string, maxLength: number) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  }
 
     const enableEditingUrl = () => {
       setIsEditingUrl(true);
@@ -282,10 +280,10 @@ export default function Edit({lesson, courseId}: EditProps) {
         ) : (
           <h1
           ref={titleRef}
-          className='h-full bg-white/5 hover:bg-white/10 transition rounded-xl px-1 outline-none'
+          className='h-full line-clamp-1 bg-white/5 hover:bg-white/10 transition rounded-xl px-1 outline-none'
           onClick={enableEditingTitle}
         >
-          { truncateText(editedTitle, 25) || truncateText(lesson.title, 25) || "Add a title..."}
+          {editedTitle || lesson.title || "Add a title..."}
         </h1>
         )}
 
@@ -356,16 +354,16 @@ export default function Edit({lesson, courseId}: EditProps) {
           className='h-full w-full bg-transparent transition ring-offset-[#0F0F10] rounded-xl p-2 outline-none resize-none'
         />
         ) : (
-<h1
-  ref={descriptionRef as React.LegacyRef<HTMLHeadingElement>}
-  className='h-full bg-white/5 hover:bg-white/10 transition ring-offset-[#0F0F10] rounded-xl p-2 outline-none w-full'
-  onClick={enableEditingDescription}
-  dangerouslySetInnerHTML={{
-    __html: editedDescription
-      ? editedDescription.replace(/\n/g, '<br/>')
-      : truncateText(lesson.description, 100) || "Add a description...",
-  }}
-/>
+          <h1
+            ref={descriptionRef as React.LegacyRef<HTMLHeadingElement>}
+            className='h-full bg-white/5 hover:bg-white/10 transition ring-offset-[#0F0F10] rounded-xl p-2 outline-none w-full'
+            onClick={enableEditingDescription}
+            dangerouslySetInnerHTML={{
+              __html: editedDescription
+                ? editedDescription.replace(/\n/g, '<br/>')
+                : truncateText(lesson.description, 100) || "Add a description...",
+            }}
+          />
         )}
 
 

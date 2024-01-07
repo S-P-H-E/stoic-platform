@@ -162,13 +162,6 @@ export default function CreateResource() {
     }
   }, [selectedImage, userId, fileError]);
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
-
   const toggleSelection = (value: string) => {
     if (selectedValues.includes(value)) {
       setSelectedValues(selectedValues.filter((v) => v !== value));
@@ -241,9 +234,9 @@ export default function CreateResource() {
 >
   <input {...getFileInputProps()} />
   {selectedFile ? (
-    <div className="flex justify-center items-center flex-col gap-2">
+    <div className="flex line-clamp-1 justify-center items-center flex-col gap-2">
       <p className="text-[--highlight]">You can click again to change the file</p>
-      <p>{truncateText(selectedFile.name, 20)}</p>
+      <p>{selectedFile.name}</p>
       {fileUploadProgress !== null && (
         <Progress value={fileUploadProgress} />
       )}

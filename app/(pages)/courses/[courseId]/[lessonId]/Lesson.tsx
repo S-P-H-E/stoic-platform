@@ -88,13 +88,6 @@ export default function LessonComponent() {
     }
   }
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
-
   useEffect(() => {
     const fetchLessonData = async () => {
       try {
@@ -439,11 +432,8 @@ export default function LessonComponent() {
                     : <p>Copy</p>
                     }
                   </button>
-                  <h1 className='text-3xl font-medium hidden md:block '>
-                    {truncateText(lesson.title, 40)}
-                  </h1>
-                  <h1 className='text-3xl font-medium md:hidden block'>
-                    {truncateText(lesson.title, 20)}
+                  <h1 className='text-3xl font-medium line-clamp-1'>
+                    {lesson.title}
                   </h1>
                   <div className='flex justify-between items-center gap-2'>
                     <button className='hidden border border-[--border] md:flex gap-1 h-fit items-center rounded-xl px-2' onClick={handleLinkCopy}>
@@ -510,17 +500,10 @@ export default function LessonComponent() {
                   ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'animate-pulse' : ''}`}>
                     <div className="flex items-center">
                       <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
-                      <h1 className={clsx('text-xl font-medium', {
+                      <h1 className={clsx('text-xl line-clamp-1 font-medium', {
                         'text-black': String(lessonpath.lessonId) === String(lessonItem.id),
-                        'hidden md:flex': true,
                       })}>
-                        {truncateText(lessonItem.title, 14)}
-                      </h1>
-                      <h1 className={clsx('text-xl font-medium', {
-                        'text-black': String(lessonpath.lessonId) === String(lessonItem.id),
-                        'md:hidden flex': true,
-                      })}>
-                        {truncateText(lessonItem.title, 29)}
+                        {lessonItem.title}
                       </h1>
                     </div>
                     {lessonCompletionStatusMap.has(lessonItem.id) ? (
@@ -612,17 +595,10 @@ export default function LessonComponent() {
                   ${videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id) ? 'animate-pulse' : ''}`}>
                     <div className="flex items-center">
                       <p className='text-3xl font-mono rounded-full p-2 px-4'>{lessonItem.order as unknown as string}</p>
-                      <h1 className={clsx('text-xl font-medium', {
+                      <h1 className={clsx('line-clamp-1 text-xl font-medium', {
                         'text-black': String(lessonpath.lessonId) === String(lessonItem.id),
-                        'hidden md:flex': true,
                       })}>
-                        {truncateText(lessonItem.title, 14)}
-                      </h1>
-                      <h1 className={clsx('text-xl font-medium', {
-                        'text-black': String(lessonpath.lessonId) === String(lessonItem.id),
-                        'md:hidden flex': true,
-                      })}>
-                        {truncateText(lessonItem.title, 29)}
+                        {lessonItem.title}
                       </h1>
                     </div>
                     {lessonCompletionStatusMap.has(lessonItem.id) ? (

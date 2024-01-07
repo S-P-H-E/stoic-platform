@@ -200,13 +200,6 @@ export default function Comments({
     };
   };
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength && text.indexOf(' ') === -1) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
-
   const detectAndStyleLinks = (comment: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const matches = comment.match(urlRegex);
@@ -332,7 +325,7 @@ export default function Comments({
                   {/* <Image width={500} height={500} src={comment.userProfilePic} alt="Profile Picture" className='w-10 object-cover rounded-full mr-2 aspect-square'/> */}
                   <h1
                     className={clsx(
-                      'text-2xl font-medium',
+                      'text-2xl font-medium line-clamp-1',
                       comment.userRoles &&
                       comment.userRoles.length > 0 &&
                       `text-${getUserRoleColor(comment.userRoles)}`

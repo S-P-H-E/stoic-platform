@@ -193,13 +193,6 @@ export default function Chat({
     return styledComment;
   };
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
-
   const MessageTimestamp = ({
     createdAt,
     noContext,
@@ -403,10 +396,10 @@ export default function Chat({
 
   return (
     <div className="flex flex-col h-full w-full relative">
-      <div className="text-2xl py-2 font-medium justify-center flex border-b border-[--border]">
+      <div className="line-clamp-1 text-2xl py-2 font-medium justify-center flex border-b border-[--border]">
         <h1>
           {currentChannel
-            ? truncateText(currentChannel.name, 30)
+            ? currentChannel.name
             : 'Loading...'}
         </h1>
       </div>
@@ -461,7 +454,7 @@ export default function Chat({
                       >
                         <p>{repliedUser ? ` ${repliedUser.name}` : 'Unknown User'}{/* <span className="text-white font-base">:</span> */}</p>
                       </span>
-                      <p>{truncateText(msg.message, 40)}</p>
+                      <p className="line-clamp-1">{msg.message}</p>
                     </div>
                   </div>
                 );
@@ -621,7 +614,7 @@ export default function Chat({
         {isReplying && replyingTo ? (
           <span className="flex justify-between items-center">
             <div>
-              You are replying to{' '}
+              Replying to{' '}
               <span
                 className={clsx(
                   'font-medium',

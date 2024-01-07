@@ -30,12 +30,6 @@ export default function Members({
   members: Member[];
   roles: Role[];
 }) {
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
 
   function getUserRoleColor(userRoles: Role[] | 'User'): string {
     if (userRoles === 'User' || userRoles.length === 0) {
@@ -76,14 +70,14 @@ export default function Members({
           <div className="flex flex-col justify-center break-all">
             <h1
               className={clsx(
-                'text-lg font-medium',
+                'text-lg font-medium line-clamp-1',
                 member.roles &&
                 member.roles.length > 0 &&
                 member.roles !== "User" &&
                 `text-${getUserRoleColor(member.roles)}`
               )}
             >
-              {truncateText(member.name, 30)}
+              {member.name}
             </h1>
           </div>
         </li>
