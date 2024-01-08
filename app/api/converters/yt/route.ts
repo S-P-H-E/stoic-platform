@@ -54,6 +54,19 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
     const authorThumbnailUrl = bestQualityAuthorThumbnail?.url;
 
+    const audioFormats = ytdl.filterFormats(info.formats, 'audio');
+    const bestAudioFormat = audioFormats.reduce((prev, current) => {
+      return prev.audioBitrate && current.audioBitrate && prev.audioBitrate > current.audioBitrate
+        ? prev
+        : current;
+    });
+
+    const audioDownloadLink = bestAudioFormat
+    ? {
+        url: bestAudioFormat.url,
+      }
+    : null;
+
     const author = {
       id: info.videoDetails.author.id,
       name: info.videoDetails.author.name,
@@ -73,7 +86,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const uploadDate = formattedDate
     const lengthSeconds = info.videoDetails.lengthSeconds;
 
-    return new Response(JSON.stringify({videoTitle, downloadLinks, thumbnailUrl, videoUrl, author, authorThumbnailUrl, uploadDate, lengthSeconds}));
+    return new Response(JSON.stringify({info, audioDownloadLink, videoTitle, downloadLinks, thumbnailUrl, videoUrl, author, authorThumbnailUrl, uploadDate, lengthSeconds}));
   } catch (error: any) {
     console.log(error)
     if (error.message.includes('No video id found')) {

@@ -1,41 +1,50 @@
 import React from 'react'
 import Converter from './Converter'
-import { AiFillYoutube } from 'react-icons/ai'
+import { AiFillInstagram, AiFillYoutube } from 'react-icons/ai'
 import { SiTiktok } from 'react-icons/si'
+import { FaXTwitter } from "react-icons/fa6";
 
 const converters = [
   {
-    name: 'Youtube MP4 Converter',
-    description: 'Convert YouTube videos into downloadable mp4 files.',
+    name: 'Youtube Converter',
+    description: 'Convert YouTube videos into downloadable video and audio files.',
     color: 'bg-red-500',
     icon: <AiFillYoutube size={64}/>,
-    href: '/converters/ytmp4',
+    href: '/converters/youtube',
     disabled: false
   },
   {
-    name: 'Youtube MP3 Converter',
-    description: 'Convert YouTube videos into downloadable mp3 files.',
+    name: 'Instagram Converter',
+    description: 'Convert Instagram videos into downloadable video and audio files.',
     color: 'bg-blue-500',
-    icon: <AiFillYoutube size={64}/>,
-    href: '/converters/ytmp3',
-    disabled: false
+    icon: <AiFillInstagram size={64}/>,
+    href: '',
+    disabled: true
   },
   {
     name: 'TikTok Converter',
-    description: 'Convert TikTok videos into downloadable mp4 or mp3 files.',
+    description: 'Convert TikTok videos into downloadable video and audio files.',
     color: 'bg-pink-500',
     icon: <SiTiktok size={48}/>,
     href: '/converters/tiktok',
     disabled: false
   },
   {
+    name: 'X Converter',
+    description: 'Convert X (Twitter) videos into downloadable video and audio files.',
+    color: 'bg-yellow-800', // ? change to black
+    icon: <FaXTwitter size={48}/>,
+    href: '',
+    disabled: true
+  },
+/*   {
     name: 'Rumble Converter',
     description: 'Convert Rumble videos into downloadable mp4 or mp3 files.',
     color: 'bg-green-500',
     icon: <p className="text-xl text-center font-medium">Coming Soon</p>,
     href: '',
     disabled: true
-  },
+  }, */
 ]
 
 export default function Converters() {

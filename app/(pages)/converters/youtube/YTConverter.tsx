@@ -17,6 +17,7 @@ import Image from 'next/image';
 import { FiExternalLink } from 'react-icons/fi';
 import Link from 'next/link';
 import { HiDownload } from 'react-icons/hi';
+import { YoutubeIcon } from 'lucide-react';
 
 interface Author {
   id: string;
@@ -32,10 +33,15 @@ interface VideoLink {
   url: string;
 }
 
+interface AudioLink {
+  url: string;
+}
+
 interface VideoInfo {
   downloadLinks: VideoLink[];
   thumbnailUrl: string;
   videoUrl: string;
+  audioDownloadLink?: AudioLink | null;
   author: Author;
   authorThumbnailUrl: string;
   uploadDate: string;
@@ -81,7 +87,9 @@ export default function YTConverterComponent() {
 
   return (
     <div className="min-h-screen p-12 gap-4 flex flex-col items-center justify-center max-w-6xl w-full mx-auto">
+      {/* <YoutubeIcon size={80}/> */}
       <div className="text-center space-y-2">
+        
         <h1 className="text-5xl font-semibold">
           <span className="text-red-600">YouTube</span> MP4 Converter
         </h1>
@@ -200,7 +208,7 @@ export default function YTConverterComponent() {
               </Link>
             </div>
             <div className="flex gap-2 items-center w-full">
-              <div className="group w-12 h-12 relative rounded-full overflow-hidden">
+              <div className="group w-10 h-10 relative rounded-full overflow-hidden">
                 <Image
                   className="object-cover"
                   fill
@@ -248,6 +256,17 @@ export default function YTConverterComponent() {
                   </Button>
                 </Link>
               )} */}
+                            {videoInfo.audioDownloadLink && (
+                <Link href={videoInfo.audioDownloadLink.url}>
+                  <Button className="gap-2 group">
+                    <div className="flex gap-2 items-center group-hover:scale-110 transition-transform">
+                      <HiDownload />
+                      <span className="xl:block hidden">Download</span>{' '}
+                      Audio
+                    </div>
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </section>

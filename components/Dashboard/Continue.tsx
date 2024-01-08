@@ -59,7 +59,7 @@ export default function Continue() {
           <Link href={`courses/${generalLastCourse}/${generalLastLesson}`} className='max-h-[34.5rem] h-full group rounded-xl flex border border-[--border] transition duration-200 bg-[--darkgray] hover:border-[#585757] hover:scale-105 active:scale-100'>
           <div className='w-full h-full flex flex-col items-center gap-2 p-2 overflow-hidden'>
             <h1 className='text-lg md:text-xl font-medium text-center'>Continue learning for {userName ? userName : '...'}</h1>
-            <div className="relative  group-hover:brightness-110 transition duration-200 rounded-xl overflow-hidden w-full max-h-[25rem] md:max-h-[21rem] 2xl:max-h-[40rem]">
+            <div className="relative group-hover:brightness-110 transition duration-200 rounded-xl overflow-hidden w-full max-h-[25rem] md:max-h-[21rem] 2xl:max-h-[40rem]">
               <div className="absolute top-8 left-0 w-full h-full bg-gradient-to-b from-transparent via-transparent to-black"/>
                   {lessonData.thumbnail ? 
                   <Image loading='lazy' alt='Lesson Thumbnail' src={lessonData.thumbnail} width={500} height={400} className='w-full object-cover '/>
