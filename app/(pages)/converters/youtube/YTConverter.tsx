@@ -91,7 +91,7 @@ export default function YTConverterComponent() {
       <div className="text-center space-y-2">
         
         <h1 className="text-5xl font-semibold">
-          <span className="text-red-600">YouTube</span> MP4 Converter
+          <span className="text-red-600">YouTube</span> Converter
         </h1>
         <p className="text-[--highlight] font-light">
           Paste the link of the YouTube video you want to download, then select
