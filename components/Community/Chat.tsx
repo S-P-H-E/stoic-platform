@@ -6,6 +6,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  limit,
   onSnapshot,
   orderBy,
   query,
@@ -100,6 +101,10 @@ export default function Chat({
   activity: string
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [initialMessagesCount, setInitialMessagesCount] = useState(20);
+  const [totalMessages, setTotalMessages] = useState(0);
+  const [moreMessagesAvailable, setMoreMessagesAvailable] = useState(true);
+  
   const [editedMessage, setEditedMessage] = useState<{
     id: string;
     message: string;
@@ -225,7 +230,7 @@ export default function Chat({
   };
 
   useEffect(() => {
-    const fetchMessages = async () => {
+    const fetchMessages = async (messageLimit: number) => {
       if (userStatus == 'admin' || 'premium') {
         try {
           const messagesRef = collection(
@@ -234,7 +239,13 @@ export default function Chat({
             channelId as string,
             'messages'
           );
-          const q = query(messagesRef, orderBy('timestamp', 'asc'));
+
+          const q = query(
+            messagesRef,
+            orderBy('timestamp', 'asc'),
+            /* limit(messageLimit) */
+          );
+
           const unsubscribe = onSnapshot(q, async (snapshot) => {
             const messageData = await Promise.all(
               snapshot.docs.map(async (doc) => {
@@ -289,10 +300,10 @@ export default function Chat({
     };
 
     if (channelId && canFetch && readPermission) {
-      fetchMessages();
+      fetchMessages(initialMessagesCount);
     }
 
-  }, [channelId, members, canFetch, readPermission, userStatus, activity, messages.length]);
+  }, [initialMessagesCount, channelId, members, canFetch, readPermission, userStatus, activity, messages.length]);
 
   const deleteMessage = async (messageId: string, messageUserId: string) => {
     try {
@@ -396,7 +407,7 @@ export default function Chat({
 
   return (
     <div className="flex flex-col h-full w-full relative">
-      <div className="line-clamp-1 text-2xl py-2 font-medium justify-center flex border-b border-[--border]">
+      <div className="sticky top-0 py-2 text-2xl font-medium flex justify-center items-center border-b border-[--border]">
         <h1>
           {currentChannel
             ? currentChannel.name

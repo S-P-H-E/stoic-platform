@@ -19,6 +19,8 @@ import { UserDataFetcher } from '../../utils/userDataFetcher';
 import { motion } from 'framer-motion';
 import UserImagePassable from '../UserImagePassable';
 import clsx from 'clsx';
+import { IoSend } from "react-icons/io5";
+
 
 interface Comment {
   id: string;
@@ -280,10 +282,10 @@ export default function Comments({
         </h1>
         <form
           onSubmit={handleSubmitComment}
-          className="flex justify-between items-center w-full gap-2 px-4"
+          className="flex justify-between items-center w-full gap-3 px-4 pb-2"
         >
           {comments.length > 0 && (
-            <div className="h-[40px] md:h-[50px] aspect-square">
+            <div className="h-14 aspect-square">
               <UserImage />
             </div>
           )}
@@ -293,14 +295,17 @@ export default function Comments({
             disabled={loading}
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className={clsx("w-full outline-none py-3 bg-transparent text-lg border-b transition duration-200 focus:border-[--highlight] border-[--border] placeholder:text-[#b9b9b9]", loading && 'cursor-not-allowed opacity-50')}
+            className={clsx("w-full outline-none py-2 bg-transparent text-lg border-b transition duration-200 focus:border-[--highlight] border-[--border] placeholder:text-[#b9b9b9]", loading && 'cursor-not-allowed opacity-50')}
           />
+          <button className="p-4 overflow-hidden aspect-square hover:bg-opacity-90 transition duration-200 rounded-2xl bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading || newComment.length == 0} type="submit">
+            <IoSend size={20} className={clsx("transition duration-200", loading && 'translate-x-10 opacity-0')}/>
+          </button>
         </form>
         <ul>
           {filteredComments.map((comment) => (
             <motion.li
               key={comment.id}
-              className=" my-4 p-4 rounded-2xl"
+              className="px-4 py-3 rounded-2xl"
               custom={comment.id}
               variants={fadeInAnimationVariants}
               initial="initial"
