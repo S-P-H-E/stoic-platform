@@ -59,7 +59,8 @@ export default function CreateResource() {
           image: resourceImageUrl,
           downloadLink: fileDownloadLink,
           tags: selectedValues,
-          createdAt: new Date()
+          createdAt: new Date(),
+          downloadCount: 0
         };
   
         await addDoc(resourcesCollectionRef, resourceData);
