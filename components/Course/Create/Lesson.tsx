@@ -105,7 +105,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
           setLessonTitle('');
           setLessonDescription('');
           setLessonURL('');
-          setLessonOrder();
+          setLessonOrder(0);
           setLessonThumbnail('')
           setError('');
     
@@ -190,8 +190,8 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
           <Input
             type='number'
             placeholder='Enter the lesson order number'
-            value={lessonOrder}
-            onChange={(e) => setLessonOrder(e.target.value)}
+            value={lessonOrder === undefined ? '' : String(lessonOrder)}
+            onChange={(e) => setLessonOrder(Number(e.target.value))}
           />
         <Button onClick={handleUpload}>Upload</Button>
         {error && <p className="text-red-500">{error}</p>}
