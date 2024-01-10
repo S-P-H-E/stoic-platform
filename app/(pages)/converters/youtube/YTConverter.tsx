@@ -70,7 +70,8 @@ export default function YTConverterComponent() {
         const data = await response.json();
         setVideoInfo(data);
 
-        console.log(data.info);
+        console.log(data.audioFormats);
+        console.log(data.bestAudioFormat);
       } else {
         const errorMessage = await response.text();
         console.error('Error fetching video information:', errorMessage);
@@ -256,7 +257,7 @@ export default function YTConverterComponent() {
                   </Button>
                 </Link>
               )} */}
-                            {videoInfo.audioDownloadLink && (
+              {videoInfo.audioDownloadLink && (
                 <Link href={videoInfo.audioDownloadLink.url}>
                   <Button className="gap-2 group">
                     <div className="flex gap-2 items-center group-hover:scale-110 transition-transform">

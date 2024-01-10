@@ -55,11 +55,27 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const authorThumbnailUrl = bestQualityAuthorThumbnail?.url;
 
     const audioFormats = ytdl.filterFormats(info.formats, 'audio');
+
     const bestAudioFormat = audioFormats.reduce((prev, current) => {
-      return prev.audioBitrate && current.audioBitrate && prev.audioBitrate > current.audioBitrate
-        ? prev
-        : current;
+      // Ignore video formats in the audio selection process
+      if (current.hasVideo) {
+        return prev;
+      }
+    
+      // Prioritize formats with higher audioBitrate
+      if (prev.audioBitrate && current.audioBitrate && prev.audioBitrate > current.audioBitrate) {
+        return prev;
+      }
+    
+      // If audioBitrates are equal, prioritize formats with 'opus' codec
+      if (prev.audioBitrate === current.audioBitrate && prev.codecs && prev.codecs.includes('opus')) {
+        return prev;
+      }
+    
+      // If audioBitrates and codecs are equal, prioritize the first encountered format
+      return current;
     });
+    
 
     const audioDownloadLink = bestAudioFormat
     ? {
@@ -86,7 +102,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const uploadDate = formattedDate
     const lengthSeconds = info.videoDetails.lengthSeconds;
 
-    return new Response(JSON.stringify({info, audioDownloadLink, videoTitle, downloadLinks, thumbnailUrl, videoUrl, author, authorThumbnailUrl, uploadDate, lengthSeconds}));
+    return new Response(JSON.stringify({info, audioFormats, bestAudioFormat, audioDownloadLink, videoTitle, downloadLinks, thumbnailUrl, videoUrl, author, authorThumbnailUrl, uploadDate, lengthSeconds}));
   } catch (error: any) {
     console.log(error)
     if (error.message.includes('No video id found')) {

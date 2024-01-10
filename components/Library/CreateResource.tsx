@@ -60,7 +60,7 @@ export default function CreateResource() {
           downloadLink: fileDownloadLink,
           tags: selectedValues,
           createdAt: new Date(),
-          downloadCount: 0
+          downloadCount: 0 // update
         };
   
         await addDoc(resourcesCollectionRef, resourceData);

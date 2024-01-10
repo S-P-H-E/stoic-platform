@@ -297,7 +297,7 @@ export default function Comments({
             onChange={(e) => setNewComment(e.target.value)}
             className={clsx("w-full outline-none py-2 bg-transparent text-lg border-b transition duration-200 focus:border-[--highlight] border-[--border] placeholder:text-[#b9b9b9]", loading && 'cursor-not-allowed opacity-50')}
           />
-          <button className="p-4 overflow-hidden aspect-square hover:bg-opacity-90 transition duration-200 rounded-2xl bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading || newComment.length == 0} type="submit">
+          <button className="p-4 overflow-hidden flex items-center justify-center aspect-square hover:bg-opacity-90 transition duration-200 rounded-2xl bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading || newComment.length == 0} type="submit">
             <IoSend size={20} className={clsx("transition duration-200", loading && 'translate-x-10 opacity-0')}/>
           </button>
         </form>
