@@ -45,6 +45,11 @@ import Lesson from '@/components/Course/Create/Lesson';
 import { IoMdCreate } from 'react-icons/io';
 import Edit from '@/components/Course/Edit';
 import SkeletonLesson from '@/components/Course/SkeletonLesson';
+import ShinyButton from '@/components/ShinyButton';
+import { ButtonShad } from '@/components/ui/buttonshad';
+import Lottie from "lottie-react";
+import checkmarkAnimation from "@/public/lottie/checkmarkAnimation.json";
+
 
 interface LessonItem {
   id: string;
@@ -60,11 +65,12 @@ export default function LessonComponent() {
   const { courseId, lessonId } = useParams();
   const [lesson, setLesson] = useState<any | null>(null);
   const [lessons, setLessons] = useState<LessonItem[]>([]);
-  const [copied, setCopied] = useState<boolean>(false);
+  const [copied, setCopied] = useState(false);
   const [vimeoUrl, setVimeoUrl] = useState<string>('');
   const [courseName, setCourseName] = useState('');
   const [videoPlaying, setVideoPlaying] = useState(false);
-  const [userCompleted, setUserCompleted] = useState<boolean>(false);
+  const [userCompleted, setUserCompleted] = useState(false);
+  const [localCompleted, setLocalCompleted] = useState(false);
   const [lessonCompletionStatusMap, setLessonCompletionStatusMap] = useState(
     new Map()
   );
@@ -268,7 +274,13 @@ export default function LessonComponent() {
 
           await setDoc(
             doc(userCourseLessonsRef, String(lessonId)),
-            { completed: true },
+            { 
+              completed: true,
+              // doesnt set the completed at again if it already exists
+              ...(lessonCompletionSnapshot.data()?.completedAt
+              ? {}
+              : { completedAt: new Date() }),
+            },
             { merge: true }
           );
 
@@ -295,7 +307,7 @@ export default function LessonComponent() {
         });
 
         player.on('ended', async function () {
-          // Set the flag to true
+          setLocalCompleted(true)
           CompleteLesson();
         });
       }
@@ -446,6 +458,17 @@ export default function LessonComponent() {
     }, 2500);
   };
 
+  const getNextLessonUrl = () => {
+    const currentOrder = lesson.order;
+    const nextLesson = lessons.find((lessonItem) => lessonItem.order === currentOrder + 1);
+
+    if (nextLesson) {
+      return `/courses/${courseId}/${nextLesson.id}`;
+    }
+
+    return null;
+  };
+
   return (
     <div className="flex flex-col w-full gap-4 lg:p-10 lg:px-16 p-6">
       <div className="flex justify-between items-center gap-6 w-full">
@@ -472,6 +495,16 @@ export default function LessonComponent() {
                 allow="autoplay; fullscreen; picture-in-picture;"
                 style={{ width: '100%', height: '100%', borderRadius: '24px' }}
               />
+
+              {localCompleted &&
+                <motion.div initial={{opacity: 0}} whileInView={{opacity: 1}} viewport={{once: true}} className={clsx('z-20 rounded-3xl opacity-0 w-full flex flex-col gap-4 items-center justify-center h-full absolute inset-0 bg-black/50 transition duration-300')}>
+                  <Lottie className="w-40 h-40" loop={false} animationData={checkmarkAnimation}/>
+                  <h1 className="text-xl font-medium">🎉 You have completed this lesson 🎉</h1>
+                  <ShinyButton text={`Continue to lesson ${parseInt(lesson.order) + 1}`} href={getNextLessonUrl() ?? '404'}/>
+                  <ButtonShad className="text-white" variant="link" onClick={() => setLocalCompleted(false)}>Close</ButtonShad>
+                </motion.div>
+              }
+
             </div>
             <Script src="https://player.vimeo.com/api/player.js" />
 

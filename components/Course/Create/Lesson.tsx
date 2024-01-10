@@ -25,7 +25,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
     const [lessonDescription, setLessonDescription] = useState('');
     const [lessonThumbnail, setLessonThumbnail] = useState<string | null>(null);
     const [lessonURL, setLessonURL] = useState('');
-    const [lessonOrder, setLessonOrder] = useState('');
+    const [lessonOrder, setLessonOrder] = useState<number>();
     const [error, setError] = useState('');
   
     const [selectedCourse, setSelectedCourse] = useState('');
@@ -61,7 +61,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
               return lessonOrder > maxOrder ? lessonOrder : maxOrder;
             }, 0);
 
-            setLessonOrder((lastLessonOrder + 1).toString());
+            setLessonOrder(lastLessonOrder + 1);
           }
 
         } catch (error) {
@@ -105,7 +105,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
           setLessonTitle('');
           setLessonDescription('');
           setLessonURL('');
-          setLessonOrder('');
+          setLessonOrder();
           setLessonThumbnail('')
           setError('');
     

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-    --upgrade: #F7C910;
+    --upgrade: #55beee; /* #F7C910; */
     --highlight: #79797d;
     --modal: #0F0F10;
     --border: #303030;
