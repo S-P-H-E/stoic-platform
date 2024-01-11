@@ -65,6 +65,7 @@ export default function CourseComponent() {
             /* console.log('User\'s last lesson:', userLastLessonData.lastLessonId); */
 
             setLessonToGo(userLastLessonData.lastLessonId)
+            router.push(`${courseId}/${lessonToGo}`)
           } else {
             const firstLesson = lessonData.length > 0 ? lessonData.sort((a, b) => a.order - b.order)[0].id : undefined;
             setLessonToGo(firstLesson);
@@ -105,19 +106,10 @@ export default function CourseComponent() {
     if (courseId && userId && userStatus == 'premium' || (userStatus == 'admin')) {
       try {
         fetchCourseData();
-        router.push(`${courseId}/${lessonToGo}`)
       } catch (error) {
         console.log(error)
-      } finally {
-/*         if(lessonToGo) {
-          router.push(`${courseId}/${lessonToGo}`)
-        } else {
-          router.push(`${courseId}/404`)
-        } */
-      }
-      
       /* fetchLessonsData(); */
-    }
+    }}
 
   }, [lessonToGo, courseId, user, userId, userStatus, router]);
 
