@@ -500,7 +500,7 @@ export default function LessonComponent() {
                 <motion.div initial={{opacity: 0}} whileInView={{opacity: 1}} viewport={{once: true}} className={clsx('z-20 rounded-3xl opacity-0 w-full flex flex-col gap-4 items-center justify-center h-full absolute inset-0 bg-black/50 transition duration-300')}>
                   <Lottie className="w-40 h-40" loop={false} animationData={checkmarkAnimation}/>
                   <h1 className="text-xl font-medium">🎉 You have completed this lesson 🎉</h1>
-                  <ShinyButton text={`Continue to lesson ${parseInt(lesson.order) + 1}`} href={getNextLessonUrl() ?? lessonpath.lessonId}/>
+                  <ShinyButton text={`Continue to lesson ${parseInt(lesson.order) + 1}`} href={getNextLessonUrl() ?? lessonpath.lessonId.toString()}/>
                   <ButtonShad className="text-white" variant="link" onClick={() => setLocalCompleted(false)}>Close</ButtonShad>
                 </motion.div>
               }

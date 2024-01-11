@@ -102,14 +102,14 @@ export default function CourseComponent() {
       }
     }; */
 
-    if (courseId && userId && userStatus == 'premium' || (userStatus == 'admin' && userStatus !== null)) {
+    if (courseId && userId && userStatus == 'premium' || userStatus == 'admin') {
       try {
         fetchCourseData();
       } catch (error) {
         console.log(error)
       } finally {
         if(lessonToGo) {
-          router.push(`${courseId}/lessonToGo`)
+          router.push(`${courseId}/${lessonToGo}`)
         } else {
           router.push(`${courseId}/404`)
         }

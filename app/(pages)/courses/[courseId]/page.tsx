@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CourseComponent from "./Course";
+import CourseGuard from "./CourseGuard";
 
 export const metadata: Metadata = {
   title: 'Course - STOIC',
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 
 export default function Dashboard() {
   return (
-    <CourseComponent/>
+    <CourseGuard/>
   )
 }

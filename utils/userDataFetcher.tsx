@@ -5,7 +5,22 @@ import { collection, query, where, onSnapshot, updateDoc, doc, setDoc } from 'fi
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '@/utils/firebase';
 import { useRouter } from 'next/navigation';
+import { User } from 'firebase/auth';
 
+interface UserDataFetcherResult {
+  userStripeId: string;
+  userRoles: Role[] | "User" | undefined;
+  generalLastCourse: string;
+  userEmail: string | undefined;
+  generalLastLesson: string;
+  userName: string | null;
+  userStatus: string | undefined;
+  user: User | null | undefined;
+  userId: string | null;
+  fetching: boolean;
+  userProfileImageUrl: string;
+  userProfileBannerUrl: string;
+}
 interface Role {
   id: string;
   name: string;
@@ -13,7 +28,7 @@ interface Role {
   order: number;
 }
 // custom hook to get userName, userId, and user.email etc.
-export function UserDataFetcher() {
+export function UserDataFetcher(): UserDataFetcherResult {
   const [user, fetching] = useAuthState(auth);
   const [userName, setUserName] = useState(null);
   const [userId, setUserId] = useState<string | null>(null);

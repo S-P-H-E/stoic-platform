@@ -15,6 +15,7 @@ import {
   ImagePlus,
   Video,
   Users,
+  UserCircle
 } from 'lucide-react';
 import UserImage from './UserImage';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
@@ -32,56 +33,6 @@ import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 
 const montserrat = Montserrat({ weight: '600', subsets: ['latin'] });
-
-const routes = [
-  {
-    label: 'Dashboard',
-    icon: LayoutDashboard,
-    href: '/dashboard',
-    color: 'text-white',
-  },
-  {
-    label: 'Courses',
-    icon: GraduationCap,
-    href: '/courses',
-    color: 'text-white',
-  },
-  {
-    label: 'Community',
-    icon: Users,
-    href: '/community',
-    color: 'text-white',
-  },
-  {
-    label: 'Library',
-    icon: Book,
-    href: '/library',
-    color: 'text-white',
-  },
-  {
-    label: 'Stoic AI',
-    icon: BrainCircuit,
-    href: '/stoicai',
-    color: 'text-white',
-  },
-  {
-    label: 'Image AI',
-    icon: ImagePlus,
-    href: '/imageai',
-    color: 'text-white',
-  },
-  {
-    label: 'Converters',
-    icon: Video,
-    href: '/converters',
-    color: 'text-white',
-  },
-  {
-    label: 'Settings',
-    icon: Settings,
-    href: '/settings',
-  },
-];
 
 interface Role {
   id: string;
@@ -102,6 +53,55 @@ const Sidebar = () => {
   } = UserDataFetcher();
   const pathname = usePathname();
   const { signOut } = useFirebase();
+
+  const routes = [
+    {
+      label: 'Dashboard',
+      icon: LayoutDashboard,
+      href: '/dashboard',
+      color: 'text-white',
+    },
+    {
+      label: 'Courses',
+      icon: GraduationCap,
+      href: '/courses',
+    },
+    {
+      label: 'Community',
+      icon: Users,
+      href: '/community',
+    },
+    {
+      label: 'Library',
+      icon: Book,
+      href: '/library',
+    },
+    {
+      label: 'Stoic AI',
+      icon: BrainCircuit,
+      href: '/stoicai',
+    },
+    {
+      label: 'Image AI',
+      icon: ImagePlus,
+      href: '/imageai',
+    },
+    {
+      label: 'Converters',
+      icon: Video,
+      href: '/converters',
+    },
+    {
+      label: 'User',
+      icon: UserCircle,
+      href: `/user/${userId}`, //! change to /user
+    },
+  /*   {
+      label: 'Settings',
+      icon: Settings,
+      href: '/settings',
+    }, */
+  ];
 
   const [roles, setRoles] = useState<Role[]>([]);
 
