@@ -105,14 +105,15 @@ export default function CourseComponent() {
     if (courseId && userId && userStatus == 'premium' || (userStatus == 'admin')) {
       try {
         fetchCourseData();
+        router.push(`${courseId}/${lessonToGo}`)
       } catch (error) {
         console.log(error)
       } finally {
-        if(lessonToGo) {
+/*         if(lessonToGo) {
           router.push(`${courseId}/${lessonToGo}`)
         } else {
           router.push(`${courseId}/404`)
-        }
+        } */
       }
       
       /* fetchLessonsData(); */
