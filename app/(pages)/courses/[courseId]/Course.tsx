@@ -65,7 +65,7 @@ export default function CourseComponent() {
             /* console.log('User\'s last lesson:', userLastLessonData.lastLessonId); */
 
             setLessonToGo(userLastLessonData.lastLessonId)
-            router.push(`${courseId}/${lessonToGo}`)
+            router.push(`/courses/${courseId}/${lessonToGo}`)
           } else {
             const firstLesson = lessonData.length > 0 ? lessonData.sort((a, b) => a.order - b.order)[0].id : undefined;
             setLessonToGo(firstLesson);
