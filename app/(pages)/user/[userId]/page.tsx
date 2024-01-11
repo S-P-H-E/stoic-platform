@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import UserIdGuard from './UserIdGuard';
 
 interface UserIdPageProps {
