@@ -102,7 +102,7 @@ export default function CourseComponent() {
       }
     }; */
 
-    if (courseId && userId && userStatus == 'premium' || userStatus == 'admin') {
+    if (courseId && userId && userStatus == 'premium' || (userStatus == 'admin')) {
       try {
         fetchCourseData();
       } catch (error) {

@@ -1,6 +1,7 @@
 import { ButtonShad } from '@/components/ui/buttonshad';
 import { User } from './../../../../types/types';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface GlobalUser {
     id: string | null;
