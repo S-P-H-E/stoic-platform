@@ -13,6 +13,7 @@ export default function ImageAIComponent() {
           </span>{' '}
           now.
         </h1>
+        
 
         <p className='text-highlight text-lg '>Upload an image below to get started.</p>
       <AIPhotoUploader/>
