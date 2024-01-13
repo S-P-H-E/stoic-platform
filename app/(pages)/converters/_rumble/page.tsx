@@ -136,7 +136,7 @@ export default function Home() {
           />
           <Button
             className={clsx("!w-36", {
-              "cursor-not-allowed hover:bg-transparent text-[--border] hover:ring-offset-0 hover:ring-0": inputValue === "" || isLoading,
+              "cursor-not-allowed hover:bg-transparent text-border hover:ring-offset-0 hover:ring-0": inputValue === "" || isLoading,
             })}
             type="submit"
             disabled={inputValue === "" || isLoading}
@@ -154,7 +154,7 @@ export default function Home() {
             <div className="md:items-start md:justify-start md:flex-row flex flex-col gap-4 items-center justify-center">
               <div className="md:w-[32rem] flex flex-col gap-3 w-80 pt-2">
               <Link className="" target="_blank" href={inputValue || "cantfindvideo"}>
-                  <div className="relative transition hover:ring-offset-4 hover:ring-4 ring-[--border] ring-offset-[--bg] border border-[--border] rounded-lg group overflow-hidden h-[18rem] flex w-[32rem] items-center justify-center">
+                  <div className="relative transition hover:ring-offset-4 hover:ring-4 ring-border ring-offset-[--bg] border border-border rounded-lg group overflow-hidden h-[18rem] flex w-[32rem] items-center justify-center">
                       <Image
                         alt="Video Thumbnail"
                         src={thumbnailUrl || placeholderImageUrl}
@@ -214,7 +214,7 @@ export default function Home() {
             </div>
           </>
         ) : null}
-          <hr className="border-[--border]"/>
+          <hr className="border-border"/>
         <div className="flex justify-center items-center gap-4">
           <SocialLink link="/converters/ytmp4" icon={AiFillYoutube} iconSize={64}/>
           <SocialLink icon={SiTiktok} iconSize={36} link="/converters/tiktok"/>

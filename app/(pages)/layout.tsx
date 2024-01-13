@@ -13,7 +13,7 @@ export default function PagesLayout({
       <html lang="en">
         <body>
 
-          <div className="hidden md:flex md:w-60 lg:w-72 h-full border-[--border] md:border-r">
+          <div className="hidden md:flex md:w-60 lg:w-72 h-full border-border md:border-r">
             <Sidebar />
           </div>
           <div className="flex flex-col md:pl-[15rem] lg:pl-[18rem]">

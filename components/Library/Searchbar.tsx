@@ -25,7 +25,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         placeholder='Search Resources...'
         value={searchQuery}
         onChange={(e) => handleSearch(e.target.value)}
-        className="px-4 py-2 rounded-lg border w-full bg-transparent shadow focus:border-white/80 border-[--border] transition duration-200 outline-none"
+        className="px-4 py-2 rounded-lg border w-full bg-darkgray shadow focus:border-white/80 border-border transition duration-200 outline-none"
       />
     </motion.div>
   );

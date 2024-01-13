@@ -44,9 +44,9 @@ export default function Resource({onPauseAudio, isPlayingParent, audioName, play
     {resource ? (
     <ContextMenu>
       <ContextMenuTrigger>
-      <div className={clsx('group relative flex flex-col gap-4 h-[27rem] items-center text-center border border-[--border] hover:border-white/80 rounded-xl transition  overflow-hidden', isPlaying && isPlayingParent && 'animate-pulse')}>
+      <div className={clsx('group relative flex flex-col gap-4 h-[27rem] items-center text-center bg-darkgray border border-border hover:border-white/80 rounded-xl transition  overflow-hidden', isPlaying && isPlayingParent && 'animate-pulse')}>
         <div className={clsx('relative', !resource.tags.some(tag => tag.toLowerCase() === 'audio') && 'group-hover:scale-110 transition duration-200')}>
-          <div className="absolute top-44 left-0 w-full h-20 bg-gradient-to-b from-transparent via-transparent to-[--bg]"/>
+          <div className="absolute top-44 left-0 w-full h-20 bg-gradient-to-b from-transparent via-transparent to-darkgray"/>
           {resource.image ? (
           <Image loading='lazy' alt='image' src={resource.image} width={400} height={200} className='w-full h-[15.4rem] object-cover aspect-square rounded-b-lg' />
         ) : (
@@ -66,7 +66,7 @@ export default function Resource({onPauseAudio, isPlayingParent, audioName, play
               </div>
               </div>
             ) : (
-              <div className='h-[15.4rem] bg-[--border] aspect-square animate-pulse rounded-b-lg' />
+              <div className='h-[15.4rem] bg-border aspect-square animate-pulse rounded-b-lg' />
             )
           )
         )}
@@ -76,7 +76,7 @@ export default function Resource({onPauseAudio, isPlayingParent, audioName, play
         <h1 className={clsx('font-medium line-clamp-1', resource.name.length > 28 ? 'text-xl' : resource.name.length > 14 ? 'text-2xl' : 'text-2xl')}>{resource.name}</h1>
           <ul className='flex gap-2 justify-center'>
             {resource.tags.map((tag, index) => (
-              <li className="bg-[--border] px-4 py-2 rounded-lg text-xs hover:bg-white/30 transition duration-200" key={index}>{tag}</li>
+              <li className="bg-border px-4 py-2 rounded-lg text-xs hover:bg-white/30 transition duration-200" key={index}>{tag}</li>
             ))}
           </ul>
           
@@ -98,7 +98,7 @@ export default function Resource({onPauseAudio, isPlayingParent, audioName, play
       )}
     </ContextMenu>
     ) : (
-      <div className="h-[27rem] w-full animate-pulse bg-[--border]"/>
+      <div className="h-[27rem] w-full animate-pulse bg-border"/>
     )}
     </>
   )

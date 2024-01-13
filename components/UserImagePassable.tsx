@@ -24,7 +24,7 @@ export default function UserImagePassable({ roles, userId, userRoles, userImage,
           <AvatarFallback className='uppercase select-none text-base w-full h-full'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='bg-[--background] border-[--border]' side='right' >
+      <DropdownMenuContent className='bg-[--background] border-border' side='right' >
         <UserProfile userId={userId} roles={roles} userRoles={userRoles} userBannerUrl={userBannerUrl} userStatus={userStatus ?? undefined} userName={userName} src={userImage ?? undefined}/>
       </DropdownMenuContent>
     </DropdownMenu>

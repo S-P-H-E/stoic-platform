@@ -292,7 +292,7 @@ export default function Edit({lesson, courseId}: EditProps) {
         <div className='w-52 h-fit aspect-square relative object-cover rounded-xl overflow-hidden'>
           <div
           {...getRootProps()}
-          className='outline-none border-dashed rounded-xl border-2 border-[--border] hover:bg-black/40 transition p-4 text-center justify-center items-center flex cursor-pointer w-full aspect-square'
+          className='outline-none border-dashed rounded-xl border-2 border-border hover:bg-black/40 transition p-4 text-center justify-center items-center flex cursor-pointer w-full aspect-square'
           >
             <input {...getInputProps()} />
 
@@ -303,7 +303,7 @@ export default function Edit({lesson, courseId}: EditProps) {
                   src={URL.createObjectURL(selectedImage)}
                   width={100}
                   height={100}
-                  className="p-2 border border-[--border] rounded-xl flex w-[20vh] object-contain mx-auto"
+                  className="p-2 border border-border rounded-xl flex w-[20svh] object-contain mx-auto"
                 />
               </div>
             ) : <>
@@ -324,7 +324,7 @@ export default function Edit({lesson, courseId}: EditProps) {
                     </div>
                     </div>
                     ) : (
-                      <div className='w-full text-[--border] justify-center items-center aspect-square rounded-xl flex'>
+                      <div className='w-full text-border justify-center items-center aspect-square rounded-xl flex'>
                         <FiImage size={48}/>
                       </div>
                   )}

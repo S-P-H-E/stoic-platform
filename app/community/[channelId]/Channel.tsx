@@ -261,7 +261,7 @@ export default function CommunityPage({ channelId }: CommunityPageProps) {
   return (
     <main className="h-full flex items-end w-full">
       <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel minSize={15} className="h-screen w-2/12 border-r border-[--border] flex flex-col gap-4 p-2">
+        <ResizablePanel minSize={15} className="h-screen w-2/12 border-r border-border flex flex-col gap-4 p-2">
           <>
             <h1 className="text-2xl font-medium justify-center flex">Community</h1>
             <Channels
@@ -277,7 +277,7 @@ export default function CommunityPage({ channelId }: CommunityPageProps) {
 
           <ResizableHandle className="hover:border-primary-foreground border-transparent border transition"/>
 
-          <ResizablePanel defaultSize={75} minSize={60} className="h-screen w-2/12 border-r border-[--border] flex flex-col gap-4">
+          <ResizablePanel defaultSize={75} minSize={60} className="h-screen w-2/12 border-r border-border flex flex-col gap-4">
           <>
             <div className="flex flex-col h-full w-full relative">
               <Chat
@@ -318,7 +318,7 @@ export default function CommunityPage({ channelId }: CommunityPageProps) {
               <BsPersonFill size={32} />
             </button>
           </SheetTrigger>
-          <SheetContent side="right" className="border-[--border] bg-[--bg]">
+          <SheetContent side="right" className="border-border bg-[--bg]">
             <section className="h-screen w-full flex flex-col gap-4 p-2">
               <h1 className="text-2xl font-medium justify-center flex">
                 Members

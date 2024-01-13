@@ -6,9 +6,9 @@
   --upgrade: #55beee; /* #F7C910; */
   --highlight: #79797d;
   --modal: #0F0F10;
-  --border: #303030;
-  --bg: #060606;
-  --darkgray: #0d0c0c;
+  --border: #333333;
+  --bg: #050505; /* 060606 */
+  --darkgray: #0e0e0e;
   
   min-width: 0;
 }
@@ -59,7 +59,7 @@ body {
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
+    --border: 217.2 32.6% 17.5%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
  

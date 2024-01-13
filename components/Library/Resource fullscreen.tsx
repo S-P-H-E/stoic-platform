@@ -23,14 +23,14 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
     {resource ? (
     <ContextMenu>
       <ContextMenuTrigger>
-      <div className='group relative flex flex-col gap-4 w-full h-[25.7rem] items-center text-center border border-[--border] hover:border-white/80 rounded-xl transition duration-200 overflow-hidden'>
+      <div className='group relative flex flex-col gap-4 w-full h-[25.7rem] items-center text-center border border-border hover:border-white/80 rounded-xl transition duration-200 overflow-hidden'>
         <div className="relative w-full group-hover:scale-110 transition duration-200"> {/* w-full if fulscreen needed */}
 
           <div className="absolute top-44 left-0 w-full h-20 bg-gradient-to-b from-transparent via-transparent to-[--bg]"/>
           {resource.image ? 
           <Image loading='lazy' alt='image' src={resource.image} width={400} height={200} className='w-full h-[15.4rem] object-cover rounded-b-lg' />
           : 
-          <div className='w-full h-[15.4rem] bg-[--border] animate-pulse rounded-b-lg'/>
+          <div className='w-full h-[15.4rem] bg-border animate-pulse rounded-b-lg'/>
           } {/* w-full if fulscreen needed */}
           </div>
           
@@ -38,7 +38,7 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
           <h1 className="text-3xl font-medium">{resource.name}</h1>
           <ul className='flex gap-2 justify-center'>
             {resource.tags.map((tag, index) => (
-              <li className="bg-[--border] px-4 py-2 rounded-lg text-xs hover:bg-white/30 transition duration-200" key={index}>{tag}</li>
+              <li className="bg-border px-4 py-2 rounded-lg text-xs hover:bg-white/30 transition duration-200" key={index}>{tag}</li>
             ))}
           </ul>
           
@@ -60,7 +60,7 @@ export default function Resource({resource , onDelete, userStatus}: ResourceProp
       )}
     </ContextMenu>
     ) : (
-      <div className="h-[27rem] w-full animate-pulse bg-[--border]"/>
+      <div className="h-[27rem] w-full animate-pulse bg-border"/>
     )}
     </>
   )

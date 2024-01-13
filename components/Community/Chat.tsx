@@ -407,7 +407,7 @@ export default function Chat({
 
   return (
     <div className="flex flex-col h-full w-full relative">
-      <div className="sticky top-0 py-2 text-2xl font-medium flex justify-center items-center border-b border-[--border]">
+      <div className="sticky top-0 py-2 text-2xl font-medium flex justify-center items-center border-b border-border">
         <h1>
           {currentChannel
             ? currentChannel.name
@@ -420,7 +420,7 @@ export default function Chat({
       >
         <>
         {!readPermission && currentChannel && (
-          <div className="flex gap-1 justify-center items-center text-[--highlight]">
+          <div className="flex gap-1 justify-center items-center text-highlight">
             <FaExclamationTriangle/> 
             <h1>You are not allowed to read messages in {currentChannel.name}</h1>
           </div>
@@ -561,7 +561,7 @@ export default function Chat({
                       })
                     }
                     onKeyDown={handleKeyDown}
-                    className="w-full border-[--border] border px-4 py-2 bg-[--darkgray] rounded-lg outline-none hover:bg-[--border] transition duration-200"
+                    className="w-full border-border border px-4 py-2 bg-darkgray rounded-lg outline-none hover:bg-border transition duration-200"
                   />
                   <button
                     onClick={saveEditedMessage}
@@ -573,16 +573,16 @@ export default function Chat({
                 </div>
               )}
             </div>
-            <div className="absolute -top-10 right-2 bg-[--border] rounded-xl p-1 flex gap-1 items-center opacity-0 group-hover:scale-y-100 scale-y-50 scale-x-[.8] group-hover:scale-x-100 group-hover:opacity-100 transition duration-300">
+            <div className="absolute -top-10 right-2 bg-border rounded-xl p-1 flex gap-1 items-center opacity-0 group-hover:scale-y-100 scale-y-50 scale-x-[.8] group-hover:scale-x-100 group-hover:opacity-100 transition duration-300">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger
                     onClick={() => handleReply(message)}
-                    className="hover:bg-[--highlight] h-full p-2 rounded-lg transition duration-200"
+                    className="hover:bg-highlight h-full p-2 rounded-lg transition duration-200"
                   >
                     <RiReplyFill />
                   </TooltipTrigger>
-                  <TooltipContent className="bg-[--border] border-[--highlight]">
+                  <TooltipContent className="bg-border border-highlight">
                     <p>Reply</p>
                   </TooltipContent>
                 </Tooltip>
@@ -591,11 +591,11 @@ export default function Chat({
                   <Tooltip>
                     <TooltipTrigger
                       onClick={() => editMessage(message.id, message.userId)}
-                      className="hover:bg-[--highlight] h-full p-2 rounded-lg transition duration-200"
+                      className="hover:bg-highlight h-full p-2 rounded-lg transition duration-200"
                     >
                       <FaPen />
                     </TooltipTrigger>
-                    <TooltipContent className="bg-[--border] border-[--highlight]">
+                    <TooltipContent className="bg-border border-highlight">
                       <p>Edit</p>
                     </TooltipContent>
                   </Tooltip>
@@ -609,7 +609,7 @@ export default function Chat({
                     >
                       <HiTrash />
                     </TooltipTrigger>
-                    <TooltipContent className="bg-[--border] border-[--highlight]">
+                    <TooltipContent className="bg-border border-highlight">
                       <p>Delete</p>
                     </TooltipContent>
                   </Tooltip>

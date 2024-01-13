@@ -14,7 +14,7 @@ export default function ImageAIComponent() {
           now.
         </h1>
 
-        <p className='text-[--highlight] text-lg '>Upload an image below to get started.</p>
+        <p className='text-highlight text-lg '>Upload an image below to get started.</p>
       <AIPhotoUploader/>
 
     </section>

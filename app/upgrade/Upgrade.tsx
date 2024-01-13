@@ -164,7 +164,7 @@ export default function UpgradeComponent() {
         <ButtonShad variant={'outline'}><div className="flex gap-2 items-center"><BsArrowLeftShort className="transition duration-200 group-hover:-translate-x-1" size={20}/><p>Go back to homepage</p></div></ButtonShad>
       </Link>
       
-      <motion.div className='border border-[--border] w-[450px] rounded-3xl p-8 flex flex-col items-center gap-2 bg-gradient-to-tl from-[white]/5'
+      <motion.div className='border border-border w-[450px] rounded-3xl p-8 flex flex-col items-center gap-2 bg-gradient-to-tl from-[white]/5'
         custom={1}
         variants={fadeInAnimationVariants}
         initial="initial"
@@ -175,7 +175,7 @@ export default function UpgradeComponent() {
       >
         <div className='flex flex-col justify-center items-center w-full'>
           {userName ? 
-            <div className='flex items-center gap-1 bg-[--upgrade] rounded-full px-4 py-1 text-black my-2'>
+            <div className='flex items-center gap-1 bg-upgrade rounded-full px-4 py-1 text-black my-2'>
               <BsFillPersonFill />
               <h2 className='text-black'>{userName}</h2>    
               <button onClick={() => signOut(auth)} className='font-normal 2x:text-lg md:text-base bg-transparent p-1 hover:bg-red-600 rounded-xl transition duration-200'>
@@ -183,7 +183,7 @@ export default function UpgradeComponent() {
               </button>
             </div>
           : 
-          <div className='flex items-center gap-1 bg-[--upgrade] rounded-full px-4 py-1 text-black my-2'>
+          <div className='flex items-center gap-1 bg-upgrade rounded-full px-4 py-1 text-black my-2'>
             <BsFillPersonFill />
           <h2 className='text-black'>Loading...</h2>
           </div>
@@ -191,20 +191,20 @@ export default function UpgradeComponent() {
           <h1 className='text-2xl uppercase'>Upgrade to premium</h1>
         </div>
 
-        <h1 className='text-4xl text-[--upgrade] pb-5 flex flex-col items-center font-medium'>
+        <h1 className='text-4xl text-upgrade pb-5 flex flex-col items-center font-medium'>
           <mark className='bg-transparent text-xl text-gray-500 line-through'>$99.99</mark>$49.99
         </h1>
 
         {features.map((feature) => (
           <motion.div initial="initial" whileInView="animate" viewport={{once: true,}} key={feature.id} custom={feature.id} variants={fadeInAnimationVariants} className='flex justify-between items-center gap-1 w-full p-2 rounded-md border border-[#1C1C1D]'>
             <div className='flex items-center'>
-              <div className='bg-[#F7C910]/10 text-[--upgrade] p-2 rounded-lg'>
+              <div className='bg-[#F7C910]/10 text-upgrade p-2 rounded-lg'>
                 {feature.icon}
               </div>
               <h1 className='px-2 font-medium'>{feature.name}</h1>
             </div>
             
-            <BsFillCheckCircleFill className='text-[--upgrade]'/>
+            <BsFillCheckCircleFill className='text-upgrade'/>
           </motion.div>
         ))}
         <motion.button className={clsx('upgrade mt-5', loading && 'transition !opacity-50')}
@@ -218,7 +218,7 @@ export default function UpgradeComponent() {
           {loading ? <div className="items-center justify-center w-full flex gap-2"><BiLoader className="animate-spin"/> <p>Processing</p> </div> : <p>UPGRADE</p>}
         </motion.button>
 
-        <div className='flex items-center gap-1 border border-[--border] px-2 rounded-lg mt-6'>
+        <div className='flex items-center gap-1 border border-border px-2 rounded-lg mt-6'>
           <p className='text-sm'>Secured by</p>
           <FaStripe size={35}/>
         </div>

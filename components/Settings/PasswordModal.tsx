@@ -112,8 +112,8 @@ export default function PasswordModal({ onClose }: PasswordModalProps) {
     const { user, userId } = UserDataFetcher();
     return (
   
-        <div className="relative flex flex-col border border-[--border] rounded-lg p-8 bg-black">
-          <button className='absolute top-4 right-4 text-[--highlight] hover:text-white transition cursor-pointer'>
+        <div className="relative flex flex-col border border-border rounded-lg p-8 bg-black">
+          <button className='absolute top-4 right-4 text-highlight hover:text-white transition cursor-pointer'>
             <CgClose onClick={() => onClose()} size="20"/>
           </button>
           

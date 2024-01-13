@@ -55,7 +55,7 @@ const TagFilter: React.FC<TagFilterProps> = ({ tags, onTagFilter, onDeleteTag, s
             <ButtonShad
               variant="outline"
               onClick={() => onTagFilter(tag.name)}
-              className={`px-2 py-1 whitespace-nowrap	${
+              className={`px-2 py-1 bg-darkgray whitespace-nowrap	${
                 selectedTags.includes(tag.name) ? 'hover:bg-white/80 bg-white text-black border-white' : ''
               }`}
             >
@@ -78,7 +78,7 @@ const TagFilter: React.FC<TagFilterProps> = ({ tags, onTagFilter, onDeleteTag, s
           <DialogTrigger>
           <ButtonShad
           variant="outline"
-          className="group border-dotted border-2 px-2 py-1 gap-1"
+          className="bg-darkgray group border-dotted border-2 px-2 py-1 gap-1"
           >
             Add a tag
             <AiOutlinePlus className="group-hover:scale-110 transition"/>

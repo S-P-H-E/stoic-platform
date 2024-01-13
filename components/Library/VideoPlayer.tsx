@@ -21,7 +21,7 @@ export default function VideoPlayer({
   const renderVideoContent = (videoName: string, videoUrl: string) => {
 
     return (
-      <div className={clsx("flex flex-col gap-4 p-4 items-center justify-between relative", isShortForm ? 'h-[90vh] 2xl:h-[80vh] max-h-[80rem]' : 'w-[80vw] lg:w-[60vw] max-w-[80rem]')}>
+      <div className={clsx("flex flex-col gap-4 p-4 items-center justify-between relative", isShortForm ? 'h-[90svh] 2xl:h-[80svh] max-h-[80rem]' : 'w-[80vw] lg:w-[60vw] max-w-[80rem]')}>
         <h1 className="text-sm font-medium">{`Playing Video: ${videoName}`}</h1>
         <div className="w-full my-auto overflow-y-auto rounded-lg">
           <Player
@@ -43,7 +43,7 @@ export default function VideoPlayer({
           <FaPlay size={28} />
         </button>
       </DialogTrigger>
-      <DialogContent className={clsx(isShortForm ? 'h-[90vh] 2xl:h-[80vh] max-h-[80rem]' : '!w-[80vw] lg:!w-[60vw] max-w-[80rem]')}>
+      <DialogContent className={clsx(isShortForm ? 'h-[90svh] 2xl:h-[80svh] max-h-[80rem]' : '!w-[80vw] lg:!w-[60vw] max-w-[80rem]')}>
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
             <MoonLoader size={50} loading={isLoading} />

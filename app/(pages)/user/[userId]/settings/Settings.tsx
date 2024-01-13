@@ -162,7 +162,7 @@ export default function SettingsComponent() {
       <h1 className="font-semibold text-xl sm:text-2xl md:text-3xl 2xl:text-4xl pb-8">
         Account Setings
       </h1>
-      <div className="border-[--border] border rounded-lg">
+      <div className="border-border border rounded-lg">
         <div className="w-full h-2/6 px-4 md:px-12">
           <div className="2xl:py-8 md:py-4 py-4 px-0 flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -173,7 +173,7 @@ export default function SettingsComponent() {
                 <h1 className="2xl:text-4xl lg:text-3xl md:text-2xl font-medium">
                   {userName ? userName : 'loading...'}
                 </h1>
-                <h2 className="text-light text-[--highlight] 2xl:text-lg lg:text-base text-sm">
+                <h2 className="text-light text-highlight 2xl:text-lg lg:text-base text-sm">
                   {userName ? user?.email : 'loading...'}
                 </h2>
               </div>
@@ -200,7 +200,7 @@ export default function SettingsComponent() {
               </Button>
             </div>
           </div>
-          <hr className="border-[--border]" />
+          <hr className="border-border" />
           <div className="flex flex-col md:mt-6 mt-6 2xl:mt-16 md:text-2xl 2xl:text-3xl font-medium gap-2">
             <div className="2xl:mb-8 mb-4 gap-2 flex flex-col">
               <h1>Display Name</h1>
@@ -225,7 +225,7 @@ export default function SettingsComponent() {
 
             <div className="2xl:mb-6 mb-4 gap-2 flex flex-col">
               <h1>Email</h1>
-              <p className="text-[--highlight] lg:text-xl">
+              <p className="text-highlight lg:text-xl">
                 {userName ? user?.email : 'loading...'}
               </p>
             </div>

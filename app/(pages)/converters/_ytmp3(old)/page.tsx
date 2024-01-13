@@ -124,7 +124,7 @@ export default function Home() {
           :
           <Button
           className={clsx("!w-36", {
-            "cursor-not-allowed hover:bg-transparent text-[--border] hover:ring-offset-0 hover:ring-0": inputValue === "" || isLoading,
+            "cursor-not-allowed hover:bg-transparent text-border hover:ring-offset-0 hover:ring-0": inputValue === "" || isLoading,
           })}
           type="submit"
           disabled={inputValue === "" || isLoading}
@@ -145,7 +145,7 @@ export default function Home() {
         {videoTitle ?
         <p>{videoTitle}</p>
         :null}
-      <hr className="border-[--border]"/>
+      <hr className="border-border"/>
         <div className="flex justify-center items-center gap-4">
           <SocialLink iconSize={36} link="/converters/tiktok" icon={SiTiktok}/>
           <SocialLink link="/converters/rumble">

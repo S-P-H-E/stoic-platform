@@ -51,7 +51,7 @@ export default function UserProfile({src, userName, userStatus}: {src: string, u
           <h2 className={clsx("text-lg leading-6", statusClass)}>{userStatusEdited}</h2>
         </div>
       </div>
-      <hr className="border-[--border]"/>
+      <hr className="border-border"/>
     </div>
   )
 }

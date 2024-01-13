@@ -199,7 +199,7 @@ const CustomAudioPlayer = ({
                 max="100"
                 value={volume}
                 onChange={handleVolumeChange}
-                className="w-full h-full appearance-none rounded-lg bg-[--border] overflow-hidden"
+                className="w-full h-full appearance-none rounded-lg bg-border overflow-hidden"
                 style={{ outline: 'none' }}
               />
 

@@ -347,7 +347,7 @@ export default function Resources() {
               }}
             >
               {areResourcesLoading ? (
-                <div className="h-[27rem] w-full animate-pulse bg-[--border]" />
+                <div className="h-[27rem] w-full animate-pulse bg-border" />
               ) : (
                 <Resource
                   onPauseAudio={handlePauseAudio}

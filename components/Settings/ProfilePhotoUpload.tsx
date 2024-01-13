@@ -72,23 +72,23 @@ export default function PhotoUpload({ onClose }: PasswordModalProps) {
   });
 
   return (
-    <div className="relative py-16  border-[--border] border flex flex-col gap-2 p-8 rounded-lg text-center">
+    <div className="relative py-16  border-border border flex flex-col gap-2 p-8 rounded-lg text-center">
       <div
         {...getRootProps()}
-        className='border-dashed border-2 border-[--border]  hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer'
+        className='border-dashed border-2 border-border  hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer'
       >
         <input {...getInputProps()} />
         {selectedImage ? (
           <div className="flex justify-center items-center flex-col gap-4">
-            <p className="text-[--highlight]">You can click again to change the image</p>
+            <p className="text-highlight">You can click again to change the image</p>
              <Image
               alt="Profile picture"
               src={URL.createObjectURL(selectedImage)}
               width={100}
               height={100}
-              className="p-2 border border-[--border] rounded-lg flex w-[20vh] object-contain mx-auto"
+              className="p-2 border border-border rounded-lg flex w-[20svh] object-contain mx-auto"
             />
-            <button onClick={() => {setSelectedImage(null); setIsLoading(false);}} className="hover:text-white text-[--highlight] transition flex gap-1 items-center"><MdDelete/>Clear Image</button>
+            <button onClick={() => {setSelectedImage(null); setIsLoading(false);}} className="hover:text-white text-highlight transition flex gap-1 items-center"><MdDelete/>Clear Image</button>
           </div>
         ) : <>
           {isDragActive ? (
@@ -109,7 +109,7 @@ export default function PhotoUpload({ onClose }: PasswordModalProps) {
       {selectedImage ? 
       <Button
          className={clsx({
-          'text-[--highlight]': isLoading,
+          'text-highlight': isLoading,
         }, 'font-lg text-base lg:text-xl')}
          onClick={uploadProfilePicture}
          disabled={isLoading}

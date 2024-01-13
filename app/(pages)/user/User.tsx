@@ -32,7 +32,7 @@ const UserComponent = () => {
      return(
     <div className='h-screen flex flex-col justify-center items-center text-2xl'>
       <h3>Loading...</h3>
-      <div className='text-lg flex gap-2 items-center justify-center text-[--highlight]'>
+      <div className='text-lg flex gap-2 items-center justify-center text-highlight'>
       <p>Loading {userName ? userName : 'User'}</p>
         <BiLoader className="animate-spin" />
       </div>

@@ -24,7 +24,7 @@ export default function CreateTag() {
         <Input type="text" onChange={(e) => setTagName(e.target.value)} placeholder='Enter the name of tag'/>
         <Button disabled={isLoadingTag} onClick={handleCreateTag}
           className={clsx({
-          'text-[--highlight]': isLoadingTag,
+          'text-highlight': isLoadingTag,
         })}
         >
           {isLoadingTag ?

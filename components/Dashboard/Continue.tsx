@@ -56,7 +56,7 @@ export default function Continue() {
     <>
       {!loading && courseData && lessonData ? (
         <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
-          <Link href={`courses/${generalLastCourse}/${generalLastLesson}`} className='max-h-[34.5rem] h-full group rounded-xl flex border border-[--border] transition duration-200 bg-[--darkgray] hover:border-[#585757] hover:scale-105 active:scale-100'>
+          <Link href={`courses/${generalLastCourse}/${generalLastLesson}`} className='max-h-[34.5rem] h-full group rounded-xl flex border border-border transition duration-200 bg-darkgray hover:border-[#585757] hover:scale-105 active:scale-100'>
           <div className='w-full h-full flex flex-col items-center gap-2 p-2 overflow-hidden'>
             <h1 className='text-lg md:text-xl font-medium text-center'>Continue learning for {userName ? userName : '...'}</h1>
             <div className="relative group-hover:brightness-110 transition duration-200 rounded-xl overflow-hidden w-full max-h-[25rem] md:max-h-[21rem] 2xl:max-h-[40rem]">
@@ -77,12 +77,12 @@ export default function Continue() {
           </Link>
         </motion.div>
       ) : (
-        <div className='h-[57vh] w-full border border-[--border] hover:border-[#585757] transition duration-200 rounded-xl bg-[--darkgray] p-2 flex flex-col gap-2 items-center justify-center'>
+        <div className='h-[57svh] w-full border border-border hover:border-[#585757] transition duration-200 rounded-xl bg-darkgray p-2 flex flex-col gap-2 items-center justify-center'>
           {loading ? (
             <>
-              <p className='w-4/6 h-8 rounded-xl bg-[--border] animate-pulse' />
-              <div className='bg-[--border] rounded-xl animate-pulse w-full h-full' />
-              <p className='w-2/6 h-8 rounded-xl bg-[--border] animate-pulse' />
+              <p className='w-4/6 h-8 rounded-xl bg-border animate-pulse' />
+              <div className='bg-border rounded-xl animate-pulse w-full h-full' />
+              <p className='w-2/6 h-8 rounded-xl bg-border animate-pulse' />
             </>
           ) : (
             <p>You dont have a last lesson.</p>

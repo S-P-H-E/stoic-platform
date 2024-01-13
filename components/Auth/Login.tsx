@@ -156,12 +156,12 @@ export default function Login() {
 
   return (
     <>
-    <div className='mx-2 flex flex-col gap-6 w-[22rem] sm:w-[27rem] border border-[--border] shadow-xl p-7 rounded-xl pb-8'>
+    <div className='mx-2 flex flex-col gap-6 w-[22rem] sm:w-[27rem] border border-border shadow-xl p-7 rounded-xl pb-8'>
     {isLoginMode ? (
     <>
         <div>
             <h1 className='text-2xl font-medium'>Sign in to your account</h1>
-            <p className='text-[--highlight]'>Enter your email below to login your account</p>
+            <p className='text-highlight'>Enter your email below to login your account</p>
         </div>
 
         <div className='flex flex-col justify-start items-center w-full'>
@@ -170,8 +170,8 @@ export default function Login() {
               Google
             </Button>
             <div className="inline-flex items-center justify-center w-full pt-2">
-                <hr className="h-px my-5 border-0 bg-[--border] w-full" />
-                <span className="absolute px-3 font-medium -translate-x-1/2 bg-[--bg] text-[--highlight] left-1/2 ">OR CONTINUE WITH</span>
+                <hr className="h-px my-5 border-0 bg-border w-full" />
+                <span className="absolute px-3 font-medium -translate-x-1/2 bg-[--bg] text-highlight left-1/2 ">OR CONTINUE WITH</span>
             </div>
         </div>
 
@@ -206,7 +206,7 @@ export default function Login() {
     <>
         <div>
             <h1 className='text-2xl font-medium'>Create an account</h1>
-            <p className='text-[--highlight]'>Enter your email below to create your account</p>
+            <p className='text-highlight'>Enter your email below to create your account</p>
         </div>
 
         <div className='flex flex-col justify-start items-center w-full'>
@@ -215,8 +215,8 @@ export default function Login() {
               Google
             </Button>
             <div className="inline-flex items-center justify-center w-full pt-2">
-                <hr className="h-px my-5 border-0 bg-[--border] w-full" />
-                <span className="absolute px-3 font-medium -translate-x-1/2 bg-[--bg] text-[--highlight] left-1/2 ">OR CONTINUE WITH</span>
+                <hr className="h-px my-5 border-0 bg-border w-full" />
+                <span className="absolute px-3 font-medium -translate-x-1/2 bg-[--bg] text-highlight left-1/2 ">OR CONTINUE WITH</span>
             </div>
         </div>
 

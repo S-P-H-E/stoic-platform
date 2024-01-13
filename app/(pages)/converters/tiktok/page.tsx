@@ -167,7 +167,7 @@ export default function Home() {
           />
           <Button
             className={clsx("!w-36", {
-              "cursor-not-allowed hover:bg-transparent text-[--border] hover:ring-offset-0 hover:ring-0": inputValue === "" || isLoading,
+              "cursor-not-allowed hover:bg-transparent text-border hover:ring-offset-0 hover:ring-0": inputValue === "" || isLoading,
             })}
             type="submit"
             disabled={inputValue === "" || isLoading}
@@ -191,7 +191,7 @@ export default function Home() {
                         src={thumbnailUrl || placeholderImageUrl}
                         width={640}
                         height={480}
-                        className="w-56 h-80 transition group-hover:ring-offset-4 group-hover:ring-4 ring-[--border] ring-offset-[--bg] border border-[--border] rounded-lg"
+                        className="w-56 h-80 transition group-hover:ring-offset-4 group-hover:ring-4 ring-border ring-offset-[--bg] border border-border rounded-lg"
                       />
                     <div className="absolute top-0 left-0 w-full h-full bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
@@ -259,7 +259,7 @@ export default function Home() {
             </div>
           </>
         ) : null}
-          <hr className="border-[--border]"/>
+          <hr className="border-border"/>
         <div className="flex justify-center items-center gap-4">
           <SocialLink link="/converters/ytmp4" icon={AiFillYoutube} iconSize={64}/>
           <SocialLink link="/converters/rumble">

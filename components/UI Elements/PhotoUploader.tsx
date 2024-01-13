@@ -62,18 +62,18 @@ export default function ImageUpload({ onComplete, customPath }: ImageUploadProps
   return (
       <div
         {...getRootProps()}
-        className='border-dashed border-2 border-[--border] hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer'
+        className='border-dashed border-2 border-border hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer'
       >
         <input {...getInputProps()} />
         {selectedImage ? (
           <div className="flex justify-center items-center flex-col gap-4">
-            <p className="text-[--highlight]">You can click again to change the image</p>
+            <p className="text-highlight">You can click again to change the image</p>
             <Image
               alt="Selected image"
               src={URL.createObjectURL(selectedImage)}
               width={100}
               height={100}
-              className="p-2 border border-[--border] rounded-lg flex w-[20vh] object-contain mx-auto"
+              className="p-2 border border-border rounded-lg flex w-[20svh] object-contain mx-auto"
             />
           </div>
         ) : <>

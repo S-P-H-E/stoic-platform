@@ -159,7 +159,7 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
             <h2 className={clsx("text-md leading-6 py-1", statusClass)}>{userStatusEdited}</h2>
           </div>
 
-          <hr className='border-[--border]'/>
+          <hr className='border-border'/>
 
           <div className='flex flex-col'>
             <h1 className='text-lg font-medium'>INFO</h1>

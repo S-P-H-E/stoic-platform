@@ -81,7 +81,7 @@ export default function AIPhotoUploader() {
       {...getRootProps()}
       className={clsx(
         selectedImage ? 'border h-full' : 'border-dashed w-2/3 h-[17rem]',
-        'flex flex-col gap-2 items-center justify-center border-2 border-[--border] hover:bg-black/40 transition duration-200 p-4 rounded-lg text-center cursor-pointer'
+        'flex flex-col gap-2 items-center justify-center border-2 border-border hover:bg-black/40 transition duration-200 p-4 rounded-lg text-center cursor-pointer'
       )}
     >
       <input {...getInputProps()} />
@@ -93,10 +93,10 @@ export default function AIPhotoUploader() {
           }}
           className="flex w-full h-full justify-center items-center flex-col gap-4"
         >
-          <p className="text-[--highlight]">
+          <p className="text-highlight">
             You can click again to change the image
           </p>
-          <p className="text-[--highlight]">
+          <p className="text-highlight">
             {imageWidth} x {imageHeight}
           </p>
           <div className="rounded-lg relative overflow-hidden w-full h-full">

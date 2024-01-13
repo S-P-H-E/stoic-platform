@@ -65,7 +65,7 @@ export default function ForgotPassword() {
           ) : (
             <div className="w-full gap-3 flex flex-col mt-2">
               <Input type='email' onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} placeholder='Enter your email' value={email} />    
-              <Button onClick={handlePasswordReset} disabled={isLoading} className={clsx({'text-[--highlight]': isLoading })}>{isLoading  ? 'Proceeding...' : 'Send email'}</Button>
+              <Button onClick={handlePasswordReset} disabled={isLoading} className={clsx({'text-highlight': isLoading })}>{isLoading  ? 'Proceeding...' : 'Send email'}</Button>
             </div>
           )}
           <p className="text-stone-400 font-light mt-2 text-center">{uiMessage}</p>

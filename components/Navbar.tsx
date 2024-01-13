@@ -11,7 +11,7 @@ export default function Navbar() {
         <div className="hidden md:flex">
           <CreateCourse />
           </div>
-          <Link href={'/settings'} className="rounded-full transition duration-200 w-[50px] h-[50px] cursor-pointer hover:ring-4 hover:ring-offset-4 ring-[--border] ring-offset-[--bg]">
+          <Link href={'/settings'} className="rounded-full transition duration-200 w-[50px] h-[50px] cursor-pointer hover:ring-4 hover:ring-offset-4 ring-border ring-offset-[--bg]">
             <UserImage />
           </Link>
         </div>

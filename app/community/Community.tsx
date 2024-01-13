@@ -16,7 +16,7 @@ export default function CommunityComponent() {
   return (
     <div className='h-screen flex flex-col justify-center items-center text-2xl'>
     <h3>Loading...</h3>
-    <div className='text-lg flex gap-2 items-center justify-center text-[--highlight]'>
+    <div className='text-lg flex gap-2 items-center justify-center text-highlight'>
     <p>{randomMessages[Math.floor(Math.random() * randomMessages.length)]}</p>
       <BiLoader className="animate-spin" />
     </div>

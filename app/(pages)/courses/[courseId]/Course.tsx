@@ -69,6 +69,7 @@ export default function CourseComponent() {
           } else {
             const firstLesson = lessonData.length > 0 ? lessonData.sort((a, b) => a.order - b.order)[0].id : undefined;
             setLessonToGo(firstLesson);
+            router.push(`${courseId}/${firstLesson}`);
           }
 
         } else {
@@ -120,7 +121,7 @@ export default function CourseComponent() {
   return (
     <div className='h-screen flex flex-col justify-center items-center text-2xl'>
       <h3>Loading...</h3>
-      <div className='text-lg flex gap-2 items-center justify-center text-[--highlight]'>
+      <div className='text-lg flex gap-2 items-center justify-center text-highlight'>
       <p>Loading {course?.name ? course.name : 'Course'}</p>
         <BiLoader className="animate-spin" />
       </div>

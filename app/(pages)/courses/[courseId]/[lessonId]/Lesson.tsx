@@ -508,11 +508,11 @@ export default function LessonComponent() {
             </div>
             <Script src="https://player.vimeo.com/api/player.js" />
 
-            <div className="my-5 border border-[--border] rounded-2xl p-5 relative">
+            <div className="my-5 border border-border rounded-2xl p-5 relative">
               <div className="flex flex-col md:flex-row justify-between">
                 <button
                   aria-label="Copy Link"
-                  className="border border-[--border] flex w-fit md:hidden gap-1 h-fit items-center rounded-xl mb-5 px-2"
+                  className="border border-border flex w-fit md:hidden gap-1 h-fit items-center rounded-xl mb-5 px-2"
                   onClick={handleLinkCopy}
                 >
                   <BiCopy />
@@ -523,7 +523,7 @@ export default function LessonComponent() {
                 </h1>
                 <div className="flex justify-between items-center gap-2">
                   <button
-                    className="hidden border border-[--border] md:flex gap-1 h-fit items-center rounded-xl px-2"
+                    className="hidden border border-border md:flex gap-1 h-fit items-center rounded-xl px-2"
                     onClick={handleLinkCopy}
                   >
                     <BiCopy />
@@ -589,7 +589,7 @@ export default function LessonComponent() {
                   <ContextMenu>
                     <ContextMenuTrigger>
                       <div
-                        className={`hover:bg-[--border] w-full lg:w-[250px] 2xl:w-[300px] p-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
+                        className={`hover:bg-border w-full lg:w-[250px] 2xl:w-[300px] p-3 rounded-2xl transition-all bg-[--bg] border border-border group cursor-pointer flex justify-between items-center gap-2 
                   ${
                     String(lessonpath.lessonId) === String(lessonItem.id) &&
                     'bg-white text-black hover:bg-neutral-200'
@@ -665,8 +665,8 @@ export default function LessonComponent() {
               <Dialog>
                 <DialogTrigger>
                   <motion.div
-                    className="hover:bg-[--border] h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] !border-2 border-dotted 
-                      border-[--border] group cursor-pointer flex justify-center items-center gap-2 text-center"
+                    className="hover:bg-border h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] !border-2 border-dotted 
+                      border-border group cursor-pointer flex justify-center items-center gap-2 text-center"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.35 }}
@@ -710,7 +710,7 @@ export default function LessonComponent() {
                   <ContextMenu>
                     <ContextMenuTrigger>
                       <div
-                        className={`hover:bg-[--border] w-full md:w-[200px] xl:w-[250px] 2xl:w-[300px] md:mx-5 p-3 rounded-2xl transition-all bg-[--bg] border border-[--border] group cursor-pointer flex justify-between items-center gap-2 
+                        className={`hover:bg-border w-full md:w-[200px] xl:w-[250px] 2xl:w-[300px] md:mx-5 p-3 rounded-2xl transition-all bg-[--bg] border border-border group cursor-pointer flex justify-between items-center gap-2 
                   ${
                     String(lessonpath.lessonId) === String(lessonItem.id)
                       && 'bg-white text-black hover:bg-neutral-200'
@@ -774,8 +774,8 @@ export default function LessonComponent() {
               <Dialog>
                 <DialogTrigger>
                   <motion.div
-                    className="hover:bg-[--border] h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] !border-2 border-dotted 
-                      border-[--border] group cursor-pointer flex justify-center items-center gap-2 text-center"
+                    className="hover:bg-border h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] !border-2 border-dotted 
+                      border-border group cursor-pointer flex justify-center items-center gap-2 text-center"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}

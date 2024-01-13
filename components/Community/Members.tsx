@@ -50,7 +50,7 @@ export default function Members({
       {members.map((member) => (
         <li
           key={member.id}
-          className="group animate-pop px-4 py-2 border border-[--border] rounded-xl flex gap-3 hover:bg-[--border] transition duration-200"
+          className="group animate-pop px-4 py-2 border border-border rounded-xl flex gap-3 hover:bg-border transition duration-200"
         >
           <div className="w-12 h-12 relative">
             <UserImagePassable
@@ -63,7 +63,7 @@ export default function Members({
               userStatus={member.status}
             />
             {member.activity == 'online' &&
-            <div className="animate-pop bg-green-500 w-4 h-4 right-0 bottom-0 absolute rounded-full border-[--bg] group-hover:border-[--border] border-[3px] transition duration-200" />
+            <div className="animate-pop bg-green-500 w-4 h-4 right-0 bottom-0 absolute rounded-full border-[--bg] group-hover:border-border border-[3px] transition duration-200" />
             }
             
           </div>

@@ -3,7 +3,7 @@ import DashboardCourses from './DashboardCourses'
 
 export default function AllCourses() {
   return (
-    <div className='flex flex-col p-4 bg-[--darkgray] items-center gap-4 hover:border-[#585757] border border-[--border] h-full  transition duration-200 rounded-xl relative'>
+    <div className='flex flex-col p-4 bg-darkgray items-center gap-4 hover:border-[#585757] border border-border h-full  transition duration-200 rounded-xl relative'>
         <h1 className="text-2xl font-medium">Courses</h1>
         <div className="flex flex-col w-full relative h-full">
 {/*           <div className="absolute z-50 left-0 h-full items-center justify-center flex">

@@ -28,7 +28,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
     setInputFocused(false);
   };
 
-  const borderClassName = inputFocused ? 'border-white/40 ring ring-white/10' : 'border-[--border]';
+  const borderClassName = inputFocused ? 'border-white/40 ring ring-white/10' : 'border-border';
 
   const toggleVisibility = () => {
     setToggle(prevToggle => !prevToggle);
@@ -43,7 +43,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
         value={value || ''}
         type={inputType}
         onChange={onChange}
-        className={`disabled:opacity-50 disabled:cursor-not-allowed bg-transparent items-center focus:border-white-60 w-full placeholder:text-[--highlight] outline-none ${className}`}
+        className={`disabled:opacity-50 disabled:cursor-not-allowed bg-transparent items-center focus:border-white-60 w-full placeholder:text-highlight outline-none ${className}`}
         placeholder={placeholder}
         autoComplete="new-password"
         onFocus={handleInputFocus}
@@ -52,7 +52,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
       />
 
       {eye ? (
-        <button onClick={toggleVisibility} className='text-[--highlight] hover:text-white transition'>
+        <button onClick={toggleVisibility} className='text-highlight hover:text-white transition'>
           {toggle ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}
         </button>
       ) : (

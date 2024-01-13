@@ -87,7 +87,7 @@ export default function StoicAIComponent() {
           ))}
         </section>
         <form className="flex gap-2 w-full" onSubmit={handleFormSubmit}>
-        <div className="flex border border-[--border] items-center w-full rounded-md">
+        <div className="flex border border-border items-center w-full rounded-md">
           <textarea
             ref={textareaRef}
             className="flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600"

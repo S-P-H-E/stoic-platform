@@ -197,20 +197,20 @@ export default function CreateResource() {
       <h1 className='text-lg font-medium w-full text-start'>Image</h1>
       <div
         {...getRootProps()}
-        className='border-dashed border-2 border-[--border] hover:border-white/40 hover:bg-black/40 transition duration-200 p-4 rounded-lg text-center cursor-pointer w-full items-center justify-center flex'
+        className='border-dashed border-2 border-border hover:border-white/40 hover:bg-black/40 transition duration-200 p-4 rounded-lg text-center cursor-pointer w-full items-center justify-center flex'
       >
         <input {...getInputProps()} />
         {selectedImage ? (
           <div className="flex justify-center items-center flex-col gap-3">
-            <p className="text-[--highlight]">You can click again to change the image</p>
+            <p className="text-highlight">You can click again to change the image</p>
              <Image
               alt="Profile picture"
               src={URL.createObjectURL(selectedImage)}
               width={100}
               height={100}
-              className="p-2 border border-[--border] rounded-lg flex w-[20vh] object-contain mx-auto"
+              className="p-2 border border-border rounded-lg flex w-[20svh] object-contain mx-auto"
             />
-            <button onClick={() => {setSelectedImage(null); setResourceImageUrl(null); setIsLoading(false);}} className="hover:text-white text-[--highlight] transition flex gap-1 items-center"><MdDelete/>Clear Image</button>
+            <button onClick={() => {setSelectedImage(null); setResourceImageUrl(null); setIsLoading(false);}} className="hover:text-white text-highlight transition flex gap-1 items-center"><MdDelete/>Clear Image</button>
           </div>
         ) : <>
           {isDragActive ? (
@@ -232,17 +232,17 @@ export default function CreateResource() {
       <h1 className='text-lg font-medium w-full text-start'>File</h1>
 <div
   {...getFileRootProps()}
-  className='border-dashed border-2 border-[--border] hover:border-white/40 hover:bg-black/40 transition duration-200 p-2 rounded-lg text-center cursor-pointer w-full items-center justify-center flex'
+  className='border-dashed border-2 border-border hover:border-white/40 hover:bg-black/40 transition duration-200 p-2 rounded-lg text-center cursor-pointer w-full items-center justify-center flex'
 >
   <input {...getFileInputProps()} />
   {selectedFile ? (
     <div className="flex line-clamp-1 justify-center items-center flex-col gap-2">
-      <p className="text-[--highlight]">You can click again to change the file</p>
+      <p className="text-highlight">You can click again to change the file</p>
       <p>{selectedFile.name}</p>
       {fileUploadProgress !== null && (
         <Progress value={fileUploadProgress} />
       )}
-      <button onClick={() => {setSelectedFile(null); setFileDownloadLink(null); setFileIsLoading(false)}} className="hover:text-white p-1 text-[--highlight] transition flex gap-1 items-center">
+      <button onClick={() => {setSelectedFile(null); setFileDownloadLink(null); setFileIsLoading(false)}} className="hover:text-white p-1 text-highlight transition flex gap-1 items-center">
         <MdDelete/> Clear File
       </button>
     </div>
@@ -320,7 +320,7 @@ export default function CreateResource() {
       
       <Button onClick={createResource} disabled={!selectedFile || !resourceName || tags.length === 0 || isLoading || fileIsLoading}
       className={clsx({
-        'text-[--highlight]': !selectedFile || !resourceName || tags.length === 0 || isLoading || fileIsLoading,
+        'text-highlight': !selectedFile || !resourceName || tags.length === 0 || isLoading || fileIsLoading,
       })}
       >
         {isLoading || fileIsLoading ? 'Loading...' : 'Create Resource'}

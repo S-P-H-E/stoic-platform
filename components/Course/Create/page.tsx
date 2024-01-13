@@ -24,7 +24,7 @@ export default function CreateContent({className}: Props) {
       <DialogTrigger>
         {userStatus === 'admin' ? (
           <>
-            <button className={clsx(className, 'hover:bg-[--highlight] transition hidden md:flex justify-center items-center px-2 py-1 border border-[--highlight] gap-1 rounded-xl cursor-pointer')}>
+            <button className={clsx(className, 'hover:bg-highlight transition hidden md:flex justify-center items-center px-2 py-1 border border-highlight gap-1 rounded-xl cursor-pointer')}>
               <AiOutlineCloudUpload size={20} />
               Upload
             </button>

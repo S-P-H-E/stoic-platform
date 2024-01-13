@@ -94,7 +94,7 @@ export default function YTConverterComponent() {
         <h1 className="text-5xl font-semibold">
           <span className="text-red-600">YouTube</span> Converter
         </h1>
-        <p className="text-[--highlight] font-light">
+        <p className="text-highlight font-light">
           Paste the link of the YouTube video you want to download, then select
           which quality and download!
         </p>
@@ -228,7 +228,7 @@ export default function YTConverterComponent() {
               </div>
               <div className="flex flex-col line-clamp-2">
                 <h3 className="text-lg">{videoInfo.author.name}</h3>
-                <div className="flex gap-4 text-sm text-[--highlight]">
+                <div className="flex gap-4 text-sm text-highlight">
                   <p>{videoInfo.author.user}</p>
                   <p>{videoInfo.uploadDate}</p>
                 </div>
@@ -273,7 +273,7 @@ export default function YTConverterComponent() {
         </section>
       )}
 
-      {videoInfo && <hr className="border-[--border] w-full" />}
+      {videoInfo && <hr className="border-border w-full" />}
 
       <div className="flex justify-center items-center gap-4">
         <SocialLink link="/converters/tiktok" icon={SiTiktok} iconSize={64} />
