@@ -85,7 +85,7 @@ import CourseLoading from './CourseLoading';
     
       return (
         <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 5xl:grid-cols-6 gap-4 mx-auto items-center justify-center w-full '>
-          {loading ? (
+          {!loading ? (
             <>
               {courses.map((course, index) => {
                 const lastLessonId = course.userCourseData ? course.userCourseData.lastLessonId : null;

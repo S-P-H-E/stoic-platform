@@ -17,11 +17,11 @@ export default function UserImagePassable({ roles, userId, userRoles, userImage,
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Avatar className="w-full h-full">
+      <DropdownMenuTrigger asChild>
+        <Avatar className="cursor-pointer w-full h-full">
           <AvatarImage src={userImage ?? undefined} />
           {/* Display the first letter of the userName */}
-          <AvatarFallback className='uppercase bg-darkgray select-none text-base w-full h-full'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
+          <AvatarFallback className='uppercase select-none w-full h-full'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='bg-darkgray ring ring-border' side='right' >

@@ -39,7 +39,7 @@ export default function UserImage({className}: {className?:string}) {
     <Avatar className={clsx("w-full h-full aspect-square", className)}>
       <AvatarImage src={photoUrl ?? undefined} />
       {/* Display the first letter of the userName */}
-      <AvatarFallback className='uppercase bg-darkgray select-none text-base w-full h-full'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
+      <AvatarFallback className='uppercase select-none w-full h-full'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
     </Avatar>
   );
 }
