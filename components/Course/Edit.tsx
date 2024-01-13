@@ -303,7 +303,7 @@ export default function Edit({lesson, courseId}: EditProps) {
                   src={URL.createObjectURL(selectedImage)}
                   width={100}
                   height={100}
-                  className="p-2 border border-border rounded-xl flex w-[20svh] object-contain mx-auto"
+                  className="p-2 border border-border rounded-xl flex w-full object-cover"
                 />
               </div>
             ) : <>
@@ -315,7 +315,7 @@ export default function Edit({lesson, courseId}: EditProps) {
                 <div className='flex flex-col justify-center items-center h-'>
                   {lesson && lesson.thumbnail ? (
                     <div className='group aspect-square'>
-                      <Image fill alt="Lesson Image" src={lesson.thumbnail}/>
+                      <Image fill alt="Lesson Image" className="object-cover" src={lesson.thumbnail}/>
                       <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex justify-center items-center transition duration-300 rounded-xl">
                       <div className="flex flex-col items-center aspect-square">
                         <FiImage size={48} className="text-white" />
