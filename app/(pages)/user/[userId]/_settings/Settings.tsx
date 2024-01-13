@@ -240,7 +240,7 @@ export default function SettingsComponent() {
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
-                    <PhotoUpload onClose={closeImageModal} />
+                    {/* <PhotoUpload onClose={closeImageModal} /> */}
                   </DialogContent>
                 </Dialog>
               ) : null}
@@ -258,7 +258,7 @@ export default function SettingsComponent() {
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
-                    <BannerUpload onClose={closeBannerModal} />
+                    {/* <BannerUpload onClose={closeBannerModal} /> */}
                   </DialogContent>
                 </Dialog>
               ) : null}
