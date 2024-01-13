@@ -286,7 +286,7 @@ export default function Comments({
         >
           {comments.length > 0 && (
             
-              <UserImage className="w-14 h-14"/>
+            <UserImage className="w-14 h-14"/>
           )}
           <input
             placeholder="Type your comment here"

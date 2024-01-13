@@ -84,7 +84,7 @@ import CourseLoading from './CourseLoading';
       }, [fetchCourses, userId]);
     
       return (
-        <div className='flex sm:flex-row flex-col gap-6 sm:items-start items-center w-full'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 5xl:grid-cols-6 gap-4 mx-auto items-center justify-center w-full '>
           {!loading ? (
             <>
               {courses.map((course, index) => {

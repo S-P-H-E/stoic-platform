@@ -4,8 +4,9 @@ import ImageUpload from '@/components/UI Elements/PhotoUploader';
 import { db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { message } from 'antd';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import React, { useState } from 'react'
+import { sanitizeString } from './../../../utils/utils';
 
 export default function CreateCourse() {
 
@@ -29,8 +30,12 @@ export default function CreateCourse() {
   
       try {
         if (userStatus === 'admin') {
-          const coursesCollectionRef = collection(db, 'courses');
-          await addDoc(coursesCollectionRef, courseData);
+          
+          const customDocId = sanitizeString(courseName)
+
+          const courseDocRef = doc(db, 'courses', customDocId);
+          await setDoc(courseDocRef, courseData);
+    
           setCourseName('');
           setCourseDescription('');
           setCourseImage(null);

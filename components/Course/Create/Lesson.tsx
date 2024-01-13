@@ -6,9 +6,10 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
-import { message } from 'antd';
+import { sanitizeString } from '@/utils/utils';
+import { Checkbox, message } from 'antd';
 import clsx from 'clsx';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDocs, collection, setDoc } from 'firebase/firestore';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 
@@ -26,6 +27,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
     const [lessonThumbnail, setLessonThumbnail] = useState<string | null>(null);
     const [lessonURL, setLessonURL] = useState('');
     const [lessonOrder, setLessonOrder] = useState<number>();
+    const [lessonLocked, setLessonLocked] = useState(false);
     const [error, setError] = useState('');
   
     const [selectedCourse, setSelectedCourse] = useState('');
@@ -94,14 +96,19 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
         description: lessonDescription,
         url: lessonURL,
         order: lessonOrder,
-        thumbnail: lessonThumbnail
+        thumbnail: lessonThumbnail,
+        locked: lessonLocked
       };
   
       // Add the lesson to the selected course's 'lessons' collection
       try {
         if (userStatus == 'admin' ) {
-          const lessonsCollectionRef = collection(db, 'courses', selectedCourse, 'lessons');
-          await addDoc(lessonsCollectionRef, lessonData);
+          const customDocId = sanitizeString(lessonTitle)
+
+          const lessonDocRef = doc(db, 'courses', selectedCourse, 'lessons', customDocId);
+
+          await setDoc(lessonDocRef, lessonData);
+
           setLessonTitle('');
           setLessonDescription('');
           setLessonURL('');
@@ -117,8 +124,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
         message.error('Error adding lesson:')
       }
     };
-
-  return (
+     return (
     <div className='flex flex-col justify-center items-center p-5 pt-3 gap-1'>
         <h1 className='text-xl font-medium pb-3'>Upload Lesson</h1>
         <h1 className='text-lg font-medium w-full'>Course</h1>
@@ -193,6 +199,11 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
             value={lessonOrder === undefined ? '' : String(lessonOrder)}
             onChange={(e) => setLessonOrder(Number(e.target.value))}
           />
+
+          <div className="flex gap-4">
+            <h1 className='text-lg font-medium'>Locked</h1>
+            <Checkbox onChange={(e) => setLessonLocked(e.target.checked)} checked={lessonLocked} />
+          </div>
         <Button onClick={handleUpload}>Upload</Button>
         {error && <p className="text-red-500">{error}</p>}
         </div>

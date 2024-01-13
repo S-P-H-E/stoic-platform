@@ -16,6 +16,7 @@ import { message } from 'antd';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
+import Link from 'next/link';
 
 interface Role {
   id: string;
@@ -125,26 +126,26 @@ export default function UserProfile({src, userName, black, userId, userStatus, u
             <div className='w-full h-full bg-white rounded-2xl'/>
           }
         </div>
-        <Dialog>
-          <DialogTrigger>
+{/*         <Dialog>
+          <DialogTrigger> */}
             <div className={clsx("absolute top-[6rem] left-8 group ring-[9px] rounded-full", black ? 'bg-black ring-black' : 'bg-black ring-darkgray')}>
               <Avatar className="w-[6rem] h-[6rem] ">
                 <AvatarImage src={src ?? undefined} />
                 {/* Display the first letter of the userName */}
                 <AvatarFallback className='uppercase select-none text-base'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
                 <div className="absolute inset-0 flex items-center justify-center rounded-full bg-neutral-950/70 opacity-0 scale-[1.3] duration-200 group-hover:opacity-100 group-hover:scale-100 transition">
-                  <span className="text-xs flex">VIEW PROFILE</span>
+                  <Link href={`/user/${userId}`} className="text-xs flex">VIEW PROFILE</Link>
                 </div>
               </Avatar>
               <div className={clsx('z-50 w-fit h-fit absolute top-[70px] right-0 rounded-full border-4', statusClass, black ? 'border-black bg-black' : 'border-darkgray bg-darkgray')}>
                 <HiMiniCheckBadge size={30}/>
               </div>
             </div>
-          </DialogTrigger>
+{/*           </DialogTrigger>
           <DialogContent className={clsx(black ? 'bg-black' : 'bg-darkgray')}>
             <UserProfileDialog userBannerUrl={userBannerUrl} userStatus={userStatusEdited ?? undefined} userName={userName} src={src}/>
           </DialogContent>
-      </Dialog>
+      </Dialog> */}
       <div className='py-4 md:px-7 px-2 mt-8 flex flex-col w-full h-full rounded-lg gap-2'>
           <div className="flex flex-col w-full h-full">
 

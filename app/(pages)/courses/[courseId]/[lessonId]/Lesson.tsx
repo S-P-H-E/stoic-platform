@@ -58,6 +58,7 @@ interface LessonItem {
   order: number;
   url: string;
   thumbnail: string;
+  locked: boolean;
 }
 
 export default function LessonComponent() {
@@ -215,6 +216,7 @@ export default function LessonComponent() {
               order: doc.data().order,
               url: doc.data().url,
               thumbnail: doc.data().thumbnail,
+              locked: doc.data().locked
             }));
             lessonsData.sort((a, b) => a.order - b.order);
 
@@ -272,6 +274,26 @@ export default function LessonComponent() {
             String(courseId)
           );
 
+          const activitiesRef = collection(
+            db,
+            'users',
+            String(userId),
+            'activities'
+          );
+          
+          if(lesson.title) {
+            const lessonDocRef = doc(
+              activitiesRef,
+              `completed_${lesson.title}_lesson`
+            );
+
+            await setDoc(lessonDocRef, {
+              title: `Completed '${lesson.title}' Lesson`,
+              completedAt: new Date(),
+              icon: 'CheckCheck',
+            });
+          }
+
           await setDoc(
             doc(userCourseLessonsRef, String(lessonId)),
             { 
@@ -321,7 +343,7 @@ export default function LessonComponent() {
         window.removeEventListener('message', handleVimeoMessageAsync);
       };
     }
-  }, [vimeoUrl, userId, courseId, lessonId, isPremium]);
+  }, [vimeoUrl, userId, courseId, lessonId, isPremium, lesson?.title]);
 
   useEffect(() => {
     const fetchUserCompletion = () => {
@@ -582,23 +604,22 @@ export default function LessonComponent() {
                 }}
               >
                 <Link
-                  href={`/courses/${courseId}/${lessonItem.id}`}
+                  href={lessonItem.locked ? `/courses/${courseId}/${lessonpath.lessonId.toString()}` : `/courses/${courseId}/${lessonItem.id}`}
                   key={index}
-                  className="cursor-pointer w-full"
+                  className={clsx(lessonItem.locked ? 'opacity-50 !cursor-not-allowed' : 'cursor-pointer', "w-full")}
                 >
                   <ContextMenu>
                     <ContextMenuTrigger>
                       <div
-                        className={`hover:bg-border w-full lg:w-[250px] 2xl:w-[300px] p-3 rounded-2xl transition-all bg-[--bg] border border-border group cursor-pointer flex justify-between items-center gap-2 
-                  ${
-                    String(lessonpath.lessonId) === String(lessonItem.id) &&
-                    'bg-white text-black hover:bg-neutral-200'
-                  }
-                  ${
-                    videoPlaying &&
-                    String(lessonpath.lessonId) === String(lessonItem.id) &&
-                    'animate-pulse'
-                  }`}
+                        className={clsx(
+                          'hover:bg-border w-full lg:w-[250px] 2xl:w-[300px] p-3 rounded-2xl transition-all bg-[--bg] border border-border group cursor-pointer flex justify-between items-center gap-2',
+                          {
+                          'bg-white text-black hover:bg-neutral-200':
+                              String(lessonpath.lessonId) === String(lessonItem.id),
+                            'animate-pulse':
+                              videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id),
+                          }
+                        )}
                       >
                         <div className="flex items-center">
                           <p className="text-3xl font-mono rounded-full p-2 px-4">
@@ -703,9 +724,9 @@ export default function LessonComponent() {
                 }}
               >
                 <Link
-                  href={`/courses/${courseId}/${lessonItem.id}`}
+                  href={lessonItem.locked ? `/courses/${courseId}/${lessonpath.lessonId.toString()}` : `/courses/${courseId}/${lessonItem.id}`}
                   key={index}
-                  className="cursor-pointer w-full"
+                  className={clsx(lessonItem.locked ? 'opacity-50 !cursor-not-allowed' : 'cursor-pointer', "w-full")}
                 >
                   <ContextMenu>
                     <ContextMenuTrigger>
