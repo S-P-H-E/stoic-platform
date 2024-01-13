@@ -200,7 +200,7 @@ export default function CreateLesson({predefinedCourse, predefinedCourseName}: C
             onChange={(e) => setLessonOrder(Number(e.target.value))}
           />
 
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
             <h1 className='text-lg font-medium'>Locked</h1>
             <Checkbox onChange={(e) => setLessonLocked(e.target.checked)} checked={lessonLocked} />
           </div>
