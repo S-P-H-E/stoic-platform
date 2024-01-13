@@ -15,7 +15,7 @@ interface UserDataFetcherResult {
   generalLastLesson: string;
   userName: string | null;
   userStatus: string | undefined;
-  user: User | null | undefined;
+  user: User | null | undefined
   userId: string | null;
   fetching: boolean;
   userProfileImageUrl: string;

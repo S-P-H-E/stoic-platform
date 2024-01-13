@@ -21,10 +21,10 @@ export default function UserImagePassable({ roles, userId, userRoles, userImage,
         <Avatar className="w-full h-full">
           <AvatarImage src={userImage ?? undefined} />
           {/* Display the first letter of the userName */}
-          <AvatarFallback className='uppercase select-none text-base w-full h-full'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
+          <AvatarFallback className='uppercase bg-darkgray select-none text-base w-full h-full'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='bg-[--background] border-border' side='right' >
+      <DropdownMenuContent className='bg-darkgray border border-border' side='right' >
         <UserProfile userId={userId} roles={roles} userRoles={userRoles} userBannerUrl={userBannerUrl} userStatus={userStatus ?? undefined} userName={userName} src={userImage ?? undefined}/>
       </DropdownMenuContent>
     </DropdownMenu>

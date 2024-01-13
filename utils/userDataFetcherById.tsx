@@ -21,6 +21,7 @@ export function UserDataFetcherById(userId: string) {
   const [userProfileImageUrl, setUserProfileImageUrl] = useState('')
   const [userProfileBannerUrl, setUserProfileBannerUrl] = useState('')
   const [userStripeId, setUserStripeId] = useState('')
+  const [userDescription, setUserDescription] = useState('')
 
   const [roles, setRoles] = useState<Role[]>([]);
 
@@ -62,11 +63,12 @@ export function UserDataFetcherById(userId: string) {
         setGeneralLastCourse(userData.generalLastCourse);
         setGeneralLastLesson(userData.generalLastLesson)
         setUserStripeId(userData.stripe_customer_id);
+        setUserDescription(userData.description)
       }
     });
 
     return () => unsubscribe();
   }, [userId, roles]);
 
-  return { userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, userProfileImageUrl, userProfileBannerUrl };
+  return { userDescription, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, userProfileImageUrl, userProfileBannerUrl };
 }

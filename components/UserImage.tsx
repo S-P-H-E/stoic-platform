@@ -6,8 +6,9 @@ import { storage } from '@/utils/firebase';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { onSnapshot, doc } from 'firebase/firestore';
 import { db } from '@/utils/firebase'; // Import your Firestore instance
+import clsx from 'clsx';
 
-export default function UserImage() {
+export default function UserImage({className}: {className?:string}) {
   const [photoUrl, setProfileImageUrl] = useState<string | null>(null);
   const { user, userId, userName } = UserDataFetcher();
 
@@ -35,10 +36,10 @@ export default function UserImage() {
   const userChar: string = userName ? userName : '';
 
   return (
-    <Avatar className="w-full h-full">
+    <Avatar className={clsx("w-full h-full aspect-square", className)}>
       <AvatarImage src={photoUrl ?? undefined} />
       {/* Display the first letter of the userName */}
-      <AvatarFallback className='uppercase select-none'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
+      <AvatarFallback className='uppercase bg-darkgray select-none text-base w-full h-full'>{userChar.charAt(0)}{userChar.charAt(userChar.length - 1)}</AvatarFallback>
     </Avatar>
   );
 }

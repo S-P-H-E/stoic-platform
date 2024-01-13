@@ -285,9 +285,8 @@ export default function Comments({
           className="flex justify-between items-center w-full gap-3 px-4 pb-2"
         >
           {comments.length > 0 && (
-            <div className="h-14 aspect-square">
-              <UserImage />
-            </div>
+            
+              <UserImage className="w-14 h-14"/>
           )}
           <input
             placeholder="Type your comment here"
@@ -316,7 +315,7 @@ export default function Comments({
             >
               <div className="flex justify-between items-center">
                 <div className="flex gap-2 justify-center items-center">
-                  <div className="w-12 h-12">
+                  <div className="w-12 h-12 aspect-square">
                     <UserImagePassable
                       userId={comment.userId}
                       roles={roles}

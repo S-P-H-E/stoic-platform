@@ -21,7 +21,7 @@ export default function UserIdGuard({userId}: {userId: string}) {
 
   const { userId: userIdGlobal, userStatus: userStatusGlobal } = UserDataFetcher();
 
-  const { userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, userProfileImageUrl, userProfileBannerUrl } = UserDataFetcherById(userId);
+  const { userDescription, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, userProfileImageUrl, userProfileBannerUrl } = UserDataFetcherById(userId);
 
   const [loading, setLoading] = useState(true);
   const [timedOut, setTimedOut] = useState(false);
@@ -57,6 +57,7 @@ export default function UserIdGuard({userId}: {userId: string}) {
     generalLastLesson,
     name: userName,
     status: userStatus,
+    description: userDescription,
     profileImageUrl: userProfileImageUrl,
     profileBannerUrl: userProfileBannerUrl,
   };

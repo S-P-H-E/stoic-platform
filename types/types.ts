@@ -20,6 +20,7 @@ export interface User {
   status: string | undefined;
   profileImageUrl: string;
   profileBannerUrl: string;
+  description: string;
 }
   
 export interface Role {

@@ -24,7 +24,7 @@ interface Role {
   order: number;
 }
 
-export default function UserProfile({src, userName, userId, userStatus, userBannerUrl, userRoles, roles}: {userId: string | null, roles: Role[], src: string, userName: string, userStatus: string, userBannerUrl: string, userRoles: Role[] |"User"}) {
+export default function UserProfile({src, userName, black, userId, userStatus, userBannerUrl, userRoles, roles}: {black?: boolean; userId: string | null, roles: Role[], src: string, userName: string, userStatus: string, userBannerUrl: string, userRoles: Role[] |"User"}) {
   const userChar: string = userName ? userName : '';
   const [userStatusEdited, setUserStatusEdited] = useState('Loading...')
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
@@ -127,7 +127,7 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
         </div>
         <Dialog>
           <DialogTrigger>
-            <div className="absolute top-[6rem] left-4 group border-[9px] bg-black border-[black] rounded-full">
+            <div className={clsx("absolute top-[6rem] left-8 group ring-[9px] rounded-full", black ? 'bg-black ring-black' : 'bg-black ring-darkgray')}>
               <Avatar className="w-[6rem] h-[6rem] ">
                 <AvatarImage src={src ?? undefined} />
                 {/* Display the first letter of the userName */}
@@ -136,12 +136,12 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
                   <span className="text-xs flex">VIEW PROFILE</span>
                 </div>
               </Avatar>
-              <div className={clsx('z-50 w-fit h-fit bg-[black] absolute top-[70px] right-0 rounded-full border-4 border-[black]', statusClass)}>
+              <div className={clsx('z-50 w-fit h-fit absolute top-[70px] right-0 rounded-full border-4', statusClass, black ? 'border-black bg-black' : 'border-darkgray bg-darkgray')}>
                 <HiMiniCheckBadge size={30}/>
               </div>
             </div>
           </DialogTrigger>
-          <DialogContent className="bg-[--background]">
+          <DialogContent className={clsx(black ? 'bg-black' : 'bg-darkgray')}>
             <UserProfileDialog userBannerUrl={userBannerUrl} userStatus={userStatusEdited ?? undefined} userName={userName} src={src}/>
           </DialogContent>
       </Dialog>
@@ -178,7 +178,7 @@ export default function UserProfile({src, userName, userId, userStatus, userBann
               </div>
             </div>
 
-            <div className='border border-[#2C2C2C] bg-[#0f0f0f] rounded-xl p-3 gap-3 flex flex-col'>
+            <div className={clsx('border border-border rounded-xl p-3 gap-3 flex flex-col', black ? 'bg-darkgray' : 'bg-black')}>
               <h1>ROLES</h1>
               <div className='flex flex-wrap gap-3 items-center text-lg'>
               {userRoles && (

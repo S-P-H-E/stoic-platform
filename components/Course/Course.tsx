@@ -4,7 +4,7 @@ import Link from 'next/link'
 export default function Course({ href, name, description, image}: { name: string, description: string, href: string, image:string}) {
   return (
     <Link href={href} passHref className='group bg-darkgray pb-6 group relative flex flex-col w-full sm:w-[22rem] h-[27rem] items-center text-center border border-border rounded-xl hover:scale-105 transition duration-200 overflow-hidden'>
-      <div className="relative group-hover:brightness-125 group-hover:scale-110 transition duration-200 rounded-xl">
+      <div className="relative group-hover:scale-110 transition duration-200 rounded-xl">
         <div className="absolute top-28 left-0 w-full h-44 bg-gradient-to-b from-transparent via-darkgray to-darkgray rounded-xl"/>
         <Image loading='lazy' alt='image' src={image} width={400} height={200} className='rounded-xl h-60 object-cover' />
       </div>

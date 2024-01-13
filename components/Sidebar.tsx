@@ -194,10 +194,11 @@ const Sidebar = () => {
                       <UserImage />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                      className="absolute -left-10 bottom-1 bg-[--background] border-border"
+                      className="absolute -left-10 bottom-1 bg-black border border-border"
                       side="top"
                     >
                       <UserProfile
+                        black
                         userId={userId}
                         roles={roles}
                         userRoles={userRoles ?? 'User'}

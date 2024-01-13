@@ -13,7 +13,7 @@ export default function UserProfileDialog({src, userName, userStatus, userBanner
     });
 
     return(
-        <div className="rounded-xl h-96 p-2 relative">
+        <div className="rounded-xl h-96 p-2 relative border border-border ">
             <div className="w-full h-40 relative">
                 {userBannerUrl ? 
                     <Image alt="User Banner" fill className="rounded-lg object-cover" src={userBannerUrl} />

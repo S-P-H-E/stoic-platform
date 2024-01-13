@@ -11,24 +11,40 @@ import { useDropzone } from 'react-dropzone'; // Import useDropzone
 import { BsImageFill } from 'react-icons/bs'
 import { MdDelete } from 'react-icons/md';
 import clsx from 'clsx';
+import { User } from '@/types/types';
 
-interface PasswordModalProps {
-  onClose: () => void;
+interface GlobalUser {
+  id: string | null;
+  status: string | undefined;
 }
 
-export default function PhotoUpload({ onClose }: PasswordModalProps) {
+interface PhotoModalProps {
+  onClose?: () => void;
+  user: User;
+  globalUser: GlobalUser;
+  userId: string;
+  isAuthorized: boolean;
+}
+
+export default function PhotoUpload({
+  onClose,
+  user,
+  globalUser,
+  userId,
+  isAuthorized,
+}: PhotoModalProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [photoUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { user, userId } = UserDataFetcher();
+  const { user: fireBaseUser } = UserDataFetcher();
 
   const onFileSelected = useCallback((file: File) => {
     setSelectedImage(file);
   }, []);
 
   const uploadProfilePicture = async () => {
-    if (selectedImage && user && userId) {
+    if (selectedImage && user && userId && isAuthorized) {
       const allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']; // Add any other allowed image types
   
       if (!allowedFileTypes.includes(selectedImage.type)) {
@@ -44,9 +60,15 @@ export default function PhotoUpload({ onClose }: PasswordModalProps) {
   
         const imageUrl = await getDownloadURL(storageRef);
         setProfileImageUrl(imageUrl);
-        await updateProfile(user, { photoURL: imageUrl });
-  
-        onClose();
+        
+        if(fireBaseUser != null || fireBaseUser != undefined) {
+          await updateProfile(fireBaseUser, { photoURL: imageUrl });
+        }
+        
+        if(onClose) {
+          onClose();
+        }
+        
         message.success('Profile picture uploaded successfully!');
   
         const userDocRef = doc(db, 'users', userId);
@@ -61,8 +83,15 @@ export default function PhotoUpload({ onClose }: PasswordModalProps) {
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: (acceptedFiles) => onFileSelected(acceptedFiles[0]),
-    maxSize: 8 * 1024 * 1024, 
+    onDrop: (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      if (file.size > 8 * 1024 * 1024) {
+        message.error('File size exceeds 8MB. Please select a smaller file.');
+        return;
+      }
+      onFileSelected(file);
+    },
+    /* maxSize: 8 * 1024 * 1024,  */
     accept: {
       'image/jpeg': [],
       'image/png': [],
@@ -72,22 +101,25 @@ export default function PhotoUpload({ onClose }: PasswordModalProps) {
   });
 
   return (
-    <div className="relative py-16  border-border border flex flex-col gap-2 p-8 rounded-lg text-center">
+    <div className="relative h-full bg-modal border-border border flex flex-col gap-3 p-6 rounded-xl text-center">
+      <h1 className="text-lg font-medium pb-2">Change Profile Picture</h1>
       <div
         {...getRootProps()}
-        className='border-dashed border-2 border-border  hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer'
+        className='border-dashed border-2 border-border h-full flex items-center justify-center hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer'
       >
         <input {...getInputProps()} />
         {selectedImage ? (
-          <div className="flex justify-center items-center flex-col gap-4">
+          <div className="flex justify-center items-center flex-col h-full w-full gap-3">
             <p className="text-highlight">You can click again to change the image</p>
-             <Image
-              alt="Profile picture"
-              src={URL.createObjectURL(selectedImage)}
-              width={100}
-              height={100}
-              className="p-2 border border-border rounded-lg flex w-[20svh] object-contain mx-auto"
-            />
+            <div className="w-full h-full aspect-square relative rounded-lg">
+              <Image
+                alt="Profile picture"
+                src={URL.createObjectURL(selectedImage)}
+                fill
+                quality={95}
+                className="rounded-lg object-cover"
+              />
+            </div>
             <button onClick={() => {setSelectedImage(null); setIsLoading(false);}} className="hover:text-white text-highlight transition flex gap-1 items-center"><MdDelete/>Clear Image</button>
           </div>
         ) : <>
