@@ -21,6 +21,8 @@ const UserIdHeader = ({
   userId: string;
   isAuthorized: boolean;
 }) => {
+  const isCurrentUser = globalUser.id == userId
+
   return (
     <section className="w-full">
       <div className="w-full h-[48svh] min-h-[12rem] max-h-[40rem] relative bg-darkgray">
@@ -41,7 +43,7 @@ const UserIdHeader = ({
             <Dialog>
               <DialogTrigger>
                 <div className="z-20 absolute w-full h-full inset-0 opacity-0 bg-bg/50 text-2xl lg:text-3xl font-medium flex items-center justify-center lg:rounded-b-2xl group-hover:opacity-100 transition">
-                  <h1>Click to change your banner</h1>
+                  <h1>{isCurrentUser ? 'Click to change your banner' : "Click to change the user's banner"}</h1>
                 </div>
               </DialogTrigger>
               <DialogContent >
