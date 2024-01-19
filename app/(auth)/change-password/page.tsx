@@ -7,9 +7,8 @@ import { validatePassword } from '@/utils/validation'
 import { message } from 'antd'
 import clsx from 'clsx'
 import { confirmPasswordReset } from 'firebase/auth'
-import { collection, doc, getDocs, query, where } from 'firebase/firestore'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import { FiLoader } from 'react-icons/fi'
 
 export default function ChangePassword() {
@@ -52,6 +51,7 @@ export default function ChangePassword() {
   const [newPassword, setnewPassword] = useState('')
 
   return (
+    <Suspense>
     <div className="flex flex-col items-center justify-center h-screen gap-3 w-full">
       {mode === 'resetPassword' ? (
         oobCode ? (
@@ -84,5 +84,6 @@ export default function ChangePassword() {
         <p>Invalid Mode</p>
       )}
     </div>
+    </Suspense>
   )
 }
