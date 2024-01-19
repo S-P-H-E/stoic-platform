@@ -78,7 +78,7 @@ export default function UserIdGuard({userId}: {userId: string}) {
     }
   }, [generalLastCourse, generalLastLesson, userDescription, userEmail, userIdGlobal, userName, 
     userNameGlobal, userProfileBannerUrl, userProfileImageUrl, userRoles, userStatus, userStatusGlobal, 
-    userStripeId, userStripeIdGlobal
+    userStripeId, userStripeIdGlobal, userSocial
   ])
 
 

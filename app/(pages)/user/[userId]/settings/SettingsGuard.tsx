@@ -52,7 +52,7 @@ export default function SettingsGuard({userId}: {userId: string}) {
       }
     }, [userId, generalLastCourse, generalLastLesson, userDescription, userEmail, userIdGlobal, userName, 
       userNameGlobal, userProfileBannerUrl, userProfileImageUrl, userRoles, userStatus, userStatusGlobal, 
-      userStripeId, userStripeIdGlobal
+      userStripeId, userStripeIdGlobal, userSocial
     ])
 
     useEffect(() => {
