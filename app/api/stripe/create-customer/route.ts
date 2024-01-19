@@ -9,14 +9,22 @@ export async function POST(request: NextRequest) {
 
     const { userName, userEmail, userStripeId } = body; //check user stripe id here too
 
-    if (userName && userEmail && !userStripeId) {
-        const customer = await stripe.customers.create({
-            email: String(userEmail),
-            name: String(userName)
-        });
+    console.log(userEmail)
+    console.log(userName)
+    console.log(userStripeId)
 
-    return new Response(JSON.stringify(customer));
-    } else {
-        return new Response("User already is a stripe customer or user credentials are wrong.")
+    try {
+        if (userName && userEmail && !userStripeId) {
+            const customer = await stripe.customers.create({
+                email: String(userEmail),
+                name: String(userName)
+            });
+    
+        return new Response(JSON.stringify(customer));
+        } else {
+            return new Response("User already is a stripe customer or user credentials are wrong.")
+        }
+    } catch (error) {
+        console.log(error)
     }
 }

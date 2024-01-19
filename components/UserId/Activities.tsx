@@ -9,6 +9,8 @@ import type { ReactNode } from 'react';
 interface GlobalUser {
   id: string | null;
   status: string | undefined;
+  stripeId: string | undefined;
+  name: string | null;
 }
 
 interface Activity {

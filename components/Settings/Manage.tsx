@@ -51,6 +51,7 @@ export default function Manage({
     const customerPortalUrl = await generateCustomerPortal();
     router.push(customerPortalUrl);
   };
+  
   return (
     <Button
       onClick={handleClick}

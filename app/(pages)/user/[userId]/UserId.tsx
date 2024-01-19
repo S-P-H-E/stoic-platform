@@ -9,6 +9,8 @@ import Activities from '@/components/UserId/Activities';
 interface GlobalUser {
     id: string | null;
     status: string | undefined;
+    name: string | null;
+    stripeId: string | undefined;
 }
 
 const UserIdComponent = ({globalUser, userId, user}: {globalUser: GlobalUser, user: User, userId: string}) => {

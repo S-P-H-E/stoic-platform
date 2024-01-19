@@ -94,7 +94,7 @@ const Sidebar = () => {
     {
       label: 'User',
       icon: UserCircle,
-      href: `/user/${userId}`, //! change to /user
+      href: `/user/${userId}` || `/user/`, //! change to /user
     },
   /*   {
       label: 'Settings',
@@ -164,6 +164,7 @@ const Sidebar = () => {
             >
               STOIC
             </h1>
+            <p className="text-xs font-light ml-1">BETA</p>
           </Link>
           <div className="justify-between h-full flex flex-col">
             <div className="space-y-1 ">

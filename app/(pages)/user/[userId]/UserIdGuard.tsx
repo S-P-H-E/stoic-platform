@@ -15,11 +15,13 @@ import { User } from './../../../../types/types';
 interface GlobalUser {
   id: string | null;
   status: string | undefined;
+  name: string | null
+  stripeId: string | undefined;
 }
 
 export default function UserIdGuard({userId}: {userId: string}) {
 
-  const { userId: userIdGlobal, userStatus: userStatusGlobal } = UserDataFetcher();
+  const { userId: userIdGlobal, userStatus: userStatusGlobal, userStripeId: userStripeIdGlobal, userName: userNameGlobal } = UserDataFetcher();
 
   const { userDescription, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, userProfileImageUrl, userProfileBannerUrl } = UserDataFetcherById(userId);
 
@@ -64,7 +66,9 @@ export default function UserIdGuard({userId}: {userId: string}) {
 
   const globalUser: GlobalUser = {
     id: userIdGlobal,
-    status: userStatusGlobal
+    name: userNameGlobal,
+    status: userStatusGlobal,
+    stripeId: userStripeIdGlobal
   }
 
   if (timedOut) {

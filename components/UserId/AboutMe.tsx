@@ -10,6 +10,8 @@ import React, { useState } from 'react';
 interface GlobalUser {
   id: string | null;
   status: string | undefined;
+  stripeId: string | undefined;
+  name: string | null;
 }
 
 const AboutMe = ({
@@ -36,13 +38,8 @@ const AboutMe = ({
     setEditedDescription(event.target.value);
   };
 
-  const handleTextAreaBlur = () => {
-    handleDescriptionUpdate()
-  };
-
   const handleDescriptionUpdate = async () => {
     if(isAuthorized) {
-      setIsEditing(false);
 
       if (editedDescription.length > 200) {
         message.error('Description must be 200 characters or less.');
@@ -59,11 +56,23 @@ const AboutMe = ({
       message.error('You are not permitted to do this!');
     }
   };
+  
+  const handleTextAreaBlur = () => {
+    setIsEditing(false);
+
+    if (user.description != editedDescription) {
+      handleDescriptionUpdate()
+    }
+  };
 
   const handleTextAreaKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      handleDescriptionUpdate();
+      setIsEditing(false);
+      
+      if (user.description != editedDescription) {
+        handleDescriptionUpdate();
+      }
     }
   };
 

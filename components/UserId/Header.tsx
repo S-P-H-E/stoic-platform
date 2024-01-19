@@ -7,10 +7,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import BannerUpload from '../Settings/BannerPhotoUpload';
 import PhotoUpload from '../Settings/ProfilePhotoUpload';
+import Membership from './Membership';
 
 interface GlobalUser {
   id: string | null;
   status: string | undefined;
+  stripeId: string | undefined;
+  name: string | null;
 }
 
 const UserIdHeader = ({
@@ -55,7 +58,7 @@ const UserIdHeader = ({
       </div>
       <div className="w-full bg-darkgray border-b border-border pb-6">
         <div className="px-6 gap-4 flex justify-between items-center xl:w-[80%] lg:w-[85%] max-w-7xl max-h-7xl mx-auto h-3/4 w-full relative">
-            <div className="absolute bottom-0 left-8 ring-8 ring-darkgray w-44 xl:w-52 aspect-square rounded-full">
+            <div className="absolute bottom-0 left-8 ring-8 ring-darkgray w-44 xl:w-52 bg-darkgray aspect-square rounded-full">
               <div className="group relative h-full w-full rounded-full">
                 
                 <Avatar className="w-full h-full">
@@ -92,11 +95,17 @@ const UserIdHeader = ({
 
           {isAuthorized ? (
             <div className="flex gap-2 items-center">
+              <Membership 
+                user={user} 
+                globalUserName={globalUser.name} 
+                globalStripeCustomerId={globalUser.stripeId || undefined} 
+                globalUserRole={globalUser.status} 
+                globalUserId={globalUser.id} 
+                stripeCustomerId={user.stripeId} 
+                userId={userId}
+              />
               <ButtonShad variant="secondary">
-                <p>Billing</p>
-              </ButtonShad>
-              <ButtonShad>
-                <p>Manage Account</p>
+                <p>Settings</p>
               </ButtonShad>
             </div>
           ) : (
