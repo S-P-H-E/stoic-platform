@@ -10,15 +10,17 @@ export async function POST(request: NextRequest) {
 
   const { userStripeId } = body;
 
+  console.log('RECEIVED STRIPE ID ON SERVER: ' + userStripeId)
+
   if (userStripeId) {
     const checkout = await stripe.checkout.sessions.create({
-      success_url: 'http://localhost:3000/upgrade', //! change in future
-      cancel_url: 'http://localhost:3000/upgrade',
+      success_url: `${process.env.APP_DOMAIN}/upgrade`,
+      cancel_url: `${process.env.APP_DOMAIN}/upgrade`,
       customer: userStripeId,
       line_items: [
         {
           price:
-            'price_1NRdQRJVAR9FxLkw45myeidy' /* price_1OSO71JVAR9FxLkw0dmNnwqO */,
+            'price_1OSO71JVAR9FxLkw0dmNnwqO' /* price_1OSO71JVAR9FxLkw0dmNnwqO */,
           quantity: 1,
         },
       ],

@@ -87,7 +87,7 @@ const AboutMe = ({
             onChange={handleTextAreaChange}
             onBlur={handleTextAreaBlur}
             onKeyDown={handleTextAreaKeyDown}
-            placeholder={'Hello im andrew tate and you are a fucking niger'}
+            placeholder={'Add a description...'}
           />
         ) : (
           user.description ? 

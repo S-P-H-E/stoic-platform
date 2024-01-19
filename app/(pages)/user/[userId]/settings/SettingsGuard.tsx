@@ -25,7 +25,7 @@ export default function SettingsGuard({userId}: {userId: string}) {
     const [roles, setRoles] = useState<Role[]>([]);
 
     useEffect(() => {
-      if (userStatusGlobal !== 'user' && userIdGlobal == userId) {
+      if (userStatusGlobal !== 'user' && userIdGlobal == userId || userStatusGlobal === 'admin') {
         const user: User = {
           stripeId: userStripeId,
           roles: userRoles,
@@ -74,7 +74,7 @@ export default function SettingsGuard({userId}: {userId: string}) {
       return () => unsubscribe();
     }, []);
 
-    if (userStatus && userId !== userIdGlobal) {
+    if (userStatus && userId !== userIdGlobal && userStatusGlobal !== 'admin' ) {
       return (
       <div className='flex flex-col min-h-screen items-center justify-center gap-3'>
           { userStatus === 'user' && <Locked/> }

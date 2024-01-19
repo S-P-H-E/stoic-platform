@@ -16,7 +16,7 @@ interface GlobalUser {
 }
 
 const UserIdComponent = ({globalUser, userId, user}: {globalUser: GlobalUser | undefined, user: User | undefined, userId: string}) => {
-    const isAuthorized = userId === globalUser?.id;
+    const isAuthorized = userId === globalUser?.id || globalUser.status === 'admin';
 
     if (user && globalUser) {
         return (

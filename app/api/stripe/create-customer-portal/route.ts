@@ -8,20 +8,20 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    const { stripeCustomerId, userId, globalUserId, globalUserRole, newlyCreated } = body;
+    const { stripeCustomerId, userId, globalUserId, globalUserRole } = body;
 
     if (!userId) {
         return new Response ("No user found.")
     }
 
-    if (globalUserId != userId || globalUserRole !== 'admin') {
+    if (globalUserId != userId && globalUserRole !== 'admin') {
         return new Response ("You are not allowed to make this request!")
     }
 
     if (stripeCustomerId) {
         const portalSession = await stripe.billingPortal.sessions.create({
             customer: stripeCustomerId,
-            return_url: `${process.env.STRIPE_RETURN_URL}/${userId}`
+            return_url: `${process.env.APP_DOMAIN}/user/${userId}`
         })
 
         return new Response(JSON.stringify(portalSession.url));

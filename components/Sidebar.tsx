@@ -190,7 +190,7 @@ const Sidebar = () => {
                       <UserImage />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                      className="absolute -left-10 bottom-1 bg-black border border-border"
+                      className="absolute -left-10 bottom-1 bg-black ring ring-border"
                       side="top"
                     >
                       <UserProfile
@@ -203,6 +203,7 @@ const Sidebar = () => {
                         userDescription={userDescription}
                         src={userProfileImageUrl ?? undefined}
                         userBannerUrl={userProfileBannerUrl}
+
                       />
                     </DropdownMenuContent>
                   </DropdownMenu>

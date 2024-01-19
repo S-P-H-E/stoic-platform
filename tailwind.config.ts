@@ -30,6 +30,7 @@ module.exports = {
         border: "#333333",
         bg: "#050505",
         darkgray: "#0e0e0e",
+        upgrade: "#55beee",
         
 /*         border: "hsl(var(--border))", */
         input: "hsl(var(--input))",

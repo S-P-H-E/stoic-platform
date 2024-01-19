@@ -87,23 +87,24 @@ export default function UpgradeComponent() {
         },
         { merge: true }
       );
+
+      return data.id
     } else {
       return null;
       // console.log("STRIPE CREDENTIALS ERROR");
     }
   };
 
-  const generateCheckoutLink = async () => {
+  const generateCheckoutLink = async (createdStripeId?: string) => {
     try {
-      setLoading(true)
-      if (userStripeId) {
+      if (userStripeId || createdStripeId) {
         const response = await fetch('/api/stripe/create-checkout-link', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            userStripeId,
+            userStripeId: userStripeId || createdStripeId, // ? Uses the predefined id that gets returned as soon as the customer is created on the go.
           }),
         });
   
@@ -119,8 +120,6 @@ export default function UpgradeComponent() {
       }
     } catch (error) {
       console.log(error)
-    } finally {
-      setLoading(false)
     }
   };
 
@@ -133,15 +132,24 @@ export default function UpgradeComponent() {
   const handleBuy = async () => {
     try {
       setLoading(true);
+      if (userStripeId) {
+        const checkoutUrl = await generateCheckoutLink();
 
-      if (!userStripeId) {
-        await createCustomerIfNull();
-      }
+        if (checkoutUrl) {
+          router.push(checkoutUrl);
+        }
+      } else {
+        console.log('creating new customer...')
+        const createdCustomerId = await createCustomerIfNull();
+        console.log('created new customer with id: ' + createdCustomerId)
 
-      const checkout = await generateCheckoutLink();
+        console.log('creating customerportal')
+        const customerPortalUrl = await generateCheckoutLink(createdCustomerId);
+        console.log('created customerportal with url: ' + customerPortalUrl)
 
-      if (checkout) {
-        router.push(checkout);
+        if (customerPortalUrl) {
+          router.push(customerPortalUrl);
+        }
       }
 
     } catch (error) {
@@ -192,13 +200,13 @@ export default function UpgradeComponent() {
         </div>
 
         <h1 className='text-4xl text-upgrade pb-5 flex flex-col items-center font-medium'>
-          <mark className='bg-transparent text-xl text-gray-500 line-through'>$99.99</mark>$49.99
+          <mark className='bg-transparent text-xl text-muted-foreground line-through'>$99.99</mark>$49.99
         </h1>
 
         {features.map((feature) => (
           <motion.div initial="initial" whileInView="animate" viewport={{once: true,}} key={feature.id} custom={feature.id} variants={fadeInAnimationVariants} className='flex justify-between items-center gap-1 w-full p-2 rounded-md border border-[#1C1C1D]'>
             <div className='flex items-center'>
-              <div className='bg-[#F7C910]/10 text-upgrade p-2 rounded-lg'>
+              <div className='bg-upgrade/10 text-upgrade p-2 rounded-lg'>
                 {feature.icon}
               </div>
               <h1 className='px-2 font-medium'>{feature.name}</h1>

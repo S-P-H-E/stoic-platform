@@ -167,17 +167,17 @@ export default function UserProfile({
               src={userBannerUrl}
               fill
               alt="image"
-              className="object-cover w-full"
+              className="z-10 object-cover w-full"
             />
           ) : (
-            <div className="w-full h-full bg-white" />
+            <div className="z-10 absolute inset-0 w-full h-full bg-white" />
           )}
 
  
           {edit && isAuthorized && userId && (
             <Dialog>
               <DialogTrigger>
-                <div className="absolute w-full h-full inset-0 opacity-0 bg-bg/50 text-xl font-medium flex items-center justify-center group-hover:opacity-100 transition">
+                <div className="z-20 absolute w-full h-full inset-0 opacity-0 bg-bg/50 text-xl font-medium flex items-center justify-center group-hover:opacity-100 transition">
                   <h1>Click to change your banner</h1>
                 </div>
               </DialogTrigger>
@@ -190,12 +190,14 @@ export default function UserProfile({
               </DialogContent>
             </Dialog>
           )}
+
+          <div className="absolute inset-0 w-full h-full bg-border animate-pulse" />
         </div>
         {/*         <Dialog>
           <DialogTrigger> */}
         <div
           className={clsx(
-            'absolute top-[6rem] left-8 group ring-[9px] rounded-full',
+            'absolute top-[6rem] left-8 group ring-[9px] rounded-full z-30',
             black ? 'bg-black ring-black' : 'bg-black ring-darkgray'
           )}
         >
@@ -280,11 +282,11 @@ export default function UserProfile({
             <h1 className="text-lg font-medium">INFO</h1>
             <div
               className={clsx(
-                'border-border border rounded-xl p-2',
+                'border-border border rounded-xl p-3',
                 black ? 'bg-darkgray' : 'bg-black'
               )}
             >
-              <p>{userDescription}</p>
+              <p>{userDescription ? userDescription : 'No description provided'}</p>
             </div>
             {/*             <div className='flex justify-between pb-5 pt-2'>
               <div className='bg-white text-black w-fit py-1 px-2 md:py-1 md:px-3 rounded-full flex items-center gap-2 text-xs md:text-sm font-semibold'>
@@ -331,7 +333,7 @@ export default function UserProfile({
                           .map((role) => (
                             <div
                               className={clsx(
-                                `bg-${role.color} flex px-4 py-2 h-10 rounded-md gap-2 items-center`
+                                `bg-${role.color} flex px-4 py-2 h-10 border border-border rounded-md gap-2 items-center`
                               )}
                               key={role.id}
                             >
