@@ -18,6 +18,9 @@ const AboutMe = ({
   userId: string;
   isAuthorized: boolean;
 }) => {
+
+  const isCurrentUser = globalUser.id == userId
+
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(user.description || '');
 
@@ -70,7 +73,7 @@ const AboutMe = ({
   };
 
   return (
-    <section className="border border-border bg-darkgray rounded-2xl w-full lg:h-80 lg:w-80 p-5 flex flex-col gap-2">
+    <section className="border border-border bg-darkgray rounded-2xl w-full lg:min-h-[10rem] lg:w-80 p-5 flex flex-col gap-2">
       <h1 className="text-2xl font-semibold">About Me</h1>
       <div
         onClick={handleEditClick}
@@ -100,7 +103,7 @@ const AboutMe = ({
               ))}
             </p>
           :
-            <p>{isAuthorized ? "You haven't added a description. Click to add one!" : "No description provided"}</p>
+            <p>{isCurrentUser ? "You haven't added a description. Click to add one!" : "This user hasn't added a description."}</p>
         )}
       </div>
     </section>

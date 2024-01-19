@@ -26,13 +26,13 @@ const UserIdHeader = ({
       <div className="w-full h-[48svh] min-h-[12rem] max-h-[40rem] relative bg-darkgray">
         <div className="group relative w-full xl:w-[80%] lg:w-[85%] h-full max-w-7xl flex flex-col mx-auto lg:rounded-b-2xl overflow-hidden">
           {!user.profileBannerUrl ?
-            <div className="w-full h-full bg-border rounded-b-2xl animate-pulse"/>
+            <div className="w-full h-full bg-white z-10"/>
           :
             <Image
               fill
               priority
               src={user.profileBannerUrl}
-              className="object-cover lg:rounded-b-2xl z-10"
+              className="object-cover z-10"
               alt="User Banner Image"
             /> 
           }
