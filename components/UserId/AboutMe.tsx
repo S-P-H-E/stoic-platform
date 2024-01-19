@@ -1,18 +1,11 @@
 'use client';
 
-import { User } from '@/types/types';
+import { User, GlobalUser } from '@/types/types';
 import { db } from '@/utils/firebase';
 import { message } from 'antd';
 import clsx from 'clsx';
 import { doc, updateDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
-
-interface GlobalUser {
-  id: string | null;
-  status: string | undefined;
-  stripeId: string | undefined;
-  name: string | null;
-}
 
 const AboutMe = ({
   user,
@@ -41,8 +34,8 @@ const AboutMe = ({
   const handleDescriptionUpdate = async () => {
     if(isAuthorized) {
 
-      if (editedDescription.length > 200) {
-        message.error('Description must be 200 characters or less.');
+      if (editedDescription.length > 250) {
+        message.error('Description must be 250 characters or less.');
         return;
       }
   
@@ -77,7 +70,7 @@ const AboutMe = ({
   };
 
   return (
-    <section className="border border-border bg-darkgray rounded-2xl w-full h-96 lg:w-80 p-5 flex flex-col gap-2">
+    <section className="border border-border bg-darkgray rounded-2xl w-full lg:h-80 lg:w-80 p-5 flex flex-col gap-2">
       <h1 className="text-2xl font-semibold">About Me</h1>
       <div
         onClick={handleEditClick}

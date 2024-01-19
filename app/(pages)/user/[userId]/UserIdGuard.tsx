@@ -23,10 +23,13 @@ export default function UserIdGuard({userId}: {userId: string}) {
 
   const { userId: userIdGlobal, userStatus: userStatusGlobal, userStripeId: userStripeIdGlobal, userName: userNameGlobal } = UserDataFetcher();
 
-  const { userDescription, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, userProfileImageUrl, userProfileBannerUrl } = UserDataFetcherById(userId);
+  const { userSocial, userDescription, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, userProfileImageUrl, userProfileBannerUrl } = UserDataFetcherById(userId);
 
   const [loading, setLoading] = useState(true);
   const [timedOut, setTimedOut] = useState(false);
+
+  const [globalUser, setGlobalUser] = useState<GlobalUser>()
+  const [user, setUser] = useState<User>()
 
   const userNotFound = userName == undefined && userName == null
 
@@ -46,29 +49,42 @@ export default function UserIdGuard({userId}: {userId: string}) {
     return () => clearTimeout(timeoutId);
   }, [userNotFound]);
 
+  
+  useEffect(() => {
+    if (userStatusGlobal !== 'user') {
+      const user: User = {
+        stripeId: userStripeId,
+        roles: userRoles,
+        generalLastCourse,
+        email: userEmail,
+        generalLastLesson,
+        name: userName,
+        social: userSocial,
+        status: userStatus,
+        description: userDescription,
+        profileImageUrl: userProfileImageUrl,
+        profileBannerUrl: userProfileBannerUrl,
+      };
+  
+      const globalUser: GlobalUser = {
+        id: userIdGlobal,
+        name: userNameGlobal,
+        status: userStatusGlobal,
+        stripeId: userStripeIdGlobal
+      }
+  
+      setGlobalUser(globalUser)
+      setUser(user)
+    }
+  }, [generalLastCourse, generalLastLesson, userDescription, userEmail, userIdGlobal, userName, 
+    userNameGlobal, userProfileBannerUrl, userProfileImageUrl, userRoles, userStatus, userStatusGlobal, 
+    userStripeId, userStripeIdGlobal
+  ])
+
+
   // Check if userStatus is 'user' and userStatus is loaded before rendering.
   if (loading && !timedOut) {
     return <PageLoader/>
-  }
-
-  const user: User = {
-    stripeId: userStripeId,
-    roles: userRoles,
-    generalLastCourse,
-    email: userEmail,
-    generalLastLesson,
-    name: userName,
-    status: userStatus,
-    description: userDescription,
-    profileImageUrl: userProfileImageUrl,
-    profileBannerUrl: userProfileBannerUrl,
-  };
-
-  const globalUser: GlobalUser = {
-    id: userIdGlobal,
-    name: userNameGlobal,
-    status: userStatusGlobal,
-    stripeId: userStripeIdGlobal
   }
 
   if (timedOut) {
@@ -87,14 +103,14 @@ export default function UserIdGuard({userId}: {userId: string}) {
     return (
       <>
         <Locked />
-        <UserIdComponent globalUser={globalUser} user={user} userId={userId} />
+        <UserIdComponent globalUser={globalUser || undefined} user={user || undefined} userId={userId} />
       </>
     );
   } else if (
     userId && userStatusGlobal == 'premium' ||
     (userStatusGlobal == 'admin' && userStatusGlobal !== null)
   ) {
-    return <UserIdComponent globalUser={globalUser} user={user} userId={userId} />;
+    return <UserIdComponent globalUser={globalUser || undefined} user={user || undefined} userId={userId} />;
   }
 
   else {

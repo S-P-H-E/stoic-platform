@@ -17,6 +17,7 @@ interface UserDataFetcherResult {
   userStatus: string | undefined;
   user: User | null | undefined
   userId: string | null;
+  userDescription: string | null;
   fetching: boolean;
   userProfileImageUrl: string;
   userProfileBannerUrl: string;
@@ -31,6 +32,7 @@ interface Role {
 export function UserDataFetcher(): UserDataFetcherResult {
   const [user, fetching] = useAuthState(auth);
   const [userName, setUserName] = useState(null);
+  const [userDescription, setUserDescription] = useState(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [userStatus, setUserStatus] = useState<string>();
   const [userRoles, setUserRoles] = useState<Role[] | "User">();
@@ -188,6 +190,7 @@ export function UserDataFetcher(): UserDataFetcherResult {
             setGeneralLastCourse(userData.generalLastCourse);
             setGeneralLastLesson(userData.generalLastLesson)
             setUserStripeId(userData.stripe_customer_id)
+            setUserDescription(userData.description)
 
             const newUserStatus = userData.status;
             setUserStatus(newUserStatus);
@@ -208,5 +211,5 @@ export function UserDataFetcher(): UserDataFetcherResult {
     return unsubscribeAuth;
   }, [user, router, roles]);
 
-  return { userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, user, userId, fetching, userProfileImageUrl, userProfileBannerUrl};
+  return { userDescription, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, user, userId, fetching, userProfileImageUrl, userProfileBannerUrl};
 }

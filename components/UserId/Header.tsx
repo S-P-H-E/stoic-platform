@@ -1,20 +1,14 @@
-import { User } from '@/types/types';
+import { User, GlobalUser } from '@/types/types';
 import Image from 'next/image';
 import { ButtonShad } from '../ui/buttonshad';
 import { FaPen } from 'react-icons/fa6';
-import UserImagePassable from '../UserImagePassable';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import BannerUpload from '../Settings/BannerPhotoUpload';
 import PhotoUpload from '../Settings/ProfilePhotoUpload';
 import Membership from './Membership';
-
-interface GlobalUser {
-  id: string | null;
-  status: string | undefined;
-  stripeId: string | undefined;
-  name: string | null;
-}
+import Link from 'next/link';
+import { IoMdSettings } from 'react-icons/io';
 
 const UserIdHeader = ({
   user,
@@ -29,8 +23,8 @@ const UserIdHeader = ({
 }) => {
   return (
     <section className="w-full">
-      <div className="w-full h-[48svh] min-h-[12rem] max-h-screen relative bg-darkgray">
-        <div className="group relative w-full xl:w-[80%] lg:w-[85%] h-full max-w-7xl max-h-7xl flex flex-col mx-auto lg:rounded-b-2xl">
+      <div className="w-full h-[48svh] min-h-[12rem] max-h-[40rem] relative bg-darkgray">
+        <div className="group relative w-full xl:w-[80%] lg:w-[85%] h-full max-w-7xl flex flex-col mx-auto lg:rounded-b-2xl">
           {!user.profileBannerUrl ?
             <div className="w-full h-full bg-border rounded-b-2xl animate-pulse"/>
           :
@@ -104,9 +98,12 @@ const UserIdHeader = ({
                 stripeCustomerId={user.stripeId} 
                 userId={userId}
               />
-              <ButtonShad variant="secondary">
-                <p>Settings</p>
-              </ButtonShad>
+              <Link href={`${userId}/settings`}>
+                <ButtonShad className="active:scale-90 transition gap-1" variant="secondary">
+                  <IoMdSettings size={16} />
+                  <p className="md:block hidden">Settings</p>
+                </ButtonShad>
+              </Link>
             </div>
           ) : (
             <div className="flex gap-2 items-center">

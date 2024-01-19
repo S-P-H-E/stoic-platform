@@ -10,7 +10,7 @@ interface Role {
   order: number;
 }
 
-export default function UserImagePassable({ roles, userId, userRoles, userImage, userName, userStatus, userBannerUrl }: { roles:Role[], userId: string | null, userBannerUrl: string, userImage: string, userName: string, userStatus:string, userRoles: Role[] | "User"}) {
+export default function UserImagePassable({ roles, userId, userRoles, userDescription, userImage, userName, userStatus, userBannerUrl }: { userDescription: string | undefined, roles:Role[], userId: string | null, userBannerUrl: string, userImage: string, userName: string, userStatus:string, userRoles: Role[] | "User"}) {
 
   // Extract the first letter of the userName
   const userChar: string = userName ? userName : '';
@@ -25,7 +25,7 @@ export default function UserImagePassable({ roles, userId, userRoles, userImage,
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='bg-darkgray ring ring-border' side='right' >
-        <UserProfile userId={userId} roles={roles} userRoles={userRoles} userBannerUrl={userBannerUrl} userStatus={userStatus ?? undefined} userName={userName} src={userImage ?? undefined}/>
+        <UserProfile userDescription={userDescription || 'No description provided'} userId={userId} roles={roles} userRoles={userRoles} userBannerUrl={userBannerUrl} userStatus={userStatus ?? undefined} userName={userName} src={userImage ?? undefined}/>
       </DropdownMenuContent>
     </DropdownMenu>
   );

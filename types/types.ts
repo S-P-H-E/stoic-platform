@@ -17,10 +17,11 @@ export interface User {
   email: string | undefined;
   generalLastLesson: string;
   name: string | null;
+  description: string | null;
   status: string | undefined;
   profileImageUrl: string;
   profileBannerUrl: string;
-  description: string;
+  social: string | undefined;
 }
   
 export interface Role {
@@ -28,4 +29,11 @@ export interface Role {
   name: string;
   color: string;
   order: number;
+}
+
+export interface GlobalUser {
+  id: string | null;
+  status: string | undefined;
+  name: string | null
+  stripeId: string | undefined;
 }

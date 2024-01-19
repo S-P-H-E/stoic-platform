@@ -7,3 +7,10 @@ export const sanitizeString = (input: string) => {
 
   return sanitizedString;
 };
+
+export function truncateText(text: string | undefined | null, maxLength: number) {
+  if (text && text.length > maxLength) {
+    return text.substring(0, maxLength) + '...';
+  }
+  return text;
+}

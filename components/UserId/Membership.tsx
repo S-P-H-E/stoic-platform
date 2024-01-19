@@ -8,14 +8,17 @@ import { User } from '@/types/types';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 import { message } from 'antd';
+import { LuWallet } from "react-icons/lu";
+
+
 
 interface MembershipProps {
   stripeCustomerId: string;
   userId: string;
-  globalUserId: string | null;
+  globalUserId: string | null | undefined;
   globalUserRole: string | undefined;
   globalStripeCustomerId: string | undefined;
-  globalUserName: string | null
+  globalUserName: string | null | undefined;
   user: User;
 }
 
@@ -132,6 +135,6 @@ export default function Membership({user, stripeCustomerId, userId, globalUserId
       };
 
   return (
-    <ButtonShad onClick={handleClick} disabled={loading} className="disabled:cursor-not-allowed">{loading ? <BiLoader className="animate-spin"/> : 'Membership'}</ButtonShad>
+    <ButtonShad onClick={handleClick} disabled={loading} className="disabled:cursor-not-allowed active:scale-90 transition">{loading ? <BiLoader className="animate-spin"/> : <div className="flex items-center gap-1"> <LuWallet size={16}/> <p>Membership</p></div>}</ButtonShad>
   )
 }

@@ -31,6 +31,7 @@ import StoicLogo from '@/public/stoicWhite.webp';
 import { useEffect, useState } from 'react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
+import { truncateText } from '@/utils/utils';
 
 const montserrat = Montserrat({ weight: '600', subsets: ['latin'] });
 
@@ -45,6 +46,7 @@ const Sidebar = () => {
   const {
     userRoles,
     userName,
+    userDescription,
     userId,
     userStatus,
     userProfileImageUrl,
@@ -135,13 +137,6 @@ const Sidebar = () => {
     return leastOrderRole.color;
   }
 
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
-
   return (
     <div className="flex h-full z-50">
       <div className="top-0 left-0 h-full md:border-r border-border py-8 px-2 lg:p-4 w-full md:w-60 lg:w-72 md:fixed bg-darkgray text-white">
@@ -205,6 +200,7 @@ const Sidebar = () => {
                         userRoles={userRoles ?? 'User'}
                         userStatus={userStatus ?? ''}
                         userName={userName ?? ''}
+                        userDescription={userDescription}
                         src={userProfileImageUrl ?? undefined}
                         userBannerUrl={userProfileBannerUrl}
                       />

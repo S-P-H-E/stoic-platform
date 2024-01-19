@@ -42,6 +42,7 @@ interface Channel {
 interface Member {
   id: string;
   name: string;
+  description: string;
   email: string;
   photoUrl: string;
   bannerUrl: string;
@@ -174,6 +175,7 @@ export default function CommunityPage({ channelId }: CommunityPageProps) {
           return {
             id: doc.id,
             name: data.name,
+            description: data.description,
             email: data.email,
             photoUrl: data.photoUrl,
             bannerUrl: data.bannerUrl,

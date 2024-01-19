@@ -12,6 +12,7 @@ interface Role {
 interface Member {
   id: string;
   name: string;
+  description: string;
   email: string;
   photoUrl: string;
   status: string;
@@ -54,6 +55,7 @@ export default function Members({
         >
           <div className="w-12 h-12 relative">
             <UserImagePassable
+              userDescription={member.description}
               userId={member.id}
               roles={roles}
               userRoles={member.roles}

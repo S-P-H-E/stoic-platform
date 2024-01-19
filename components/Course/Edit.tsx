@@ -1,6 +1,7 @@
 "use client"
 
 import { db, storage } from '@/utils/firebase';
+import { truncateText } from '@/utils/utils';
 import { message } from 'antd';
 import { doc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -173,13 +174,6 @@ export default function Edit({lesson, courseId}: EditProps) {
       descriptionRef.current.focus();
     }
   }, [isEditingDescription]);
-
-  function truncateText(text: string, maxLength: number) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
-  }
 
     const enableEditingUrl = () => {
       setIsEditingUrl(true);

@@ -6,9 +6,12 @@ import { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import Link from 'next/link';
 import UserImage from './UserImage';
+import { UserDataFetcher } from './../utils/userDataFetcher';
 
 const MobileSidebar = () => {
   const [isMounted, setIsMounted] = useState(false);
+
+  const { userId } = UserDataFetcher()
 
   useEffect(() => {
     setIsMounted(true);
@@ -28,7 +31,7 @@ const MobileSidebar = () => {
           <Sidebar />
         </SheetContent>
       </Sheet>
-      <Link href={'/settings'} className="rounded-full transition duration-200 w-[50px] h-[50px] cursor-pointer hover:ring-4 hover:ring-offset-4 ring-border ring-offset-[--bg]">
+      <Link href={`/user/${userId}`} className="rounded-full transition duration-200 w-[50px] h-[50px] cursor-pointer hover:ring-4 hover:ring-offset-4 ring-border ring-offset-[--bg]">
         <UserImage />
       </Link>
     </div>

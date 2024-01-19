@@ -1,4 +1,4 @@
-    "use client"
+"use client"
 
     import { db } from '@/utils/firebase';
     import { UserDataFetcher } from '@/utils/userDataFetcher';

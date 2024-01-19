@@ -10,19 +10,15 @@ import { useDropzone } from 'react-dropzone'; // Import useDropzone
 import { BsImageFill } from 'react-icons/bs';
 import { MdDelete } from 'react-icons/md';
 import clsx from 'clsx';
-import { User } from '@/types/types';
+import { User,GlobalUser } from '@/types/types';
 
-
-interface GlobalUser {
-  id: string | null;
-  status: string | undefined;
-}
 interface BannerModalProps {
   onClose?: () => void;
-  user: User;
-  globalUser: GlobalUser;
+  user?: User;
+  globalUser?: GlobalUser;
   userId: string;
   isAuthorized: boolean;
+  bypass?:boolean
 }
 
 export default function BannerUpload({
@@ -31,6 +27,7 @@ export default function BannerUpload({
   globalUser,
   userId,
   isAuthorized,
+  bypass,
 }: BannerModalProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [photoUrl, setBannerImageUrl] = useState<string | null>(null);
@@ -43,7 +40,7 @@ export default function BannerUpload({
   }, []);
 
   const uploadBannerPicture = async () => {
-    if (selectedImage && user && userId && isAuthorized) {
+    if (selectedImage && user && userId && isAuthorized || userId && isAuthorized && selectedImage && bypass) {
       const allowedFileTypes = [
         'image/jpeg',
         'image/png',

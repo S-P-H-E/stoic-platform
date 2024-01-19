@@ -1,7 +1,29 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function Course({ href, name, description, image}: { name: string, description: string, href: string, image:string}) {
+export default function Course({ href, name, description, image }: { name: string, description: string, href: string, image: string }) {
+
+/*   const getBase64Client = async () => {
+    const response = await fetch('/api/getBase64', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url: image,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create portal');
+    }
+
+    const data = await response.json();
+    return data;
+  };
+
+  console.log(blurDataUrl) */
+
   return (
     <Link href={href} passHref className='group bg-darkgray pb-6 group relative flex flex-col w-full h-[27rem] items-center text-center border border-border rounded-xl hover:scale-105 transition duration-200 overflow-hidden'>
       <div className="relative group-hover:scale-110 transition duration-200 rounded-xl">

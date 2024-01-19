@@ -33,6 +33,7 @@ interface Comment {
   userBannerPic: string;
   userStatus: string;
   userName: string;
+  userDescription: string;
   userRoles: Role[];
 }
 
@@ -120,6 +121,7 @@ export default function Comments({
                 userProfilePic: userProfileData.photoUrl || '',
                 userBannerPic: userProfileData.bannerUrl || '',
                 userName: userProfileData.userName || '',
+                userDescription: userProfileData.userDescription || 'No description provided',
                 userStatus: userProfileData.userStatus || '',
                 userRoles: userRoles || 'User',
               };
@@ -189,6 +191,7 @@ export default function Comments({
           photoUrl: userData.photoUrl,
           bannerUrl: userData.bannerUrl,
           userName: userData.name,
+          userDescription: userData.description ?? 'No description provided',
           userStatus: userData.status,
           userRoles: userData.roles,
         };
@@ -317,6 +320,7 @@ export default function Comments({
                 <div className="flex gap-2 justify-center items-center">
                   <div className="w-12 h-12 aspect-square">
                     <UserImagePassable
+                      userDescription={comment.userDescription}
                       userId={comment.userId}
                       roles={roles}
                       userRoles={comment.userRoles}

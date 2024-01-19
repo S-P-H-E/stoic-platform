@@ -11,19 +11,15 @@ import { useDropzone } from 'react-dropzone'; // Import useDropzone
 import { BsImageFill } from 'react-icons/bs'
 import { MdDelete } from 'react-icons/md';
 import clsx from 'clsx';
-import { User } from '@/types/types';
-
-interface GlobalUser {
-  id: string | null;
-  status: string | undefined;
-}
+import { User, GlobalUser } from '@/types/types';
 
 interface PhotoModalProps {
   onClose?: () => void;
-  user: User;
-  globalUser: GlobalUser;
+  user?: User;
+  globalUser?: GlobalUser;
   userId: string;
   isAuthorized: boolean;
+  bypass?: boolean;
 }
 
 export default function PhotoUpload({
@@ -32,6 +28,7 @@ export default function PhotoUpload({
   globalUser,
   userId,
   isAuthorized,
+  bypass
 }: PhotoModalProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [photoUrl, setProfileImageUrl] = useState<string | null>(null);
@@ -44,7 +41,7 @@ export default function PhotoUpload({
   }, []);
 
   const uploadProfilePicture = async () => {
-    if (selectedImage && user && userId && isAuthorized) {
+    if (selectedImage && user && userId && isAuthorized || userId && isAuthorized && selectedImage && bypass) {
       const allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']; // Add any other allowed image types
   
       if (!allowedFileTypes.includes(selectedImage.type)) {

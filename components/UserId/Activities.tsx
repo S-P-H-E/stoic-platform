@@ -1,17 +1,10 @@
 'use client';
 
-import { User } from '@/types/types';
+import { User, GlobalUser } from '@/types/types';
 import { Award, CheckCheck, Play, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ActivityCard from './ActivityCard';
 import type { ReactNode } from 'react';
-
-interface GlobalUser {
-  id: string | null;
-  status: string | undefined;
-  stripeId: string | undefined;
-  name: string | null;
-}
 
 interface Activity {
   title: string;

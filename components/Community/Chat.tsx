@@ -33,6 +33,7 @@ interface Message {
   userProfilePic: any;
   userBannerPic: any;
   userName: any;
+  userDescription: any;
   userStatus: any;
   id: string;
   message: string;
@@ -53,6 +54,7 @@ interface Role {
 interface Member {
   id: string;
   name: string;
+  description: string;
   email: string;
   photoUrl: string;
   bannerUrl: string;
@@ -263,6 +265,7 @@ export default function Chat({
                   userProfilePic: userProfileData?.photoUrl || '',
                   userBannerPic: userProfileData?.bannerUrl || '',
                   userName: userProfileData?.name || '',
+                  userDescription: userProfileData?.description || '',
                   userStatus: userProfileData?.status || '',
                   userRoles: userProfileData?.roles || 'User',
                 };
@@ -443,6 +446,7 @@ export default function Chat({
                   userImage: repliedUser?.photoUrl || '',
                   userName: repliedUser?.name || '',
                   userStatus: repliedUser?.status || '',
+                  userDescription: repliedUser?.description
                 };
 
                 return (
@@ -488,6 +492,7 @@ export default function Chat({
               <div className="flex gap-2">
                 <div className="w-12 h-12">
                   <UserImagePassable
+                    userDescription={message.userDescription}
                     userId={message.userId}
                     roles={roles}
                     userRoles={message.userRoles}
