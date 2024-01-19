@@ -8,7 +8,7 @@ import { message } from 'antd'
 import clsx from 'clsx'
 import { confirmPasswordReset } from 'firebase/auth'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { Suspense, useState } from 'react'
+import React, { useState } from 'react'
 import { FiLoader } from 'react-icons/fi'
 
 export default function ChangePassword() {
@@ -51,7 +51,6 @@ export default function ChangePassword() {
   const [newPassword, setnewPassword] = useState('')
 
   return (
-    <Suspense>
     <div className="flex flex-col items-center justify-center h-screen gap-3 w-full">
       {mode === 'resetPassword' ? (
         oobCode ? (
@@ -64,17 +63,17 @@ export default function ChangePassword() {
                 resetPassword(oobCode, newPassword)
               }}>
               <Input placeholder={"Enter your new password"} type='text' value={newPassword} onChange={e => setnewPassword(e.target.value)}/>
-              <div className="gap-2 flex flex-col">
-              <Button
-              disabled={isLoading}
-              type='submit'
-              className={clsx({
-                'text-gray-400': isLoading, // Apply the 'text-gray-400' class when isLoading is true
-              })}>
-              { isLoading ? <FiLoader className="animate-spin my-1"/> : <p>Reset Password </p>}
-            </Button>
-            <p className="text-stone-400 text-sm font-light">Your password should be at least 8 digits, have uppercase and a number</p>
-            </div>
+                <div className="gap-2 flex flex-col">
+                  <Button
+                  disabled={isLoading}
+                  type='submit'
+                  className={clsx({
+                    'text-gray-400': isLoading, // Apply the 'text-gray-400' class when isLoading is true
+                  })}>
+                  { isLoading ? <FiLoader className="animate-spin my-1"/> : <p>Reset Password </p>}
+                </Button>
+              <p className="text-stone-400 text-sm font-light">Your password should be at least 8 digits, have uppercase and a number</p>
+              </div>
             </form>
           </div>
         ) : (
@@ -84,6 +83,5 @@ export default function ChangePassword() {
         <p>Invalid Mode</p>
       )}
     </div>
-    </Suspense>
   )
 }
