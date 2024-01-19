@@ -99,7 +99,7 @@ export default function SettingsComponent({
           <>
             <div className="bg-darkgray border border-border p-4 rounded-2xl w-full">
             <Form {...form}>
-                <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+                <form className="space-y-7" onSubmit={form.handleSubmit(onSubmit)}>
                   <FormField
                     control={form.control}
                     name="name"
@@ -164,7 +164,7 @@ export default function SettingsComponent({
                 </form>
             </Form>
             </div>
-            <div className="bg-darkgray rounded-2xl min-w-[21rem] p-1 w-2/3 border-border border">
+            <div className="bg-darkgray rounded-2xl min-w-[21rem] p-1 w-full lg:w-2/4 xl:w-2/3 border-border border">
               <UserProfile
                 edit
                 userDescription={user.description}

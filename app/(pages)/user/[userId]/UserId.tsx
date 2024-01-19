@@ -7,6 +7,7 @@ import AboutMe from '@/components/UserId/AboutMe';
 import Activities from '@/components/UserId/Activities';
 import Locked from '@/components/Locked';
 import StoicLogo from '@/public/stoicWhite.webp'
+import Socials from '@/components/UserId/Socials';
 
 interface GlobalUser {
     id: string | null;
@@ -16,15 +17,18 @@ interface GlobalUser {
 }
 
 const UserIdComponent = ({globalUser, userId, user}: {globalUser: GlobalUser | undefined, user: User | undefined, userId: string}) => {
-    const isAuthorized = userId === globalUser?.id || globalUser.status === 'admin';
+    const isAuthorized = userId === globalUser?.id || globalUser?.status === 'admin';
 
-    if (user && globalUser) {
+    if (user && globalUser && globalUser.status !== 'user') {
         return (
             <main className='h-full flex flex-col gap-4 w-full'>
                 <UserIdHeader isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
                 <div className='w-full xl:w-[80%] lg:w-[85%] max-w-7xl max-h-7xl px-6 mx-auto flex flex-col lg:flex-row gap-4 pb-8'>{/*  PADDING CHECK! !! ! ! */}
                     <Activities isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
-                    <AboutMe isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
+                    <div className="gap-4 flex flex-col">
+                        <AboutMe isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
+                        <Socials isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
+                    </div>
                 </div>
             </main>
         );

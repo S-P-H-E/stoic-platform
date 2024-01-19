@@ -159,7 +159,7 @@ const Sidebar = () => {
             >
               STOIC
             </h1>
-            <p className="text-xs font-light ml-1">BETA</p>
+            <p className="text-xs font-light ml-1 opacity-90">BETA</p>
           </Link>
           <div className="justify-between h-full flex flex-col">
             <div className="space-y-1 ">

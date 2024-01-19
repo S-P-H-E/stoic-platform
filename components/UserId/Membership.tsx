@@ -135,6 +135,6 @@ export default function Membership({user, stripeCustomerId, userId, globalUserId
       };
 
   return (
-    <ButtonShad onClick={handleClick} disabled={loading} className="disabled:cursor-not-allowed active:scale-90 transition">{loading ? <BiLoader className="animate-spin"/> : <div className="flex items-center gap-1"> <LuWallet size={16}/> <p>Membership</p></div>}</ButtonShad>
+    <ButtonShad onClick={handleClick} disabled={loading} className="disabled:cursor-not-allowed active:scale-90 transition">{loading ? <BiLoader className="animate-spin"/> : <div className="flex items-center gap-1"> <LuWallet size={16}/> <p className="lg:block hidden">Membership</p></div>}</ButtonShad>
   )
 }
