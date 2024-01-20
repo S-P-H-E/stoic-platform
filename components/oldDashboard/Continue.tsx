@@ -10,7 +10,7 @@ import {motion} from 'framer-motion'
 import placeholderImage from '@/public/placeholder.jpg'
 
 export default function Continue() {
-  const { generalLastCourse, generalLastLesson, userStatus, userId, fetching, userName } = UserDataFetcher();
+  const { generalLastCourse, generalLastLesson, userStatus, userId, userName } = UserDataFetcher();
 
   const isPremium = userStatus === 'premium' || userStatus === 'admin'
 
@@ -26,22 +26,15 @@ export default function Continue() {
       const lessonUnsubscribe = onSnapshot(lessonDocRef, (lessonDocSnap) => {
         if (lessonDocSnap.exists()) {
           const lessonData = lessonDocSnap.data();
-
           setLessonData(lessonData)
-
           isLoading(false)
-
-          /* console.log(lessonData.description) */
         }
       });
 
       const courseUnsubscribe = onSnapshot(courseDocRef, (courseDocSnap) => {
         if (courseDocSnap.exists()) {
           const courseData = courseDocSnap.data();
-
           setCourseData(courseData)
-
-          /* console.log(courseData) */
         }
       });
 

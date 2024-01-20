@@ -44,7 +44,12 @@ export default function LibraryNavbar({ handleTagDelete, handleTagFilter, handle
       }
     })
   return (
-    <motion.nav transition={{duration: 0.45, ease: "easeInOut"}} animate={hidden ? 'hidden' : 'visible'} variants={{visible: {y: 0}, hidden: {y: "-100%"}}} className="z-30 sticky bg-[#060606] bg-opacity-90 py-3 backdrop-blur-md top-0 flex flex-col gap-4">
+    <motion.nav
+    transition={{duration: 0.45, ease: "easeInOut"}}
+    animate={hidden ? 'hidden' : 'visible'}
+    variants={{visible: {y: 0}, hidden: {y: "-100%"}}}
+    className="z-30 sticky bg-bg bg-opacity-90 py-3 backdrop-blur-md top-0 flex flex-col gap-4">
+
         <div className="flex flex-col gap-4">
           <div className="flex justify-between gap-4">
           <h1 className='text-3xl font-semibold'>Library</h1>

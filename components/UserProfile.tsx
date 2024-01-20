@@ -45,15 +45,15 @@ export default function UserProfile({
   userRoles,
   roles,
 }: {
-  userDescription: string | null;
+  userDescription: string | null | undefined;
   edit?: boolean;
   black?: boolean;
   userId: string | null;
   roles: Role[];
-  src: string;
+  src: string | undefined;
   userName: string;
   userStatus: string;
-  userBannerUrl: string;
+  userBannerUrl: string | undefined;
   userRoles: Role[] | 'User';
 }) {
   const userChar: string = userName ? userName : '';

@@ -153,7 +153,7 @@ export default function SettingsComponent({
                     </Dialog>
 
                   <div>
-                    <Membership user={user} userId={userId} stripeCustomerId={user?.stripeId} globalUserId={globalUser?.id} globalUserRole={globalUser?.status} globalUserName={globalUser?.name} globalStripeCustomerId={globalUser?.stripeId}/>  
+                    <Membership user={user} userId={userId} stripeCustomerId={user.stripeId} globalUserId={globalUser?.id} globalUserRole={globalUser?.status} globalUserName={globalUser?.name} globalStripeCustomerId={globalUser?.stripeId}/>  
                   </div>
 
                   <FormError message={error} />
@@ -162,7 +162,7 @@ export default function SettingsComponent({
                     {loading ? <BiLoader className="animate-spin"/> : 'Save'}
                   </ButtonShad>
                 </form>
-            </Form>
+              </Form>
             </div>
             <div className="bg-darkgray rounded-2xl min-w-[21rem] p-1 w-full lg:w-2/4 xl:w-2/3 border-border border">
               <UserProfile

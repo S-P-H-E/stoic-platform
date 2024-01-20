@@ -1,7 +1,7 @@
 'use client'
 
 import Locked from '@/components/Locked';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardComponent from './Dashboard';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import PageLoader from '@/components/PageLoader';
@@ -10,26 +10,35 @@ import { isUserAllowedToFetch } from '@/utils/utils';
 
 export default function DashboardGuard() {
   const { userStatus, userName, userSocial, userProfileImageUrl, generalLastCourse, generalLastLesson } = UserDataFetcher();
+
+  const [user, setUser] = useState<User>()
   
   const allowedToFetch = isUserAllowedToFetch(userStatus)
 
-  const user: User = {
-    generalLastCourse,
-    generalLastLesson,
-    name: userName,
-    social: userSocial,
-    status: userStatus,
-    profileImageUrl: userProfileImageUrl,
-  };
+  useEffect(() => {
+    if (allowedToFetch) {
+      const user: User = {
+        generalLastCourse,
+        generalLastLesson,
+        name: userName,
+        social: userSocial,
+        status: userStatus,
+        profileImageUrl: userProfileImageUrl,
+      };
+
+      setUser(user)
+    }
+  }, [allowedToFetch, generalLastCourse, generalLastLesson, userName, userProfileImageUrl, userSocial, userStatus])
+
 
   // Check if userStatus is 'user' and userStatus is loaded before rendering.
   if (allowedToFetch) {
-    return <DashboardComponent user={user} />;
+    return <DashboardComponent user={user} allowedToFetch={allowedToFetch} />;
   } else if (userStatus) {
     return (
       <>
         <Locked />
-        <DashboardComponent notAllowed />
+        <DashboardComponent notAllowed allowedToFetch={allowedToFetch} />
       </>
     )
   } else {

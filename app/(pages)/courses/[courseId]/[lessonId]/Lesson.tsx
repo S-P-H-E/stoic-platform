@@ -612,7 +612,7 @@ export default function LessonComponent() {
                     <ContextMenuTrigger>
                       <div
                         className={clsx(
-                          'hover:bg-border w-full lg:w-[250px] 2xl:w-[300px] p-3 rounded-2xl transition-all bg-[--bg] border border-border group cursor-pointer flex justify-between items-center gap-2',
+                          'hover:bg-border w-full md:w-[200px] lg:w-[250px] 2xl:w-[300px] p-3 rounded-2xl transition-all bg-[--bg] border border-border group cursor-pointer flex justify-between items-center gap-2',
                           {
                           'bg-white text-black hover:bg-neutral-200':
                               String(lessonpath.lessonId) === String(lessonItem.id),
@@ -670,9 +670,9 @@ export default function LessonComponent() {
                 </Link>
                 {userStatus == 'admin' && userId && (
                   <Dialog>
-                    <DialogTrigger>
-                      <button>
-                        <IoMdCreate />
+                    <DialogTrigger asChild>
+                      <button className={clsx(lessonpath.lessonId === lessonItem.id && "text-black")}>
+                        <IoMdCreate size={20}/>
                       </button>
                     </DialogTrigger>
                     <DialogContent>
@@ -686,7 +686,7 @@ export default function LessonComponent() {
               <Dialog>
                 <DialogTrigger>
                   <motion.div
-                    className="hover:bg-border h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] !border-2 border-dotted 
+                    className="hover:bg-border h-20 w-full md:w-[200px] lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] !border-2 border-dotted 
                       border-border group cursor-pointer flex justify-center items-center gap-2 text-center"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -710,7 +710,7 @@ export default function LessonComponent() {
 
           {/* MOBILE LESSON LIST */}
 
-          <div className="visible md:hidden max-h-[300px] overflow-y-scroll flex flex-col overflow-x-hidden gap-3 relative">
+          <div className="visible md:hidden max-h-[300px] overflow-y-auto flex flex-col overflow-x-hidden gap-3 relative">
             {lessons.map((lessonItem, index) => (
               <motion.div
                 key={index}

@@ -13,7 +13,7 @@ import { LuWallet } from "react-icons/lu";
 
 
 interface MembershipProps {
-  stripeCustomerId: string;
+  stripeCustomerId: string | undefined;
   userId: string;
   globalUserId: string | null | undefined;
   globalUserRole: string | undefined;
