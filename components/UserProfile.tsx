@@ -6,7 +6,6 @@ import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 import Image from 'next/image';
 import { HiMiniCheckBadge } from 'react-icons/hi2';
 import { BiFilm, BiLogoInstagram, BiVideo, BiX } from 'react-icons/bi';
-import UserProfileDialog from './UserProfileDialog';
 import { ButtonShad } from './ui/buttonshad';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
@@ -251,11 +250,6 @@ export default function UserProfile({
             </div>
           )}
         </div>
-        {/*           </DialogTrigger>
-          <DialogContent className={clsx(black ? 'bg-black' : 'bg-darkgray')}>
-            <UserProfileDialog userBannerUrl={userBannerUrl} userStatus={userStatusEdited ?? undefined} userName={userName} src={src}/>
-          </DialogContent>
-      </Dialog> */}
         <div className="py-4 md:px-7 px-2 mt-8 flex flex-col w-full h-full rounded-lg gap-2">
           <div className="flex flex-col w-full h-full">
             <h1

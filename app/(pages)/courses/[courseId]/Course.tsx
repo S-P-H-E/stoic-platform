@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { collection, doc, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { BiLoader } from 'react-icons/bi';
+import type { User } from 'firebase/auth';
 
 type Course = {
   name: string;
@@ -20,18 +21,20 @@ type Lesson = {
   id: string;
 }
 
-export default function CourseComponent() {
+interface CourseComponentProps {
+  userStatus: string | undefined;
+  userId: string | null;
+  user: User; // from firebase
+  allowedToFetch: boolean;
+}
+
+export default function CourseComponent({userStatus, userId, user, allowedToFetch}: CourseComponentProps) {
   const { courseId } = useParams() as { courseId: string };
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [lessonToGo, setLessonToGo] = useState<string | undefined>(undefined);
-  const { user, userId, userStatus } = UserDataFetcher();
 
   const router = useRouter()
-
-/*   if(lessons) {
-    console.log(lessons)
-  } */
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -39,7 +42,7 @@ export default function CourseComponent() {
         const courseDocRef = doc(db, 'courses', courseId);
         const courseDocSnap = await getDoc(courseDocRef);
         
-        if (courseDocSnap.exists() && userId && (userStatus == 'admin' || userStatus == 'premium')) {
+        if (courseDocSnap.exists() && userId && allowedToFetch) {
           const courseData = courseDocSnap.data() as Course;
           setCourse(courseData);
 
@@ -104,7 +107,7 @@ export default function CourseComponent() {
       }
     }; */
 
-    if (courseId && userId && userStatus == 'premium' || (userStatus == 'admin')) {
+    if (courseId && userId && allowedToFetch) {
       try {
         fetchCourseData();
       } catch (error) {
@@ -112,7 +115,7 @@ export default function CourseComponent() {
       /* fetchLessonsData(); */
     }}
 
-  }, [lessonToGo, courseId, user, userId, userStatus, router]);
+  }, [lessonToGo, courseId, user, userId, userStatus, router, allowedToFetch]);
 
 /*   if(lessonToGo && courseId) {
     router.push(`/${lessonToGo}`)

@@ -12,7 +12,6 @@ export default function PagesLayout({
     <AuthGuard>
       <html lang="en">
         <body>
-
           <div className="hidden md:flex md:w-60 lg:w-72 h-full border-border md:border-r">
             <Sidebar />
           </div>

@@ -62,12 +62,12 @@ interface Role {
 
 interface CommunityPageProps {
   channelId: string;
+  userId: string | null;
+  userStatus: string | undefined;
 }
 
-export default function CommunityPage({ channelId }: CommunityPageProps) {
+export default function CommunityPage({ channelId, userId, userStatus }: CommunityPageProps) {
   const router = useRouter();
-
-  const { userId, userStatus } = UserDataFetcher();
 
   const [channels, setChannels] = useState<Channel[]>([]);
   const [currentChannel, setCurrentChannel] = useState<Channel>();
@@ -80,10 +80,6 @@ export default function CommunityPage({ channelId }: CommunityPageProps) {
   const currentChannelIdString = channelId || '';
 
   const [activity, setActivity] = useState('offline');
-
-  /*   if (userStatus == 'user') {
-    router.push('/')
-  } */
 
   useEffect(() => {
     if (userId) {
