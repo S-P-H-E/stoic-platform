@@ -13,12 +13,11 @@ import Switch from '@/components/Switch';
 import CreateCourse from './Course';
 
 interface Props {
-  className?: string
+  userStatus?: string | undefined; 
+  className?: string;
 }
 
-export default function CreateContent({className}: Props) {
-  const { userStatus } = UserDataFetcher();
-
+export default function CreateContent({userStatus, className}: Props) {
   return (
     <Dialog>
       <DialogTrigger>

@@ -8,3 +8,8 @@ export const SettingsSchema = z
     })
 
     // password change schema here with old new pass
+
+export const DashboardSchema = z
+    .object({
+        
+})

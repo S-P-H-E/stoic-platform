@@ -4,19 +4,23 @@ import Locked from "@/components/Locked";
 import { UserDataFetcher } from "@/utils/userDataFetcher";
 import ConvertersComponent from "./Converters";
 import PageLoader from "@/components/PageLoader";
+import {isUserAllowedToFetch} from '@/utils/utils'
 
 export default function ConvertersGuard() {
   const { userStatus } = UserDataFetcher();
 
-  if (userStatus == 'user') {
+  const allowedToFetch = isUserAllowedToFetch(userStatus)
+
+  if (allowedToFetch) {
+    return <ConvertersComponent allowedToFetch={allowedToFetch}/>
+  }
+  else if (userStatus) {
     return (
       <>
         <Locked/>
-        <ConvertersComponent/>
+        <ConvertersComponent allowedToFetch={allowedToFetch}/>
       </>
     )
-  } else if (userStatus == 'premium' || userStatus == 'admin' && userStatus !== null) {
-    return <ConvertersComponent/>
   }
   else {
     // Handle the case when userStatus is still loading or unavailable.

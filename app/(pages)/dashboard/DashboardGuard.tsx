@@ -5,23 +5,33 @@ import React from 'react';
 import DashboardComponent from './Dashboard';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import PageLoader from '@/components/PageLoader';
+import { User } from '@/types/types';
+import { isUserAllowedToFetch } from '@/utils/utils';
 
 export default function DashboardGuard() {
-  const { userStatus } = UserDataFetcher();
+  const { userStatus, userName, userSocial, userProfileImageUrl, generalLastCourse, generalLastLesson } = UserDataFetcher();
+  
+  const allowedToFetch = isUserAllowedToFetch(userStatus)
+
+  const user: User = {
+    generalLastCourse,
+    generalLastLesson,
+    name: userName,
+    social: userSocial,
+    status: userStatus,
+    profileImageUrl: userProfileImageUrl,
+  };
 
   // Check if userStatus is 'user' and userStatus is loaded before rendering.
-  if (userStatus === 'user') {
+  if (allowedToFetch) {
+    return <DashboardComponent user={user} />;
+  } else if (userStatus) {
     return (
       <>
         <Locked />
-        <DashboardComponent />
+        <DashboardComponent notAllowed />
       </>
-    );
-  } else if (
-    userStatus == 'premium' ||
-    (userStatus == 'admin' && userStatus !== null)
-  ) {
-    return <DashboardComponent />;
+    )
   } else {
     // Handle the case when userStatus is still loading or unavailable.
     return (

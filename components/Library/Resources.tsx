@@ -17,6 +17,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Toaster } from "@/components/ui/toaster"
 import { ButtonShad } from '../ui/buttonshad';
 import LibraryNavbar from '@/components/Library/Navbar';
+import { isUserAllowedToFetch } from '@/utils/utils';
 
 interface Resource {
   id: string;
@@ -26,7 +27,7 @@ interface Resource {
   tags: string[];
 }
 
-export default function Resources() {
+export default function Resources({isPremium, userStatus, userId}: {isPremium: boolean, userStatus: string | undefined, userId: string | null}) {
   const [resources, setResources] = useState<Resource[]>([]);
   const [filteredResources, setFilteredResources] = useState<Resource[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -41,10 +42,7 @@ export default function Resources() {
 
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const { userStatus, userId } = UserDataFetcher();
   const { toast } = useToast();
-
-  const isPremium = userStatus === 'premium' || userStatus === 'admin';
 
   const handlePauseAudio = () => {
     setIsPlaying(false);

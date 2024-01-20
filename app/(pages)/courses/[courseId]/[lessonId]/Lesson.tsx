@@ -49,7 +49,7 @@ import ShinyButton from '@/components/ShinyButton';
 import { ButtonShad } from '@/components/ui/buttonshad';
 import Lottie from "lottie-react";
 import checkmarkAnimation from "@/public/lottie/checkmarkAnimation.json";
-
+import { isUserAllowedToFetch } from '@/utils/utils'
 
 interface LessonItem {
   id: string;
@@ -78,7 +78,7 @@ export default function LessonComponent() {
   const [completedLessonCount, setCompletedLessonCount] = useState(null);
 
   const { userId, userStatus } = UserDataFetcher();
-  const isPremium = userStatus === 'premium' || userStatus === 'admin';
+  const isPremium = isUserAllowedToFetch(userStatus)
 
   const pathname = usePathname();
 

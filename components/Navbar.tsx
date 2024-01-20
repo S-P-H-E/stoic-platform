@@ -1,6 +1,6 @@
 import UserImage from "@/components/UserImage";
 import Link from "next/link";
-import Greeting from "@/components/Dashboard/Greeting";
+import Greeting from "@/components/oldDashboard/Greeting";
 import CreateCourse from "@/components/Course/Create/page";
 
 export default function Navbar() {

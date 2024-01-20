@@ -3,7 +3,7 @@ import React from 'react';
 import bgCover from '@/public/backgroundCover.jpg';
 import Converters from '@/components/Converter/Converters';
 
-export default function ConvertersComponent() {
+export default function ConvertersComponent({allowedToFetch}: {allowedToFetch: boolean}) {
   return (
     <div className="h-full flex flex-col md:gap-16 gap-8 justify-between items-start w-full">
       <div className="relative flex w-full h-96">
@@ -20,7 +20,7 @@ export default function ConvertersComponent() {
         </h1>
       </div>
       <div className="flex flex-col gap-4 md:gap-8 w-full p-8">
-        <Converters />
+        <Converters allowedToFetch={allowedToFetch} />
       </div>
     </div>
   );

@@ -11,17 +11,18 @@
 } */
 
 export interface User {
-  stripeId: string;
-  roles: Role[] | "User" | undefined;
-  generalLastCourse: string;
-  email: string | undefined;
-  generalLastLesson: string;
-  name: string | null;
-  description: string | null;
-  status: string | undefined;
-  profileImageUrl: string;
-  profileBannerUrl: string;
-  social: string | undefined;
+  id?: string
+  stripeId?: string;
+  roles?: Role[] | "User" | undefined;
+  generalLastCourse?: string;
+  email?: string | undefined;
+  generalLastLesson?: string;
+  name?: string | null;
+  description?: string | null;
+  status?: string | undefined;
+  profileImageUrl?: string;
+  profileBannerUrl?: string;
+  social?: string | undefined;
 }
   
 export interface Role {

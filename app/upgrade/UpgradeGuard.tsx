@@ -5,18 +5,18 @@ import UpgradeComponent from './Upgrade';
 import Upgraded from './Upgraded'
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import PageLoader from '@/components/PageLoader';
+import { isUserAllowedToFetch } from '@/utils/utils';
 
 export default function UpgradeGuard() {
   const { userStatus } = UserDataFetcher();
 
+  const allowedToFetch = isUserAllowedToFetch(userStatus)
+
   // Check if userStatus is 'user' and userStatus is loaded before rendering.
-  if (userStatus === 'user') {
-    return <UpgradeComponent />
-  } else if (
-    userStatus == 'premium' ||
-    (userStatus == 'admin' && userStatus !== null)
-  ) {
+  if (allowedToFetch) {
     return <Upgraded />;
+  } else if (userStatus) {
+    return <UpgradeComponent userStatus={userStatus} />
   } else {
     return (
       <PageLoader/>

@@ -7,22 +7,22 @@ import { UserDataFetcher } from '@/utils/userDataFetcher';
 import React from 'react';
 import { BiLoader } from 'react-icons/bi';
 import LibraryComponent from './Library';
+import { isUserAllowedToFetch } from '@/utils/utils';
 
 export default function LibraryGuard() {
-  const { userStatus } = UserDataFetcher();
+  const { userStatus, userId } = UserDataFetcher();
 
-  if (userStatus == 'user') {
+  const allowedToFetch = isUserAllowedToFetch(userStatus)
+
+  if (allowedToFetch) {
+    return <LibraryComponent userStatus={userStatus} userId={userId} isPremium={allowedToFetch}/>;
+  } else if (userStatus) {
     return (
       <>
         <Locked />
-        <LibraryComponent />
+        <LibraryComponent userStatus={userStatus} userId={userId} isPremium={allowedToFetch}/>
       </>
     );
-  } else if (
-    userStatus == 'premium' ||
-    (userStatus == 'admin' && userStatus !== null)
-  ) {
-    return <LibraryComponent />;
   } else {
     // Handle the case when userStatus is still loading or unavailable.
     return <PageLoader />;

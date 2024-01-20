@@ -7,17 +7,19 @@ import PageLoader from "@/components/PageLoader";
 
 export default function ImageAIGuard() {
   const { userStatus } = UserDataFetcher();
+
+  const allowedToFetch = isUserAllowedToFetch(userStatus)
   
-  if (userStatus == 'user') {
+  if (allowedToFetch) {
+    return(
+      <ImageAIComponent/>
+    )
+  } else if (userStatus) {
     return(
       <>
         <Locked/>
         <ImageAIComponent/>
       </>
-    )
-  } else if (userStatus == 'premium' || userStatus == 'admin' && userStatus !== null) {
-    return(
-      <ImageAIComponent/>
     )
   }
   else {

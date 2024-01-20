@@ -15,17 +15,20 @@ import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 
 export default function SettingsGuard({userId}: {userId: string}) {
+
   const { userId: userIdGlobal, userStatus: userStatusGlobal, userStripeId: userStripeIdGlobal, userName: userNameGlobal } = UserDataFetcher();
 
+  const allowedToFetch = userStatusGlobal !== 'user' && userIdGlobal == userId || userStatusGlobal === 'admin'
+
   const { userSocial, userDescription, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, userProfileImageUrl, userProfileBannerUrl } = UserDataFetcherById(userId);
-    // fetch data based on userId here
+    // fetches data based on userId here
 
     const [globalUser, setGlobalUser] = useState<GlobalUser>()
     const [user, setUser] = useState<User>()
     const [roles, setRoles] = useState<Role[]>([]);
 
     useEffect(() => {
-      if (userStatusGlobal !== 'user' && userIdGlobal == userId || userStatusGlobal === 'admin') {
+      if (allowedToFetch) {
         const user: User = {
           stripeId: userStripeId,
           roles: userRoles,
@@ -52,7 +55,7 @@ export default function SettingsGuard({userId}: {userId: string}) {
       }
     }, [userId, generalLastCourse, generalLastLesson, userDescription, userEmail, userIdGlobal, userName, 
       userNameGlobal, userProfileBannerUrl, userProfileImageUrl, userRoles, userStatus, userStatusGlobal, 
-      userStripeId, userStripeIdGlobal, userSocial
+      userStripeId, userStripeIdGlobal, userSocial, allowedToFetch
     ])
 
     useEffect(() => {
@@ -93,7 +96,7 @@ export default function SettingsGuard({userId}: {userId: string}) {
           <SettingsComponent roles={roles} userId={userId} globalUser={globalUser} user={user}/>
         </div>
       );
-    } else if (userStatus == 'premium' || userStatus == 'admin' && userStatus !== null) {
+    } else if (userStatus == 'premium' || userStatus == 'admin') {
       return (
         <div className="h-full flex lg:p-10 lg:px-16 p-6 justify-between items-start w-full">
           <SettingsComponent roles={roles} userId={userId} globalUser={globalUser} user={user}/>

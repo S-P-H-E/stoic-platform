@@ -1,26 +1,27 @@
 'use client'
 
 import Locked from '@/components/Locked';
-import UserComponent from './User';
+import React from 'react';
+import DashboardComponent from './Dashboard';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import PageLoader from '@/components/PageLoader';
-import { isUserAllowedToFetch } from '@/utils/utils';
 
-export default function UserGuard() {
+export default function DashboardGuard() {
   const { userStatus } = UserDataFetcher();
-  
-  const allowedToFetch = isUserAllowedToFetch(userStatus)
 
   // Check if userStatus is 'user' and userStatus is loaded before rendering.
-  if (allowedToFetch) {
-    return <UserComponent />;
-  } else if (userStatus) {
+  if (userStatus === 'user') {
     return (
       <>
         <Locked />
-        <UserComponent />
+        <DashboardComponent />
       </>
     );
+  } else if (
+    userStatus == 'premium' ||
+    (userStatus == 'admin' && userStatus !== null)
+  ) {
+    return <DashboardComponent />;
   } else {
     // Handle the case when userStatus is still loading or unavailable.
     return (

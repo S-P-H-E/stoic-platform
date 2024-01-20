@@ -5,20 +5,23 @@ import { UserDataFetcher } from '@/utils/userDataFetcher';
 import CoursesComponent from './Courses';
 import Locked from '@/components/Locked';
 import PageLoader from '@/components/PageLoader';
+import {isUserAllowedToFetch} from '@/utils/utils'
 
 export default function CoursesGuard() {
-    const { userStatus } = UserDataFetcher();
+    const { userStatus, userId } = UserDataFetcher();
 
-    if (userStatus == 'user') {
+    const allowedToFetch = isUserAllowedToFetch(userStatus)
+    
+    if (allowedToFetch) {
+      return (
+        <CoursesComponent userStatus={userStatus} userId={userId} isPremium={allowedToFetch}/>
+      )
+    } else if (userStatus) {
       return (
         <>
           <Locked/>
-          <CoursesComponent/>
+          <CoursesComponent userStatus={userStatus} userId={userId} isPremium={allowedToFetch}/>
         </>
-      )
-    } else if (userStatus == 'premium' || userStatus == 'admin' && userStatus !== null) {
-      return (
-        <CoursesComponent/>
       )
     } else {
       // Handle the case when userStatus is still loading or unavailable.

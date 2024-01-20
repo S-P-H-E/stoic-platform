@@ -12,13 +12,11 @@
     } from 'firebase/firestore';
     import React, { useCallback, useEffect, useState } from 'react';
     import Course from './Course';
-import { motion } from 'framer-motion';
-import CourseLoading from './CourseLoading';
+    import { motion } from 'framer-motion';
+    import CourseLoading from './CourseLoading';
 
-    export default function Courses() {
-      const { userId, userStatus } = UserDataFetcher();
-      const isPremium = userStatus === 'premium' || userStatus === 'admin';
-    
+    export default function Courses({isPremium, userId}: {isPremium: boolean, userId: string | null}) {
+
       const [loading, isLoading] = useState(true);
     
       const [courses, setCourses] = useState<Array<any>>([]);
