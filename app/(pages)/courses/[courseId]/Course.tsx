@@ -24,7 +24,7 @@ type Lesson = {
 interface CourseComponentProps {
   userStatus: string | undefined;
   userId: string | null;
-  user: User; // from firebase
+  user: User | null | undefined; // from firebase
   allowedToFetch: boolean;
 }
 
