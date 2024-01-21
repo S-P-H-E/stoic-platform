@@ -58,7 +58,7 @@ export default function Login() {
       }
     };
 
-    // Email Auth
+    // Email Authemtication
 
     const [registerEmail, setRegisterEmail] = useState("")
     const [registerPassword, setRegisterPassword] = useState("")
