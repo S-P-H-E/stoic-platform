@@ -15,4 +15,4 @@ export function truncateText(text: string | undefined | null, maxLength: number)
   return text;
 }
 
-export const isUserAllowedToFetch = (status) => status === 'premium' || status === 'admin';
+export const isUserAllowedToFetch = (status: string | undefined) => status === 'premium' || status === 'admin';
