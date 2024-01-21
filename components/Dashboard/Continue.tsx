@@ -67,7 +67,7 @@ export default function Continue({ user, allowedToFetch }: ContinueProp) {
     <>
       <div
         className={clsx(
-          'bg-darkgray relative group justify-between border overflow-hidden border-border w-full h-60 rounded-lg flex gap-4 hover:bg-border transition',
+          'bg-darkgray relative group justify-between border overflow-hidden border-border hover:border-highlight w-full h-60 rounded-lg flex gap-4 hover:bg-border transition',
           loading && 'opacity-50 cursor-not-allowed'
         )}
       >

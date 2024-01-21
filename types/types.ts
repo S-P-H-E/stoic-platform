@@ -10,8 +10,16 @@
   userProfileBannerUrl: string;
 } */
 
+export interface Task {
+  id: string;
+  name: string;
+  description: string | undefined;
+  createdAt: string;
+  completed: boolean;
+}
+
 export interface User {
-  id?: string
+  id?: string | null
   stripeId?: string;
   roles?: Role[] | "User" | undefined;
   generalLastCourse?: string;

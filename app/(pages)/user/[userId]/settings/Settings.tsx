@@ -15,7 +15,7 @@ import {
 import Link from 'next/link'
 import NewInput from '@/components/UI Elements/NewInput';
 import { ButtonShad } from '@/components/ui/buttonshad';
-import { updateUserDetails } from '@/utils/updateUserDetails';
+import { updateUserDetails } from '@/utils/updateFirestore';
 import { useEffect, useState } from 'react'
 import { message } from 'antd';
 import FormError from '@/components/FormError';
@@ -55,14 +55,15 @@ export default function SettingsComponent({
   const onSubmit = async (values: z.infer<typeof SettingsSchema>) => {
     try {
       setLoading(true)
-      await updateUserDetails(userId, values)
-      message.success('Succesfully updated user info.')
+      await updateUserDetails(user?.status, userId, values)
+      message.success('Succesfully updated user information!')
+      setSuccess("Successfully updated user information!")
     } catch {
+      setError("Failed to update user info, please try again later.")
       message.error('There was an issue with your request. Please try again.')
     } finally {
       setLoading(false)
     }
-
   };
 
   useEffect(() => {
@@ -158,7 +159,7 @@ export default function SettingsComponent({
 
                   <FormError message={error} />
                   <FormSuccess message={success} />
-                  <ButtonShad variant="secondary" disabled={loading} className="disabled:cursor-not-allowed active:scale-90 transition" type="submit">
+                  <ButtonShad variant="secondary" disabled={loading} className="border-white border disabled:cursor-not-allowed active:scale-90 transition" type="submit">
                     {loading ? <BiLoader className="animate-spin"/> : 'Save'}
                   </ButtonShad>
                 </form>

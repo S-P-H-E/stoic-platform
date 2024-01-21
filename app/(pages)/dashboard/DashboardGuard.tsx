@@ -9,7 +9,7 @@ import { User } from '@/types/types';
 import { isUserAllowedToFetch } from '@/utils/utils';
 
 export default function DashboardGuard() {
-  const { userStatus, userName, userSocial, userProfileImageUrl, generalLastCourse, generalLastLesson } = UserDataFetcher();
+  const { userId, userStatus, userName, userSocial, userProfileImageUrl, generalLastCourse, generalLastLesson } = UserDataFetcher();
 
   const [user, setUser] = useState<User>()
   
@@ -18,6 +18,7 @@ export default function DashboardGuard() {
   useEffect(() => {
     if (allowedToFetch) {
       const user: User = {
+        id: userId,
         generalLastCourse,
         generalLastLesson,
         name: userName,
@@ -28,7 +29,7 @@ export default function DashboardGuard() {
 
       setUser(user)
     }
-  }, [allowedToFetch, generalLastCourse, generalLastLesson, userName, userProfileImageUrl, userSocial, userStatus])
+  }, [allowedToFetch, userId, generalLastCourse, generalLastLesson, userName, userProfileImageUrl, userSocial, userStatus])
 
 
   // Check if userStatus is 'user' and userStatus is loaded before rendering.
