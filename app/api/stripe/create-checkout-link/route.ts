@@ -14,8 +14,8 @@ export async function POST(request: NextRequest) {
 
   if (userStripeId) {
     const checkout = await stripe.checkout.sessions.create({
-      success_url: `${process.env.APP_DOMAIN}/upgrade`,
-      cancel_url: `${process.env.APP_DOMAIN}/upgrade`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_DOMAIN}/upgrade`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_DOMAIN}/upgrade`,
       customer: userStripeId,
       line_items: [
         {

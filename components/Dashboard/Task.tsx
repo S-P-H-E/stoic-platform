@@ -114,11 +114,6 @@ export default function Task({ task, userId }: { userId: string | null | undefin
   
     return percentage;
   }
-
-  const inputString = "sadasdasdasdsadasds";
-  const percentage = calculateWidthPercentage(inputString.length);
-  console.log(`For "${inputString}" with ${inputString.length} characters, the required percentage is: ${percentage}%`);
-
   //! if  no description, do cursor-default
 
   return (
@@ -148,9 +143,9 @@ export default function Task({ task, userId }: { userId: string | null | undefin
                 <AnimatePresence>
                   {checked &&
                     <motion.div
-                      className="shadow-xl absolute left-7 w-0 h-1 bg-white rounded-xl"
+                      className="shadow-xl absolute left-7 w-0 h-1 bg-primary-foreground rounded-xl"
                       animate={{ width: `${widthPercentage}%` }}
-                      exit={{ width: 1 }}
+                      exit={{ width: 1}}
                     />
                   }
                 </AnimatePresence>

@@ -23,14 +23,17 @@ import { message } from 'antd';
 import { BiLoader } from 'react-icons/bi';
 import { createNewTask } from '@/utils/updateFirestore';
 import { isUserAllowedToFetch } from '@/utils/utils';
+import clsx from 'clsx'
 import NewTextArea from '../UI Elements/NewTextArea';
 
 export default function CreateTaskButton({
   userId,
   userStatus,
+  mobile
 }: {
   userId: string | null | undefined;
   userStatus: string | undefined;
+  mobile?: boolean;
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
@@ -104,7 +107,7 @@ export default function CreateTaskButton({
       <DialogTrigger>
         <ButtonShad
           size="icon"
-          className="gap-2 text-lg w-12 h-12 md:hidden active:scale-95 transition"
+          className={clsx("gap-2 text-lg w-12 h-12 active:scale-95 transition", mobile ? 'hidden' : 'md:hidden')}
         >
           <FaPlus size={28} />
         </ButtonShad>
@@ -112,7 +115,7 @@ export default function CreateTaskButton({
         <ButtonShad
           variant="outline"
           size="lg"
-          className="gap-2 text-lg hidden md:flex active:scale-95 transition"
+          className={clsx("gap-2 text-lg active:scale-95 transition", !mobile && 'hidden md:flex')}
         >
           <FaPlus />
           <p>Create Task</p>

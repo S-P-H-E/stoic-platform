@@ -171,7 +171,7 @@ export default function Login() {
             </Button>
             <div className="inline-flex items-center justify-center w-full pt-2">
                 <hr className="h-px my-5 border-0 bg-border w-full" />
-                <span className="absolute px-3 font-medium -translate-x-1/2 bg-[--bg] text-highlight left-1/2 ">OR CONTINUE WITH</span>
+                <span className="absolute px-3 font-medium -translate-x-1/2 bg-bg text-highlight left-1/2 ">OR CONTINUE WITH</span>
             </div>
         </div>
 
@@ -216,7 +216,7 @@ export default function Login() {
             </Button>
             <div className="inline-flex items-center justify-center w-full pt-2">
                 <hr className="h-px my-5 border-0 bg-border w-full" />
-                <span className="absolute px-3 font-medium -translate-x-1/2 bg-[--bg] text-highlight left-1/2 ">OR CONTINUE WITH</span>
+                <span className="absolute px-3 font-medium -translate-x-1/2 bg-bg text-highlight left-1/2 ">OR CONTINUE WITH</span>
             </div>
         </div>
 

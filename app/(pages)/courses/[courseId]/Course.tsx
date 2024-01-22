@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { db } from '@/utils/firebase';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { collection, doc, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { BiLoader } from 'react-icons/bi';
@@ -26,10 +26,10 @@ interface CourseComponentProps {
   userId: string | null;
   user: User | null | undefined; // from firebase
   allowedToFetch: boolean;
+  courseId: string
 }
 
-export default function CourseComponent({userStatus, userId, user, allowedToFetch}: CourseComponentProps) {
-  const { courseId } = useParams() as { courseId: string };
+export default function CourseComponent({userStatus, userId, user, allowedToFetch, courseId}: CourseComponentProps) {
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [lessonToGo, setLessonToGo] = useState<string | undefined>(undefined);

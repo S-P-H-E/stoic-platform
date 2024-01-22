@@ -7,19 +7,19 @@ import { UserDataFetcher } from '@/utils/userDataFetcher';
 import PageLoader from '@/components/PageLoader';
 import { isUserAllowedToFetch } from '@/utils/utils'
 
-export default function CourseGuard() {
+export default function CourseGuard({courseId}: {courseId: string}) {
   const { user, userId, userStatus } = UserDataFetcher();
 
   const allowedToFetch = isUserAllowedToFetch(userStatus)
 
   // Check if userStatus is 'user' and userStatus is loaded before rendering.
   if (allowedToFetch) {
-    return <CourseComponent user={user} userId={userId} userStatus={userStatus} allowedToFetch={allowedToFetch} />;
+    return <CourseComponent courseId={courseId} user={user} userId={userId} userStatus={userStatus} allowedToFetch={allowedToFetch} />;
   } else if (userStatus) {
     return (
       <>
         <Locked />
-        <CourseComponent user={user} userId={userId} userStatus={userStatus} allowedToFetch={allowedToFetch}  />
+        <CourseComponent courseId={courseId} user={user} userId={userId} userStatus={userStatus} allowedToFetch={allowedToFetch}  />
       </>
     );
   } else {

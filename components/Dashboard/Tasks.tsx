@@ -18,6 +18,7 @@ import { Task as TypeTask } from '@/types/types';
 import { fetchUserTasks } from '@/utils/getFirestore';
 import { message } from 'antd';
 import CreateTaskButton from './CreateTaskButton';
+import { ScaleLoader } from 'react-spinners';
 
 export default function Tasks({
   userId,
@@ -29,7 +30,7 @@ export default function Tasks({
   const isAllowed = isUserAllowedToFetch(userStatus);
 
   const [tasks, setTasks] = useState<Array<TypeTask> | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
@@ -90,36 +91,42 @@ export default function Tasks({
 
       <div className="relative w-full">
         {tasks && tasks.length > 6 && (
-          <div className="absolute top-0 w-full h-5 bg-gradient-to-b from-bg  to-transparent" />
+          <div className="absolute top-0 w-full h-5 bg-gradient-to-b from-bg  to-transparent z-10" />
         )}
-        <div className="max-h-[25rem] overflow-y-auto flex flex-col gap-3 scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600">
-          {loading ? (
-            <p>Loading...</p>
-          ) : tasks && tasks.length > 0 ? (
-            tasks.map((task, index) => (
-              <motion.div
-                key={index}
-                custom={index}
-                variants={fadeInAnimationVariants}
-                initial="initial"
-                whileInView="animate"
-                viewport={{
-                  once: true
-                }}
-              >
-                <Task userId={userId} task={task} />
-              </motion.div>
-            ))
-          ) : (
+
+        {loading || !tasks && (
+          <div className='w-full h-48 justify-center items-center flex'>
+            <ScaleLoader color="#fff" width={10} height={75}/>
+          </div>
+        )}
+
+        <div className="max-h-[25rem] overflow-y-auto flex flex-col gap-3 scrollbar-thin hover:scrollbar-thumb-neutral-900 scrollbar-thumb-neutral-800 scrollbar-track-neutral-600">
+          {tasks && tasks.length <= 0 && (
             <motion.div initial={{opacity: 0}} whileInView={{opacity: 1}} viewport={{once: true}}
-            className='w-full h-80 flex flex-col gap-4 justify-center items-center border-border border bg-darkgray rounded-lg'>
-              <div className="flex flex-col gap-1 items-center">
+            className='w-full h-64 flex flex-col gap-1 justify-center items-center border-border border bg-darkgray rounded-lg'>
+              <div className="flex p-4 flex-col gap-1 items-center">
                 <h1 className='text-2xl font-semibold'>No tasks found</h1>
-                <p className="text-sm font-light text-muted-foreground">You haven&apos;t created any tasks yet, click the button below to create one.</p>
+                <p className="text-sm text-center text-muted-foreground">You haven&apos;t created any tasks yet, click the button below to create one.</p>
               </div>
-              <CreateTaskButton userId={userId} userStatus={userStatus}/>
+              <CreateTaskButton mobile userId={userId} userStatus={userStatus}/>
             </motion.div>
           )}
+
+          {tasks && tasks.length > 0 &&
+          tasks.map((task, index) => (
+            <motion.div
+              key={index}
+              custom={index}
+              variants={fadeInAnimationVariants}
+              initial="initial"
+              whileInView="animate"
+              viewport={{
+                once: true
+              }}
+            >
+              <Task userId={userId} task={task} />
+            </motion.div>
+          ))}
         </div>
         {tasks && tasks.length > 6 && (
           <div className="absolute bottom-0 w-full h-5 bg-gradient-to-t from-bg to-transparent" />

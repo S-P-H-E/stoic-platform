@@ -215,10 +215,10 @@ export default function Chatbox({ resetReplyingTo, replyingTo, userName, userSta
         <div className="text-red-500">You are currently rate-limited. Please wait before sending another message. {}</div>
       )}
         <form className="relative flex gap-2 w-full justify-end items-end mt-auto" onSubmit={handleFormSubmit}>
-            <div className={clsx("flex border border-border items-center w-full rounded-md bg-[--bg]", loading && 'cursor-not-allowed opacity-50')}>
+            <div className={clsx("flex border border-border items-center w-full rounded-md bg-bg", loading && 'cursor-not-allowed opacity-50')}>
               <textarea
                 ref={textareaRef}
-                className={clsx('flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600', !messagePermission && 'cursor-not-allowed', loading && 'cursor-not-allowed opacity-50')}
+                className={clsx('flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin hover:scrollbar-thumb-neutral-900 scrollbar-thumb-neutral-800 scrollbar-track-neutral-600', !messagePermission && 'cursor-not-allowed', loading && 'cursor-not-allowed opacity-50')}
                 value={newMessage}
                 disabled={!messagePermission || loading || false}
                 onKeyDown={handleTextareaKeyPress}
@@ -236,7 +236,7 @@ export default function Chatbox({ resetReplyingTo, replyingTo, userName, userSta
             </div>
             {newMessage.length > 850 &&
             <div className="absolute bottom-2 right-16">
-              <p className={clsx('border-border border bg-[--bg] px-2 py-1 rounded-xl', (newMessage.length) > 1000 && 'text-red-500 border-red-600/50')}>{newMessage.length}</p>
+              <p className={clsx('border-border border bg-bg px-2 py-1 rounded-xl', (newMessage.length) > 1000 && 'text-red-500 border-red-600/50')}>{newMessage.length}</p>
             </div>
             }
         </form>

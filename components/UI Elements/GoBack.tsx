@@ -12,6 +12,6 @@ export default function GoBack() {
   }
 
   return (
-    <button onClick={handleClick} className="text-[#D5d6d6] text-lg hover:text-stone-200 transition gap-1 flex items-center"><BsChevronLeft/>Go Back</button>
+    <button onClick={handleClick} className="text-highlight text-lg hover:text-stone-200 transition gap-1 flex items-center"><BsChevronLeft/>Go Back</button>
   )
 }

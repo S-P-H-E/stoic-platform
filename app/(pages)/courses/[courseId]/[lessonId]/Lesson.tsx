@@ -1,5 +1,5 @@
 'use client';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { db } from '@/utils/firebase';
 import {
@@ -19,7 +19,6 @@ import {
 import Link from 'next/link';
 import Script from 'next/script';
 import Comments from '@/components/Course/Comments';
-import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { motion } from 'framer-motion';
 import { BiCopy } from 'react-icons/bi';
 import {
@@ -47,9 +46,10 @@ import Edit from '@/components/Course/Edit';
 import SkeletonLesson from '@/components/Course/SkeletonLesson';
 import ShinyButton from '@/components/ShinyButton';
 import { ButtonShad } from '@/components/ui/buttonshad';
-import Lottie from "lottie-react";
-import checkmarkAnimation from "@/public/lottie/checkmarkAnimation.json";
-import { isUserAllowedToFetch } from '@/utils/utils'
+import Lottie from 'lottie-react';
+import checkmarkAnimation from '@/public/lottie/checkmarkAnimation.json';
+import { isUserAllowedToFetch } from '@/utils/utils';
+import { Type } from 'lucide-react';
 
 interface LessonItem {
   id: string;
@@ -61,9 +61,18 @@ interface LessonItem {
   locked: boolean;
 }
 
-export default function LessonComponent() {
+export default function LessonComponent({
+  lessonId,
+  courseId,
+  userId,
+  userStatus
+}: {
+  lessonId: string;
+  courseId: string;
+  userId: string | null;
+  userStatus: string | undefined;
+}) {
   const router = useRouter();
-  const { courseId, lessonId } = useParams();
   const [lesson, setLesson] = useState<any | null>(null);
   const [lessons, setLessons] = useState<LessonItem[]>([]);
   const [copied, setCopied] = useState(false);
@@ -77,12 +86,7 @@ export default function LessonComponent() {
   );
   const [completedLessonCount, setCompletedLessonCount] = useState(null);
 
-  const { userId, userStatus } = UserDataFetcher();
-  const isPremium = isUserAllowedToFetch(userStatus)
-
-  const pathname = usePathname();
-
-  const lessonpath = useParams();
+  const isPremium = isUserAllowedToFetch(userStatus);
 
   const fadeInAnimationVariants = {
     // for framer motion
@@ -94,18 +98,14 @@ export default function LessonComponent() {
       opacity: 1,
       y: 0,
       transition: {
-        delay: 0.05 * index,
+        delay: 0.045 * index,
       },
     }),
   };
 
-/*   if (userStatus == 'user') {
-    router.push('/');
-  } */
-
   const deleteLesson = async (lessonIdToDelete: string) => {
     try {
-      if (lessonIdToDelete) {
+      if (lessonIdToDelete && userStatus === 'admin') {
         const lessonDocRef = doc(
           db,
           'courses',
@@ -199,7 +199,7 @@ export default function LessonComponent() {
 
     const fetchLessonsForCourse = () => {
       try {
-        if (courseId) {
+        if (courseId && isPremium) {
           const lessonsRef = collection(
             db,
             'courses',
@@ -216,7 +216,7 @@ export default function LessonComponent() {
               order: doc.data().order,
               url: doc.data().url,
               thumbnail: doc.data().thumbnail,
-              locked: doc.data().locked
+              locked: doc.data().locked,
             }));
             lessonsData.sort((a, b) => a.order - b.order);
 
@@ -280,8 +280,8 @@ export default function LessonComponent() {
             String(userId),
             'activities'
           );
-          
-          if(lesson.title) {
+
+          if (lesson.title) {
             const lessonDocRef = doc(
               activitiesRef,
               `completed_${lesson.title}_lesson`
@@ -296,12 +296,12 @@ export default function LessonComponent() {
 
           await setDoc(
             doc(userCourseLessonsRef, String(lessonId)),
-            { 
+            {
               completed: true,
               // doesnt set the completed at again if it already exists
               ...(lessonCompletionSnapshot.data()?.completedAt
-              ? {}
-              : { completedAt: new Date() }),
+                ? {}
+                : { completedAt: new Date() }),
             },
             { merge: true }
           );
@@ -329,7 +329,7 @@ export default function LessonComponent() {
         });
 
         player.on('ended', async function () {
-          setLocalCompleted(true)
+          setLocalCompleted(true);
           CompleteLesson();
         });
       }
@@ -456,13 +456,14 @@ export default function LessonComponent() {
   }, [userId, courseId, isPremium]);
 
   if (!lesson || !lessons) {
+    // ! change
     return (
-      <div className="flex flex-col justify-center items-center w-full">
-        <div className="px-16 pt-10 flex justify-between items-center gap-6 w-full">
+      <div className="mx-auto max-w-8xl flex flex-col justify-center items-center w-full">
+        <div className="lg:px-12 lg:pt-10 pt-6 px-6 flex justify-between items-center gap-6 w-full">
           <GoBack />
         </div>
 
-        <div className="flex flex-col lg:px-16 p-6 w-full h-screen">
+        <div className="flex flex-col w-full gap-4 lg:p-8 lg:pl-12 p-6">
           <SkeletonLesson />
         </div>
       </div>
@@ -470,7 +471,7 @@ export default function LessonComponent() {
   }
 
   const handleLinkCopy = () => {
-    const currentUrl = 'https://app.stoiccord.com' + pathname;
+    const currentUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/courses/${courseId}/${lessonId}`;
     navigator.clipboard.writeText(currentUrl);
     message.success('Link copied to clipboard');
     setCopied(true);
@@ -482,7 +483,9 @@ export default function LessonComponent() {
 
   const getNextLessonUrl = () => {
     const currentOrder = lesson.order;
-    const nextLesson = lessons.find((lessonItem) => lessonItem.order === currentOrder + 1);
+    const nextLesson = lessons.find(
+      (lessonItem) => lessonItem.order === currentOrder + 1
+    );
 
     if (nextLesson) {
       return `/courses/${courseId}/${nextLesson.id}`;
@@ -492,23 +495,23 @@ export default function LessonComponent() {
   };
 
   return (
-    <div className="flex flex-col w-full gap-4 lg:p-10 lg:px-16 p-6">
+    <div className="flex flex-col w-full gap-4 lg:p-10 lg:px-12 p-6 mx-auto max-w-8xl">
       <div className="flex justify-between items-center gap-6 w-full">
         <Link
           href={'/courses'}
-          className="text-[#D5d6d6] text-lg hover:text-stone-200 transition gap-1 flex items-center"
+          className="text-highlight text-lg hover:text-stone-200 transition gap-1 flex items-center"
         >
           <BsChevronLeft />
           Go Back
         </Link>
       </div>
 
-      <h1 className="text-3xl font-medium">
+      <h1 className="text-2xl lg:text-3xl font-medium">
         {courseName} - Episode {lesson.order}
         {/*  - {completedLessonCount}  */}
       </h1>
 
-      <div className="flex flex-col md:flex-row w-full">
+      <div className="flex flex-col lg:flex-row w-full">
         <div className="w-full">
           <>
             <div className="relative sm:w-full rounded-3xl aspect-video shadow-2xl shadow-white/10">
@@ -518,23 +521,44 @@ export default function LessonComponent() {
                 style={{ width: '100%', height: '100%', borderRadius: '24px' }}
               />
 
-              {localCompleted &&
-                <motion.div initial={{opacity: 0}} whileInView={{opacity: 1}} viewport={{once: true}} className={clsx('z-20 rounded-3xl opacity-0 w-full flex flex-col gap-4 items-center justify-center h-full absolute inset-0 bg-black/50 transition duration-300')}>
-                  <Lottie className="w-40 h-40" loop={false} animationData={checkmarkAnimation}/>
-                  <h1 className="text-xl font-medium">🎉 You have completed this lesson 🎉</h1>
-                  <ShinyButton text={`Continue to lesson ${parseInt(lesson.order) + 1}`} href={getNextLessonUrl() ?? lessonpath.lessonId.toString()}/>
-                  <ButtonShad className="text-white" variant="link" onClick={() => setLocalCompleted(false)}>Close</ButtonShad>
+              {localCompleted && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  className={clsx(
+                    'z-20 rounded-3xl opacity-0 w-full flex flex-col gap-4 items-center justify-center h-full absolute inset-0 bg-black/50 transition duration-300'
+                  )}
+                >
+                  <Lottie
+                    className="w-40 h-40"
+                    loop={false}
+                    animationData={checkmarkAnimation}
+                  />
+                  <h1 className="text-xl font-medium">
+                    🎉 You have completed this lesson 🎉
+                  </h1>
+                  <ShinyButton
+                    text={`Continue to lesson ${parseInt(lesson.order) + 1}`}
+                    href={getNextLessonUrl() ?? lessonId.toString()}
+                  />
+                  <ButtonShad
+                    className="text-white"
+                    variant="link"
+                    onClick={() => setLocalCompleted(false)}
+                  >
+                    Close
+                  </ButtonShad>
                 </motion.div>
-              }
-
+              )}
             </div>
             <Script src="https://player.vimeo.com/api/player.js" />
 
-            <div className="my-5 border border-border rounded-2xl p-5 relative">
-              <div className="flex flex-col md:flex-row justify-between">
+            <div className="my-5 border border-border bg-darkgray rounded-2xl p-5 relative">
+              <div className="flex flex-col lg:flex-row justify-between">
                 <button
                   aria-label="Copy Link"
-                  className="border border-border flex w-fit md:hidden gap-1 h-fit items-center rounded-xl mb-5 px-2"
+                  className="active:scale-90 hover:bg-border transition border border-border flex w-fit lg:hidden gap-1 h-fit items-center rounded-xl mb-5 px-2"
                   onClick={handleLinkCopy}
                 >
                   <BiCopy />
@@ -545,13 +569,13 @@ export default function LessonComponent() {
                 </h1>
                 <div className="flex justify-between items-center gap-2">
                   <button
-                    className="hidden border border-border md:flex gap-1 h-fit items-center rounded-xl px-2"
+                    className="active:scale-90 hover:bg-border transition hidden border border-border lg:flex gap-1 h-fit items-center rounded-xl px-2"
                     onClick={handleLinkCopy}
                   >
                     <BiCopy />
                     {copied ? <p>Copied!</p> : <p>Copy</p>}
                   </button>
-                  <div className="md:static absolute right-6 top-6">
+                  <div className="lg:static absolute right-6 top-6">
                     {userCompleted === true ? (
                       <AiFillCheckCircle className="text-green-500" />
                     ) : (
@@ -560,7 +584,7 @@ export default function LessonComponent() {
                   </div>
                 </div>
               </div>
-              <p className="rounded-xl mt-3 max-w-[950px] text-sm md:text-base">
+              <p className="rounded-xl mt-3 max-w-[950px] text-sm lg:text-base">
                 {lesson.description
                   .split('\n')
                   .map((line: number, index: number) => (
@@ -572,7 +596,7 @@ export default function LessonComponent() {
               </p>
             </div>
 
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <Comments
                 courseId={courseId as string}
                 lessonId={lessonId as string}
@@ -584,10 +608,10 @@ export default function LessonComponent() {
         <div>
           {/* DESKTOP LESSON LIST */}
 
-          <div className="hidden md:flex flex-col gap-5 md:mx-5">
+          <div className="hidden lg:flex flex-col gap-5 mx-5">
             {lessons.map((lessonItem, index) => (
               <motion.div
-                className="flex gap-2 items-center"
+                className="flex gap-2 justify-between items-center"
                 key={index}
                 custom={index}
                 variants={fadeInAnimationVariants}
@@ -604,55 +628,66 @@ export default function LessonComponent() {
                 }}
               >
                 <Link
-                  href={lessonItem.locked ? `/courses/${courseId}/${lessonpath.lessonId.toString()}` : `/courses/${courseId}/${lessonItem.id}`}
+                  href={
+                    lessonItem.locked
+                      ? `/courses/${courseId}/${lessonId.toString()}`
+                      : `/courses/${courseId}/${lessonItem.id}`
+                  }
                   key={index}
-                  className={clsx(lessonItem.locked ? 'opacity-50 !cursor-not-allowed' : 'cursor-pointer', "w-full")}
+                  className={clsx(
+                    lessonItem.locked
+                      ? 'opacity-50 !cursor-not-allowed'
+                      : 'cursor-pointer',
+                    'w-full'
+                  )}
                 >
                   <ContextMenu>
                     <ContextMenuTrigger>
                       <div
                         className={clsx(
-                          'hover:bg-border w-full md:w-[200px] lg:w-[250px] 2xl:w-[300px] p-3 rounded-2xl transition-all bg-[--bg] border border-border group cursor-pointer flex justify-between items-center gap-2',
+                          'hover:bg-border w-full lg:w-[200px] 2xl:w-[300px] p-3 rounded-2xl transition-all bg-darkgray border border-border group cursor-pointer flex justify-between items-center gap-2',
                           {
-                          'bg-white text-black hover:bg-neutral-200':
-                              String(lessonpath.lessonId) === String(lessonItem.id),
+                            'bg-white text-black hover:bg-neutral-200':
+                              String(lessonId) === String(lessonItem.id),
                             'animate-pulse':
-                              videoPlaying && String(lessonpath.lessonId) === String(lessonItem.id),
+                              videoPlaying &&
+                              String(lessonId) === String(lessonItem.id),
                           }
                         )}
                       >
-                        <div className="flex items-center">
-                          <p className="text-3xl font-mono rounded-full p-2 px-4">
+                        <div className="flex items-center p-2 px-4 gap-4">
+                          <p className="text-2xl 2xl:text-3xl font-mono rounded-full ">
                             {lessonItem.order as unknown as string}
                           </p>
                           <h1
                             className={clsx(
-                              'text-xl line-clamp-1 font-medium',
+                              'text-lg 2xl:text-xl line-clamp-1 font-medium',
                               {
                                 'text-black':
-                                  String(lessonpath.lessonId) ===
-                                  String(lessonItem.id),
+                                  String(lessonId) === String(lessonItem.id),
                               }
                             )}
                           >
                             {lessonItem.title}
                           </h1>
                         </div>
-                        {lessonCompletionStatusMap.has(lessonItem.id) ? (
-                          lessonCompletionStatusMap.get(lessonItem.id) ? (
-                            <>
-                              <FaCheckCircle className="text-green-500" />
-                            </>
+                        <div>
+                          {lessonCompletionStatusMap.has(lessonItem.id) ? (
+                            lessonCompletionStatusMap.get(lessonItem.id) ? (
+                              <>
+                                <FaCheckCircle className="text-green-500" />
+                              </>
+                            ) : (
+                              <>
+                                <FaTimesCircle className="text-red-500" />
+                              </>
+                            )
                           ) : (
                             <>
-                              <FaTimesCircle className="text-red-500" />
+                              <FaEyeSlash className="text-gray-500" />
                             </>
-                          )
-                        ) : (
-                          <>
-                            <FaEyeSlash className="text-gray-500" />
-                          </>
-                        )}
+                          )}
+                        </div>
                       </div>
                     </ContextMenuTrigger>
 
@@ -671,8 +706,13 @@ export default function LessonComponent() {
                 {userStatus == 'admin' && userId && (
                   <Dialog>
                     <DialogTrigger asChild>
-                      <button className={clsx(lessonpath.lessonId === lessonItem.id && "text-black")}>
-                        <IoMdCreate size={20}/>
+                      <button
+                        className={clsx(
+                          lessonId === lessonItem.id && 'text-black',
+                          '2xl:pl-4 md:pr-4'
+                        )}
+                      >
+                        <IoMdCreate size={20} />
                       </button>
                     </DialogTrigger>
                     <DialogContent>
@@ -682,19 +722,22 @@ export default function LessonComponent() {
                 )}
               </motion.div>
             ))}
+            
             {userStatus == 'admin' && userId && (
+              <>
               <Dialog>
                 <DialogTrigger>
                   <motion.div
-                    className="hover:bg-border h-20 w-full md:w-[200px] lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] !border-2 border-dotted 
+                    className="hover:bg-border h-20 w-full lg:w-[200px] 2xl:w-[300px] font-medium text-lg 2xl:text-xl rounded-2xl transition-all bg-darkgray !border-2 border-dotted 
                       border-border group cursor-pointer flex justify-center items-center gap-2 text-center"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.35 }}
+                    viewport={{once:true}}
                   >
                     <span className="group-hover:scale-x-110 transition flex gap-2 items-center">
                       <AiFillPlusCircle />
-                      <p>Add a lesson</p>
+                      <p>Add Lesson</p>
                     </span>
                   </motion.div>
                 </DialogTrigger>
@@ -705,12 +748,30 @@ export default function LessonComponent() {
                   />
                 </DialogContent>
               </Dialog>
+
+              <Link href={`/${courseId}/${lessonId}/dashboard`}>
+
+              <motion.div
+                    className="hover:bg-border h-20 w-full lg:w-[200px] 2xl:w-[300px] font-medium text-lg 2xl:text-xl rounded-2xl transition-all bg-darkgray !border-2 border-dotted 
+                      border-border group cursor-pointer flex justify-center items-center gap-2 text-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.35 }}
+                    viewport={{once:true}}
+                  >
+                    <span className="group-hover:scale-x-110 transition flex gap-2 items-center">
+                      <Type />
+                      <p>Add Text-Lesson</p>
+                    </span>
+                  </motion.div>
+                  </Link>
+              </>
             )}
           </div>
 
           {/* MOBILE LESSON LIST */}
 
-          <div className="visible md:hidden max-h-[300px] overflow-y-auto flex flex-col overflow-x-hidden gap-3 relative">
+          <div className="visible lg:hidden max-h-[300px] overflow-y-auto scrollbar-thin hover:scrollbar-thumb-neutral-900 scrollbar-thumb-neutral-800 scrollbar-track-neutral-600 flex flex-col overflow-x-hidden gap-3 relative">
             {lessons.map((lessonItem, index) => (
               <motion.div
                 key={index}
@@ -724,22 +785,31 @@ export default function LessonComponent() {
                 }}
               >
                 <Link
-                  href={lessonItem.locked ? `/courses/${courseId}/${lessonpath.lessonId.toString()}` : `/courses/${courseId}/${lessonItem.id}`}
+                  href={
+                    lessonItem.locked
+                      ? `/courses/${courseId}/${lessonId.toString()}`
+                      : `/courses/${courseId}/${lessonItem.id}`
+                  }
                   key={index}
-                  className={clsx(lessonItem.locked ? 'opacity-50 !cursor-not-allowed' : 'cursor-pointer', "w-full")}
+                  className={clsx(
+                    lessonItem.locked
+                      ? 'opacity-50 !cursor-not-allowed'
+                      : 'cursor-pointer',
+                    'w-full'
+                  )}
                 >
                   <ContextMenu>
                     <ContextMenuTrigger>
                       <div
-                        className={`hover:bg-border w-full md:w-[200px] xl:w-[250px] 2xl:w-[300px] md:mx-5 p-3 rounded-2xl transition-all bg-[--bg] border border-border group cursor-pointer flex justify-between items-center gap-2 
+                        className={`hover:bg-border w-full lg:w-[250px] 2xl:w-[300px] lg:mx-5 p-3 rounded-2xl transition-all bg-darkgray border border-border group cursor-pointer flex justify-between items-center gap-2 
                   ${
-                    String(lessonpath.lessonId) === String(lessonItem.id)
-                      && 'bg-white text-black hover:bg-neutral-200'
+                    String(lessonId) === String(lessonItem.id) &&
+                    'bg-white text-black hover:bg-neutral-200'
                   }
                   ${
                     videoPlaying &&
-                    String(lessonpath.lessonId) === String(lessonItem.id)
-                      && 'animate-pulse'
+                    String(lessonId) === String(lessonItem.id) &&
+                    'animate-pulse'
                   }`}
                       >
                         <div className="flex items-center">
@@ -751,8 +821,7 @@ export default function LessonComponent() {
                               'line-clamp-1 text-xl font-medium',
                               {
                                 'text-black':
-                                  String(lessonpath.lessonId) ===
-                                  String(lessonItem.id),
+                                  String(lessonId) === String(lessonItem.id),
                               }
                             )}
                           >
@@ -795,15 +864,16 @@ export default function LessonComponent() {
               <Dialog>
                 <DialogTrigger>
                   <motion.div
-                    className="hover:bg-border h-20 w-full lg:w-[250px] 2xl:w-[300px] text-xl rounded-2xl transition-all bg-[--bg] !border-2 border-dotted 
+                    className="hover:bg-border h-20 w-full lg:w-[250px] 2xl:w-[300px] font-medium text-xl rounded-2xl transition-all bg-darkgray !border-2 border-dotted 
                       border-border group cursor-pointer flex justify-center items-center gap-2 text-center"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
+                    viewport={{ once: true }}
                   >
                     <span className="group-hover:scale-x-110 transition flex gap-2 items-center">
                       <AiFillPlusCircle />
-                      <p>Add a lesson</p>
+                      <p>Add Lesson</p>
                     </span>
                   </motion.div>
                 </DialogTrigger>
@@ -816,7 +886,7 @@ export default function LessonComponent() {
               </Dialog>
             )}
           </div>
-          <div className="visible md:hidden">
+          <div className="visible lg:hidden">
             <Comments
               courseId={courseId as string}
               lessonId={lessonId as string}

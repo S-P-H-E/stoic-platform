@@ -90,7 +90,7 @@ export default function StoicAIComponent() {
         <div className="flex border border-border items-center w-full rounded-md">
           <textarea
             ref={textareaRef}
-            className="flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600"
+            className="flex rounded-md p-4 w-full outline-none resize-none max-h-[200px] bg-transparent hover:scrollbar-thumb-neutral-900 scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-600"
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleTextareaKeyPress} // Handle Enter key press

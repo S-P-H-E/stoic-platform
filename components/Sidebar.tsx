@@ -11,11 +11,11 @@ import {
   LayoutDashboard,
   GraduationCap,
   Book,
-  Settings,
+  PencilRuler,
   ImagePlus,
   Video,
   Users,
-  UserCircle
+  UserCircle,
 } from 'lucide-react';
 import UserImage from './UserImage';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
@@ -96,9 +96,9 @@ const Sidebar = () => {
     {
       label: 'User',
       icon: UserCircle,
-      href: `/user/${userId}` || `/user/`, //! change to /user
+      href: `/user/${userId}` || `/user/`,
     },
-  /*   {
+    /*   {
       label: 'Settings',
       icon: Settings,
       href: '/settings',
@@ -168,7 +168,7 @@ const Sidebar = () => {
                   href={route.href}
                   key={route.href}
                   className={clsx(
-                    'text-base group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
+                    'active:scale-95 text-base group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
                     pathname.includes(route.href)
                       ? 'text-white bg-white/10'
                       : 'text-zinc-400'
@@ -181,6 +181,25 @@ const Sidebar = () => {
                   </div>
                 </Link>
               ))}
+
+              {userStatus === 'admin' && (
+                <Link
+                  href="/create"
+                  className={clsx(
+                    'text-base group relative group flex p-3 w-full duration-300 justify-start font-medium cursor-pointer hover:text-white rounded-lg transition overflow-hidden',
+                    pathname.includes('create')
+                      ? 'text-white bg-white/10'
+                      : 'text-zinc-400'
+                  )}
+                >
+                  <div className="flex items-center flex-1 z-10">
+                    <PencilRuler className={clsx('h-5 w-5 mr-3')} />
+                    <h2>Create</h2>
+                  </div>
+                  <div className="opacity-0 group-hover:opacity-80 duration-300 transition bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-teal-400 via-fuchsia-600 to-orange-600 absolute w-full h-full inset-0"/>
+                </Link>
+              )}
+              
             </div>
             <div className="px-2 flex justify-between items-center">
               <div className="flex items-center gap-2">
@@ -203,7 +222,6 @@ const Sidebar = () => {
                         userDescription={userDescription}
                         src={userProfileImageUrl ?? undefined}
                         userBannerUrl={userProfileBannerUrl}
-
                       />
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -214,10 +232,10 @@ const Sidebar = () => {
                       className={clsx(
                         'text-lg font-medium line-clamp-1',
                         userRoles &&
-                        userRoles &&
-                        userRoles.length > 0 &&
-                        userRoles !== "User" &&
-                        `text-${getUserRoleColor(userRoles)}`
+                          userRoles &&
+                          userRoles.length > 0 &&
+                          userRoles !== 'User' &&
+                          `text-${getUserRoleColor(userRoles)}`
                       )}
                     >
                       {userName}

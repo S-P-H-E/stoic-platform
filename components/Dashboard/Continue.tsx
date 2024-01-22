@@ -11,6 +11,7 @@ import { FaEye } from 'react-icons/fa';
 import Image from 'next/image';
 import WavePattern from '@/public/wave.webp';
 import { Play } from 'lucide-react';
+import { RingLoader } from 'react-spinners';
 
 interface ContinueProp {
   user: User;
@@ -98,7 +99,7 @@ export default function Continue({ user, allowedToFetch }: ContinueProp) {
                 </Link>
               </>
             ) : (
-              <p>Loading...</p>
+              <RingLoader color="#fff" size={80}/>
             )
           ) : (
             <div className="flex flex-col gap-4">
@@ -127,15 +128,16 @@ export default function Continue({ user, allowedToFetch }: ContinueProp) {
           )}
         </div>
 
-        <div className="relative w-1/2 h-full z-20">
+        <div className="relative hidden lg:flex w-1/2 h-full z-20">
           <div className="h-full w-full bg-gradient-to-r from-black to-transparent absolute inset-0 z-20" />
           {user.generalLastCourse && user.generalLastLesson ? (
             courseData &&
             courseData.image && !loading && (
                <Image
                 alt="Course Image"
-                className="object-cover grayscale group-hover:grayscale-0 brightness-100 group-hover:brightness-125 transition duration-500 z-10"
+                className="object-cover grayscale group-hover:grayscale-0 brightness-105 group-hover:brightness-125 transition duration-500 z-10"
                 fill
+                quality={95}
                 src={courseData.image}
               />
             )
@@ -147,7 +149,7 @@ export default function Continue({ user, allowedToFetch }: ContinueProp) {
           <div className='w-full h-full bg-border animate-pulse absolute inset-0'/>
         </div>
 
-        <div className="h-full w-full bg-gradient-to-l from-black via-black to-transparent absolute inset-0 z-10" />
+        <div className="h-full w-full hidden lg:flex bg-gradient-to-l from-black via-black to-transparent absolute inset-0 z-10" />
 
         <div className="h-full w-full absolute inset-0">
           <Image

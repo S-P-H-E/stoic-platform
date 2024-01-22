@@ -47,7 +47,7 @@ export default function Members({
   }
 
   return (
-    <ul className="flex flex-col gap-2 h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 hover:scrollbar-thumb-neutral-500 scrollbar-track-neutral-800">
+    <ul className="flex flex-col gap-2 h-screen overflow-y-auto hover:scrollbar-thumb-neutral-900 scrollbar-thin scrollbar-thumb-neutral-600 hover:scrollbar-thumb-neutral-500 scrollbar-track-neutral-800">
       {members.map((member) => (
         <li
           key={member.id}
@@ -65,7 +65,7 @@ export default function Members({
               userStatus={member.status}
             />
             {member.activity == 'online' &&
-            <div className="animate-pop bg-green-500 w-4 h-4 right-0 bottom-0 absolute rounded-full border-[--bg] group-hover:border-border border-[3px] transition duration-200" />
+            <div className="animate-pop bg-green-500 w-4 h-4 right-0 bottom-0 absolute rounded-full border-bg group-hover:border-border border-[3px] transition duration-200" />
             }
             
           </div>

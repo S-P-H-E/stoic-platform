@@ -419,7 +419,7 @@ export default function Chat({
       </div>
       <ul
         ref={chatContainerRef}
-        className="flex flex-col mt-auto overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 hover:scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 p-3"
+        className="flex flex-col mt-auto overflow-x-hidden overflow-y-auto scrollbar-thin hover:scrollbar-thumb-neutral-900 scrollbar-thumb-neutral-600 hover:scrollbar-thumb-neutral-500 scrollbar-track-neutral-800 p-3"
       >
         <>
         {!readPermission && currentChannel && (

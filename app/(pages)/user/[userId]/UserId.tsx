@@ -8,6 +8,7 @@ import Activities from '@/components/UserId/Activities';
 import Locked from '@/components/Locked';
 import StoicLogo from '@/public/stoicWhite.webp'
 import Socials from '@/components/UserId/Socials';
+import Unauthorized from '@/components/Unauthorized';
 
 interface GlobalUser {
     id: string | null;
@@ -33,14 +34,7 @@ const UserIdComponent = ({globalUser, userId, user}: {globalUser: GlobalUser | u
             </main>
         );
     } else {
-    <div className='flex flex-col min-h-screen items-center justify-center gap-3'>
-        { globalUser?.status === 'user' && <Locked/> }
-        <Image alt='Stoic Logo' src={StoicLogo} placeholder='blur' className='w-16 h-20 mb-2'/>
-        <h3 className='text-2xl font-medium'>You are not authorised to see this content.</h3>
-        <Link href="/">
-          <ButtonShad className="active:scale-90 transition" variant={'outline'}>Take me back to homepage</ButtonShad>
-        </Link>
-    </div>
+        return <Unauthorized locked={globalUser?.status === 'user'}/>
     }
 }
  

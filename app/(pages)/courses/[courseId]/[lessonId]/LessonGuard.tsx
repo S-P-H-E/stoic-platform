@@ -5,23 +5,23 @@ import React from 'react';
 import LessonComponent from './Lesson';
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import PageLoader from '@/components/PageLoader';
+import { isUserAllowedToFetch } from '@/utils/utils';
 
-export default function LessonGuard() {
-  const { userStatus } = UserDataFetcher();
+export default function LessonGuard({lessonId, courseId}: {lessonId: string, courseId: string}) {
+  const { userStatus, userId } = UserDataFetcher();
 
-  // Check if userStatus is 'user' and userStatus is loaded before rendering.
-  if (userStatus === 'user') {
+  const isAllowed = isUserAllowedToFetch(userStatus)
+
+  if (isAllowed) {
+    return <LessonComponent userStatus={userStatus} userId={userId} courseId={courseId} lessonId={lessonId} />;
+  }
+  else if (userStatus) {
     return (
       <>
         <Locked />
-        <LessonComponent />
+        <LessonComponent userStatus={userStatus} userId={userId} courseId={courseId} lessonId={lessonId}/>
       </>
     );
-  } else if (
-    userStatus == 'premium' ||
-    (userStatus == 'admin' && userStatus !== null)
-  ) {
-    return <LessonComponent />;
   } else {
     // Handle the case when userStatus is still loading or unavailable.
     return (

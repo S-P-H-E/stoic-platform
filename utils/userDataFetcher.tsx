@@ -78,8 +78,6 @@ export function UserDataFetcher(): UserDataFetcherResult {
     const checkSubscription = async () => {
       const subscription = await hasSubscription();
 
-      console.log(subscription)
-
       if (userId && subscription && userStatus === "user") {
         const userRef = doc(db, 'users', userId);
         

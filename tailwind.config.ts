@@ -17,12 +17,15 @@ module.exports = {
       },
     },
     extend: {
+      maxWidth: {
+        "8xl": "1366px"
+      },
       screens: {
         '3xl': '1910px',
 
         '4xl': '2560px',
 
-        '5xl': '3840px'
+        '5xl': '3840px',
       },
       colors: {
         highlight: "#79797d",

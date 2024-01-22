@@ -13,6 +13,7 @@ import { User, GlobalUser, Role } from '@/types/types';
 import { UserDataFetcherById } from '@/utils/userDataFetcherById';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
+import Unauthorized from '@/components/Unauthorized';
 
 export default function SettingsGuard({userId}: {userId: string}) {
 
@@ -78,16 +79,7 @@ export default function SettingsGuard({userId}: {userId: string}) {
     }, []);
 
     if (userStatus && userId !== userIdGlobal && userStatusGlobal !== 'admin' ) {
-      return (
-      <div className='flex flex-col min-h-screen items-center justify-center gap-3'>
-          { userStatus === 'user' && <Locked/> }
-          <Image alt='Stoic Logo' src={StoicLogo} placeholder='blur' className='w-16 h-20 mb-2'/>
-          <h3 className='text-2xl font-medium'>You are not authorised to see this content.</h3>
-          <Link href="/">
-            <ButtonShad variant={'outline'}>Take me back to homepage</ButtonShad>
-          </Link>
-      </div>
-      )
+      return <Unauthorized locked={userStatusGlobal === 'user'}/>
     }
     else if (userStatus == "user") {
       return (

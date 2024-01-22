@@ -15,7 +15,7 @@ interface DownloadProps {
 export default function Download({definition, quality, downloadUrl, onclick, hasAudio}: DownloadProps) {
   return (
     <Link onClick={onclick} target="_blank" rel="noreferrer" href={downloadUrl}>
-        <div className='text-base relative group border-border border rounded-lg p-3 w-full font-semibold flex justify-center items-center gap-2 ring-offset-[--bg] ring-white/10 cursor-pointer hover:bg-border hover:ring hover:ring-offset-2 transition'>
+        <div className='text-base relative group border-border border rounded-lg p-3 w-full font-semibold flex justify-center items-center gap-2 ring-offset-bg ring-white/10 cursor-pointer hover:bg-border hover:ring hover:ring-offset-2 transition'>
             {hasAudio !== undefined ? (
               hasAudio ? (
                 <GoUnmute />
