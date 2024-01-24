@@ -90,9 +90,9 @@
     
                 const href = lastLessonId
                 ? `/courses/${course.id}/${lastLessonId}`
-                : `/courses${course.firstLesson}`
-                ? `/courses/${course.id}/${course.firstLesson.id}`
-                : `/courses/${course.id}/404`;
+                : course.firstLesson // Check if course.firstLesson is not null
+                  ? `/courses/${course.id}/${course.firstLesson.id}`
+                  : `/courses/${course.id}/404`;
     
                 return (
                   <motion.div 

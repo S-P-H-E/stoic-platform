@@ -724,9 +724,7 @@ export default function LessonComponent({
             ))}
             
             {userStatus == 'admin' && userId && (
-              <>
-              <Dialog>
-                <DialogTrigger>
+                <Link href={`/create/lesson?courseId=${courseId}`}>
                   <motion.div
                     className="hover:bg-border h-20 w-full lg:w-[200px] 2xl:w-[300px] font-medium text-lg 2xl:text-xl rounded-2xl transition-all bg-darkgray !border-2 border-dotted 
                       border-border group cursor-pointer flex justify-center items-center gap-2 text-center"
@@ -740,32 +738,7 @@ export default function LessonComponent({
                       <p>Add Lesson</p>
                     </span>
                   </motion.div>
-                </DialogTrigger>
-                <DialogContent>
-                  <Lesson
-                    predefinedCourse={courseId}
-                    predefinedCourseName={courseName}
-                  />
-                </DialogContent>
-              </Dialog>
-
-              <Link href={`/${courseId}/${lessonId}/dashboard`}>
-
-              <motion.div
-                    className="hover:bg-border h-20 w-full lg:w-[200px] 2xl:w-[300px] font-medium text-lg 2xl:text-xl rounded-2xl transition-all bg-darkgray !border-2 border-dotted 
-                      border-border group cursor-pointer flex justify-center items-center gap-2 text-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.35 }}
-                    viewport={{once:true}}
-                  >
-                    <span className="group-hover:scale-x-110 transition flex gap-2 items-center">
-                      <Type />
-                      <p>Add Text-Lesson</p>
-                    </span>
-                  </motion.div>
-                  </Link>
-              </>
+              </Link>
             )}
           </div>
 
@@ -861,8 +834,7 @@ export default function LessonComponent({
               </motion.div>
             ))}
             {userStatus == 'admin' && userId && (
-              <Dialog>
-                <DialogTrigger>
+              <Link href={`/create/lesson?courseId=${courseId}`}>
                   <motion.div
                     className="hover:bg-border h-20 w-full lg:w-[250px] 2xl:w-[300px] font-medium text-xl rounded-2xl transition-all bg-darkgray !border-2 border-dotted 
                       border-border group cursor-pointer flex justify-center items-center gap-2 text-center"
@@ -876,14 +848,7 @@ export default function LessonComponent({
                       <p>Add Lesson</p>
                     </span>
                   </motion.div>
-                </DialogTrigger>
-                <DialogContent>
-                  <Lesson
-                    predefinedCourse={courseId}
-                    predefinedCourseName={courseName}
-                  />
-                </DialogContent>
-              </Dialog>
+              </Link>
             )}
           </div>
           <div className="visible lg:hidden">

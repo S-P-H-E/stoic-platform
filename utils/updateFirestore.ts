@@ -1,4 +1,4 @@
-import { doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, setDoc, getDoc, getDocs, collection, deleteDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import { isUserAllowedToFetch, sanitizeString } from './utils';
 import {message} from 'antd'
@@ -269,6 +269,39 @@ export const updateCourse = async (
     message.success('Course updated successfully!');
   } catch (error: any) {
     console.error('Error updating course:', error.message);
+    throw error;
+  }
+};
+
+export const deleteCourse = async (
+  userStatus: string | undefined,
+  courseId: string
+): Promise<void> => {
+  try {
+    const isAllowed = userStatus === 'admin'
+
+    if (!isAllowed) {
+      message.error('You are not allowed to take this action');
+      return;
+    }
+
+    const courseDocRef = doc(db, 'courses', courseId);
+
+    const courseSnapshot = await getDocs(collection(courseDocRef, 'lessons'));
+    const lessonDeletionPromises: Promise<void>[] = [];
+
+    courseSnapshot.forEach((lessonDoc) => {
+      const lessonDocRef = doc(courseDocRef, 'lessons', lessonDoc.id);
+      const lessonDeletionPromise = deleteDoc(lessonDocRef);
+      lessonDeletionPromises.push(lessonDeletionPromise);
+    });
+
+    await Promise.all(lessonDeletionPromises);
+
+    // Delete the course itself
+    await deleteDoc(courseDocRef);
+  } catch (error: any) {
+    console.error('Error deleting course:', error.message);
     throw error;
   }
 };

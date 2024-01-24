@@ -19,8 +19,11 @@ export default function CoursePreview({imageSrc, description, type, title, cours
             <p>{description}</p>
           }
         </div>
+        <Link className="w-full" href={`/create/${courseId}`}>
+          <ButtonShad variant="secondary" className='w-full font-semibold text-black active:scale-90 transition items-center gap-2'><Eye/>View in Create</ButtonShad>
+        </Link>
         <Link className="w-full" href={`/courses/${courseId}`}>
-          <ButtonShad variant="secondary" className='w-full font-bold text-black active:scale-90 transition items-center gap-2'><Eye/>View</ButtonShad>
+          <ButtonShad variant="outline" className='bg-border w-full font-semibold text-white active:scale-90 transition items-center gap-2'><Eye/>View</ButtonShad>
         </Link>
       </div>
     </div>

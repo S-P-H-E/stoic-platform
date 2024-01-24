@@ -19,8 +19,11 @@ export default function LessonPreview({description, type, title, courseId}: {cou
             <p>{description}</p>
           }
         </div>
+        <Link className="w-full" href={`/create/${courseId}/${sanitizeString (title)}`}>
+          <ButtonShad variant="secondary" className='w-full font-semibold text-black active:scale-90 transition items-center gap-2'><Eye/>View in Create</ButtonShad>
+        </Link>
         <Link className="w-full" href={`/courses/${courseId}/${sanitizeString (title)}`}>
-          <ButtonShad variant="secondary" className='w-full font-bold text-black active:scale-90 transition items-center gap-2'><Eye/>Watch</ButtonShad>
+          <ButtonShad variant="secondary" className='w-full font-semibold text-black active:scale-90 transition items-center gap-2'><Eye/>Watch</ButtonShad>
         </Link>
       </div>
     </div>
