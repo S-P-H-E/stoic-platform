@@ -98,8 +98,7 @@ export default function CreateTaskButton({
     'Finished the new edit for the upcoming promotion video.',
   ];
 
-  const getRandomPlaceholder = (array: string[]) =>
-    array[Math.floor(Math.random() * array.length)];
+  const getRandomPlaceholder = (array: string[]) => array[Math.floor(Math.random() * array.length)];
 
   return (
     // ! CHECK NEW WHITE VARIANT ON BUTTON AND CONTINUE

@@ -18,7 +18,8 @@ module.exports = {
     },
     extend: {
       maxWidth: {
-        "8xl": "1366px"
+        "8xl": "1366px",
+        "9xl": "1920px"
       },
       screens: {
         '3xl': '1910px',

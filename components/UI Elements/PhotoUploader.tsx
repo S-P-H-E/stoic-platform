@@ -7,13 +7,16 @@ import { message } from 'antd';
 import { useDropzone } from 'react-dropzone';
 import { BsImageFill } from 'react-icons/bs';
 import Image from 'next/image';
+import clsx from 'clsx';
 
 interface ImageUploadProps {
   onComplete: (imageUrl: string) => void;
-  customPath?: string
+  customPath?: string;
+  create?: boolean;
+  predefinedImage?: string;
 }
 
-export default function ImageUpload({ onComplete, customPath }: ImageUploadProps) {
+export default function ImageUpload({ onComplete, customPath, create, predefinedImage }: ImageUploadProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -62,15 +65,15 @@ export default function ImageUpload({ onComplete, customPath }: ImageUploadProps
   return (
       <div
         {...getRootProps()}
-        className='border-dashed border-2 border-border hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer'
+        className={clsx('transition p-4 rounded-lg text-center cursor-pointer', create ? 'py-12 ring-2 ring-highlight hover:ring-sky-600' : 'border-dashed border-2 border-border hover:bg-black/40 ')}
       >
         <input {...getInputProps()} />
-        {selectedImage ? (
+        {selectedImage || predefinedImage ? (
           <div className="flex justify-center items-center flex-col gap-4">
             <p className="text-highlight">You can click again to change the image</p>
             <Image
               alt="Selected image"
-              src={URL.createObjectURL(selectedImage)}
+              src={!predefinedImage && selectedImage ? URL.createObjectURL(selectedImage) : predefinedImage || ''}
               width={100}
               height={100}
               className="p-2 border border-border rounded-lg flex w-[20svh] object-contain mx-auto"

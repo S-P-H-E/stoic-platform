@@ -168,7 +168,7 @@ const Sidebar = () => {
                   href={route.href}
                   key={route.href}
                   className={clsx(
-                    'active:scale-95 text-base group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
+                    'active:scale-95 duration-200 text-base group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
                     pathname.includes(route.href)
                       ? 'text-white bg-white/10'
                       : 'text-zinc-400'
@@ -182,13 +182,13 @@ const Sidebar = () => {
                 </Link>
               ))}
 
-{/*               {userStatus === 'admin' && (
+              {userStatus === 'admin' && (
                 <Link
                   href="/create"
                   className={clsx(
-                    'text-base group relative group flex p-3 w-full duration-300 justify-start font-medium cursor-pointer hover:text-white rounded-lg transition',
+                    'text-base group active:scale-95 relative group flex p-3 w-full duration-300 justify-start font-medium cursor-pointer hover:text-white rounded-lg transition',
                     pathname.includes('create')
-                      ? 'text-white bg-white/10'
+                      ? 'text-white shadow-[0_0px_50px_rgba(8,_112,_184,_0.3)]'
                       : 'text-zinc-400'
                   )}
                 >
@@ -196,9 +196,9 @@ const Sidebar = () => {
                     <PencilRuler className={clsx('h-5 w-5 mr-3')} />
                     <h2>Create</h2>
                   </div>
-                  <div className="opacity-0 rounded-lg shadow-[0_0px_50px_rgba(8,_112,_184,_0.8)] group-hover:opacity-80 duration-300 transition bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-teal-400 via-fuchsia-600 to-orange-600 absolute w-full h-full inset-0"/>
+                  <div className={clsx("opacity-0 rounded-lg shadow-[0_0px_50px_rgba(8,_112,_184,_0.6)] duration-300 transition bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-teal-400 via-fuchsia-600 to-orange-600 absolute w-full h-full inset-0", pathname.includes('create') ? 'opacity-100 group-hover:opacity-90' : 'group-hover:opacity-80')}/>
                 </Link>
-              )} */}
+              )}
               
             </div>
             <div className="px-2 flex justify-between items-center">

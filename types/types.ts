@@ -43,6 +43,30 @@ export interface Role {
 export interface GlobalUser {
   id: string | null;
   status: string | undefined;
-  name: string | null
+  name: string | null;
   stripeId: string | undefined;
+}
+
+export interface Course {
+  description: string;
+  image: string;
+  name: string;
+  id?: string;
+  lessons?: Lesson[];
+  locked?: boolean; 
+}
+
+export interface Lesson {
+  description: string;
+  order: number;
+  thumbnail: string | null | undefined;
+  title: string;
+  courseId?: string;
+  url?: string;
+  endText?: string;
+  locked?: boolean;
+  id?: string;
+  type?: "text" | "video";
+  content?: string;
+  createdAt?: Date;
 }

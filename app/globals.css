@@ -145,3 +145,11 @@ body {
 .upgrade:hover::before {
   width: 250%;
 }
+
+.pattern {
+  margin: 0;
+  padding: 0;
+  background: url('/marbleTexture.png') repeat;
+  background-size: 400px;
+  background-repeat: repeat;
+}
