@@ -123,6 +123,11 @@ export default function TextForm({
                   label={'Lesson order'}
                   placeholder={'Enter the desired order of your lesson'}
                   {...field}
+                  onChange={(e) => {
+                    const inputValue = e.target.value;
+                    const newValue = inputValue !== '' ? parseInt(inputValue, 10) : undefined; // Keep it as an empty string if it's not a valid number
+                    field.onChange(newValue);
+                  }}
                 />
               </FormControl>
               <FormMessage />

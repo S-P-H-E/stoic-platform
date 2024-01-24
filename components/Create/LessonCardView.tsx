@@ -44,7 +44,7 @@ export default function LessonCardView({isAdmin, course, lesson, courseIdProp}: 
   }
 
   return (
-      <div className={clsx("rounded-xl w-full h-54 bg-gradient-to-r border border-border hover:border-highlight from-gray-700 via-gray-900 to-black group relative transition duration-500 overflow-hidden", !courseIdProp && 'hover:shadow-[0_0px_65px_rgba(49,_76,_80,_0.55)]')}>
+      <div className={clsx("rounded-xl w-full h-60 bg-gradient-to-r border border-border hover:border-highlight from-gray-700 via-gray-900 to-black group relative transition duration-500 overflow-hidden", !courseIdProp && 'hover:shadow-[0_0px_65px_rgba(49,_76,_80,_0.55)]')}>
           <div className="absolute flex gap-2 right-5 top-5 z-30">
             {lesson.order &&
               <div className="p-2 bg-darkgray border transition duration-500 border-border group-hover:bg-border group-hover:border-highlight aspect-square rounded-full">{lesson.order}</div>
