@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import CreateLesson from './Lesson';
 import Switch from '@/components/Switch';
 import CreateCourse from './Course';
+import Link from 'next/link';
 
 interface Props {
   userStatus?: string | undefined; 
@@ -19,31 +20,20 @@ interface Props {
 
 export default function CreateContent({userStatus, className}: Props) {
   return (
-    <Dialog>
-      <DialogTrigger>
-        {userStatus === 'admin' ? (
+    <Link href="create">
+        {userStatus === 'admin' && (
           <>
-            <button className={clsx(className, 'hover:bg-highlight transition hidden md:flex justify-center items-center px-2 py-1 border border-highlight gap-1 rounded-xl cursor-pointer')}>
+            <button className={clsx(className, 'active:scale-90 hover:bg-highlight transition hidden md:flex justify-center items-center px-2 py-1 border border-highlight gap-1 rounded-xl cursor-pointer')}>
               <AiOutlineCloudUpload size={20} />
               Upload
             </button>
 
-            <div className={clsx(className, 'border border-dashed border-[#444444] w-full h-[70px] rounded-xl flex justify-center items-center gap-1 md:hidden')}>
+            <div className={clsx(className, 'transition active:scale-95 border border-dashed border-border w-full h-[70px] rounded-xl flex justify-center items-center gap-1 md:hidden')}>
               <AiOutlineCloudUpload size={20} />
               Upload
             </div>
           </>
-        ) : null}
-      </DialogTrigger>
-      <DialogContent>
-        <div className="pt-3">
-        <Switch
-          initialTab="first"
-          firstComponent={<CreateLesson />}
-          secondComponent={<CreateCourse />}
-        />
-        </div>
-      </DialogContent>
-    </Dialog>
+        )}
+    </Link>
   );
 }

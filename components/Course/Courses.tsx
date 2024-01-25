@@ -14,6 +14,7 @@
     import Course from './Course';
     import { motion } from 'framer-motion';
     import CourseLoading from './CourseLoading';
+import CourseCard from './NewCourseCard';
 
     export default function Courses({isPremium, userId}: {isPremium: boolean, userId: string | null}) {
 
@@ -23,14 +24,14 @@
 
       const fadeInAnimationVariants = { // for framer motion  
         initial: {
-            opacity: 0,
-            y: 100,
+          opacity: 0,
+          y: 100,
         },
         animate: (index: number) => ({
             opacity: 1,
             y: 0,
             transition: {
-                delay: 0.05 * index,
+              delay: 0.05 * index,
             }
         })
     }
@@ -82,7 +83,7 @@
       }, [fetchCourses, userId]);
     
       return (
-        <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 5xl:grid-cols-6 gap-4 mx-auto items-center justify-center w-full '>
+        <div className='grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 mx-auto items-center justify-center h-full w-full'>
           {!loading ? (
             <>
               {courses.map((course, index) => {
@@ -92,7 +93,7 @@
                 ? `/courses/${course.id}/${lastLessonId}`
                 : course.firstLesson // Check if course.firstLesson is not null
                   ? `/courses/${course.id}/${course.firstLesson.id}`
-                  : `/courses/${course.id}/404`;
+                  : `/courses/${course.id}/404`;  // ! CHANGE ! ! !
     
                 return (
                   <motion.div 
@@ -105,7 +106,7 @@
                     once: true,
                   }}
                   >
-                    <Course image={course.image} href={href} name={course.name} description={course.description}/>
+                    <CourseCard locked={course.locked} image={course.image} href={href} name={course.name} description={course.description}/>
                   </motion.div>
                 );
               })}

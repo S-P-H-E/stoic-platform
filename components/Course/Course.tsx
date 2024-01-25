@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import clsx from 'clsx'
 
-export default function Course({ href, name, description, image }: { name: string, description: string, href: string, image: string }) {
+export default function Course({ href, name, description, image, locked }: { locked: boolean, name: string, description: string, href: string, image: string }) {
 
 /*   const getBase64Client = async () => {
     const response = await fetch('/api/getBase64', {
@@ -13,10 +14,10 @@ export default function Course({ href, name, description, image }: { name: strin
         url: image,
       }),
     });
-
-    if (!response.ok) {
+ponse.ok) {
       throw new Error('Failed to create portal');
     }
+    if (!res
 
     const data = await response.json();
     return data;
@@ -25,7 +26,7 @@ export default function Course({ href, name, description, image }: { name: strin
   console.log(blurDataUrl) */
 
   return (
-    <Link href={href} passHref className='group bg-darkgray pb-6 group relative flex flex-col w-full h-[27rem] items-center text-center border border-border rounded-xl hover:scale-105 transition duration-200 overflow-hidden'>
+    <Link href={!locked ? href : ''} passHref className={clsx('bg-darkgray pb-6 relative flex flex-col w-full h-[27rem] items-center text-center border border-border rounded-xl transition duration-200 overflow-hidden', locked ? 'cursor-not-allowed opacity-50' : 'hover:scale-105 group')}>
       <div className="relative group-hover:scale-110 transition duration-200 rounded-xl">
         <div className="absolute top-28 left-0 w-full h-44 bg-gradient-to-b from-transparent via-darkgray to-darkgray rounded-xl"/>
         <Image loading='lazy' alt='image' src={image} width={400} height={200} className='rounded-xl h-60 object-cover' />
