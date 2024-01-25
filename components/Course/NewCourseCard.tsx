@@ -44,7 +44,7 @@ export default function CourseCard({
             </div>
           }
           {/* <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-transparent to-bg z-30" /> */}
-          <div className="absolute bottom-0 w-full h-full bg-gradient-to-b from-transparent via-transparent to-black" />
+          <div className="absolute bottom-0 w-full h-full bg-gradient-to-b from-transparent via-transparent to-bg" />
         </div>
         <div className="flex flex-col gap-2 z-30 w-full h-[45%] items-center text-center relative justify-center">
           <div className="items-center justify-center gap-2 flex-col w-full h-full absolute inset-0 flex p-4">
@@ -55,10 +55,10 @@ export default function CourseCard({
           </div>
         </div>
 
-        <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-gray-900 via-black to-teal-950/20 z-10 group-hover:opacity-0 group-hover:brightness-125 transition duration-700" />
+        <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-gray-900 via-bg to-teal-950/20 z-10 group-hover:opacity-0 group-hover:brightness-125 transition duration-700" />
         <div className="absolute inset-0 w-full h-full bg-gradient-to-t from-teal-950 via-gray-950/60 to-transparent z-20 opacity-0 group-hover:opacity-100 group-hover:brightness-125 transition duration-700" />
-        <div className="absolute bottom-0 w-full h-[55%] z-10 bg-gradient-to-b from-black via-black/30 to-transparent" />
-        <div className="absolute bottom-[30%] w-full h-16 z-10 bg-black blur-[20px]" />
+        <div className="absolute bottom-0 w-full h-[55%] z-10 bg-gradient-to-b from-bg via-bg/30 to-transparent" />
+        <div className="absolute bottom-[30%] w-full h-16 z-10 bg-bg blur-[20px]" />
         <Image
           className="object-cover rounded-xl brightness-50 transition duration-500 scale-150 group-hover:brightness-100 group-hover:scale-[1.15]"
           alt="test"
