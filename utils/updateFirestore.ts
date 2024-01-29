@@ -176,7 +176,8 @@ export const updateExistingLesson = async (
   courseId: string,
   lessonId: string,
   locked: boolean,
-  details: Record<string, any>
+  details: Record<string, any>,
+  contents?: string[],
 ): Promise<void> => {
   try {
     if (!isAdmin) {
@@ -217,7 +218,7 @@ export const updateExistingLesson = async (
         order: details.order || existingLessonData.order || '',
         title: details.title || existingLessonData.title || '',
         thumbnail: existingLessonData.thumbnail || '',
-        content: details.content || existingLessonData.content || '',
+        content: contents || existingLessonData.content || [''],
         createdAt: existingLessonData.createdAt || new Date() || '',
         locked: locked,
         endText: details.endText || existingLessonData.endText || '',

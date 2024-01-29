@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Course, Lesson } from '@/types/types';
-import {
-  fetchSingleLessonWithCourse,
-} from '@/utils/getFirestore';
+import { fetchSingleLessonWithCourse } from '@/utils/getFirestore';
 import { ButtonShad } from '@/components/ui/buttonshad';
 import { FaArrowLeft } from 'react-icons/fa6';
 import * as z from 'zod';
@@ -52,7 +50,26 @@ export default function CreateLessonIdComponent({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
-  const [checked, setChecked] = useState(lessonWithCourse.lesson?.locked || false);
+  const [checked, setChecked] = useState(
+    lessonWithCourse.lesson?.locked || false
+  );
+  
+  const [contents, setContents] = useState<string[]>(['']);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [HTMLContent, setHTMLContent] = useState('');
+
+  
+  const handlePageChange = (newPage: number, updatedHTMLContent?: string) => {
+    if (updatedHTMLContent !== undefined) {
+      setHTMLContent(updatedHTMLContent);
+      setContents((prevContents) => {
+        const newContents = [...prevContents];
+        newContents[currentPage] = updatedHTMLContent;
+        return newContents;
+      });
+    }
+    setCurrentPage(newPage);
+  };
 
   const router = useRouter();
 
@@ -118,7 +135,6 @@ export default function CreateLessonIdComponent({
     }
   }, [userStatus, courseId, lessonId, isAdmin]);
 
-
   const onSubmit = async (values: z.infer<typeof LessonSchema>) => {
     if (isAdmin) {
       try {
@@ -128,11 +144,19 @@ export default function CreateLessonIdComponent({
         setSuccess('Successfully updated the lesson!');
         setError(undefined);
 
-        const type = lessonWithCourse?.lesson?.type || "text"; 
-        const courseId = lessonWithCourse?.course?.id || ""; 
-        const lessonId = lessonWithCourse?.lesson?.id || "";
+        const type = lessonWithCourse?.lesson?.type || 'text';
+        const courseId = lessonWithCourse?.course?.id || '';
+        const lessonId = lessonWithCourse?.lesson?.id || '';
 
-        await updateExistingLesson(type, isAdmin, courseId, lessonId, checked, values);
+        await updateExistingLesson(
+          type,
+          isAdmin,
+          courseId,
+          lessonId,
+          checked,
+          values,
+          contents || ['']
+        );
 
         setTimeout(() => {
           setSuccess(undefined);
@@ -241,19 +265,14 @@ export default function CreateLessonIdComponent({
             )}
 
             {lessonWithCourse?.lesson?.type === 'text' && (
-              <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-lg">Lesson Content</FormLabel>
-                    <FormControl>
-                      <TipTap onChange={field.onChange} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <FormItem>
+                <FormLabel className="text-lg">Lesson Content</FormLabel>
+                <TipTap
+                  currentPage={currentPage}
+                  onPageChange={handlePageChange}
+                  contents={contents}
+                />
+              </FormItem>
             )}
 
             <FormField
