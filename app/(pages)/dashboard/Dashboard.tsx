@@ -27,7 +27,7 @@ export default function DashboardComponent({allowedToFetch, notAllowed, user}: D
         <Continue allowedToFetch={allowedToFetch} user={user}/>
         <Tasks userId={user.id} userStatus={user.status}/>
         {user.social &&
-        <Statistics user={user}/>
+          <Statistics user={user}/>
         }
         
       </div>
