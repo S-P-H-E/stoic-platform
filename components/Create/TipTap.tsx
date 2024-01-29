@@ -17,18 +17,20 @@ import { ButtonShad } from '../ui/buttonshad';
 import { FormLabel } from '../ui/form';
 
 interface TipTapProps {
-/*   content: string | string[];
+  /*   content: string | string[];
   onChange: (richText: string) => void; */
   currentPage: number;
   onPageChange: (newPage: number, updatedHTMLContent?: string) => void;
   contents: string[];
+  predefinedHTMLContent?: string;
 }
 
 export default function TipTap({
- /*  onChange, */
+  /*  onChange, */
   currentPage,
   onPageChange,
   contents,
+  predefinedHTMLContent
 }: TipTapProps) {
   const [HTMLContent, setHTMLContent] = useState('');
 
@@ -93,11 +95,14 @@ export default function TipTap({
     },
     onUpdate({ editor }) {
       const updatedHTMLContent = editor.getHTML();
-/*       onChange(updatedHTMLContent); */
+      /*       onChange(updatedHTMLContent); */
       setHTMLContent(updatedHTMLContent);
 
-      if (!editor.isActive('textStyle', { fontFamily: 'Montserrat' }) && !editor.isActive('textStyle', { fontFamily: 'Geist' })) {
-        editor.chain().focus().setFontFamily('Inter').run()
+      if (
+        !editor.isActive('textStyle', { fontFamily: 'Montserrat' }) &&
+        !editor.isActive('textStyle', { fontFamily: 'Geist' })
+      ) {
+        editor.chain().focus().setFontFamily('Inter').run();
       }
     },
   });
@@ -109,14 +114,14 @@ export default function TipTap({
   const goToNextPage = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     onPageChange(currentPage + 1, HTMLContent);
-    setHTMLContent('')
+    setHTMLContent('');
     editor?.commands.clearContent();
   };
 
   const goToPreviousPage = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     onPageChange(currentPage - 1);
-    setHTMLContent(contents[currentPage - 1])
+    setHTMLContent(contents[currentPage - 1]);
     editor?.commands.clearContent();
   };
 
@@ -128,9 +133,6 @@ export default function TipTap({
     }
   }, [editor]);
 
-  console.log(contents);
-  console.log(currentPage);
-
   return (
     <div className="flex flex-col gap-2 justify-center min-h-[200px]">
       {/* <button onClick={addImage}>setImage</button> */}
@@ -138,26 +140,34 @@ export default function TipTap({
       <EditorContent editor={editor} />
 
       <div className="flex justify-center items-center gap-4">
-        <ButtonShad variant={currentPage != 0 ? "secondary" : "default"} onClick={goToPreviousPage} disabled={currentPage === 0}>
+        <ButtonShad
+          variant={currentPage != 0 ? 'secondary' : 'default'}
+          onClick={goToPreviousPage}
+          disabled={currentPage === 0}
+        >
           <FaCaretLeft size={20} />
         </ButtonShad>
-        <div className="font-medium text-lg">
-          {currentPage}
-        </div>
-        <ButtonShad variant={HTMLContent != '' && HTMLContent != '<p></p>' ? "secondary" : "default"} onClick={goToNextPage} disabled={HTMLContent == ''}>
+        <div className="font-medium text-lg">{currentPage + 1}</div>
+        <ButtonShad
+          variant={
+            (HTMLContent !== '' && HTMLContent !== '<p></p>') ||
+            (predefinedHTMLContent && predefinedHTMLContent !== '<p></p>')
+              ? 'secondary'
+              : 'default'
+          }
+          onClick={goToNextPage}
+          disabled={HTMLContent === '' && (!predefinedHTMLContent || predefinedHTMLContent === '<p></p>')}
+        >
           <FaCaretRight size={20} />
         </ButtonShad>
       </div>
 
-      {HTMLContent &&
-            <div className="mt-4">
-            <FormLabel className="text-lg">
-              Preview
-            </FormLabel>
-            <pre dangerouslySetInnerHTML={{ __html: HTMLContent }} />
-          </div>
-      }
-
+      {(HTMLContent ?? predefinedHTMLContent) && (
+        <div className="mt-4">
+          <FormLabel className="text-lg">Preview</FormLabel>
+          <pre dangerouslySetInnerHTML={{ __html: (HTMLContent || predefinedHTMLContent) ?? '' }} />
+        </div>
+      )}
     </div>
   );
 }

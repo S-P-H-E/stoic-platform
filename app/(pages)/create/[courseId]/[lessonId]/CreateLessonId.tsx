@@ -57,7 +57,6 @@ export default function CreateLessonIdComponent({
   const [contents, setContents] = useState<string[]>(['']);
   const [currentPage, setCurrentPage] = useState(0);
   const [HTMLContent, setHTMLContent] = useState('');
-
   
   const handlePageChange = (newPage: number, updatedHTMLContent?: string) => {
     if (updatedHTMLContent !== undefined) {
@@ -89,6 +88,10 @@ export default function CreateLessonIdComponent({
   useEffect(() => {
     if (lessonWithCourse && lessonWithCourse.lesson) {
       setChecked(lessonWithCourse.lesson.locked || false);
+      setContents(lessonWithCourse.lesson.content || [''])
+      setHTMLContent(
+        (lessonWithCourse.lesson.content?.[currentPage] as string) ?? ''
+      );
       form.reset({
         title: lessonWithCourse.lesson.title,
         description: lessonWithCourse.lesson.description,
@@ -98,7 +101,7 @@ export default function CreateLessonIdComponent({
         content: lessonWithCourse.lesson.content || [''],
       });
     }
-  }, [lessonWithCourse, form]);
+  }, [lessonWithCourse, form, currentPage]);
 
   useEffect(() => {
     if (!isAdmin && (!courseId || !lessonId)) {
@@ -268,6 +271,7 @@ export default function CreateLessonIdComponent({
               <FormItem>
                 <FormLabel className="text-lg">Lesson Content</FormLabel>
                 <TipTap
+                  predefinedHTMLContent={HTMLContent}
                   currentPage={currentPage}
                   onPageChange={handlePageChange}
                   contents={contents}
