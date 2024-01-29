@@ -59,7 +59,8 @@ export const createNewLesson = async (
   courseId: string,
   course: Course,
   locked: boolean,
-  details: Record<string, any>
+  details: Record<string, any>,
+  contents?: string[],
 ): Promise<void> => {
   try {
     if (!course) {
@@ -97,8 +98,8 @@ export const createNewLesson = async (
           title: title,
           thumbnail: '',
           createdAt: new Date(),
-          /* content: content, */
-          endText: details.endText,
+          content: contents || [''],
+          endText: details.endText || '',
           type: 'text',
         };
 

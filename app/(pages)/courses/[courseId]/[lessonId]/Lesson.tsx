@@ -38,18 +38,14 @@ import {
 } from 'react-icons/ai';
 import GoBack from '@/components/UI Elements/GoBack';
 import { BsChevronLeft } from 'react-icons/bs';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { DialogTrigger } from '@radix-ui/react-dialog';
-import Lesson from '@/components/Course/Create/Lesson';
 import { IoMdCreate } from 'react-icons/io';
-import Edit from '@/components/Course/Edit';
 import SkeletonLesson from '@/components/Course/SkeletonLesson';
 import ShinyButton from '@/components/ShinyButton';
 import { ButtonShad } from '@/components/ui/buttonshad';
 import Lottie from 'lottie-react';
 import checkmarkAnimation from '@/public/lottie/checkmarkAnimation.json';
 import { isUserAllowedToFetch } from '@/utils/utils';
-import { Type } from 'lucide-react';
+import Unauthorized from './../../../../../components/Unauthorized';
 
 interface LessonItem {
   id: string;
@@ -65,12 +61,14 @@ export default function LessonComponent({
   lessonId,
   courseId,
   userId,
-  userStatus
+  userStatus,
+  page
 }: {
   lessonId: string;
   courseId: string;
   userId: string | null;
   userStatus: string | undefined;
+  page: number;
 }) {
   const router = useRouter();
   const [lesson, setLesson] = useState<any | null>(null);
@@ -81,6 +79,7 @@ export default function LessonComponent({
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [userCompleted, setUserCompleted] = useState(false);
   const [localCompleted, setLocalCompleted] = useState(false);
+  const [locked, setLocked] = useState(false)
   const [lessonCompletionStatusMap, setLessonCompletionStatusMap] = useState(
     new Map()
   );
@@ -124,23 +123,6 @@ export default function LessonComponent({
     const fetchLessonData = async () => {
       try {
         if (courseId && lessonId && userId && isPremium) {
-          const lessonDocRef = doc(
-            db,
-            'courses',
-            courseId as string,
-            'lessons',
-            lessonId as string
-          );
-          const lessonDocSnap = await getDoc(lessonDocRef);
-          const userCourseRef = doc(
-            db,
-            'users',
-            String(userId),
-            'courses',
-            String(courseId)
-          );
-          setDoc(userCourseRef, { lastLessonId: lessonId }, { merge: true });
-
           const courseDocRef = doc(db, 'courses', courseId as string);
           const courseDocSnap = await getDoc(courseDocRef);
 
@@ -149,48 +131,75 @@ export default function LessonComponent({
             const courseName = courseData.name;
 
             setCourseName(courseName);
-          }
 
-          const userRef = doc(db, 'users', userId);
-          updateDoc(userRef, {
-            generalLastCourse: courseId,
-            generalLastLesson: lessonId,
-          });
+            if (courseData.locked) {
+              message.error('This course is locked.');
+              setLocked(true)
+              return;
+            }
 
-          if (lessonDocSnap.exists()) {
-            const lessonData = lessonDocSnap.data();
-            setLesson(lessonData);
-
-            const userCourseLessonsRef = collection(
+            const lessonDocRef = doc(
+              db,
+              'courses',
+              courseId as string,
+              'lessons',
+              lessonId as string
+            );
+            const lessonDocSnap = await getDoc(lessonDocRef);
+            const userCourseRef = doc(
               db,
               'users',
               String(userId),
               'courses',
-              String(courseId),
-              'lessons'
+              String(courseId)
             );
+            setDoc(userCourseRef, { lastLessonId: lessonId }, { merge: true });
+  
+            const userRef = doc(db, 'users', userId);
+            updateDoc(userRef, {
+              generalLastCourse: courseId,
+              generalLastLesson: lessonId,
+            });
+  
+            if (lessonDocSnap.exists()) {
+              const lessonData = lessonDocSnap.data();
+              
+              if (!lessonData.locked) {
+                setLesson(lessonData);
 
-            const lessonIdStr = String(lessonId);
-            await setDoc(
-              doc(userCourseLessonsRef, lessonIdStr),
-              { watched: true },
-              { merge: true }
-            );
-          } else {
-            const firstLessonQuery = query(
-              collection(db, 'courses', courseId as string, 'lessons'),
-              orderBy('order'),
-              limit(1)
-            );
-
-            const firstLessonSnapshot = await getDocs(firstLessonQuery);
-            if (!firstLessonSnapshot.empty) {
-              const firstLessonData = firstLessonSnapshot.docs[0].data();
-              const firstLessonId = firstLessonSnapshot.docs[0].id;
-
-              router.push(`/courses/${courseId}/${firstLessonId}`);
+                const userCourseLessonsRef = collection(
+                  db,
+                  'users',
+                  String(userId),
+                  'courses',
+                  String(courseId),
+                  'lessons'
+                );
+    
+                const lessonIdStr = String(lessonId);
+                await setDoc(
+                  doc(userCourseLessonsRef, lessonIdStr),
+                  { watched: true },
+                  { merge: true }
+                );
+                
+              }
+            } else {
+              const firstLessonQuery = query(
+                collection(db, 'courses', courseId as string, 'lessons'),
+                orderBy('order'),
+                limit(1)
+              );
+  
+              const firstLessonSnapshot = await getDocs(firstLessonQuery);
+              if (!firstLessonSnapshot.empty) {
+                const firstLessonData = firstLessonSnapshot.docs[0].data();
+                const firstLessonId = firstLessonSnapshot.docs[0].id;
+  
+                router.push(`/courses/${courseId}/${firstLessonId}`);
+              }
             }
-          }
+          } 
         }
       } catch (error) {
         console.error('Error fetching lesson:' + error);
@@ -241,7 +250,7 @@ export default function LessonComponent({
   }, [courseId, lessonId, userId, router, vimeoUrl, isPremium]);
 
   useEffect(() => {
-    const CompleteLesson = async () => {
+    const CompleteVideoLesson = async () => {
       try {
         const lessonCompletionRef = doc(
           db,
@@ -314,7 +323,7 @@ export default function LessonComponent({
     };
 
     const handleVimeoMessageAsync = async (event: MessageEvent) => {
-      if (event.origin === 'https://player.vimeo.com' && userId && isPremium) {
+      if (event.origin === 'https://player.vimeo.com' && userId && isPremium && lesson?.type == 'video') {
         var iframe = document.querySelector('iframe');
         var player = new VimeoPlayer(iframe);
 
@@ -330,7 +339,7 @@ export default function LessonComponent({
 
         player.on('ended', async function () {
           setLocalCompleted(true);
-          CompleteLesson();
+          CompleteVideoLesson();
         });
       }
     };
@@ -343,7 +352,7 @@ export default function LessonComponent({
         window.removeEventListener('message', handleVimeoMessageAsync);
       };
     }
-  }, [vimeoUrl, userId, courseId, lessonId, isPremium, lesson?.title]);
+  }, [vimeoUrl, userId, courseId, lessonId, isPremium, lesson?.title, lesson?.type]);
 
   useEffect(() => {
     const fetchUserCompletion = () => {
@@ -455,7 +464,13 @@ export default function LessonComponent({
     fetchLessonCompletionStatus();
   }, [userId, courseId, isPremium]);
 
-  if (!lesson || !lessons) {
+  if (locked) {
+    return (
+      <Unauthorized/>
+    )
+  }
+
+  if ( (!lesson || !lessons) && !locked) {
     // ! change
     return (
       <div className="mx-auto max-w-8xl flex flex-col justify-center items-center w-full">
@@ -514,7 +529,15 @@ export default function LessonComponent({
       <div className="flex flex-col lg:flex-row w-full">
         <div className="w-full">
           <>
-            <div className="relative sm:w-full rounded-3xl aspect-video shadow-2xl shadow-white/10">
+            {lesson.type == 'text' ?
+              <div className="relative flex flex-col justify-between sm:w-full rounded-3xl aspect-video p-10">
+                <div className="break-words max-w-full" dangerouslySetInnerHTML={{ __html: lesson?.content[page - 1 || 0] }} />
+                {lesson?.content.length > (page ?? 1) &&
+                  <Link href={`/courses/${courseId}/${lessonId}?page=${(Number(page) || 1) + 1}`}><ButtonShad className="w-fit" variant="secondary">NEXT</ButtonShad></Link>
+                }
+              </div>
+            :
+              <div className="relative sm:w-full rounded-3xl aspect-video shadow-2xl shadow-white/10">
               <iframe
                 src={lesson.url}
                 allow="autoplay; fullscreen; picture-in-picture;"
@@ -551,9 +574,11 @@ export default function LessonComponent({
                   </ButtonShad>
                 </motion.div>
               )}
+              <Script src="https://player.vimeo.com/api/player.js" />
             </div>
-            <Script src="https://player.vimeo.com/api/player.js" />
+            }
 
+            {lesson.type !== 'text' &&
             <div className="my-5 border border-border bg-darkgray rounded-2xl p-5 relative">
               <div className="flex flex-col lg:flex-row justify-between">
                 <button
@@ -595,6 +620,7 @@ export default function LessonComponent({
                   ))}
               </p>
             </div>
+            }
 
             <div className="hidden lg:block">
               <Comments
@@ -603,7 +629,7 @@ export default function LessonComponent({
               />
             </div>
           </>
-        </div>
+          </div>
 
         <div>
           {/* DESKTOP LESSON LIST */}
@@ -611,7 +637,7 @@ export default function LessonComponent({
           <div className="hidden lg:flex flex-col gap-5 mx-5">
             {lessons.map((lessonItem, index) => (
               <motion.div
-                className="flex gap-2 justify-between items-center"
+                className={clsx("flex gap-2 justify-between items-center")}
                 key={index}
                 custom={index}
                 variants={fadeInAnimationVariants}
@@ -634,12 +660,7 @@ export default function LessonComponent({
                       : `/courses/${courseId}/${lessonItem.id}`
                   }
                   key={index}
-                  className={clsx(
-                    lessonItem.locked
-                      ? 'opacity-50 !cursor-not-allowed'
-                      : 'cursor-pointer',
-                    'w-full'
-                  )}
+                  className='w-full'
                 >
                   <ContextMenu>
                     <ContextMenuTrigger>
@@ -656,15 +677,15 @@ export default function LessonComponent({
                         )}
                       >
                         <div className="flex items-center p-2 px-4 gap-4">
-                          <p className="text-2xl 2xl:text-3xl font-mono rounded-full ">
+                          <p className={clsx("text-2xl 2xl:text-3xl font-mono rounded-full", lessonItem.locked && 'opacity-50')}>
                             {lessonItem.order as unknown as string}
                           </p>
                           <h1
                             className={clsx(
                               'text-lg 2xl:text-xl line-clamp-1 font-medium',
                               {
-                                'text-black':
-                                  String(lessonId) === String(lessonItem.id),
+                                'opacity-50':
+                                  lessonItem.locked
                               }
                             )}
                           >
@@ -703,22 +724,17 @@ export default function LessonComponent({
                     )}
                   </ContextMenu>
                 </Link>
-                {userStatus == 'admin' && userId && (
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <button
-                        className={clsx(
-                          lessonId === lessonItem.id && 'text-black',
-                          '2xl:pl-4 md:pr-4'
-                        )}
-                      >
-                        <IoMdCreate size={20} />
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <Edit courseId={courseId as string} lesson={lessonItem} />
-                    </DialogContent>
-                  </Dialog>
+                {userStatus == 'admin' && (
+                  <Link href={`/create/${courseId}/${lessonItem.id}`}>
+                  <button
+                    className={clsx(
+                      lessonId === lessonItem.id && 'text-black',
+                      '2xl:pl-4 md:pr-4 hover:opacity-80 transition active:scale-90 hover:scale-125 w-fit hover:drop-shadow-md'
+                      )}
+                    >
+                      <IoMdCreate size={20} />
+                  </button>
+                  </Link>
                 )}
               </motion.div>
             ))}
@@ -764,39 +780,33 @@ export default function LessonComponent({
                       : `/courses/${courseId}/${lessonItem.id}`
                   }
                   key={index}
-                  className={clsx(
-                    lessonItem.locked
-                      ? 'opacity-50 !cursor-not-allowed'
-                      : 'cursor-pointer',
-                    'w-full'
-                  )}
+                  className={'w-full'}
                 >
                   <ContextMenu>
                     <ContextMenuTrigger>
                       <div
-                        className={`hover:bg-border w-full lg:w-[250px] 2xl:w-[300px] lg:mx-5 p-3 rounded-2xl transition-all bg-darkgray border border-border group cursor-pointer flex justify-between items-center gap-2 
-                  ${
-                    String(lessonId) === String(lessonItem.id) &&
-                    'bg-white text-black hover:bg-neutral-200'
-                  }
-                  ${
-                    videoPlaying &&
-                    String(lessonId) === String(lessonItem.id) &&
-                    'animate-pulse'
-                  }`}
+                      className={`hover:bg-border w-full lg:w-[250px] 2xl:w-[300px] lg:mx-5 p-3 rounded-2xl transition-all bg-darkgray border border-border group cursor-pointer flex justify-between items-center gap-2 
+                      ${
+                        String(lessonId) === String(lessonItem.id) &&
+                        'bg-white text-black hover:bg-neutral-200'
+                      }
+                      ${
+                        videoPlaying &&
+                        String(lessonId) === String(lessonItem.id) &&
+                        'animate-pulse'
+                      }
+                      ${
+                        lessonItem.locked &&
+                        'opacity-50'
+                      }
+                      `}
                       >
                         <div className="flex items-center">
                           <p className="text-3xl font-mono rounded-full p-2 px-4">
                             {lessonItem.order as unknown as string}
                           </p>
                           <h1
-                            className={clsx(
-                              'line-clamp-1 text-xl font-medium',
-                              {
-                                'text-black':
-                                  String(lessonId) === String(lessonItem.id),
-                              }
-                            )}
+                            className='line-clamp-1 text-xl font-medium'     
                           >
                             {lessonItem.title}
                           </h1>

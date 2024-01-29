@@ -61,7 +61,7 @@ export default function CourseCard({
         <div className="absolute bottom-[30%] w-full h-16 z-10 bg-bg blur-[20px]" />
         <Image
           className="object-cover rounded-xl brightness-50 transition duration-500 scale-150 group-hover:brightness-100 group-hover:scale-[1.15]"
-          alt="test"
+          alt="Wave pattern"
           src={WavePattern}
           placeholder="blur"
           fill

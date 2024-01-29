@@ -6,6 +6,9 @@ interface LessonIdPageProps {
     lessonId: string;
     courseId: string;
   }
+  searchParams: {
+    page: number;
+  }
 }
 
 export const metadata: Metadata = {
@@ -14,10 +17,11 @@ export const metadata: Metadata = {
 }
 
 export default function LessonId({
-  params: {lessonId, courseId}
+  params: {lessonId, courseId},
+  searchParams: {page}
 }: LessonIdPageProps) {
   return (
-    <LessonGuard courseId={courseId} lessonId={lessonId}/>
+    <LessonGuard page={page} courseId={courseId} lessonId={lessonId}/>
   )
 }
 

@@ -7,19 +7,19 @@ import { UserDataFetcher } from '@/utils/userDataFetcher';
 import PageLoader from '@/components/PageLoader';
 import { isUserAllowedToFetch } from '@/utils/utils';
 
-export default function LessonGuard({lessonId, courseId}: {lessonId: string, courseId: string}) {
+export default function LessonGuard({lessonId, courseId, page}: {page: number, lessonId: string, courseId: string}) {
   const { userStatus, userId } = UserDataFetcher();
 
   const isAllowed = isUserAllowedToFetch(userStatus)
 
   if (isAllowed) {
-    return <LessonComponent userStatus={userStatus} userId={userId} courseId={courseId} lessonId={lessonId} />;
+    return <LessonComponent page={page} userStatus={userStatus} userId={userId} courseId={courseId} lessonId={lessonId} />;
   }
   else if (userStatus) {
     return (
       <>
         <Locked />
-        <LessonComponent userStatus={userStatus} userId={userId} courseId={courseId} lessonId={lessonId}/>
+        <LessonComponent page={page} userStatus={userStatus} userId={userId} courseId={courseId} lessonId={lessonId}/>
       </>
     );
   } else {

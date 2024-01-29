@@ -31,7 +31,7 @@ export const LessonSchemaVideo = z
 export const LessonSchemaText= z
     .object({
         order: z.number().max(100, { message: 'Lesson order must be at most 100' }),
-        content: z.string().max(10000, { message: 'Lesson content must be at most 10000 characters' }),
+        /* content: z.string().max(10000, { message: 'Lesson content must be at most 10000 characters' }), */
         endText: z.optional(z.string().max(100, { message: 'Lesson end text must be at most 100 characters' })),
     })
 

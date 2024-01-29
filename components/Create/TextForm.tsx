@@ -50,9 +50,25 @@ export default function TextForm({
 
   const [checked, setChecked] = useState(false);
 
+  const [contents, setContents] = useState<string[]>(['']);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [HTMLContent, setHTMLContent] = useState('');
+
+  const handlePageChange = (newPage: number, updatedHTMLContent?: string) => {
+    if (updatedHTMLContent !== undefined) {
+      setHTMLContent(updatedHTMLContent);
+      setContents((prevContents) => {
+        const newContents = [...prevContents];
+        newContents[currentPage] = updatedHTMLContent;
+        return newContents;
+      });
+    }
+    setCurrentPage(newPage);
+  };
+
   const form = useForm<z.infer<typeof LessonSchemaText>>({
     resolver: zodResolver(LessonSchemaText),
-    mode: "onChange",
+/*     mode: "onChange", */
     defaultValues: {
       order: courseOrder
     },
@@ -71,9 +87,9 @@ export default function TextForm({
   const onSubmit = async (values: z.infer<typeof LessonSchemaText>) => {
     if (isAdmin) {
       try {
-        setLoading(true);
+        setLoading(true)
 
-        createNewLesson(
+        await createNewLesson(
           type,
           final,
           isAdmin,
@@ -82,7 +98,8 @@ export default function TextForm({
           courseId,
           course,
           checked,
-          values
+          values,
+          contents,
         );
 
         message.success('Successfully created new text lesson!');
@@ -161,21 +178,16 @@ export default function TextForm({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="content"
-          render={({ field }) => (
             <FormItem>
               <FormLabel className="text-lg">
                 Lesson Content
               </FormLabel>
-              <FormControl>
-                <TipTap content={field.name} onChange={field.onChange}/>
-              </FormControl>
-              <FormMessage />
+                <TipTap
+                  currentPage={currentPage}
+                  onPageChange={handlePageChange}
+                  contents={contents}
+                />
             </FormItem>
-          )}
-        />
 
       <div className="flex gap-2 items-center">
         <FormLabel className="text-lg">

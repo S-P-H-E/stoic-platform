@@ -321,7 +321,7 @@ export default function CreateLessonIdComponent({
                     <BiLoader className="animate-spin" /> <p>Loading</p>
                   </div>
                 ) : (
-                  'Continue'
+                  'Save'
                 )}
               </ButtonShad>
 

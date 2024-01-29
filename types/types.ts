@@ -67,6 +67,6 @@ export interface Lesson {
   locked?: boolean;
   id?: string;
   type?: "text" | "video";
-  content?: string;
+  content?: string[];
   createdAt?: Date;
 }
