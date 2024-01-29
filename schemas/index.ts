@@ -48,7 +48,7 @@ export const LessonSchema = z
         endText: z.optional(z.string().max(100, { message: 'Lesson end text must be at most 100 characters' })),
         order: z.optional(z.number().max(100, { message: 'Lesson order must be at most 100 characters' })),
         url: z.optional(z.string().max(500, { message: 'Lesson vimeo url must be at most 500 characters' })),
-        content: z.optional(z.string().max(10000, { message: 'Lesson content must be at most 10000 characters' })),
+        content: z.optional(z.array(z.string().max(10000, { message: 'Lesson content must be at most 10000 characters' }))),
     })
 
 export const EditCourseSchema = z

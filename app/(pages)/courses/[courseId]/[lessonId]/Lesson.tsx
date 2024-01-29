@@ -535,6 +535,10 @@ export default function LessonComponent({
                 {lesson?.content.length > (page ?? 1) &&
                   <Link href={`/courses/${courseId}/${lessonId}?page=${(Number(page) || 1) + 1}`}><ButtonShad className="w-fit" variant="secondary">NEXT</ButtonShad></Link>
                 }
+
+                {page > 1 &&
+                  <Link href={`/courses/${courseId}/${lessonId}?page=${(Number(page)) - 1}`}><ButtonShad className="w-fit" variant="secondary">PREVIOUS</ButtonShad></Link>
+                }
               </div>
             :
               <div className="relative sm:w-full rounded-3xl aspect-video shadow-2xl shadow-white/10">

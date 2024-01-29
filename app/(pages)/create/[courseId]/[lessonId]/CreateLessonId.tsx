@@ -78,7 +78,7 @@ export default function CreateLessonIdComponent({
         order: lessonWithCourse.lesson.order,
         endText: lessonWithCourse.lesson.endText || '',
         url: lessonWithCourse.lesson.url || '',
-        content: lessonWithCourse.lesson.content || '',
+        content: lessonWithCourse.lesson.content || [''],
       });
     }
   }, [lessonWithCourse, form]);
@@ -248,7 +248,7 @@ export default function CreateLessonIdComponent({
                   <FormItem>
                     <FormLabel className="text-lg">Lesson Content</FormLabel>
                     <FormControl>
-                      <TipTap content={field.name} onChange={field.onChange} />
+                      <TipTap onChange={field.onChange} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
