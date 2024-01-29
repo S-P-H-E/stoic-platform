@@ -73,7 +73,7 @@ const AboutMe = ({
   };
 
   return (
-    <section className="border border-border bg-darkgray rounded-2xl w-full lg:min-h-[10rem] lg:w-80 p-5 flex flex-col gap-2">
+    <section className="border border-border bg-darkgray rounded-2xl lg:min-h-[10rem] w-full p-5 flex flex-col gap-2">
       <h1 className="text-2xl font-semibold">About Me</h1>
       <div
         onClick={handleEditClick}

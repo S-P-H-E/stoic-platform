@@ -118,7 +118,7 @@ export default function Socials(
 
   // custom styled links like yt
   return (
-    <div className="border border-border bg-darkgray rounded-2xl w-full lg:w-80 p-5 flex flex-col gap-2">
+    <div className="border border-border bg-darkgray rounded-2xl w-full p-5 flex flex-col gap-2">
       <h1 className="text-2xl font-semibold">Socials</h1>
       <div
         onClick={handleEditClick}

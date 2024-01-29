@@ -26,7 +26,7 @@ const UserIdComponent = ({globalUser, userId, user}: {globalUser: GlobalUser | u
                 <UserIdHeader isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
                 <div className='w-full xl:w-[80%] lg:w-[85%] max-w-7xl max-h-7xl px-6 mx-auto flex flex-col lg:flex-row gap-4 pb-8'>{/*  PADDING CHECK! !! ! ! */}
                     <Activities isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
-                    <div className="gap-4 flex flex-col">
+                    <div className="gap-4 flex flex-col w-1/2 max-w-[20rem]">
                         <AboutMe isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
                         <Socials isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
                     </div>

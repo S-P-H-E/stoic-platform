@@ -5,7 +5,7 @@ import Continue from '@/components/Dashboard/Continue';
 import CreateTaskButton from '@/components/Dashboard/CreateTaskButton';
 import Tasks from '@/components/Dashboard/Tasks';
 import Unauthorized from '@/components/Unauthorized';
-import Analytics from '@/components/Dashboard/Analytics';
+import Statistics from '@/components/Dashboard/Stats';
 
 interface DashboardComponentProps {
   allowedToFetch: boolean;
@@ -26,7 +26,10 @@ export default function DashboardComponent({allowedToFetch, notAllowed, user}: D
         </div>
         <Continue allowedToFetch={allowedToFetch} user={user}/>
         <Tasks userId={user.id} userStatus={user.status}/>
-        <Analytics user={user}/>
+        {user.social &&
+        <Statistics user={user}/>
+        }
+        
       </div>
     )
   }
