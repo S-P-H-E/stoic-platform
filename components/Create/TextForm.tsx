@@ -200,7 +200,7 @@ export default function TextForm({
         />
       </div>
 
-            <p className="text-red-500">Warning: The last page that you are seeing on the Lesson Content box will not be saved when you press continue, so make sure to press the right arrow button so you have a empty last page above.</p>
+            <p className="text-yellow-500">Warning: The last page that you are seeing on the Lesson Content box will not be saved when you press continue, so make sure to press the right arrow button so you have a empty last page above.</p>
   
         <div className="flex gap-3 items-center">
           {title && (
