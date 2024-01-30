@@ -15,6 +15,7 @@ import FontFamily from '@tiptap/extension-font-family';
 import { FaCaretLeft, FaCaretRight } from 'react-icons/fa6';
 import { ButtonShad } from '../ui/buttonshad';
 import { FormLabel } from '../ui/form';
+import HardBreak from '@tiptap/extension-hard-break';
 
 interface TipTapProps {
   /*   content: string | string[];
@@ -85,6 +86,18 @@ export default function TipTap({
       FontFamily.configure({
         types: ['textStyle'],
       }),
+      HardBreak.extend({
+        addKeyboardShortcuts() {
+          return {
+              Enter: () => {
+                  if (this.editor.isActive('orderedList') || this.editor.isActive('bulletList')) {
+                      return this.editor.chain().createParagraphNear().run();
+                  }
+                  return this.editor.commands.setHardBreak();
+              },
+          };
+      },
+      })
     ],
     content: contents[currentPage],
     editorProps: {

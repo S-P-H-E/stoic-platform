@@ -29,6 +29,7 @@
     "@tiptap/extension-blockquote": "^2.1.16",
     "@tiptap/extension-bullet-list": "^2.1.16",
     "@tiptap/extension-font-family": "^2.1.16",
+    "@tiptap/extension-hard-break": "^2.2.0",
     "@tiptap/extension-image": "^2.1.16",
     "@tiptap/extension-list-item": "^2.1.16",
     "@tiptap/extension-ordered-list": "^2.1.16",
