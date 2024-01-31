@@ -1,7 +1,9 @@
 import React, {useState, useTransition} from 'react';
+import CardWrapper from '../CardWrapper';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
+
 import {
     Form,
     FormControl,
@@ -10,22 +12,21 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
-import {RegisterSchema} from '@/schemas';
+import {LoginSchema} from '@/schemas';
 import {ButtonShad} from '../ui/buttonshad';
+import Link from 'next/link';
+import NewInput from '../UI Elements/NewInput';
 import {Input} from '../ui/modifiedInput';
 import FormSuccess from '../FormSuccess';
 import FormError from '../FormError';
-import {auth, db} from "@/utils/firebase";
+import {auth} from "@/utils/firebase";
 import {message} from "antd";
 import {useRouter} from "next/navigation";
 import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
 import ForgotPassword from "@/components/Auth/ForgotPassword";
-import {createUserWithEmailAndPassword} from "firebase/auth";
-import type {FirebaseError} from "@firebase/util";
+import {signInWithEmailAndPassword} from "firebase/auth";
+import type  {FirebaseError} from "@firebase/util";
 import {BiLoader} from "react-icons/bi";
-import {doc, getDoc, setDoc} from "firebase/firestore";
-import {sanitizeString} from "@/utils/utils";
-import CardWrapper from "@/components/CardWrapper";
 
 const firebaseErrorMessages: Record<string, string> = {
     "auth/invalid-email": "The email address is not valid.",
@@ -35,49 +36,23 @@ const firebaseErrorMessages: Record<string, string> = {
     "auth/email-already-in-use": "The email address is already in use by another account.",
     "auth/user-not-found": "The email address is not associated with an existing account.",
 }
-export default function NewRegister() {
+export default function NewLogin() {
     const [error, setError] = useState<string | undefined>('');
     const [success, setSuccess] = useState<string | undefined>('');
     const [isPending, startTransition] = useTransition();
 
     const router = useRouter()
 
-    const form = useForm<z.infer<typeof RegisterSchema>>({
-        resolver: zodResolver(RegisterSchema),
+    const form = useForm<z.infer<typeof LoginSchema>>({
+        resolver: zodResolver(LoginSchema),
     });
 
-    const { name: formName} = form.watch();
-
-    const register = async (values: z.infer<typeof RegisterSchema>) => {
+    const login = async (values: z.infer<typeof LoginSchema>) => {
         try {
-            const existingUserRef = doc(db, "users", sanitizeString(values.name));
-            const existingUserSnap = await getDoc(existingUserRef);
+            const user = await signInWithEmailAndPassword(auth, values.email, values.password)
 
-            if (existingUserSnap.exists()) {
-                message.error("Username already in use. Please choose a different username.");
-            } else {
-
-                const user = await createUserWithEmailAndPassword(auth, values.email, values.password);
-
-                const userEmail = user.user.email;
-                const userName = values.name;
-
-                const userData = {
-                    name: userName,
-                    email: userEmail,
-                    password: values.password,
-                    status: 'user',
-                    onboarding: true,
-                    custom: true
-                }
-
-                const userRef = doc(db, "users", sanitizeString(userName));
-                await setDoc(userRef, userData);
-
-                message.success("Signed in successfully");
-                router.push('/dashboard');
-            }
-
+            message.success("Signed in successfully");
+            router.push('/dashboard');
         } catch (error) {
             const firebaseError = error as FirebaseError;
             const errorCode = firebaseError.code as keyof typeof firebaseErrorMessages;
@@ -87,13 +62,13 @@ export default function NewRegister() {
         }
     }
 
-    const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
+    const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
         setError('');
         setSuccess('');
 
         startTransition(async () => {
             try {
-                await register(values)
+                await login(values)
             } catch {
                 setError('Something went wrong!');
             }
@@ -102,35 +77,13 @@ export default function NewRegister() {
 
     return (
         <CardWrapper
-            headerLabel="Create a new account"
-            backButtonHref="/"
-            backButtonLabel="Already have an account?"
+            headerLabel="Login to your account"
+            backButtonHref="/?mode=register"
+            backButtonLabel="Don't have an account?"
+            showSocial
         >
             <Form {...form}>
                 <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({field}) => (
-                            <FormItem>
-                                <FormLabel className="text-lg text-white">Display Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        placeholder="Enter your display name here"
-                                        type="name"
-                                        disabled={isPending}
-                                    />
-                                </FormControl>
-                                {formName &&
-                                    <p className="text-muted-foreground text-sm">Your username will be
-                                        @{sanitizeString(formName)}
-                                    </p>
-                                }
-                                <FormMessage/>
-                            </FormItem>
-                        )}
-                    />
                     <FormField
                         control={form.control}
                         name="email"
@@ -179,9 +132,8 @@ export default function NewRegister() {
                     />
                     <FormError message={error}/>
                     <FormSuccess message={success}/>
-                    <ButtonShad type="submit" variant="secondary" className="w-full active:scale-95 transition"
-                                disabled={isPending}>
-                        {isPending ? <BiLoader className="animate-spin"/> : 'Register'}
+                    <ButtonShad type="submit" variant="secondary" className="w-full active:scale-95 transition" disabled={isPending}>
+                        {isPending ? <BiLoader className="animate-spin"/> : 'Login'}
                     </ButtonShad>
                 </form>
             </Form>

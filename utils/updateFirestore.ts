@@ -118,13 +118,13 @@ export const createNewLesson = async (
 }
 
 export const createNewCourse = async (
-  type: "public" | "locked",
-  isAdmin: boolean,
-  description: string | undefined,
-  title: string,
-  courseId: string,
-  course: Course,
-  imageSrc: string,
+    type: "public" | "locked",
+    isAdmin: boolean,
+    description: string | undefined,
+    title: string,
+    courseId: string | null,
+    course: Course,
+    imageSrc: string,
 ): Promise<void> => {
   try {
     if (course) {
@@ -141,7 +141,7 @@ export const createNewCourse = async (
           image: imageSrc || '',
         };
 
-        const courseDocRef = doc(db, 'courses', courseId);
+        const courseDocRef = doc(db, 'courses', courseId!);
 
         await setDoc(courseDocRef, course);
       }
@@ -155,7 +155,7 @@ export const createNewCourse = async (
           locked: true
         };
 
-        const courseDocRef = doc(db, 'courses', courseId);
+        const courseDocRef = doc(db, 'courses', courseId!);
 
         await setDoc(courseDocRef, course);
       }

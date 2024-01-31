@@ -33,6 +33,10 @@ export default function CreateCourse() {
           
           const customDocId = sanitizeString(courseName)
 
+            if (!customDocId) {
+                return { error: 'There is an issue with your name, can you pick another one?' }
+            }
+
           const courseDocRef = doc(db, 'courses', customDocId);
           await setDoc(courseDocRef, courseData);
     

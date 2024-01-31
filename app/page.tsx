@@ -1,12 +1,11 @@
 "use client"
 
-import Login from '@/components/Auth/Login'
 import { useRouter } from 'next/navigation'
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { BiLoader } from 'react-icons/bi';
 import PageLoader from './../components/PageLoader';
 import Image from 'next/image';
-import StoicPatternBG from '@/public/Stoic_Pattern_EM.webp'
+import StoicPatternBG from '@/public/Stoic_Pattern_EM.jpg'
 import { motion } from 'framer-motion';
 import NewLogin from '@/components/Auth/NewLogin';
 import NewRegister from "@/components/Auth/NewRegister";
