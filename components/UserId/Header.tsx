@@ -60,11 +60,11 @@ const UserIdHeader = ({
                 
                 <Avatar className="w-full h-full">
                 {!user.profileImageUrl ?
-                  <div className="w-full h-full bg-border rounded-full animate-pulse"/>
+                  <div className="w-full h-full bg-border rounded-full absolute inset-0 animate-pulse"/>
                   :
                 <AvatarImage src={user.profileImageUrl ?? undefined} />
                 }
-                <AvatarFallback className='uppercase bg-darkgray select-none text-base w-full h-full'>{user.name && user.name.charAt(0)}{user.name && user.name.charAt(user.name.length - 1)}</AvatarFallback>
+                <AvatarFallback className='uppercase bg-white text-5xl select-none w-full z-10 h-full'>{user.name && user.name.charAt(0)}{user.name && user.name.charAt(user.name.length - 1)}</AvatarFallback>
                   
                 </Avatar>
                 {isAuthorized && (

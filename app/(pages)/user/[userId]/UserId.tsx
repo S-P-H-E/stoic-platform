@@ -1,5 +1,4 @@
 import { ButtonShad } from '@/components/ui/buttonshad';
-import { User } from './../../../../types/types';
 import Link from 'next/link';
 import Image from 'next/image';
 import UserIdHeader from '@/components/UserId/Header';
@@ -9,6 +8,7 @@ import Locked from '@/components/Locked';
 import StoicLogo from '@/public/stoicWhite.webp'
 import Socials from '@/components/UserId/Socials';
 import Unauthorized from '@/components/Unauthorized';
+import {User} from "@/types/types";
 
 interface GlobalUser {
     id: string | null;
