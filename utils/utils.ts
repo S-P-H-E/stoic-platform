@@ -64,6 +64,14 @@ export function convertToAsciiEquivalent(input: string): string {
   const normalizedString = input.normalize('NFD');
   // Use a regular expression to remove non-ASCII characters
   const asciiEquivalentString = normalizedString.replace(/[^\x00-\x7F]/g, '');
-  return asciiEquivalentString;
+
+  // Sanitize the ASCII equivalent string
+  const sanitizedString = asciiEquivalentString
+      .toLowerCase()
+      .replace(/[^\p{L}0-9.-]+/gu, '')
+      .replace(/--+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+  return sanitizedString;
 }
 
