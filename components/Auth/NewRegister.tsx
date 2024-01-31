@@ -24,8 +24,8 @@ import {createUserWithEmailAndPassword} from "firebase/auth";
 import type {FirebaseError} from "@firebase/util";
 import {BiLoader} from "react-icons/bi";
 import {doc, getDoc, setDoc} from "firebase/firestore";
-import {sanitizeString} from "@/utils/utils";
 import CardWrapper from "@/components/CardWrapper";
+import {convertToAsciiEquivalent} from "@/utils/utils";
 
 const firebaseErrorMessages: Record<string, string> = {
     "auth/invalid-email": "The email address is not valid.",
@@ -50,7 +50,7 @@ export default function NewRegister() {
 
     const register = async (values: z.infer<typeof RegisterSchema>) => {
         try {
-            const existingUserRef = doc(db, "users", sanitizeString(values.name));
+            const existingUserRef = doc(db, "users", convertToAsciiEquivalent(values.name));
             const existingUserSnap = await getDoc(existingUserRef);
 
             if (existingUserSnap.exists()) {
@@ -65,13 +65,14 @@ export default function NewRegister() {
                 const userData = {
                     name: userName,
                     email: userEmail,
+                    photoUrl: user.user.photoURL,
                     password: values.password,
                     status: 'user',
                     onboarding: true,
                     custom: true
                 }
 
-                const userRef = doc(db, "users", sanitizeString(userName));
+                const userRef = doc(db, "users", convertToAsciiEquivalent(userName));
                 await setDoc(userRef, userData);
 
                 message.success("Signed in successfully");
@@ -124,7 +125,7 @@ export default function NewRegister() {
                                 </FormControl>
                                 {formName &&
                                     <p className="text-muted-foreground text-sm">Your username will be
-                                        @{sanitizeString(formName)}
+                                        @{convertToAsciiEquivalent(formName)}
                                     </p>
                                 }
                                 <FormMessage/>

@@ -8,6 +8,16 @@ export const sanitizeString = (input: string) => {
     return sanitizedString;
 };
 
+export const sanitizeForUrl = (input: string) => {
+  const sanitizedString = input
+      .toLowerCase()
+      .replace(/[^\p{L}0-9.-]+/gu, '-')
+      .replace(/--+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+  return encodeURIComponent(sanitizedString);
+};
+
 export function truncateText(text: string | undefined | null, maxLength: number) {
   if (text && text.length > maxLength) {
     return text.substring(0, maxLength) + '...';
@@ -47,3 +57,13 @@ export function formatNumberCompact(number: number): string {
     return (number / 1000000).toFixed(2) + 'M';
   }
 }
+
+
+export function convertToAsciiEquivalent(input: string): string {
+  // Normalize the string to handle Unicode characters
+  const normalizedString = input.normalize('NFD');
+  // Use a regular expression to remove non-ASCII characters
+  const asciiEquivalentString = normalizedString.replace(/[^\x00-\x7F]/g, '');
+  return asciiEquivalentString;
+}
+

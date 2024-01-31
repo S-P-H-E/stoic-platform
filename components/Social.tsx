@@ -9,7 +9,7 @@ import {auth, db} from "@/utils/firebase";
 import {message} from "antd";
 import {useRouter} from "next/navigation";
 import {collection, doc, getDoc, getDocs, query, setDoc, where} from "firebase/firestore";
-import {sanitizeString} from "@/utils/utils";
+import {convertToAsciiEquivalent} from "@/utils/utils";
 const Social = () => {
     const router = useRouter()
 
@@ -60,7 +60,7 @@ const Social = () => {
 
             if (querySnapshot.empty) {
 
-                const sanitizedName = sanitizeString(user?.displayName || '')
+                const sanitizedName = convertToAsciiEquivalent(user?.displayName || '')
 
                 if(!sanitizedName) {
                     return { error: 'There is an issue with your name, can you try another name?' }
@@ -73,6 +73,7 @@ const Social = () => {
                 const userData = {
                     name: user?.displayName,
                     email: user?.email,
+                    photoUrl: user?.photoURL,
                     status: 'user',
                     onboarding: true,
                     custom: true
