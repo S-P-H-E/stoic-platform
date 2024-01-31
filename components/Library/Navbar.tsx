@@ -1,5 +1,3 @@
-"use client"
-
 import CreateButton from '@/components/Library/CreateButton'
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { useState } from 'react';

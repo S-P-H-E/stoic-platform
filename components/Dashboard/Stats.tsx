@@ -27,8 +27,6 @@ export default function Statistics({ user }: { user: User }) {
       const channel = await getChannelInfo(user.status, user.social);
       const statistics: ChannelStatistics = channel.statistics;
       setChannelStatistics(statistics);
-
-      console.log(statistics);
     });
   }, [user.status, user.social, startTransition]);
 

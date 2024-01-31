@@ -1,4 +1,3 @@
-"use client"
 
 import { auth, db } from '@/utils/firebase';
 import clsx from 'clsx';

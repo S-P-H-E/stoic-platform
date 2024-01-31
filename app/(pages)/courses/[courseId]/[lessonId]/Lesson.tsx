@@ -324,8 +324,8 @@ export default function LessonComponent({
 
     const handleVimeoMessageAsync = async (event: MessageEvent) => {
       if (event.origin === 'https://player.vimeo.com' && userId && isPremium && lesson?.type == 'video') {
-        var iframe = document.querySelector('iframe');
-        var player = new VimeoPlayer(iframe);
+        const iframe = document.querySelector('iframe');
+        const player = new VimeoPlayer(iframe);
 
         player.on('play', function () {
           setVideoPlaying(true);
@@ -339,7 +339,7 @@ export default function LessonComponent({
 
         player.on('ended', async function () {
           setLocalCompleted(true);
-          CompleteVideoLesson();
+          await CompleteVideoLesson();
         });
       }
     };

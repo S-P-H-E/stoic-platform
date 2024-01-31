@@ -169,11 +169,23 @@ export function UserDataFetcher(): UserDataFetcherResult {
 
     if (user) {
       const userRef = collection(db, 'users');
-      const q = query(userRef, where('email', '==', user.email));
+      const q = query(userRef,
+          where('email', '==', user.email),
+          where('custom', '==', true)
+      );
       
       const unsubscribeFirestore = onSnapshot(q, (querySnapshot) => {
         if (!querySnapshot.empty) {
+
           const userData = querySnapshot.docs[0].data();
+
+/*          console.log(userData)
+
+          if (!userData.custom) {
+            console.log("Custom field not found for the user. You can add your logic here.");
+          } else {
+            console.log("Custom field is found")
+          }*/
 
           const userRoles = userData.roles && userData.roles.map((roleName: string) => {
             const role = roles.find((r) => r.name === roleName);

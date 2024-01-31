@@ -154,7 +154,7 @@ export default function Login() {
 
   return (
     <>
-    <div className='mx-2 flex flex-col gap-6 w-[22rem] sm:w-[27rem] border border-border shadow-xl p-7 rounded-xl pb-8'>
+    <div className='mx-2 flex flex-col gap-6 w-[22rem] bg-black/50 backdrop-blur-md sm:w-[27rem] border border-border shadow-xl p-7 rounded-xl pb-8'>
     {isLoginMode ? (
     <>
         <div>

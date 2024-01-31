@@ -4,14 +4,15 @@ import clsx from 'clsx'
 interface NewInputProps extends InputHTMLAttributes<HTMLInputElement> {
   id?: string;
   label?: string;
-  black?: boolean
+  black?: boolean;
+  inputClassName?: string
 }
 
-export default function NewInput({className, id, label, black, ...props}: NewInputProps) {
+export default function NewInput({inputClassName, className, id, label, black, ...props}: NewInputProps) {
   return (
     <div className={clsx("rounded-lg w-full min-w-0 flex", className, black ? 'bg-bg' : 'bg-darkgray')}>
         <div className="relative bg-inherit w-full">
-            <input {...props} id={id || 'input'} className="disabled:opacity-50 disabled:cursor-not-allowed transition placeholder-transparent focus:placeholder-muted-foreground peer bg-transparent h-10 w-full rounded-lg text-gray-200 ring-2 px-2 ring-highlight focus:ring-sky-600 focus:outline-none focus:border-rose-600"/>
+            <input {...props} id={id || 'input'} className={clsx("disabled:opacity-50 disabled:cursor-not-allowed transition placeholder-transparent focus:placeholder-muted-foreground peer bg-transparent h-10 w-full rounded-lg ring-2 px-2 ring-highlight focus:ring-sky-600 focus:outline-none focus:border-rose-600 text-gray-200", inputClassName)}/>
              <label htmlFor={id || 'input'} className="absolute cursor-text left-0 -top-3 text-sm text-muted-foreground bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-muted-foreground peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all">
               {label ? label : "Type inside me"}
             </label>

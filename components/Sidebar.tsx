@@ -238,7 +238,7 @@ const Sidebar = () => {
                           `text-${getUserRoleColor(userRoles)}`
                       )}
                     >
-                      {userName}
+                      {truncateText(userName, 10)}
                     </h1>
                   )}
                   {userEmail && userId ? (

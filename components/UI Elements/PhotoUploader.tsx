@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState, useCallback } from 'react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { storage } from '@/utils/firebase';
