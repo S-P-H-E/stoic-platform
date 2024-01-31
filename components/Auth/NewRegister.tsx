@@ -165,15 +165,6 @@ export default function NewRegister() {
                                         eye
                                     />
                                 </FormControl>
-                                <Dialog>
-                                    <DialogTrigger
-                                        className="text-white px-0 font-normal hover:underline underline-offset-4 active:scale-90 transition text-sm">
-                                        Forgot your password?
-                                    </DialogTrigger>
-                                    <DialogContent>
-                                        <ForgotPassword/>
-                                    </DialogContent>
-                                </Dialog>
                                 <FormMessage/>
                             </FormItem>
                         )}
