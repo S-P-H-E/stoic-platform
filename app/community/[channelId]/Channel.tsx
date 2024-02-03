@@ -22,6 +22,7 @@ import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BsPersonFill } from 'react-icons/bs';
+import {isUserAllowedToFetch} from "@/utils/utils";
 
 interface Channel {
   id: string;
@@ -62,12 +63,14 @@ interface Role {
 
 interface CommunityPageProps {
   channelId: string;
-  userId: string | null;
-  userStatus: string | undefined;
 }
 
-export default function CommunityPage({ channelId, userId, userStatus }: CommunityPageProps) {
+export default function CommunityPage({ channelId }: CommunityPageProps) {
   const router = useRouter();
+
+  const { userStatus, userId } = UserDataFetcher();
+
+  const allowedToFetch = isUserAllowedToFetch(userStatus)
 
   const [channels, setChannels] = useState<Channel[]>([]);
   const [currentChannel, setCurrentChannel] = useState<Channel>();

@@ -15,12 +15,13 @@ import {useRouter} from 'next/navigation'
 const UserComponent = () => {
   
   const router = useRouter()
-
-  const { userStatus, userId, userName } = UserDataFetcher();
   const [timedout, setTimedout] = useState(false);
+  const { userStatus, userId, userName } = UserDataFetcher();
+
   if(userStatus == 'premium' || userStatus == 'admin') {
     router.push(`user/${userId}`)
   }
+
   useEffect(() => {
       const timeoutId = setTimeout(() => {
         setTimedout(true);

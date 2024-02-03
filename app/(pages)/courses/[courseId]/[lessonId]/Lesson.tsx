@@ -46,6 +46,7 @@ import Lottie from 'lottie-react';
 import checkmarkAnimation from '@/public/lottie/checkmarkAnimation.json';
 import { isUserAllowedToFetch } from '@/utils/utils';
 import Unauthorized from './../../../../../components/Unauthorized';
+import {UserDataFetcher} from "@/utils/userDataFetcher";
 
 interface LessonItem {
   id: string;
@@ -60,14 +61,10 @@ interface LessonItem {
 export default function LessonComponent({
   lessonId,
   courseId,
-  userId,
-  userStatus,
   page
 }: {
   lessonId: string;
   courseId: string;
-  userId: string | null;
-  userStatus: string | undefined;
   page: number;
 }) {
   const router = useRouter();
@@ -84,8 +81,10 @@ export default function LessonComponent({
     new Map()
   );
   const [completedLessonCount, setCompletedLessonCount] = useState(null);
-
+  
+  const { userStatus, userId } = UserDataFetcher();
   const isPremium = isUserAllowedToFetch(userStatus);
+
 
   const fadeInAnimationVariants = {
     // for framer motion
@@ -514,7 +513,7 @@ export default function LessonComponent({
       <div className="flex justify-between items-center gap-6 w-full">
         <Link
           href={'/courses'}
-          className="text-highlight text-lg hover:text-stone-200 transition gap-1 flex items-center"
+          className="text-highlight text-lg hover:text-stone-200 active:scale-90 transition gap-1 flex items-center"
         >
           <BsChevronLeft />
           Go Back

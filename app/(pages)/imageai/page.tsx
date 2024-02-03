@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ImageAIGuard from "./ImageAIGuard";
+import ImageAIComponent from "@/app/(pages)/imageai/ImageAI";
 
 export const metadata: Metadata = {
   title: 'Image AI - STOIC',
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 
 export default function ImageAI() {
   return (
-    <ImageAIGuard/>
+    <ImageAIComponent/>
   )
 }

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CoursesGuard from "./CoursesGuard";
+import CoursesComponent from "@/app/(pages)/courses/Courses";
 
 export const metadata: Metadata = {
   title: 'Courses - STOIC',
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 
 export default function CoursesPage() {
   return (
-    <CoursesGuard/>
+    <CoursesComponent/>
   )
 }

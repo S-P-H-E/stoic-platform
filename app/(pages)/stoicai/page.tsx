@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import StoicAIGuard from "./StoicAIGuard";
+import StoicAIComponent from "@/app/(pages)/stoicai/StoicAI";
 
 export const metadata: Metadata = {
   title: 'Stoic AI - STOIC',
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function StoicAI() {
   return (
-    <StoicAIGuard/>
+    <StoicAIComponent/>
   )
 }
 

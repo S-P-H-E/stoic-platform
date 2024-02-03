@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import UserGuard from './UserGuard';
+import UserComponent from "@/app/(pages)/user/User";
 
 export const metadata: Metadata = {
     title: 'User - STOIC',
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 const UserPage = () => {
     return (
-        <UserGuard/>
+        <UserComponent/>
     );
 }
  

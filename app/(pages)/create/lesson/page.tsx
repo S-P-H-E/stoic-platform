@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CreateLessonGuard from "./CreateLessonGuard";
+import CreateLessonComponent from "@/app/(pages)/create/lesson/CreateLesson";
 
 interface CreateLessonPageProps {
   searchParams: {
@@ -22,6 +22,6 @@ export default function CreateLessonPage({
 }: CreateLessonPageProps
 ) {
   return (
-    <CreateLessonGuard end={end} courseId={courseId} type={type} title={title} final={final} description={description}/>
+    <CreateLessonComponent end={end} courseId={courseId} type={type} title={title} final={final} description={description}/>
   )
 }

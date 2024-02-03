@@ -2,6 +2,7 @@ import React, {useState, useTransition} from 'react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
+import bcrypt from "bcryptjs"
 import {
     Form,
     FormControl,
@@ -18,8 +19,6 @@ import FormError from '../FormError';
 import {auth, db} from "@/utils/firebase";
 import {message} from "antd";
 import {useRouter} from "next/navigation";
-import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
-import ForgotPassword from "@/components/Auth/ForgotPassword";
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import type {FirebaseError} from "@firebase/util";
 import {BiLoader} from "react-icons/bi";
@@ -62,11 +61,13 @@ export default function NewRegister() {
                 const userEmail = user.user.email;
                 const userName = values.name;
 
+                const hashedPassword = await bcrypt.hash(values.password, 10);
+
                 const userData = {
                     name: userName,
                     email: userEmail,
                     photoUrl: user.user.photoURL,
-                    password: values.password,
+                    password: hashedPassword,
                     status: 'user',
                     onboarding: true,
                     custom: true

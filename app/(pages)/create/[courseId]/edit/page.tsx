@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import EditCourseGuard from "./EditCourseGuard";
+import EditCourseComponent from "@/app/(pages)/create/[courseId]/edit/EditCourse";
 
 interface EditCoursePageProps {
   params: {
@@ -17,6 +17,6 @@ export default function EditCoursePageProps({
 }: EditCoursePageProps
 ) {
   return (
-    <EditCourseGuard courseId={courseId}/>
+    <EditCourseComponent courseId={courseId}/>
   )
 }

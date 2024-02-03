@@ -149,3 +149,12 @@ export const RegisterSchema = z.object({
     message: 'Name is required',
   }),
 });
+
+export const OnboardingSchema = z.object({
+  description: z.string().max(250, {
+    message: "Description must be 250 characters or less."
+  }),
+  social: z.string().max(250, {
+    message: "Social link must be 250 characters or less."
+  })
+})

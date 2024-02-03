@@ -1,15 +1,3 @@
-/* export interface User {
-  userStripeId: string;
-  userRoles: Role[] | "User" | undefined;
-  generalLastCourse: string;
-  userEmail: string | undefined;
-  generalLastLesson: string;
-  userName: string | null;
-  userStatus: string | undefined;
-  userProfileImageUrl: string;
-  userProfileBannerUrl: string;
-} */
-
 export interface Task {
   id: string;
   name: string;
@@ -31,6 +19,7 @@ export interface User {
   profileImageUrl?: string;
   profileBannerUrl?: string;
   social?: string | undefined;
+  onboarding: boolean
 }
   
 export interface Role {
@@ -45,6 +34,7 @@ export interface GlobalUser {
   status: string | undefined;
   name: string | null;
   stripeId: string | undefined;
+  onboarding: boolean;
 }
 
 export interface Course {

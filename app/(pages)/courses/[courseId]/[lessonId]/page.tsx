@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import LessonGuard from "./LessonGuard";
+import LessonComponent from "@/app/(pages)/courses/[courseId]/[lessonId]/Lesson";
 
 interface LessonIdPageProps {
   params: {
@@ -21,7 +21,7 @@ export default function LessonId({
   searchParams: {page}
 }: LessonIdPageProps) {
   return (
-    <LessonGuard page={page} courseId={courseId} lessonId={lessonId}/>
+    <LessonComponent page={page} courseId={courseId} lessonId={lessonId}/>
   )
 }
 

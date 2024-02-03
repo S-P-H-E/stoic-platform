@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import DashboardGuard from "./DashboardGuard";
+import DashboardComponent from "./Dashboard";
 
 export const metadata: Metadata = {
   title: 'Dashboard - STOIC',
@@ -8,7 +8,6 @@ export const metadata: Metadata = {
 
 export default function Dashboard() {
   return (
-    <DashboardGuard/>
+    <DashboardComponent/>
   )
 }
-

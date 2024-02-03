@@ -41,18 +41,18 @@ export default function Root({
             }
 
         </div>
-        <motion.div className="pointer-events-none" initial={{opacity: 0}} whileInView={{opacity: 0.4}} transition={{type: 'tween'}}>
-          <Image fill alt="Background pattern" quality={95} priority src={StoicPatternBG}/>
-        </motion.div>
+          <motion.div className="pointer-events-none" initial={{opacity: 0}} whileInView={{opacity: 0.4}} transition={{type: 'tween'}}>
+              <Image fill alt="Background pattern" quality={95} priority src={StoicPatternBG}/>
+              <div className="w-full h-full z-10 absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-transparent to-black"/>
+          </motion.div>
       </main>
     )
   } else if (userStatus && userStatus == 'user') {
-    router.push('/upgrade')
-  }
-  else {
-    router.push('/dashboard')
-    return (
-      <div className='h-screen flex flex-col justify-center items-center text-2xl'>
+      router.push('/upgrade')
+  } else {
+      router.push('/dashboard')
+      return (
+          <div className='h-screen flex flex-col justify-center items-center text-2xl'>
         <h3>You are logged in</h3>
         <div className='text-lg flex gap-2 items-center justify-center text-highlight'>
           <p>Returning to dashboard</p>

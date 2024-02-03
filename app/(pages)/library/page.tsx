@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import LibraryGuard from "./LibraryGuard";
+import LibraryComponent from "@/app/(pages)/library/Library";
 
 export const metadata: Metadata = {
   title: 'Library - STOIC',
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function Library() {
   return (
-    <LibraryGuard/>
+    <LibraryComponent/>
   )
 }
 

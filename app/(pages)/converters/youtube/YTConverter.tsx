@@ -18,6 +18,8 @@ import { FiExternalLink } from 'react-icons/fi';
 import Link from 'next/link';
 import { HiDownload } from 'react-icons/hi';
 import { YoutubeIcon } from 'lucide-react';
+import {UserDataFetcher} from "@/utils/userDataFetcher";
+import {isUserAllowedToFetch} from "@/utils/utils";
 
 interface Author {
   id: string;
@@ -53,6 +55,9 @@ export default function YTConverterComponent() {
   const [vidUrl, setVidUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [videoInfo, setVideoInfo] = useState<VideoInfo>();
+
+  const { userStatus } = UserDataFetcher();
+  const allowedToFetch = isUserAllowedToFetch(userStatus)
 
   const handleConvertClick = async () => {
     try {
@@ -104,7 +109,7 @@ export default function YTConverterComponent() {
         type="text"
         placeholder="Enter YouTube video URL"
         value={vidUrl}
-        disabled={loading}
+        disabled={loading || !allowedToFetch}
         onChange={(e) => setVidUrl(e.target.value)}
       />
 
@@ -171,7 +176,7 @@ export default function YTConverterComponent() {
               'bg-red-600 ring-red-400/50 hover:bg-red-500 border-red-500'
           )}
           onClick={correctYtUrl ? handleConvertClick : undefined}
-          disabled={loading || vidUrl.length == 0}
+          disabled={loading || vidUrl.length == 0 || !allowedToFetch}
         >
           {loading ? (
             <div className="flex gap-2 items-center">

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ChannelGuard from "./ChannelGuard";
+import ChannelComponent from "./Channel";
 
 export const metadata: Metadata = {
   title: 'Community - STOIC',
@@ -16,7 +16,7 @@ export default function Dashboard(
   { params: { channelId } }: CommunityPageProps
 ) {
   return (
-    <ChannelGuard channelId={channelId}/>
+    <ChannelComponent channelId={channelId}/>
   )
 }
 

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import UserIdGuard from './UserIdGuard';
+import UserIdComponent from "@/app/(pages)/user/[userId]/UserId";
 
 interface UserIdPageProps {
     params: {
@@ -16,7 +16,7 @@ const UserIdPage = ({
     params: {userId}
 }: UserIdPageProps) => {
     return (
-        <UserIdGuard userId={userId} />
+        <UserIdComponent userId={userId}/>
     );
 }
  

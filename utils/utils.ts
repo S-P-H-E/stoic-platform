@@ -25,8 +25,6 @@ export function truncateText(text: string | undefined | null, maxLength: number)
   return text;
 }
 
-export const isUserAllowedToFetch = (status: string | undefined) => status === 'premium' || status === 'admin';
-
 export function parseChannelIdFromUrl(url: string) {
   const regex = /(https?:\/\/)?(www\.)?youtu((\.be)|(be\..{2,5}))\/((user)|(channel))\/?([a-zA-Z0-9\-_]{1,})/;
   const match = url.match(regex);
@@ -75,3 +73,4 @@ export function convertToAsciiEquivalent(input: string): string {
   return sanitizedString;
 }
 
+export const isUserAllowedToFetch = (status: string | undefined) => status === 'premium' || status === 'admin';

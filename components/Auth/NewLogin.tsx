@@ -26,7 +26,7 @@ import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
 import ForgotPassword from "@/components/Auth/ForgotPassword";
 import {signInWithEmailAndPassword} from "firebase/auth";
 import type  {FirebaseError} from "@firebase/util";
-import {BiLoader} from "react-icons/bi";
+import { BiLoader } from 'react-icons/bi';
 
 const firebaseErrorMessages: Record<string, string> = {
     "auth/invalid-email": "The email address is not valid.",
@@ -40,6 +40,7 @@ export default function NewLogin() {
     const [error, setError] = useState<string | undefined>('');
     const [success, setSuccess] = useState<string | undefined>('');
     const [isPending, startTransition] = useTransition();
+    
 
     const router = useRouter()
 

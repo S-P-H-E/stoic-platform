@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import YTConverterGuard from "./YTConverterGuard";
+import YTConverterComponent from "@/app/(pages)/converters/youtube/YTConverter";
 export const metadata: Metadata = {
   title: 'Youtube Converter - STOIC',
   description: 'Youtube converter page of Stoic platform',
@@ -7,6 +7,6 @@ export const metadata: Metadata = {
 
 export default function Dashboard() {
   return (
-    <YTConverterGuard/>
+    <YTConverterComponent/>
   )
 }

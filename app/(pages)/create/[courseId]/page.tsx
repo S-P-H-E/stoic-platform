@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CreateCourseIdGuard from "./CreateCourseIdGuard";
+import CreateCourseIdComponent from "@/app/(pages)/create/[courseId]/CreateCourseId";
 
 interface CreateCourseIdPageProps {
   params: {
@@ -17,6 +17,6 @@ export default function CreateCourseIdPage({
 }: CreateCourseIdPageProps
 ) {
   return (
-    <CreateCourseIdGuard courseId={courseId}/>
+    <CreateCourseIdComponent courseId={courseId}/>
   )
 }

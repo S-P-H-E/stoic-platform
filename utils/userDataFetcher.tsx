@@ -22,6 +22,7 @@ interface UserDataFetcherResult {
   userProfileImageUrl: string;
   userProfileBannerUrl: string;
   userSocial: string | undefined;
+  userOnboarding: boolean;
 }
 interface Role {
   id: string;
@@ -44,6 +45,7 @@ export function UserDataFetcher(): UserDataFetcherResult {
   const [userProfileBannerUrl, setUserProfileBannerUrl] = useState('')
   const [userStripeId, setUserStripeId] = useState('')
   const [userSocial, setUserSocial] = useState('')
+  const [userOnboarding, setUserOnboarding] = useState(false)
 
   const [roles, setRoles] = useState<Role[]>([]);
 
@@ -204,6 +206,7 @@ export function UserDataFetcher(): UserDataFetcherResult {
             setUserStripeId(userData.stripe_customer_id)
             setUserDescription(userData.description)
             setUserSocial(userData.social)
+            setUserOnboarding(userData.onboarding)
 
             const newUserStatus = userData.status;
             setUserStatus(newUserStatus);
@@ -224,5 +227,5 @@ export function UserDataFetcher(): UserDataFetcherResult {
     return unsubscribeAuth;
   }, [user, router, roles]);
 
-  return { userSocial, userDescription, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, user, userId, fetching, userProfileImageUrl, userProfileBannerUrl};
+  return { userOnboarding, userSocial, userDescription, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, user, userId, fetching, userProfileImageUrl, userProfileBannerUrl};
 }

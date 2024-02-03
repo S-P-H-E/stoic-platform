@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import SettingsGuard from "./SettingsGuard";
+import SettingsComponent from "@/app/(pages)/user/[userId]/settings/Settings";
 
 export const metadata: Metadata = {
   title: 'Settings - STOIC',
@@ -16,7 +16,7 @@ export default function SettingsPage({
     params: {userId}
 }: SettingsPageProps) {
   return (
-    <SettingsGuard userId={userId}/>
+    <SettingsComponent userId={userId}/>
   )
 }
 

@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Course } from '@/types/types';
@@ -27,21 +29,17 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { message } from 'antd';
 import ImageUpload from '@/components/UI Elements/PhotoUploader';
 import { updateCourse } from '@/utils/updateFirestore';
+import {UserDataFetcher} from "@/utils/userDataFetcher";
+import {isUserAllowedToFetch} from "@/utils/utils";
+import PageLoader from "@/components/PageLoader";
+import Unauthorized from "@/components/Unauthorized";
 
 interface EditCourseComponentProps {
-  userStatus: string | undefined;
-  userId: string | null;
   courseId: string;
-  isAdmin: boolean;
-  isPremium: boolean;
 }
 
 export default function EditCourseComponent({
-  userStatus,
-  userId,
   courseId,
-  isAdmin,
-  isPremium,
 }: EditCourseComponentProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | undefined>();
@@ -52,7 +50,12 @@ export default function EditCourseComponent({
 
   const router = useRouter();
 
-  if (!isAdmin) {
+  const { userStatus, userId } = UserDataFetcher();
+
+  const isPremium = isUserAllowedToFetch(userStatus)
+  const isAdmin = userStatus === 'admin'
+
+  if (!isAdmin && userStatus) {
     router.push('/');
   }
   
@@ -83,7 +86,7 @@ export default function EditCourseComponent({
   useEffect(() => {
     if (!isAdmin && !courseId) {
       setCourse(null);
-    } else if (courseId) {
+    } else if (courseId && userStatus && isAdmin) {
       try {
         setLoading(true);
 
@@ -132,106 +135,112 @@ export default function EditCourseComponent({
     }
   };
 
-  return (
-    <div className="h-full flex flex-col w-full relative mx-auto max-w-7xl lg:py-10 gap-4 lg:px-16 md:p-6">
-      <div className="flex flex-col">
-        <h1 className="text-3xl font-semibold">{`Editing ${course?.name} for ${course?.name}`}</h1>
-      </div>
-      <ButtonShad
-        onClick={() => router.back()}
-        className="w-fit justify-start items-center gap-2 z-10 mb-4 text-primary-foreground active:scale-90 transition"
-        variant="link"
-      >
-        <FaArrowLeft />
-        Go back
-      </ButtonShad>
-      <div className="w-full flex flex-col gap-4 h-full justify-center">
-        <Form {...form}>
-          <form
-            className="space-y-4 pb-8"
-            onSubmit={form.handleSubmit(onSubmit)}
+  if (isAdmin && userStatus) {
+    return (
+        <div className="h-full flex flex-col w-full relative mx-auto max-w-7xl lg:py-10 gap-4 lg:px-16 md:p-6">
+          <div className="flex flex-col">
+            <h1 className="text-3xl font-semibold">{`Editing ${course?.name} for ${course?.name}`}</h1>
+          </div>
+          <ButtonShad
+              onClick={() => router.back()}
+              className="w-fit justify-start items-center gap-2 z-10 mb-4 text-primary-foreground active:scale-90 transition"
+              variant="link"
           >
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-lg">Title</FormLabel>
-                  <FormControl>
-                    <NewInput
-                      black
-                      disabled={loading}
-                      id="title"
-                      label={'Course title'}
-                      placeholder={'Enter the title of your course'}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-lg">Description</FormLabel>
-                  <FormControl>
-                    <NewTextArea
-                      black
-                      customHeight={'h-48'}
-                      disabled={loading}
-                      id="description"
-                      label={'Course description'}
-                      placeholder={
-                        'Enter a informative description of your course'
-                      }
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <div className="flex flex-col gap-2 w-full">
-              <FormLabel className="text-lg">Image</FormLabel>        
-              <ImageUpload predefinedImage={course?.image} create customPath={'/courses'} onComplete={handleImageUpload}/>
-            </div>
-
-            <div className="flex gap-2 items-center">
-              <FormLabel className="text-lg">Locked</FormLabel>
-              <Checkbox
-                checked={checked}
-                onCheckedChange={() => setChecked(!checked)}
-                className="active:scale-90 hover:scale-105"
-              />
-            </div>
-
-            <div className="flex gap-3 items-center">
-              <ButtonShad
-                variant="secondary"
-                disabled={loading}
-                type="submit"
-                className="order-first border-white border disabled:opacity-50 disabled:cursor-not-allowed active:scale-90 transition"
+            <FaArrowLeft />
+            Go back
+          </ButtonShad>
+          <div className="w-full flex flex-col gap-4 h-full justify-center">
+            <Form {...form}>
+              <form
+                  className="space-y-4 pb-8"
+                  onSubmit={form.handleSubmit(onSubmit)}
               >
-                {loading ? (
-                  <div className="flex gap-1 items-center">
-                    <BiLoader className="animate-spin" /> <p>Loading</p>
-                  </div>
-                ) : (
-                  'Continue'
-                )}
-              </ButtonShad>
+                <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-lg">Title</FormLabel>
+                          <FormControl>
+                            <NewInput
+                                black
+                                disabled={loading}
+                                id="title"
+                                label={'Course title'}
+                                placeholder={'Enter the title of your course'}
+                                {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
-              <FormError message={error} />
-              <FormSuccess message={success} />
-            </div>
-          </form>
-        </Form>
-      </div>
-    </div>
-  );
+                <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-lg">Description</FormLabel>
+                          <FormControl>
+                            <NewTextArea
+                                black
+                                customHeight={'h-48'}
+                                disabled={loading}
+                                id="description"
+                                label={'Course description'}
+                                placeholder={
+                                  'Enter a informative description of your course'
+                                }
+                                {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <div className="flex flex-col gap-2 w-full">
+                  <FormLabel className="text-lg">Image</FormLabel>
+                  <ImageUpload predefinedImage={course?.image} create customPath={'/courses'} onComplete={handleImageUpload}/>
+                </div>
+
+                <div className="flex gap-2 items-center">
+                  <FormLabel className="text-lg">Locked</FormLabel>
+                  <Checkbox
+                      checked={checked}
+                      onCheckedChange={() => setChecked(!checked)}
+                      className="active:scale-90 hover:scale-105"
+                  />
+                </div>
+
+                <div className="flex gap-3 items-center">
+                  <ButtonShad
+                      variant="secondary"
+                      disabled={loading}
+                      type="submit"
+                      className="order-first border-white border disabled:opacity-50 disabled:cursor-not-allowed active:scale-90 transition"
+                  >
+                    {loading ? (
+                        <div className="flex gap-1 items-center">
+                          <BiLoader className="animate-spin" /> <p>Loading</p>
+                        </div>
+                    ) : (
+                        'Continue'
+                    )}
+                  </ButtonShad>
+
+                  <FormError message={error} />
+                  <FormSuccess message={success} />
+                </div>
+              </form>
+            </Form>
+          </div>
+        </div>
+    );
+  } else if (isPremium && userStatus) {
+    return <Unauthorized/>
+  } else {
+    return <PageLoader/>
+  }
 }

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CourseGuard from "./CourseGuard";
+import CourseComponent from "@/app/(pages)/courses/[courseId]/Course";
 
 
 interface CourseIdPageProps {
@@ -17,6 +17,6 @@ export default function CourseId({
   params: {courseId}
 }: CourseIdPageProps) {
   return (
-    <CourseGuard courseId={courseId}/>
+    <CourseComponent courseId={courseId}/>
   )
 }

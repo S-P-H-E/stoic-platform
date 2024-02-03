@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ConvertersGuard from "./ConvertersGuard";
+import ConvertersComponent from "@/app/(pages)/converters/Converters";
 
 export const metadata: Metadata = {
   title: 'Converters - STOIC',
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function Converters() {
   return (
-    <ConvertersGuard/>
+    <ConvertersComponent/>
   )
 }
 

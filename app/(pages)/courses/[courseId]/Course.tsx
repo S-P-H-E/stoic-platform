@@ -6,6 +6,7 @@ import { collection, doc, getDoc, getDocs, orderBy, query } from 'firebase/fires
 import { UserDataFetcher } from '@/utils/userDataFetcher';
 import { BiLoader } from 'react-icons/bi';
 import type { User } from 'firebase/auth';
+import {isUserAllowedToFetch} from "@/utils/utils";
 
 type Course = {
   name: string;
@@ -22,17 +23,16 @@ type Lesson = {
 }
 
 interface CourseComponentProps {
-  userStatus: string | undefined;
-  userId: string | null;
-  user: User | null | undefined; // from firebase
-  allowedToFetch: boolean;
   courseId: string
 }
 
-export default function CourseComponent({userStatus, userId, user, allowedToFetch, courseId}: CourseComponentProps) {
+export default function CourseComponent({courseId}: CourseComponentProps) {
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [lessonToGo, setLessonToGo] = useState<string | undefined>(undefined);
+
+  const { user, userId, userStatus } = UserDataFetcher();
+  const allowedToFetch = isUserAllowedToFetch(userStatus)
 
   const router = useRouter()
 

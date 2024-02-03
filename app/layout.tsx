@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Toaster } from 'sonner';
 
 import { GeistSans } from "geist/font";
+import React from "react";
 
 export const metadata: Metadata = {
   title: 'S T O I C',
@@ -19,8 +20,8 @@ export default function RootLayout({
     <FirebaseProvider>
       <html lang="en">
         <body className={GeistSans.className}>
-          {children}
-          <Toaster />
+            {children}
+            <Toaster />
         </body>
       </html>
     </FirebaseProvider>

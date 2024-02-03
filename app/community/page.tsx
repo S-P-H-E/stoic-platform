@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CommunityGuard from "./CommunityGuard";
+import CommunityComponent from "@/app/community/Community";
 
 export const metadata: Metadata = {
   title: 'Community - STOIC',
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 
 export default function Community() {
   return (
-    <CommunityGuard/>
+    <CommunityComponent/>
   )
 }

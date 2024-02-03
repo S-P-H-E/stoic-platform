@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CreateGuard from "./CreateGuard";
+import CreateComponent from "@/app/(pages)/create/Create";
 
 export const metadata: Metadata = {
   title: 'Create - STOIC',
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 
 export default function Create() {
   return (
-    <CreateGuard/>
+    <CreateComponent/>
   )
 }

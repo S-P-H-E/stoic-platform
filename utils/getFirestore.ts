@@ -46,7 +46,7 @@ export const fetchCourses = (
 ): (() => void) => {
   const isAllowed = isUserAllowedToFetch(userStatus);
 
-  if (isAllowed) {
+  if (isAllowed && userStatus !== undefined) {
     const coursesRef = collection(db, 'courses');
     const unsubscribe = onSnapshot(coursesRef, async (querySnapshot) => {
       const courses: Array<Course> = await Promise.all(

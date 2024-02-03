@@ -1,9 +1,17 @@
+"use client"
+
 import Image from 'next/image';
 import React from 'react';
 import bgCover from '@/public/backgroundCover.jpg';
 import Converters from '@/components/Converter/Converters';
+import {isUserAllowedToFetch} from "@/utils/utils";
+import {UserDataFetcher} from "@/utils/userDataFetcher";
 
-export default function ConvertersComponent({allowedToFetch}: {allowedToFetch: boolean}) {
+export default function ConvertersComponent() {
+    const { userStatus } = UserDataFetcher();
+
+    const allowedToFetch = isUserAllowedToFetch(userStatus)
+
   return (
     <div className="h-full flex flex-col md:gap-16 gap-8 justify-between items-start w-full">
       <div className="relative flex w-full h-96">
