@@ -58,7 +58,6 @@ export default function CourseCard({
         <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-gray-900 via-bg to-neutral-950/20 z-10 group-hover:opacity-0 group-hover:brightness-125 transition duration-700" />
         <div className="absolute inset-0 w-full h-full bg-gradient-to-t from-stone-950 via-neutral-950/60 to-transparent z-20 opacity-0 group-hover:opacity-100 group-hover:brightness-125 transition duration-700" />
         <div className="absolute bottom-0 w-full h-[55%] z-10 bg-gradient-to-b from-bg via-bg/30 to-transparent" />
-        <div className="absolute bottom-[30%] w-full h-16 z-10 bg-bg blur-[20px]" />
         <Image
           className="object-cover rounded-xl brightness-50 transition duration-500 scale-150 group-hover:brightness-100 group-hover:scale-[1.15]"
           alt="Wave pattern"
