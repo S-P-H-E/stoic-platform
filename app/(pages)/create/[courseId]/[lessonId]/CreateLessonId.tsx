@@ -52,7 +52,7 @@ export default function CreateLessonIdComponent({
   const [checked, setChecked] = useState(
     lessonWithCourse.lesson?.locked || false
   );
-  
+
   const [contents, setContents] = useState<string[]>(['']);
   const [currentPage, setCurrentPage] = useState(0);
   const [HTMLContent, setHTMLContent] = useState('');
@@ -72,7 +72,14 @@ export default function CreateLessonIdComponent({
       });
     }
     setCurrentPage(newPage);
+
+    setContents((prevContents) => {
+      const newContents = [...prevContents];
+      newContents[currentPage] = updatedHTMLContent;
+      return newContents;
+    });
   };
+
 
   const router = useRouter();
 

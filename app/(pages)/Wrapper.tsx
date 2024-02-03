@@ -29,7 +29,6 @@ const AdvancedWrapper = ({ children}: {children: React.ReactNode}) => {
        router.push(description ? `${pathname}?step=2&description=${description}` : `${pathname}?step=2`)
    }
 
-   console.log(pathname)
     if (allowedToFetch && userOnboarding) {
         return (
             <>
