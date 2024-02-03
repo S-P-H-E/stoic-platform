@@ -18,7 +18,6 @@ const AdvancedWrapper = ({ children}: {children: React.ReactNode}) => {
     const description = searchParams.get('description')
     const step = searchParams.get('step')
 
-
     const router = useRouter()
     const pathname = usePathname()
 
@@ -33,8 +32,9 @@ const AdvancedWrapper = ({ children}: {children: React.ReactNode}) => {
         return (
             <>
 {/*
-                <OnboardingNotification selectedPlatforms={selectedPlatforms || ''} description={description || ''} userId={userId} userName={userName} step={step || ''} />
+                <OnboardingNotification selectedPlatforms={selectedPlatforms || ''} description={description || ''} userStatus={userStatus} userId={userId} userName={userName} step={step || ''} />
 */}
+
                 {children}
             </>
         );

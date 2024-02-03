@@ -5,7 +5,7 @@ import {AnimatePresence, motion} from "framer-motion";
 import OnboardingCard from "@/components/OnboardingCard";
 import clsx from "clsx";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {FaArrowRight} from "react-icons/fa";
 import {FaArrowLeft} from "react-icons/fa6";
 import {useForm} from "react-hook-form";
@@ -22,16 +22,19 @@ import TwitterAnimation from '@/public/lottie/twitter.json'
 import NewTextArea from "@/components/UI Elements/NewTextArea";
 import {BiLoader} from "react-icons/bi";
 import NewInput from "@/components/UI Elements/NewInput";
+import BannerUpload from "@/components/Settings/BannerPhotoUpload";
+import {isUserAllowedToFetch} from "@/utils/utils";
 
 interface OnboardingNotificationProps {
     userId: string | null;
     userName: string | null;
+    userStatus: string | undefined;
     step: string;
     description: string;
     selectedPlatforms: string;
 }
 
-const OnboardingNotification = ({userId, userName, step, description, selectedPlatforms}: OnboardingNotificationProps) => {
+const OnboardingNotification = ({userId, userName, userStatus, step, description, selectedPlatforms}: OnboardingNotificationProps) => {
 
     const [open, setOpen] = useState(!!step)
     const [animation, setAnimation] = useState(true)
@@ -43,14 +46,31 @@ const OnboardingNotification = ({userId, userName, step, description, selectedPl
 
     const router = useRouter()
 
+    const pathname = usePathname()
+
+    const isAuthorized = isUserAllowedToFetch(userStatus)
+
     const handleDialogClose = () => {
         setOpen(!open)
         setAnimation(true)
         setProgress(100)
         if (open) {
-            router.push('dashboard')
+            router.push(pathname)
         }
     }
+
+    const fadeInAnimationVariants = {
+        initial: {
+            opacity: 0,
+        },
+        animate: (index: number) => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: 0.1 * index,
+            },
+        }),
+    };
 
     const handlePlatformSelect = (platformTitle: string) => {
         // If selectedPlatforms is an empty string, set existingPlatforms to an empty array
@@ -66,7 +86,7 @@ const OnboardingNotification = ({userId, userName, step, description, selectedPl
 
         const updatedPlatforms = existingPlatforms.join(',');
 
-        router.push(`/dashboard?step=${step}&description=${encodeURIComponent(description)}&selectedPlatforms=${updatedPlatforms}`);
+        router.push(`${pathname}?step=${step}&description=${encodeURIComponent(description)}&selectedPlatforms=${updatedPlatforms}`);
     };
 
     const form = useForm<z.infer<typeof OnboardingSchema>>({
@@ -181,13 +201,20 @@ const OnboardingNotification = ({userId, userName, step, description, selectedPl
 
                     <div className="grid grid-cols-2 gap-4">
                         {socialPlatforms.map((platform, index) => (
-                            <OnboardingCard
+                            <motion.div
                                 key={index}
-                                icon={platform.icon}
-                                label={platform.title}
-                                onClick={() => handlePlatformSelect(platform.title)}
-                                checked={selectedPlatforms?.includes(platform.title)}
-                            />
+                                custom={index}
+                                variants={fadeInAnimationVariants}
+                                initial="initial"
+                                whileInView="animate"
+                            >
+                                <OnboardingCard
+                                    icon={platform.icon}
+                                    label={platform.title}
+                                    onClick={() => handlePlatformSelect(platform.title)}
+                                    checked={selectedPlatforms?.includes(platform.title)}
+                                />
+                            </motion.div>
                         ))}
                     </div>
                 </div>
@@ -202,35 +229,45 @@ const OnboardingNotification = ({userId, userName, step, description, selectedPl
                     <Form {...form}>
                         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
                             <div className={clsx('grid gap-5', socialPlatforms.length > 2 ? 'md:grid-cols-2' : 'grid-cols-1')}>
-                            {socialPlatforms
-                                .filter(platform => selectedPlatforms?.includes(platform.title))
-                                .map((socialForm, index) => (
-                                <FormField key={index}
-                                    control={form.control}
-                                    name={socialForm.title as "social"}
-                                    render={({field}) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <NewInput
-                                                    {...field}
-                                                    placeholder={`https://${socialForm.title.toLowerCase()}.com`}
-                                                    id={index.toString()}
-                                                    inputClassName='h-16'
-                                                    label={`Enter a link to your ${socialForm.title}`}
-                                                    disabled={isPending}
-                                                />
-                                            </FormControl>
-                                            <FormMessage/>
-                                        </FormItem>
-                                    )}
-                                />
-                            ))}
+                                {socialPlatforms
+                                    .filter(platform => selectedPlatforms?.includes(platform.title))
+                                    .map((socialForm, index) => (
+                                        <FormField key={index}
+                                                   control={form.control}
+                                                   name={socialForm.title as "social"}
+                                                   render={({field}) => (
+                                                       <FormItem>
+                                                           <FormControl>
+                                                               <NewInput
+                                                                   {...field}
+                                                                   placeholder={`https://${socialForm.title.toLowerCase()}.com`}
+                                                                   id={index.toString()}
+                                                                   inputClassName='h-16'
+                                                                   label={`Enter a link to your ${socialForm.title}`}
+                                                                   disabled={isPending}
+                                                               />
+                                                           </FormControl>
+                                                           <FormMessage/>
+                                                       </FormItem>
+                                                   )}
+                                        />
+                                    ))}
                             </div>
 
                             <FormError message={error}/>
                             <FormSuccess message={success}/>
                         </form>
                     </Form>
+                </div>
+            )
+        }, {
+            content: (
+                <div className="flex flex-col items-center h-full justify-center gap-4">
+                    <h2 className="text-xl font-medium">Upload your banner</h2>
+                    <BannerUpload
+                        isAuthorized={isAuthorized}
+                        userId={userId || ''}
+                    />
                 </div>
             )
         }
@@ -241,22 +278,22 @@ const OnboardingNotification = ({userId, userName, step, description, selectedPl
         Number(step) >= Steps.length || !FormDescription
             ? ''
             : selectedPlatforms
-                ? `/dashboard?step=${Number(step) + 1}&description=${encodeURIComponent(FormDescription)}&selectedPlatforms=${selectedPlatforms}`
+                ? `${pathname}?step=${Number(step) + 1}&description=${encodeURIComponent(FormDescription)}&selectedPlatforms=${selectedPlatforms}`
                 : Number(step) >= 2
-                    ? `/dashboard?step=${step}&description=${encodeURIComponent(FormDescription)}`
-                    : `/dashboard?step=${Number(step) + 1}&description=${encodeURIComponent(FormDescription)}`;
+                    ? `${pathname}?step=${step}&description=${encodeURIComponent(FormDescription)}`
+                    : `${pathname}?step=${Number(step) + 1}&description=${encodeURIComponent(FormDescription)}`;
 
     return (
         <div className="md:pl-[15rem] lg:pl-[18rem] bg-upgrade/50 w-full py-2 px-4 flex lg:flex-row flex-col items-center text-center justify-center gap-1 lg:gap-4">
             <h1>👋 Hello {userName}, you haven&#39;t finished the onboarding process yet.</h1>
             <Dialog open={open} onOpenChange={handleDialogClose}>
                 <DialogTrigger>
-                    <ButtonShad onClick={() => router.push('dashboard?step=1')} size="sm" variant="secondary">Complete Onboarding</ButtonShad>
+                    <ButtonShad onClick={() => router.push(pathname+'?step=1')} size="sm" variant="secondary">Complete Onboarding</ButtonShad>
                 </DialogTrigger>
                 <DialogContent className="max-w-[43rem] border-none rounded-none">
                     <div className="ring ring-highlight/40 rounded-xl flex flex-col gap-4 items-center justify-center p-8">
                         <div className="text-center">
-                        <h1 className="font-semibold text-3xl">Welcome, {userName}</h1>
+                            <h1 className="font-semibold text-3xl">Welcome, {userName}</h1>
                             <p className="font-light text-highlight">Lets customize your experience.</p>
                         </div>
 
@@ -285,14 +322,16 @@ const OnboardingNotification = ({userId, userName, step, description, selectedPl
                                             </AnimatePresence>
                                         </div>
                                         <Link
-                                            href={Number(step) > 1 ? description ?  selectedPlatforms ? `/dashboard?step=${Number(step) - 1}&description=${encodeURIComponent(description)}&selectedPlatforms=${selectedPlatforms}` : `/dashboard?step=${Number(step) - 1}&description=${encodeURIComponent(description)}`  : `/dashboard?step=${Number(step) - 1}` : ''}
+                                            href={Number(step) > 1 ? description ? selectedPlatforms ? `${pathname}?step=${Number(step) - 1}&description=${encodeURIComponent(description)}&selectedPlatforms=${selectedPlatforms}` : `${pathname}?step=${Number(step) - 1}&description=${encodeURIComponent(description)}` : `${pathname}?step=${Number(step) - 1}` : ''}
                                             className={clsx("transition active:scale-90 absolute left-0", Number(step) <= 1 ? 'cursor-not-allowed' : 'group')}>
-                                            <ButtonShad disabled={Number(step) <= 1} size="icon"><FaArrowLeft className="group-active:translate-x-0 group-hover:-translate-x-0.5 transition"/></ButtonShad>
+                                            <ButtonShad disabled={Number(step) <= 1} size="icon"><FaArrowLeft
+                                                className="group-active:translate-x-0 group-hover:-translate-x-0.5 transition"/></ButtonShad>
                                         </Link>
                                         <Link
                                             href={hrefValue}
                                             className={clsx("absolute right-0 active:scale-90 transition", Number(step) >= Steps.length || !FormDescription ? 'cursor-not-allowed' : 'group')}>
-                                            <ButtonShad disabled={Number(step) >= Steps.length || !FormDescription || step >= '2' && !selectedPlatforms} size="icon"><FaArrowRight className="group-active:translate-x-0 group-hover:translate-x-0.5 transition"/></ButtonShad>
+                                            <ButtonShad disabled={Number(step) >= Steps.length || !FormDescription || step >= '2' && !selectedPlatforms} size="icon"><FaArrowRight
+                                                className="group-active:translate-x-0 group-hover:translate-x-0.5 transition"/></ButtonShad>
                                         </Link>
                                     </motion.div>
                                 }
@@ -301,7 +340,8 @@ const OnboardingNotification = ({userId, userName, step, description, selectedPl
 
                         <div className="gap-4 flex items-center justify-center">
                             {Steps.map((_, index) => (
-                                <OnboardingSphere FormDescription={FormDescription} selectedPlatforms={selectedPlatforms} description={description} key={index} step={step >= '3' && !selectedPlatforms  ? index : index + 1} active={step === (index + 1).toString()}/>
+                                <OnboardingSphere FormDescription={FormDescription} selectedPlatforms={selectedPlatforms} description={description} key={index}
+                                                  pathname={pathname} step={step >= '3' && !selectedPlatforms ? index : index + 1} active={step === (index + 1).toString()}/>
                             ))}
                         </div>
                     </div>
@@ -313,12 +353,21 @@ const OnboardingNotification = ({userId, userName, step, description, selectedPl
 
 export default OnboardingNotification;
 
-const OnboardingSphere = ({active, FormDescription, step, description, selectedPlatforms}: { FormDescription: string | undefined, selectedPlatforms: string | undefined, description: string | undefined, active?: boolean, step: number }) => {
+const OnboardingSphere = ({active, pathname, FormDescription, step, description, selectedPlatforms}: {
+    FormDescription: string | undefined,
+    selectedPlatforms: string | undefined,
+    description: string | undefined,
+    active?: boolean,
+    pathname: string,
+    step: number
+}) => {
     return (
-        <Link href={description || FormDescription ? selectedPlatforms ? `dashboard?step=${step}&description=${FormDescription || description}&socialPlatforms=${selectedPlatforms}` : `dashboard?step=${step}&description=${FormDescription || description}` : `dashboard?step=${step}`} className={clsx("w-2.5 hover:border-white border" +
-            " transition h-2.5" +
-            " rounded-full", active ? 'bg-white' +
-            ' border-white' : 'border-highlight' +
-            ' bg-highlight')}/>
+        <Link
+            href={description || FormDescription ? selectedPlatforms ? `${pathname}?step=${step}&description=${FormDescription || description}&socialPlatforms=${selectedPlatforms}` : `${pathname}?step=${step}&description=${FormDescription || description}` : `${pathname}?step=${step}`}
+            className={clsx("w-2.5 hover:border-white border" +
+                " transition h-2.5" +
+                " rounded-full", active ? 'bg-white' +
+                ' border-white' : 'border-highlight' +
+                ' bg-highlight')}/>
     )
 }
