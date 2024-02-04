@@ -34,7 +34,6 @@ const AdvancedWrapper = ({ children}: {children: React.ReactNode}) => {
 {/*
                 <OnboardingNotification selectedPlatforms={selectedPlatforms || ''} description={description || ''} userStatus={userStatus} userId={userId} userName={userName} step={step || ''} />
 */}
-
                 {children}
             </>
         );

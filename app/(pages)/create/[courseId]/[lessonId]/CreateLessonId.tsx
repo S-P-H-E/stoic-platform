@@ -75,7 +75,7 @@ export default function CreateLessonIdComponent({
 
     setContents((prevContents) => {
       const newContents = [...prevContents];
-      newContents[currentPage] = updatedHTMLContent || '';
+      newContents[currentPage] = updatedHTMLContent || HTMLContent || '';
       return newContents;
     });
   };
