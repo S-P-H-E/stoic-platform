@@ -73,4 +73,40 @@ export function convertToAsciiEquivalent(input: string): string {
   return sanitizedString;
 }
 
+export function capitalizeFirstLetter(input: string): string {
+  if (!input) {
+    return '';
+  }
+
+  return input.charAt(0).toUpperCase() + input.slice(1);
+}
+
+export function isValidURL(value: string | undefined, socialPlatform: string): boolean {
+  if (!value) {
+    return true;
+  }
+
+  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+
+  let prefixRegex;
+  switch (socialPlatform) {
+    case 'youtube':
+      prefixRegex = /^https?:\/\/(www\.)?youtube\.com/;
+      break;
+    case 'instagram':
+      prefixRegex = /^https?:\/\/(www\.)?instagram\.com/;
+      break;
+    case 'twitter':
+      prefixRegex = /^https?:\/\/(www\.)?twitter\.com/;
+      break;
+    case 'tiktok':
+      prefixRegex = /^https?:\/\/(www\.)?tiktok\.com/;
+      break;
+    default:
+      return false;  // Unknown social platform
+  }
+
+  return urlRegex.test(value) && prefixRegex.test(value);
+}
+
 export const isUserAllowedToFetch = (status: string | undefined) => status === 'premium' || status === 'admin';

@@ -24,22 +24,22 @@ export default function Statistics({ user }: { user: User }) {
 
   const fetchData = useCallback(async () => {
     startTransition(async () => {
-      const channel = await getChannelInfo(user.status, user.social);
+      const channel = await getChannelInfo(user.status, user.social?.youtube);
       const statistics: ChannelStatistics = channel.statistics;
       setChannelStatistics(statistics);
     });
-  }, [user.status, user.social, startTransition]);
+  }, [user.status, user.social?.youtube, startTransition]);
 
   useEffect(() => {
-    if (isAllowed && user.social) {
+    if (isAllowed && user.social?.youtube) {
       fetchData();
     }
-  }, [isAllowed, fetchData, user.social]);
+  }, [isAllowed, fetchData, user.social?.youtube]);
 
   return (
     <div className="flex flex-col gap-4 w-full h-40">
       <h1 className="text-2xl font-medium">Social Stats</h1>
-      {user.social && isPending ? (
+      {user.social?.youtube && isPending ? (
         <div className="w-full h-full flex items-center justify-center">
           <BeatLoader color="#fff" />
         </div>

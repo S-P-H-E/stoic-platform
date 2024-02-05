@@ -6,6 +6,14 @@ export interface Task {
   completed: boolean;
 }
 
+export interface SocialInfo {
+  youtube?: string;
+  instagram?: string;
+  twitter?: string;
+  tiktok?: string;
+  [key: string]: string | undefined;
+}
+
 export interface User {
   id?: string | null
   stripeId?: string;
@@ -18,8 +26,8 @@ export interface User {
   status?: string | undefined;
   profileImageUrl?: string;
   profileBannerUrl?: string;
-  social?: string | undefined;
-  onboarding: boolean
+  onboarding: boolean;
+  social?: SocialInfo;
 }
   
 export interface Role {

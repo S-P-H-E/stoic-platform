@@ -49,7 +49,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type={eye ? (showPassword ? 'text' : 'password') : type}
           className={clsx(
-            'flex w-full outline-none text-sm file:border-0 file:bg-transparent bg-black text-white file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
+            'flex w-full focus:outline-none outline-none text-sm file:border-0 file:bg-transparent bg-black text-white file:text-sm file:font-medium placeholder:text-muted-foreground' +
+              ' disabled:cursor-not-allowed disabled:opacity-50',
             className
           )}
           ref={ref}

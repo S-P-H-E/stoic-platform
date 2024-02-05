@@ -6,6 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '@/utils/firebase';
 import { useRouter } from 'next/navigation';
 import { User } from 'firebase/auth';
+import {SocialInfo} from "@/types/types";
 
 interface UserDataFetcherResult {
   userStripeId: string;
@@ -21,7 +22,7 @@ interface UserDataFetcherResult {
   fetching: boolean;
   userProfileImageUrl: string;
   userProfileBannerUrl: string;
-  userSocial: string | undefined;
+  userSocial: SocialInfo | undefined;
   userOnboarding: boolean;
 }
 interface Role {
@@ -44,7 +45,7 @@ export function UserDataFetcher(): UserDataFetcherResult {
   const [userProfileImageUrl, setUserProfileImageUrl] = useState('')
   const [userProfileBannerUrl, setUserProfileBannerUrl] = useState('')
   const [userStripeId, setUserStripeId] = useState('')
-  const [userSocial, setUserSocial] = useState('')
+  const [userSocial, setUserSocial] = useState<SocialInfo>({ youtube: '' });
   const [userOnboarding, setUserOnboarding] = useState(false)
 
   const [roles, setRoles] = useState<Role[]>([]);

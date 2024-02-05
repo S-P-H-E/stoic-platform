@@ -63,7 +63,6 @@ const Activities = ({
       completedAt: new Date('2024-01-22T12:15:00'),
       icon: <Play size={30} />,
     },
-    // Add more activities as needed
   ];
 
   return (

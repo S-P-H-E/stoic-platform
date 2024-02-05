@@ -139,13 +139,13 @@ export default function UpgradeComponent({userStatus}: {userStatus: string | und
           router.push(checkoutUrl);
         }
       } else {
-        console.log('creating new customer...')
+        /*console.log('creating new customer...')*/
         const createdCustomerId = await createCustomerIfNull();
-        console.log('created new customer with id: ' + createdCustomerId)
+        /*console.log('created new customer with id: ' + createdCustomerId)*/
 
-        console.log('creating customerportal')
+        /*console.log('creating customerportal')*/
         const customerPortalUrl = await generateCheckoutLink(createdCustomerId);
-        console.log('created customerportal with url: ' + customerPortalUrl)
+        /*console.log('created customerportal with url: ' + customerPortalUrl)*/
 
         if (customerPortalUrl) {
           router.push(customerPortalUrl);

@@ -24,13 +24,10 @@ export const getChannelInfo = async (
   
       const channelInfo = await channelResponse.json();
 
-      console.log(channelInfo)
-  
       if (channelInfo.items && channelInfo.items.length > 0) {
         const channelItem = channelInfo.items[0];
   
         if (channelItem.kind === 'youtube#channel') {
-          console.log(channelInfo);
           return channelItem;
         } else {
           return { error: 'There was an issue with your request. Can you update your social information?' };

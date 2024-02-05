@@ -20,7 +20,7 @@ const MobileSidebar = () => {
   if (!isMounted) return null; // Prevents SSR issues if react-lottie or dependencies are null
 
   return (
-    <div className="flex justify-between md:hidden px-6 py-4">
+    <div className="flex justify-between md:hidden px-6 w-full py-4 min-w-[350px] mx-auto">
       <Sheet>
         <SheetTrigger>
           <button className="bg-bg border-border border rounded-lg p-3 hover:bg-white hover:text-black transition duration-200">

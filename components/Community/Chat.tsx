@@ -130,8 +130,8 @@ export default function Chat({
   };
 
   useEffect(() => {
-    const audio = new Audio('/test.mp3');
-    messageSoundRef.current = audio;
+/*    const audio = new Audio('/test.mp3');
+    messageSoundRef.current = audio;*/
 
     // Clean up when the component unmounts
     return () => {

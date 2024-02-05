@@ -33,7 +33,7 @@ export default function Root({
   if (!user) {
     return (
       <main className='min-h-screen flex justify-center items-center'>
-        <div className='z-10'>
+        <div className='z-10 w-full px-6 flex items-center justify-center'>
             {mode === 'register' ?
                 <NewRegister/>
             :

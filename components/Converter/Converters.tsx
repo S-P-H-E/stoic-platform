@@ -33,7 +33,7 @@ const converters = [
     disabled: false,
   },
   {
-    name: 'X Converter',
+    name: 'Twitter (X) Converter',
     description:
       'Convert X (Twitter) videos into downloadable video and audio files.',
     color: 'bg-yellow-800', // ? change to black

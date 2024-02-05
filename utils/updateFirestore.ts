@@ -5,22 +5,29 @@ import {message} from 'antd'
 import { Course, Lesson } from '@/types/types';
 
 export const updateUserDetails = async (
-  userStatus: string | undefined,
-  userId: string,
-  details: Record<string, any>
+    userStatus: string | undefined,
+    userId: string,
+    details: Record<string, any>
 ): Promise<void> => {
   try {
     const isAllowed = isUserAllowedToFetch(userStatus)
 
     if (isAllowed) {
       const userDocRef = doc(db, 'users', userId);
-      await updateDoc(userDocRef, details);
+
+      const filteredDetails = Object.fromEntries(
+          Object.entries(details).filter(([_, value]) => value !== undefined)
+      );
+
+      await updateDoc(userDocRef, filteredDetails);
     }
     else {
       message.error('You are not allowed to take this action')
     }
   } catch (error: any) {
-    /* console.error('Error updating user details:', error.message); */
+/*
+    console.error('Error updating user details:', error.message);
+*/
     throw error;
   }
 };
@@ -304,6 +311,25 @@ export const deleteCourse = async (
     await deleteDoc(courseDocRef);
   } catch (error: any) {
     console.error('Error deleting course:', error.message);
+    throw error;
+  }
+};
+
+export const updateUser = async (
+    userId: string | null,
+    updatedDetails: Record<string, any>
+): Promise<void> => {
+  try {
+    if (userId) {
+      const userDocRef = doc(db, 'users', userId);
+
+      await updateDoc(userDocRef, updatedDetails);
+      message.success('User updated successfully!');
+    } else {
+      message.error('User ID is not valid');
+    }
+  } catch (error: any) {
+    console.error('Error updating user:', error.message);
     throw error;
   }
 };

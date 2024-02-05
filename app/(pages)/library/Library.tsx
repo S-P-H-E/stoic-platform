@@ -10,7 +10,7 @@ export default function LibraryComponent() {
     const allowedToFetch = isUserAllowedToFetch(userStatus)
 
     return (
-    <section className="lg:py-10 lg:px-16 p-6 flex flex-col gap-4 w-full">
+    <section className="lg:py-10 lg:px-16 p-6 flex flex-col gap-4 w-full min-w-[300px] mx-auto">
       <Resources isPremium={allowedToFetch} userStatus={userStatus} userId={userId}/>
     </section>
   )

@@ -9,6 +9,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
 import { message } from 'antd';
 import { LuWallet } from "react-icons/lu";
+import clsx from "clsx";
 
 
 
@@ -20,9 +21,10 @@ interface MembershipProps {
   globalStripeCustomerId: string | undefined;
   globalUserName: string | null | undefined;
   user: User;
+  settings?: boolean;
 }
 
-export default function Membership({user, stripeCustomerId, userId, globalUserId, globalUserRole, globalUserName, globalStripeCustomerId}: MembershipProps) {
+export default function Membership({settings, user, stripeCustomerId, userId, globalUserId, globalUserRole, globalUserName, globalStripeCustomerId}: MembershipProps) {
     const [loading, setLoading] = useState(false);
 
     const router = useRouter()
@@ -135,6 +137,6 @@ export default function Membership({user, stripeCustomerId, userId, globalUserId
       };
 
   return (
-    <ButtonShad onClick={handleClick} disabled={loading} className="disabled:cursor-not-allowed active:scale-90 transition">{loading ? <BiLoader className="animate-spin"/> : <div className="flex items-center gap-1"> <LuWallet size={16}/> <p className="lg:block hidden">Membership</p></div>}</ButtonShad>
+    <ButtonShad onClick={handleClick} disabled={loading} className="disabled:cursor-not-allowed active:scale-90 transition">{loading ? <BiLoader className="animate-spin"/> : <div className="flex items-center gap-1"> <LuWallet size={16}/> <p className={clsx(!settings && "lg:block hidden")}>Membership</p></div>}</ButtonShad>
   )
 }

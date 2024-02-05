@@ -21,6 +21,7 @@ interface BannerModalProps {
   userId: string;
   isAuthorized: boolean;
   bypass?:boolean
+  noTitle?: boolean
 }
 
 export default function BannerUpload({
@@ -30,6 +31,7 @@ export default function BannerUpload({
   userId,
   isAuthorized,
   bypass,
+    noTitle
 }: BannerModalProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [photoUrl, setBannerImageUrl] = useState<string | null>(null);
@@ -99,11 +101,13 @@ export default function BannerUpload({
   });
 
   return (
-    <div className="relative h-full bg-modal border-border border flex flex-col gap-3 p-6 rounded-xl text-center">
-      <h1 className="text-lg font-medium pb-2">Change Banner</h1>
+    <div className={clsx(!noTitle ? ' bg-modal border-border border h-full p-6' : 'h-[70%]', "relative flex flex-col gap-3 rounded-xl text-center", noTitle && selectedImage && 'mb-16')}>
+      {!noTitle &&
+        <h1 className="text-lg font-medium pb-2">Change Banner</h1>
+      }
       <div
-        {...getRootProps()}
-        className="border-dashed border-2 border-border h-full flex items-center justify-center hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer"
+          {...getRootProps()}
+          className="border-dashed border-2 border-border h-full flex items-center justify-center hover:bg-black/40 transition p-4 rounded-lg text-center cursor-pointer"
       >
         <input {...getInputProps()} />
         {selectedImage ? (
@@ -169,7 +173,7 @@ export default function BannerUpload({
             {
               'text-highlight': isLoading,
             },
-            'font-lg text-base lg:text-xl'
+              !noTitle && 'lg:text-xl'
           )}
           onClick={uploadBannerPicture}
           disabled={isLoading}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { doc, onSnapshot, collection, query, where } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
+import {SocialInfo} from "@/types/types";
 
 interface Role {
   id: string;
@@ -21,7 +22,7 @@ export function UserDataFetcherById(userId: string) {
   const [userProfileImageUrl, setUserProfileImageUrl] = useState('')
   const [userProfileBannerUrl, setUserProfileBannerUrl] = useState('')
   const [userStripeId, setUserStripeId] = useState('')
-  const [userSocial, setUserSocial] = useState('')
+  const [userSocial, setUserSocial] = useState<SocialInfo>({});
   const [userDescription, setUserDescription] = useState('')
   const [userOnboarding, setUserOnboarding] = useState(false)
 
