@@ -84,11 +84,11 @@ const Sidebar = () => {
             icon: BrainCircuit,
             href: '/stoicai',
         },
-        {
+/*        {
             label: 'Image AI',
             icon: ImagePlus,
             href: '/imageai',
-        },
+        },*/
         {
             label: 'Converters',
             icon: Video,

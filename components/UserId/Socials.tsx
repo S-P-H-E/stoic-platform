@@ -5,9 +5,8 @@ import clsx from 'clsx';
 import {doc, updateDoc} from 'firebase/firestore';
 import React, {useState} from 'react'
 import {FaTiktok, FaInstagram, FaYoutube, FaQuestion} from 'react-icons/fa';
-import Link from 'next/link'
 import {capitalizeFirstLetter, isValidURL} from "@/utils/utils";
-import {FaTwitter} from "react-icons/fa6";
+import {FaXTwitter} from "react-icons/fa6";
 
 enum SocialMediaPlatform {
     TikTok = 'TikTok',
@@ -21,7 +20,7 @@ const platformLogos = {
     [SocialMediaPlatform.TikTok]: <FaTiktok/>,
     [SocialMediaPlatform.Instagram]: <FaInstagram/>,
     [SocialMediaPlatform.YouTube]: <FaYoutube/>,
-    [SocialMediaPlatform.Twitter]: <FaTwitter/>,
+    [SocialMediaPlatform.Twitter]: <FaXTwitter/>,
     [SocialMediaPlatform.Unknown]: <FaQuestion/>,
 };
 

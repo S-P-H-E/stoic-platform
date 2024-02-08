@@ -167,27 +167,27 @@ const OnboardingNotification = ({final, userId, userName, userStatus, step, skip
         // get from searchparam if not from values if not empty string
 
         if ( Number(step) === 4 && description && (skip === 'true' || selectedPlatforms && socialPlatforms) )
-        startTransition(async () => {
-            try {
-                const updatedSocials = {
-                    instagram: formSocials.instagram || instagram || '',
-                    twitter: formSocials.twitter || twitter || '',
-                    youtube: formSocials.youtube || youtube || '',
-                    tiktok: formSocials.tiktok || tiktok || '',
-                };
+            startTransition(async () => {
+                try {
+                    const updatedSocials = {
+                        instagram: formSocials.instagram || instagram || '',
+                        twitter: formSocials.twitter || twitter || '',
+                        youtube: formSocials.youtube || youtube || '',
+                        tiktok: formSocials.tiktok || tiktok || '',
+                    };
 
-                const UpdatedUserDetails = {
-                    description: FormDescription || description || '',
-                    social: updatedSocials,
-                    onboarding: false
+                    const UpdatedUserDetails = {
+                        description: FormDescription || description || '',
+                        social: updatedSocials,
+                        onboarding: false
+                    }
+
+                    await updateUser(userId, UpdatedUserDetails);
+                    message.success('You have succesfully completed the onboarding!')
+                } catch {
+                    setError('Something went wrong!');
                 }
-
-                await updateUser(userId, UpdatedUserDetails);
-                message.success('You have succesfully completed the onboarding!')
-            } catch {
-                setError('Something went wrong!');
-            }
-        });
+            });
     };
 
     const handleRemovePlatform = (platformTitle: string) => {
@@ -251,9 +251,9 @@ const OnboardingNotification = ({final, userId, userName, userStatus, step, skip
                                                 {...field}
                                                 placeholder={placeholderMessages[Math.floor(Math.random() * placeholderMessages.length)]}
                                                 id="description"
-                                                customWidth="w-96"
+                                                customWidth="md:w-96"
                                                 customHeight="h-24 md:h-32"
-                                                label="Enter a description about you"
+                                                label="Enter your description"
                                                 disabled={isPending}
                                             />
                                         </FormControl>
@@ -421,7 +421,7 @@ const OnboardingNotification = ({final, userId, userName, userStatus, step, skip
                             </div>
                             <p className="text-highlight text-sm">* You can always link your accounts later in user settings</p>
                         </DialogContent>
-                    </Dialog>
+                    </Dialog>pst
                 </div>
             )
         },
@@ -495,7 +495,7 @@ const OnboardingNotification = ({final, userId, userName, userStatus, step, skip
                 <DialogTrigger>
                     <ButtonShad onClick={() => router.push(pathname + '?step=1')} size="sm" variant="secondary">Complete Onboarding</ButtonShad>
                 </DialogTrigger>
-                <DialogContent className="max-w-[43rem] border-none rounded-none">
+                <DialogContent className="max-w-[43rem] border-none rounded-xl">
                     <div className="ring ring-highlight/40 rounded-xl flex flex-col gap-4 items-center justify-center p-8">
                         <div className="text-center">
                             <h1 className="font-semibold text-3xl">Welcome, {userName}</h1>
@@ -528,22 +528,39 @@ const OnboardingNotification = ({final, userId, userName, userStatus, step, skip
                                                 ))}
                                             </AnimatePresence>
                                         </div>
-                                        <Link
-                                            href={final === 'true' ? '' : (Number(step) > 1 ? description ? selectedPlatforms ? `${pathname}?step=${Number(step) - 1}&description=${encodeURIComponent(description)}&selectedPlatforms=${selectedPlatforms}` : `${pathname}?step=${Number(step) - 1}&description=${encodeURIComponent(description)}` : `${pathname}?step=${Number(step) - 1}` : '')}
-                                            className={clsx("transition active:scale-90 absolute left-0", Number(step) <= 1 ? 'cursor-not-allowed' : 'group')}>
-                                            <ButtonShad disabled={Number(step) <= 1 || final === 'true'} size="icon"><FaArrowLeft
-                                                className="group-active:translate-x-0 group-hover:-translate-x-0.5 transition"/></ButtonShad>
-                                        </Link>
-                                        <button
-                                            onClick={handleNext}
-                                            className={clsx("absolute right-0 active:scale-90 transition", isDisabled ? 'cursor-not-allowed' : 'group')}>
-                                            <ButtonShad
-                                                size="icon"
-                                                disabled={isDisabled}
-                                            >
-                                                <FaArrowRight className="group-active:translate-x-0 group-hover:translate-x-0.5 transition"/>
-                                            </ButtonShad>
-                                        </button>
+                                            <Link
+                                                href={final === 'true' ? '' : (Number(step) > 1 ? description ? selectedPlatforms ? `${pathname}?step=${Number(step) - 1}&description=${encodeURIComponent(description)}&selectedPlatforms=${selectedPlatforms}` : `${pathname}?step=${Number(step) - 1}&description=${encodeURIComponent(description)}` : `${pathname}?step=${Number(step) - 1}` : '')}
+                                                className={clsx("transition hidden md:block active:scale-90 absolute left-0", Number(step) <= 1 ? 'cursor-not-allowed' : 'group')}>
+                                                <ButtonShad disabled={Number(step) <= 1 || final === 'true'} size="icon"><FaArrowLeft
+                                                    className="group-active:translate-x-0 group-hover:-translate-x-0.5 transition"/></ButtonShad>
+                                            </Link>
+                                            <button
+                                                onClick={handleNext}
+                                                className={clsx("absolute hidden md:block right-0 active:scale-90 transition", isDisabled ? 'cursor-not-allowed' : 'group')}>
+                                                <ButtonShad
+                                                    size="icon"
+                                                    disabled={isDisabled}
+                                                >
+                                                    <FaArrowRight className="group-active:translate-x-0 group-hover:translate-x-0.5 transition"/>
+                                                </ButtonShad>
+                                            </button>
+
+                                            <Link
+                                                href={final === 'true' ? '' : (Number(step) > 1 ? description ? selectedPlatforms ? `${pathname}?step=${Number(step) - 1}&description=${encodeURIComponent(description)}&selectedPlatforms=${selectedPlatforms}` : `${pathname}?step=${Number(step) - 1}&description=${encodeURIComponent(description)}` : `${pathname}?step=${Number(step) - 1}` : '')}
+                                                className={clsx("md:hidden transition active:scale-90 absolute left-0 bottom-0", Number(step) <= 1 ? 'cursor-not-allowed' : 'group')}>
+                                                <ButtonShad disabled={Number(step) <= 1 || final === 'true'} size="icon"><FaArrowLeft
+                                                    className="group-active:translate-x-0 group-hover:-translate-x-0.5 transition"/></ButtonShad>
+                                            </Link>
+                                            <button
+                                                onClick={handleNext}
+                                                className={clsx("md:hidden absolute right-0 bottom-0 active:scale-90 transition", isDisabled ? 'cursor-not-allowed' : 'group')}>
+                                                <ButtonShad
+                                                    size="icon"
+                                                    disabled={isDisabled}
+                                                >
+                                                    <FaArrowRight className="group-active:translate-x-0 group-hover:translate-x-0.5 transition"/>
+                                                </ButtonShad>
+                                            </button>
                                     </motion.div>
                                 }
                             </AnimatePresence>

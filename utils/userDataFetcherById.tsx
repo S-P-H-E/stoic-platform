@@ -13,6 +13,7 @@ interface Role {
 }
 
 export function UserDataFetcherById(userId: string) {
+  const [userUid, setUserUid] = useState(undefined);
   const [userName, setUserName] = useState(null);
   const [userStatus, setUserStatus] = useState<string>();
   const [userRoles, setUserRoles] = useState<Role[] | "User">();
@@ -25,6 +26,8 @@ export function UserDataFetcherById(userId: string) {
   const [userSocial, setUserSocial] = useState<SocialInfo>({});
   const [userDescription, setUserDescription] = useState('')
   const [userOnboarding, setUserOnboarding] = useState(false)
+  const [userCreatedAt, setUserCreatedAt] = useState<Date | undefined>(undefined)
+  const [userEmailVerified, setUserEmailVerified] = useState(false)
 
   const [roles, setRoles] = useState<Role[]>([]);
 
@@ -69,11 +72,14 @@ export function UserDataFetcherById(userId: string) {
         setUserDescription(userData.description)
         setUserSocial(userData.social)
         setUserOnboarding(userData.onboading)
+        setUserEmailVerified(userData.emailVerified)
+        setUserCreatedAt(userData.createdAt)
+        setUserUid(userData.uid)
       }
     });
 
     return () => unsubscribe();
   }, [userId, roles]);
 
-  return { userDescription, userSocial, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userOnboarding, userStatus, userProfileImageUrl, userProfileBannerUrl };
+  return { userUid, userEmailVerified, userCreatedAt, userDescription, userSocial, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userOnboarding, userStatus, userProfileImageUrl, userProfileBannerUrl };
 }

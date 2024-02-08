@@ -19,7 +19,7 @@ import NewInput from '../UI Elements/NewInput';
 import {Input} from '../ui/modifiedInput';
 import FormSuccess from '../FormSuccess';
 import FormError from '../FormError';
-import {auth} from "@/utils/firebase";
+import {auth, db} from "@/utils/firebase";
 import {message} from "antd";
 import {useRouter} from "next/navigation";
 import {Dialog, DialogContent, DialogTrigger} from "@/components/ui/dialog";
@@ -27,6 +27,7 @@ import ForgotPassword from "@/components/Auth/ForgotPassword";
 import {signInWithEmailAndPassword} from "firebase/auth";
 import type  {FirebaseError} from "@firebase/util";
 import { BiLoader } from 'react-icons/bi';
+import {collection, getDocs, query, where} from "firebase/firestore";
 
 const firebaseErrorMessages: Record<string, string> = {
     "auth/invalid-email": "The email address is not valid.",
@@ -40,7 +41,6 @@ export default function NewLogin() {
     const [error, setError] = useState<string | undefined>('');
     const [success, setSuccess] = useState<string | undefined>('');
     const [isPending, startTransition] = useTransition();
-    
 
     const router = useRouter()
 
@@ -50,11 +50,28 @@ export default function NewLogin() {
 
     const login = async (values: z.infer<typeof LoginSchema>) => {
         try {
-            const user = await signInWithEmailAndPassword(auth, values.email, values.password)
+            const q = query(collection(db, 'users'), where('email', '==', values.email), where('custom', '==', true));
+            const querySnapshot = await getDocs(q);
 
+            if (!querySnapshot.empty) {
+                const userDoc = querySnapshot.docs[0];
+
+                if (!userDoc.data().password) {
+                    message.warning(`Looks like you signed up with Google or Twitter, use those to log in.`);
+                    return;
+                }
+            } else {
+                message.error("User not found or not authorized.");
+                return;
+            }
+
+            const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
             message.success("Signed in successfully");
             router.push('/dashboard');
         } catch (error) {
+/*
+            console.log(error)
+*/
             const firebaseError = error as FirebaseError;
             const errorCode = firebaseError.code as keyof typeof firebaseErrorMessages;
             const errorMessage = firebaseErrorMessages[errorCode] || "An error occurred. Please try again.";

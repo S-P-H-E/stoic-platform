@@ -1,6 +1,21 @@
 import * as z from 'zod';
 import {isValidURL} from "@/utils/utils";
 
+export const ResetPasswordPageSchema = z.object({
+    password: z.string().min(7, {
+        message: 'Minimum 7 characters required'
+    })
+})
+
+export const UpdatePasswordPageSchema = z.object({
+    password: z.string().min(1, {
+        message: 'Password is required.'
+    }),
+    newPassword: z.string().min(7, {
+        message: 'Minimum 7 characters required'
+    })
+})
+
 export const SettingsSchema = z.object({
     name: z.optional(
         z.string().max(40, {message: 'Name must be at most 40 characters'})
@@ -10,6 +25,9 @@ export const SettingsSchema = z.object({
             .string()
             .max(250, {message: 'Description must be at most 250 characters'})
     ),
+    email: z.optional(z.string().email({
+        message: 'Invalid email',
+    })),
   // change for multiple stuff from onboarding copy
     instagram: z.optional(z.string().max(250).refine(value => isValidURL(value, 'instagram'), {
         message: "Invalid Instagram link."

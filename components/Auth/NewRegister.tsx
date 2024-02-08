@@ -25,6 +25,7 @@ import {BiLoader} from "react-icons/bi";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import CardWrapper from "@/components/CardWrapper";
 import {convertToAsciiEquivalent} from "@/utils/utils";
+import {sendEmailVerification} from "firebase/auth";
 
 const firebaseErrorMessages: Record<string, string> = {
     "auth/invalid-email": "The email address is not valid.",
@@ -56,9 +57,10 @@ export default function NewRegister() {
                 message.error("Username already in use. Please choose a different username.");
             } else {
 
-                const user = await createUserWithEmailAndPassword(auth, values.email, values.password);
+                const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+                await sendEmailVerification(userCredential.user)
 
-                const userEmail = user.user.email;
+                const userEmail = userCredential.user.email;
                 const userName = values.name;
 
                 const hashedPassword = await bcrypt.hash(values.password, 10);
@@ -66,7 +68,10 @@ export default function NewRegister() {
                 const userData = {
                     name: userName,
                     email: userEmail,
-                    photoUrl: user.user.photoURL,
+                    photoUrl: userCredential.user.photoURL,
+                    uid: userCredential.user.uid,
+                    emailVerified: userCredential.user.emailVerified,
+                    createdAt: userCredential.user.metadata.creationTime,
                     password: hashedPassword,
                     status: 'user',
                     onboarding: true,

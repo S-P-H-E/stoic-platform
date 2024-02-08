@@ -18,6 +18,8 @@ export interface User {
   id?: string | null
   stripeId?: string;
   roles?: Role[] | "User" | undefined;
+  createdAt?: Date,
+  emailVerified?: boolean;
   generalLastCourse?: string;
   generalLastLesson?: string;
   email?: string | undefined;

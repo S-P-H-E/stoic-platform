@@ -32,7 +32,7 @@ import {Dialog, DialogClose, DialogContent, DialogTrigger} from '@/components/ui
 import {UserDataFetcher} from "@/utils/userDataFetcher";
 import {UserDataFetcherById} from "@/utils/userDataFetcherById";
 import {collection, onSnapshot, orderBy, query} from "firebase/firestore";
-import {db} from "@/utils/firebase";
+import {auth, db} from "@/utils/firebase";
 import Unauthorized from "@/components/Unauthorized";
 import PageLoader from "@/components/PageLoader";
 import {FiChevronDown, FiChevronUp} from "react-icons/fi";
@@ -44,6 +44,10 @@ import TwitterAnimation from '@/public/lottie/twitter.json'
 import clsx from "clsx";
 import Lottie from "lottie-react";
 import {MdCancel} from "react-icons/md";
+import {sendEmailVerification} from "firebase/auth";
+import {BsExclamation} from "react-icons/bs";
+import { RecaptchaVerifier } from "firebase/auth";
+import UpdatePassword from "@/components/Settings/UpdatePassword";
 
 export default function SettingsComponent({
                                               userId,
@@ -54,8 +58,9 @@ export default function SettingsComponent({
     const [success, setSuccess] = useState<string | undefined>();
 
     const [loading, setLoading] = useState(false)
+    const [modalOpen, setModalOpen] = useState(false)
 
-    const {userOnboarding: userOnboardingGlobal, userId: userIdGlobal, userStatus: userStatusGlobal, userStripeId: userStripeIdGlobal, userName: userNameGlobal} = UserDataFetcher();
+    const {userPassword: userPasswordGlobal, user: userGlobal, userOnboarding: userOnboardingGlobal, userId: userIdGlobal, userStatus: userStatusGlobal, userStripeId: userStripeIdGlobal, userName: userNameGlobal} = UserDataFetcher();
 
     const allowedToFetch = userStatusGlobal !== 'user' && userIdGlobal == userId || userStatusGlobal === 'admin'
 
@@ -71,7 +76,8 @@ export default function SettingsComponent({
         userStatus,
         userProfileImageUrl,
         userProfileBannerUrl,
-        userOnboarding
+        userOnboarding,
+        userEmailVerified
     } = UserDataFetcherById(userId);
     // fetches data based on userId here
 
@@ -105,6 +111,7 @@ export default function SettingsComponent({
                 profileImageUrl: userProfileImageUrl,
                 onboarding: userOnboarding,
                 profileBannerUrl: userProfileBannerUrl,
+                emailVerified: userEmailVerified
             };
 
             const globalUser: GlobalUser = {
@@ -128,7 +135,8 @@ export default function SettingsComponent({
         }
     }, [userId, generalLastCourse, generalLastLesson, userDescription, userEmail, userIdGlobal, userName,
         userNameGlobal, userProfileBannerUrl, userProfileImageUrl, userRoles, userStatus, userStatusGlobal,
-        userStripeId, userStripeIdGlobal, userSocial, allowedToFetch, userOnboarding, userOnboardingGlobal
+        userStripeId, userStripeIdGlobal, userSocial, allowedToFetch, userOnboarding, userOnboardingGlobal,
+        userEmailVerified
     ])
 
     useEffect(() => {
@@ -159,6 +167,7 @@ export default function SettingsComponent({
             twitter: user?.social?.twitter || undefined,
             instagram: user?.social?.instagram || undefined,
             tiktok: user?.social?.tiktok || undefined,
+            email: user?.email || undefined,
         },
     });
 
@@ -172,6 +181,7 @@ export default function SettingsComponent({
             form.reset({
                 name: user?.name || '',
                 description: user?.description || '',
+                email: user?.email || '',
                 ...socialValues,
             });
         }
@@ -201,8 +211,6 @@ export default function SettingsComponent({
                 },
             };
 
-            console.log(updatedValues)
-
             await updateUserDetails(user?.status, userId, updatedValues);
 
             message.success('Successfully updated user information!');
@@ -222,6 +230,10 @@ export default function SettingsComponent({
         setSocialMenuOpen(!socialMenuOpen);
     }
 
+    const closeModal = () => {
+        setModalOpen(false)
+    }
+
     const handleSocialPlatformButtonClick = (event: React.MouseEvent<HTMLButtonElement>, platform: string) => {
         event.preventDefault();
 
@@ -232,7 +244,6 @@ export default function SettingsComponent({
                 updatedInputs.push(platform);
             }
 
-            console.log(updatedInputs);
             return updatedInputs;
         });
     }
@@ -243,7 +254,7 @@ export default function SettingsComponent({
         try {
             setLoading(true);
 
-            const updatedSocialPlatforms = { ...socialPlatforms };
+            const updatedSocialPlatforms = {...socialPlatforms};
 
             // Set the platform to an empty string instead of deleting it
             updatedSocialPlatforms[platform] = '';
@@ -260,11 +271,19 @@ export default function SettingsComponent({
                 social: updatedSocialPlatforms,
             };
 
+            // Remove undefined values from the updatedSocialPlatforms object
+            Object.keys(updatedSocialPlatforms).forEach((key) => {
+                if (updatedSocialPlatforms[key] === undefined) {
+                    delete updatedSocialPlatforms[key];
+                }
+            });
+
             await updateUserDetails(user?.status, userId, updatedUser);
 
             message.success(`Successfully removed ${capitalizeFirstLetter(platform)} link!`);
             setSuccess(`Successfully removed ${capitalizeFirstLetter(platform)} link!`);
-        } catch {
+        } catch (error) {
+            console.log(error)
             setError(`Failed to remove ${capitalizeFirstLetter(platform)} link. Please try again later.`);
             message.error('There was an issue with your request. Please try again.');
         } finally {
@@ -300,6 +319,29 @@ export default function SettingsComponent({
         return !fieldValue || fieldValue.trim() === '';
     };
 
+    const handleVerifyEmail = async () => {
+        try {
+            setLoading(true);
+
+            if (userGlobal && userId === globalUser?.id) {
+                await sendEmailVerification(userGlobal)
+                message.success('Verification email sent successfully!');
+            } else {
+                message.error('Something went wrong with your request, please try again.')
+            }
+
+        } catch (error) {
+            if (error == 'FirebaseError: Firebase: Error (auth/too-many-requests).') {
+                setError('Too many requests, please try again later.');
+            } else {
+                setError('Failed to send verification email. Please try again later.');
+            }
+            message.error('There was an issue with sending the verification email.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     if (userStatus && userId !== userIdGlobal && userStatusGlobal !== 'admin') {
         return <Unauthorized locked={userStatusGlobal === 'user'}/>
     } else if (userStatus) {
@@ -323,6 +365,9 @@ export default function SettingsComponent({
                     {user && user.name && user.roles && user.status && (
                         <>
                             <div className="bg-darkgray border border-border p-4 rounded-2xl w-full">
+                                <div id="recaptcha-container">
+                                    RECAPTCHA
+                                </div>
                                 <Form {...form}>
                                     <form className="space-y-7" onSubmit={form.handleSubmit(onSubmit)}>
                                         <FormField
@@ -352,6 +397,44 @@ export default function SettingsComponent({
                                                 </FormItem>
                                             )}
                                         />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="email"
+                                            render={({field}) => (
+                                                <FormItem>
+                                                    <FormLabel className="text-lg">Email</FormLabel>
+                                                    <FormControl>
+                                                        <NewInput
+                                                            disabled={loading}
+                                                            id="email"
+                                                            type="email"
+                                                            label="Update your account email"
+                                                            placeholder={"Enter your new email"}
+                                                            {...field}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage/>
+
+                                                    {!user.emailVerified &&
+                                                        <div className="flex items-center pt-1 gap-2">
+                                                            <FormLabel className="text-yellow-500 text-[16.5px] flex items-center"><BsExclamation size={32}/> You haven&#39;t verified your email address.</FormLabel>
+                                                            <ButtonShad
+                                                                onClick={handleVerifyEmail}
+                                                                disabled={loading}
+                                                                size="sm"
+                                                                className="active:scale-90 transition bg-yellow-500 hover:bg-yellow-600"
+                                                                variant="secondary"
+                                                            >
+                                                                {loading ? 'Sending email...' : 'Verify'}
+                                                            </ButtonShad>
+                                                        </div>
+                                                    }
+                                                </FormItem>
+                                            )}
+                                        />
+
+
                                         <div className="flex flex-col gap-4">
                                             {Object.keys(socialPlatforms)
                                                 .filter((platform) => socialPlatforms[platform] || newInputs.includes(platform)) // Check if the platform has a non-empty value or exists in newInputs
@@ -380,7 +463,8 @@ export default function SettingsComponent({
                                                         {!fieldEmpty(platform as "youtube" | "instagram" | "twitter" | "tiktok" | "name" | "description") ?
                                                             <Dialog>
                                                                 <DialogTrigger asChild>
-                                                                    <button className="hover:scale-110 active:scale-90 transition hover:opacity-80 absolute right-2 top-[1.15rem] h-full flex items-center justify-center text-red-500">
+                                                                    <button
+                                                                        className="hover:scale-110 active:scale-90 transition hover:opacity-80 absolute right-2 top-[1.15rem] h-full flex items-center justify-center text-red-500">
                                                                         <MdCancel/>
                                                                     </button>
                                                                 </DialogTrigger>
@@ -388,15 +472,17 @@ export default function SettingsComponent({
                                                                     <div className="flex flex-col gap-1">
                                                                         <h1 className="text-2xl font-semibold">Delete confirmation</h1>
                                                                         {isValidURL(form.getValues()[platform as "youtube" | "instagram" | "twitter" | "tiktok" | "name" | "description"], platform) ?
-                                                                            <p className="text-highlight">You already seem to have a valid {capitalizeFirstLetter(platform)} link, you sure you want to remove it?</p>
+                                                                            <p className="text-highlight">You already seem to have a valid {capitalizeFirstLetter(platform)} link, you sure you
+                                                                                want to remove it?</p>
                                                                             :
                                                                             <p className="text-highlight">You&apos;ve already typed something in this box. Are you sure you want to erase it?</p>
                                                                         }
-                                                                            <p className="break-all">You have entered: {form.getValues()[platform as "youtube" | "instagram" | "twitter" | "tiktok" | "name" | "description"]}
-                                                                    </p>
-                                                                </div>
-                                                                <div className="flex gap-4">
-                                                                <ButtonShad variant="destructive" onClick={(e) => handleRemovePlatform(e, platform)}>
+                                                                        <p className="break-all">You have
+                                                                            entered: {form.getValues()[platform as "youtube" | "instagram" | "twitter" | "tiktok" | "name" | "description"]}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div className="flex gap-4">
+                                                                        <ButtonShad variant="destructive" onClick={(e) => handleRemovePlatform(e, platform)}>
                                                                             Yes, delete it
                                                                         </ButtonShad>
                                                                         <DialogClose>
@@ -421,8 +507,8 @@ export default function SettingsComponent({
                                                 {!socialMenuOpen &&
                                                     <div className={clsx("relative", !socialMenuOpen && 'pb-8')}>
                                                         <motion.div initial={{opacity: 0}} animate={{opacity: 1}} className="w-full absolute inset-0">
-                                                        <ButtonShad onClick={(e) => handleSocialMenuOpen(e)} className="group w-full active:scale-95 transition flex items-center gap-2"
-                                                                        variant="outline">
+                                                            <ButtonShad onClick={(e) => handleSocialMenuOpen(e)} className="group w-full active:scale-95 transition flex items-center gap-2"
+                                                                        variant="ring">
                                                                 <FiChevronDown className="group-hover:rotate-180 transition duration-300"/> Add Social
                                                             </ButtonShad>
                                                         </motion.div>
@@ -431,7 +517,8 @@ export default function SettingsComponent({
                                             </AnimatePresence>
                                             <AnimatePresence>
                                                 {socialMenuOpen &&
-                                                    <motion.div className="flex flex-col gap-4" initial={{height: 0, opacity: 0}} animate={{height: 100, opacity: 1}} exit={{height: 0, opacity: 0, y: -30}}>
+                                                    <motion.div className="flex flex-col gap-4" initial={{height: 0, opacity: 0}} animate={{height: 100, opacity: 1}}
+                                                                exit={{height: 0, opacity: 0, y: -30}}>
                                                         <motion.div initial={{height: 0, opacity: 0}} animate={{height: 50, opacity: 1}}
                                                                     className="w-full gap-3 grid grid-cols-2 md:grid-cols-4">
                                                             {Object.keys(socialPlatforms).map((platform, index) => (
@@ -449,7 +536,7 @@ export default function SettingsComponent({
                                                                         onClick={(e) => handleSocialPlatformButtonClick(e, platform)}
                                                                         className="disabled:opacity-50 disabled:cursor-not-allowed duration-200 flex font-medium items-center text-start px-4 rounded-lg hover:ring-sky-600 active:scale-95 ring-2 ring-highlight transition w-full h-full"
                                                                     >
-                                                                        <Lottie className="w-1/2" loop={false} animationData={lottieAnimations[platform]} />
+                                                                        <Lottie className="w-1/2" loop={false} animationData={lottieAnimations[platform]}/>
                                                                         {capitalizeFirstLetter(platform)}
                                                                     </button>
                                                                 </motion.div>
@@ -458,7 +545,7 @@ export default function SettingsComponent({
                                                         </motion.div>
                                                         <motion.div exit={{opacity: 0, scale: 0, height: 0}}>
                                                             <ButtonShad onClick={(e) => handleSocialMenuOpen(e)} className="mt-2 w-full group active:scale-95 transition flex items-center gap-2"
-                                                                        variant="outline">
+                                                                        variant="ring">
                                                                 <FiChevronUp className="group-hover:rotate-180 transition duration-300"/>Close Menu
                                                             </ButtonShad>
                                                         </motion.div>
@@ -466,20 +553,6 @@ export default function SettingsComponent({
                                                 }
                                             </AnimatePresence>
                                         </div>
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <ButtonShad className='gap-1'>
-                                                    <FaLock/>
-                                                    Change Password
-                                                </ButtonShad>
-                                            </DialogTrigger>
-                                            <DialogContent className="flex flex-col gap-2 p-8">
-                                                <div className="flex flex-col gap-1">
-                                                    <h1 className="text-2xl font-semibold mb-2">Work in progress...</h1>
-                                                    <p className="text-highlight">S T O I C</p>
-                                                </div>
-                                            </DialogContent>
-                                        </Dialog>
 
                                         <div>
                                             <Membership settings user={user} userId={userId} stripeCustomerId={user.stripeId} globalUserId={globalUser?.id} globalUserRole={globalUser?.status}
@@ -493,8 +566,23 @@ export default function SettingsComponent({
                                         </ButtonShad>
                                     </form>
                                 </Form>
+
+                                <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+                                    <DialogTrigger asChild>
+                                        <ButtonShad className='gap-1'>
+                                            <FaLock/>
+                                            Change Password
+                                        </ButtonShad>
+                                    </DialogTrigger>
+                                    <DialogContent className="flex flex-col gap-2 p-8">
+                                        <div className="flex flex-col gap-1">
+                                            <h1 className="text-2xl font-semibold mb-2">Update your password</h1>
+                                            <UpdatePassword userId={globalUser?.id} closeModal={closeModal} userStatus={globalUser?.status} userPassword={userPasswordGlobal}/>
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
                             </div>
-                            <div className="bg-darkgray rounded-2xl min-w-[21rem] max-h-[35rem] p-1 w-full lg:w-2/4 xl:w-2/3 border-border border">
+                            <div className="bg-darkgray rounded-2xl min-w-[21rem] p-1 w-full lg:w-2/4 xl:w-2/3 border-border border">
                                 <UserProfile
                                     edit
                                     userDescription={user.description}
