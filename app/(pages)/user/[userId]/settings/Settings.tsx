@@ -46,7 +46,7 @@ import Lottie from "lottie-react";
 import {MdCancel} from "react-icons/md";
 import {sendEmailVerification} from "firebase/auth";
 import {BsExclamation} from "react-icons/bs";
-import { RecaptchaVerifier } from "firebase/auth";
+import {RecaptchaVerifier} from "firebase/auth";
 import UpdatePassword from "@/components/Settings/UpdatePassword";
 
 export default function SettingsComponent({
@@ -60,7 +60,15 @@ export default function SettingsComponent({
     const [loading, setLoading] = useState(false)
     const [modalOpen, setModalOpen] = useState(false)
 
-    const {userPassword: userPasswordGlobal, user: userGlobal, userOnboarding: userOnboardingGlobal, userId: userIdGlobal, userStatus: userStatusGlobal, userStripeId: userStripeIdGlobal, userName: userNameGlobal} = UserDataFetcher();
+    const {
+        userPassword: userPasswordGlobal,
+        user: userGlobal,
+        userOnboarding: userOnboardingGlobal,
+        userId: userIdGlobal,
+        userStatus: userStatusGlobal,
+        userStripeId: userStripeIdGlobal,
+        userName: userNameGlobal
+    } = UserDataFetcher();
 
     const allowedToFetch = userStatusGlobal !== 'user' && userIdGlobal == userId || userStatusGlobal === 'admin'
 
@@ -418,7 +426,8 @@ export default function SettingsComponent({
 
                                                     {!user.emailVerified &&
                                                         <div className="flex items-center pt-1 gap-2">
-                                                            <FormLabel className="text-yellow-500 text-[16.5px] flex items-center"><BsExclamation size={32}/> You haven&#39;t verified your email address.</FormLabel>
+                                                            <FormLabel className="text-yellow-500 text-[16.5px] flex items-center"><BsExclamation size={32}/> You haven&#39;t verified your email
+                                                                address.</FormLabel>
                                                             <ButtonShad
                                                                 onClick={handleVerifyEmail}
                                                                 disabled={loading}
@@ -554,11 +563,6 @@ export default function SettingsComponent({
                                             </AnimatePresence>
                                         </div>
 
-                                        <div>
-                                            <Membership settings user={user} userId={userId} stripeCustomerId={user.stripeId} globalUserId={globalUser?.id} globalUserRole={globalUser?.status}
-                                                        globalUserName={globalUser?.name} globalStripeCustomerId={globalUser?.stripeId}/>
-                                        </div>
-
                                         <FormError message={error}/>
                                         <FormSuccess message={success}/>
                                         <ButtonShad variant="secondary" disabled={loading} className="border-white border disabled:cursor-not-allowed active:scale-90 transition" type="submit">
@@ -567,20 +571,27 @@ export default function SettingsComponent({
                                     </form>
                                 </Form>
 
-                                <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-                                    <DialogTrigger asChild>
-                                        <ButtonShad className='gap-1'>
-                                            <FaLock/>
-                                            Change Password
-                                        </ButtonShad>
-                                    </DialogTrigger>
-                                    <DialogContent className="flex flex-col gap-2 p-8">
-                                        <div className="flex flex-col gap-1">
-                                            <h1 className="text-2xl font-semibold mb-2">Update your password</h1>
-                                            <UpdatePassword userId={globalUser?.id} closeModal={closeModal} userStatus={globalUser?.status} userPassword={userPasswordGlobal}/>
-                                        </div>
-                                    </DialogContent>
-                                </Dialog>
+                                <div className="flex flex-col gap-4 w-fit mt-4">
+                                    <div>
+                                        <Membership settings user={user} userId={userId} stripeCustomerId={user.stripeId} globalUserId={globalUser?.id} globalUserRole={globalUser?.status}
+                                                    globalUserName={globalUser?.name} globalStripeCustomerId={globalUser?.stripeId}/>
+                                    </div>
+
+                                    <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+                                        <DialogTrigger asChild>
+                                            <ButtonShad className='gap-1'>
+                                                <FaLock/>
+                                                Change Password
+                                            </ButtonShad>
+                                        </DialogTrigger>
+                                        <DialogContent className="flex flex-col gap-2 p-8">
+                                            <div className="flex flex-col gap-1">
+                                                <h1 className="text-2xl font-semibold mb-2">Update your password</h1>
+                                                <UpdatePassword userId={globalUser?.id} closeModal={closeModal} userStatus={globalUser?.status} userPassword={userPasswordGlobal}/>
+                                            </div>
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
                             </div>
                             <div className="bg-darkgray rounded-2xl min-w-[21rem] p-1 w-full lg:w-2/4 xl:w-2/3 border-border border">
                                 <UserProfile
