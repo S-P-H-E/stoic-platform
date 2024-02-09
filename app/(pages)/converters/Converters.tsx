@@ -2,7 +2,8 @@
 
 import Image from 'next/image';
 import React from 'react';
-import bgCover from '@/public/backgroundCover.jpg';
+import bgCover from '@/public/waveHQ.webp';
+import bgCoverOld from '@/public/backgroundCover.jpg';
 import Converters from '@/components/Converter/Converters';
 import {isUserAllowedToFetch} from "@/utils/utils";
 import {UserDataFetcher} from "@/utils/userDataFetcher";
@@ -19,6 +20,7 @@ export default function ConvertersComponent() {
           alt="Background Cover"
           src={bgCover}
           fill
+          priority
           className="object-cover"
           placeholder="blur"
         />
