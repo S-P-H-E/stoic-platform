@@ -200,7 +200,7 @@ export default function UpgradeComponent({userStatus}: {userStatus: string | und
         </div>
 
         <h1 className='text-4xl text-upgrade pb-5 flex flex-col items-center font-medium'>
-          <mark className='bg-transparent text-xl text-muted-foreground line-through'>$99.99</mark>$49.99
+          <mark className='bg-transparent text-xl text-muted-foreground line-through'>$49.99</mark>$29.99
         </h1>
 
         {features.map((feature) => (

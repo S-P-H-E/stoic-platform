@@ -1,4 +1,3 @@
-import { formatNumber, formatNumberCompact } from '@/utils/utils'
 import React from 'react'
 import Counter from './Counter'
 

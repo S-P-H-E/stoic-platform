@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
 
   const { userStripeId } = body;
 
-  console.log('RECEIVED STRIPE ID ON SERVER: ' + userStripeId)
+/*  console.log('RECEIVED STRIPE ID ON SERVER: ' + userStripeId)*/
 
   if (userStripeId) {
     const checkout = await stripe.checkout.sessions.create({
@@ -20,8 +20,13 @@ export async function POST(request: NextRequest) {
       line_items: [
         {
           price:
-            'price_1OSO71JVAR9FxLkw0dmNnwqO' /* price_1OSO71JVAR9FxLkw0dmNnwqO */,
+            process.env.PRICE_ID /* price_1OSO71JVAR9FxLkw0dmNnwqO */,
           quantity: 1,
+        },
+      ],
+      discounts: [
+        {
+          promotion_code: process.env.PROMO_ID,
         },
       ],
       mode: 'subscription',

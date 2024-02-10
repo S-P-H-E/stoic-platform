@@ -73,6 +73,7 @@ const Sidebar = () => {
             label: 'Community',
             icon: Users,
             href: '/community',
+            locked: true
         },
         {
             label: 'Library',
@@ -82,12 +83,13 @@ const Sidebar = () => {
         {
             label: 'Stoic AI',
             icon: BrainCircuit,
-            href: '/stoicai',
+            href: '/_stoicai',
+            locked: true
         },
 /*        {
             label: 'Image AI',
             icon: ImagePlus,
-            href: '/imageai',
+            href: '/_imageai',
         },*/
         {
             label: 'Converters',
@@ -182,12 +184,13 @@ const Sidebar = () => {
                                     <Tooltip delayDuration={1}>
                                         <TooltipTrigger asChild>
                                             <Link
-                                                href={route.href}
+                                                href={route.locked ? '' : route.href}
                                                 className={clsx(
                                                     'active:scale-95 duration-200 text-base group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
                                                     pathname.includes(route.href) || extraContentHover && route.extraContentHref
                                                         ? 'text-white bg-white/10'
-                                                        : 'text-zinc-400'
+                                                        : 'text-zinc-400',
+                                                    route.locked && 'opacity-50 !cursor-not-allowed'
                                                     /*  userStatus === 'user' ? 'blur-sm' : '' */
                                                 )}
                                             >

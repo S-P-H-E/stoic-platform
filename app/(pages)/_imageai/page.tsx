@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ImageAIComponent from "@/app/(pages)/imageai/ImageAI";
+import ImageAIComponent from "@/app/(pages)/_imageai/ImageAI";
 
 export const metadata: Metadata = {
   title: 'Image AI - STOIC',
