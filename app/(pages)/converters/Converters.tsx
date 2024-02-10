@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import React from 'react';
-import bgCover from '@/public/waveHQ.webp';
+import bgCover from '@/public/STOIC_EM_BANNER.webp';
 import bgCoverOld from '@/public/backgroundCover.jpg';
 import Converters from '@/components/Converter/Converters';
 import {isUserAllowedToFetch} from "@/utils/utils";
@@ -21,6 +21,7 @@ export default function ConvertersComponent() {
           src={bgCover}
           fill
           priority
+          quality={90}
           className="object-cover"
           placeholder="blur"
         />
