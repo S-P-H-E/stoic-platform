@@ -108,6 +108,7 @@ export const createNewLesson = async (
           content: contents || [''],
           endText: details.endText || '',
           type: 'text',
+          locked: locked || false,
         };
 
         const lessonDocRef = doc(db, 'courses', courseId, 'lessons', lessonName);
