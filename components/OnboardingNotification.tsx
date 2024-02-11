@@ -421,7 +421,7 @@ const OnboardingNotification = ({final, userId, userName, userStatus, step, skip
                             </div>
                             <p className="text-highlight text-sm">* You can always link your accounts later in user settings</p>
                         </DialogContent>
-                    </Dialog>pst
+                    </Dialog>
                 </div>
             )
         },
