@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CommunityComponent from "@/app/community/Community";
+import CommunityComponent from "@/app/_community/Community";
 
 export const metadata: Metadata = {
   title: 'Community - STOIC',
