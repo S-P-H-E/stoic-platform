@@ -105,7 +105,7 @@ export default function Membership({settings, user, stripeCustomerId, userId, gl
             console.log('No stripe customer id found matching ur profile.');
           }
         } catch (error) {
-          console.log(error)
+         /* console.log(error)*/
         } finally {
           setLoading(false)
         }

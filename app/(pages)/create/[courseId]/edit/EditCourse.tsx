@@ -99,7 +99,7 @@ export default function EditCourseComponent({
           unsubscribe();
         };
       } catch (error) {
-        console.log(error);
+        /*console.log(error);*/
       } finally {
         setLoading(false);
       }
@@ -125,7 +125,7 @@ export default function EditCourseComponent({
         message.error(
           'There was an issue with your request. Please try again.'
         );
-        console.log(error )
+        /*console.log(error )*/
       } finally {
         setLoading(false);
         // router push here

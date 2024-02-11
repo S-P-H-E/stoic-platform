@@ -114,7 +114,7 @@ export default function LessonComponent({
         await deleteDoc(lessonDocRef);
       }
     } catch (error) {
-      console.log(error);
+      /*console.log(error);*/
     }
   };
 
@@ -237,7 +237,7 @@ export default function LessonComponent({
 
           return () => unsubscribe(); // Unsubscribe when the component unmounts
         } else {
-          console.log('Course Id not found');
+          /*console.log('Course Id not found');*/
         }
       } catch (error) {
         console.error('Error fetching lessons:' + error);
@@ -328,12 +328,12 @@ export default function LessonComponent({
 
         player.on('play', function () {
           setVideoPlaying(true);
-          console.log('VIDEO PLAYED');
+          /*console.log('VIDEO PLAYED');*/
         });
 
         player.on('pause', function () {
           setVideoPlaying(false);
-          console.log('VIDEO PAUSED');
+          /*console.log('VIDEO PAUSED');*/
         });
 
         player.on('ended', async function () {

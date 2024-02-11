@@ -73,7 +73,7 @@ import CourseCard from './NewCourseCard';
             setCourses(coursesWithLessons);
             isLoading(false);
           } catch (err) {
-            console.log(err);
+            /*console.log(err);*/
           }
         }
       }, [userId, isPremium]);

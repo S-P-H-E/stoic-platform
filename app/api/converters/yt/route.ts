@@ -95,7 +95,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const videoUrl = info.videoDetails.video_url;
     const videoTitle = info.videoDetails.title;
 
-    console.log(info)
+    /*console.log(info)*/
 
     const formattedDate = format(info.videoDetails.uploadDate, 'MM/dd/yyyy');
 
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
     return new Response(JSON.stringify({info, audioFormats, bestAudioFormat, audioDownloadLink, videoTitle, downloadLinks, thumbnailUrl, videoUrl, author, authorThumbnailUrl, uploadDate, lengthSeconds}));
   } catch (error: any) {
-    console.log(error)
+    /*console.log(error)*/
     if (error.message.includes('No video id found')) {
       return new Response('Error fetching video information: No video ID found', { status: 404 });
     } else if(error.message.includes('does not match expected format')) {

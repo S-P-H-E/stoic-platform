@@ -66,7 +66,7 @@ export default function VerifyEmail() {
 
         } catch (error) {
             message.error('Something went wrong, please try again.');
-            console.log(error)
+            /*console.log(error)*/
         } finally {
             setIsLoading(false);
             setSuccess(true)

@@ -48,7 +48,9 @@ export default function ImageUpload({ onComplete, customPath, create, predefined
       if (file) {
         await onFileSelected(file);
       } else {
+/*
         console.log('No file dropped');
+*/
       }
     },
     maxSize: 10 * 1024 * 1024,

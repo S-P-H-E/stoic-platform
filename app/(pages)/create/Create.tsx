@@ -46,7 +46,9 @@ export default function CreateComponent() {
                     unsubscribe();
                 };
             } catch (error) {
+/*
                 console.log(error);
+*/
             } finally {
                 isLoading(false);
             }

@@ -116,10 +116,10 @@ export default function UpgradeComponent({userStatus}: {userStatus: string | und
   
         return data;
       } else {
-        console.log('No stripe customer id found matching ur profile.');
+        /*console.log('No stripe customer id found matching ur profile.');*/
       }
     } catch (error) {
-      console.log(error)
+      /*console.log(error)*/
     }
   };
 

@@ -45,7 +45,7 @@ export default function StoicAIComponent() {
 
       handleSubmit(e);
 
-      console.log(input)
+     /* console.log(input)*/
 
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';

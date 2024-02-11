@@ -63,7 +63,7 @@ export default function ForgotPassword() {
             setUIMessage('Password reset email sent. Check your inbox.');
             message.success("Password reset email sent successfully")
         } catch (error) {
-            console.log(error)
+            /*console.log(error)*/
             const firebaseError = error as FirebaseError;
             const errorCode = firebaseError.code as keyof typeof firebaseErrorMessages;
             const errorMessage = firebaseErrorMessages[errorCode] || "Something went wrong, please ensure your email is correct";

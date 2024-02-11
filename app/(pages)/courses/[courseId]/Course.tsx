@@ -111,7 +111,7 @@ export default function CourseComponent({courseId}: CourseComponentProps) {
       try {
         fetchCourseData();
       } catch (error) {
-        console.log(error)
+        /*console.log(error)*/
       /* fetchLessonsData(); */
     }}
 

@@ -235,7 +235,7 @@ export default function CommunityPage({ channelId }: CommunityPageProps) {
             (channel) => channel.id === currentChannelIdString
           );
 
-          console.log(currentChannelData);
+          /*console.log(currentChannelData);*/
           setCurrentChannel(currentChannelData);
         }
       );

@@ -60,7 +60,6 @@ export default function Edit({lesson, courseId}: EditProps) {
 
       const imageUrl = await getDownloadURL(storageRef);
 
-      console.log(imageUrl)
 
       const lessonRef = doc(db, 'courses', courseId, 'lessons', lesson.id)
       await updateDoc(lessonRef, {
@@ -83,7 +82,7 @@ export default function Edit({lesson, courseId}: EditProps) {
       if (file) {
         await onFileSelected(file);
       } else {
-        console.log('No file dropped');
+        /*console.log('No file dropped');*/
       }
     },
     maxSize: 10 * 1024 * 1024,

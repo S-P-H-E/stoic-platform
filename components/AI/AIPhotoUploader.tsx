@@ -65,7 +65,7 @@ export default function AIPhotoUploader() {
       if (file) {
         await onFileSelected(file);
       } else {
-        console.log('No file dropped');
+        /*console.log('No file dropped');*/
       }
     },
     maxSize: 15 * 1024 * 1024,

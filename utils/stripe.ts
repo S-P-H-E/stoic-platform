@@ -53,11 +53,11 @@ export async function generateCustomerPortalLink(customerId: string) {
       return_url: 'http://localhost:3000/dashboard',
     });
 
-    console.log();
-
     return portalSession.url;
   } catch (error) {
+/*
     console.log(error);
+*/
     return undefined;
   }
 }
@@ -82,7 +82,7 @@ export async function createCustomerIfNull() {
 
     const data = await response.json();
 
-    console.log(data);
+   /* console.log(data);*/
 
     await setDoc(
       doc(db, 'users', userId as string),

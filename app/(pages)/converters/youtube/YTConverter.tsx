@@ -75,8 +75,8 @@ export default function YTConverterComponent() {
         const data = await response.json();
         setVideoInfo(data);
 
-        console.log(data.audioFormats);
-        console.log(data.bestAudioFormat);
+        /*console.log(data.audioFormats);*/
+        /*console.log(data.bestAudioFormat);*/
       } else {
         const errorMessage = await response.text();
         console.error('Error fetching video information:', errorMessage);

@@ -134,7 +134,7 @@ export default function Home() {
         setVideoMusic(videoMusic)
 
       })
-      .catch(err => console.log(err))
+      .catch(error => console.log(error))
       .finally(() => {
         setLoading(false);
       })

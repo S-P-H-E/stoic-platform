@@ -49,7 +49,7 @@ export default function Courses({
         setCourses(predefinedCourses);
       }
     } catch (error) {
-      console.log(error);
+      /*console.log(error);*/
     } finally {
       setLoading(false);
     }

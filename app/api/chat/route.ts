@@ -32,7 +32,7 @@ export async function POST(req: Request) {
 
   const stream = OpenAIStream(response, {
     onCompletion: async (result) => {
-      console.log(result);
+      /*console.log(result);*/
     },
   });
 

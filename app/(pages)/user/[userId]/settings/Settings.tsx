@@ -291,7 +291,7 @@ export default function SettingsComponent({
             message.success(`Successfully removed ${capitalizeFirstLetter(platform)} link!`);
             setSuccess(`Successfully removed ${capitalizeFirstLetter(platform)} link!`);
         } catch (error) {
-            console.log(error)
+            /*console.log(error)*/
             setError(`Failed to remove ${capitalizeFirstLetter(platform)} link. Please try again later.`);
             message.error('There was an issue with your request. Please try again.');
         } finally {

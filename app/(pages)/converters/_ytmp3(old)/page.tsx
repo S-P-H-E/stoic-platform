@@ -73,9 +73,6 @@ export default function Home() {
           res = await axios(options);
         }
   
-        console.log(res.data.title);
-        console.log(res.data.link);
-  
         setVideoTitle(res.data.title);
         setUrlResult(res.data.link);
       } catch (err) {

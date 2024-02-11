@@ -99,7 +99,7 @@ export default function UserProfile({
 
         if (userRoles === 'User') {
           updatedRoles = [...selectedValues];
-          console.log(updatedRoles);
+          /*console.log(updatedRoles);*/
         } else {
           const userRoleNames = userRoles.map((role) => role.name);
 
@@ -119,7 +119,7 @@ export default function UserProfile({
         message.error('An error occurred.. try again later');
       }
     } catch (error) {
-      console.log(error);
+      /*console.log(error);*/
       message.error('Failed to add role.');
     }
   };

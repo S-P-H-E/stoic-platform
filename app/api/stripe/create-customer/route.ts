@@ -9,9 +9,9 @@ export async function POST(request: NextRequest) {
 
     const { userName, userEmail, userStripeId } = body; //check user stripe id here too
 
-    console.log(userEmail)
+/*    console.log(userEmail)
     console.log(userName)
-    console.log(userStripeId)
+    console.log(userStripeId)*/
 
     try {
         if (userName && userEmail && !userStripeId) {
@@ -25,6 +25,6 @@ export async function POST(request: NextRequest) {
             return new Response("User already is a stripe customer or user credentials are wrong.")
         }
     } catch (error) {
-        console.log(error)
+        /*console.log(error)*/
     }
 }

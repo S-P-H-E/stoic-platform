@@ -93,7 +93,7 @@ export default function PasswordModal({ onClose }: PasswordModalProps) {
           onClose();
 
         } else {
-          console.log("User not found");
+          /*console.log("User not found");*/
         }
       } catch (error) {
         const firebaseError = error as FirebaseError;
@@ -103,7 +103,7 @@ export default function PasswordModal({ onClose }: PasswordModalProps) {
           setWrongPasswordErrorUI(true)
         }
         message.error(errorMessage);
-        console.log(error)
+        /*console.log(error)*/
       }
     };
 

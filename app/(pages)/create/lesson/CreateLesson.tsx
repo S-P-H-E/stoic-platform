@@ -72,7 +72,7 @@ export default function CreateLessonComponent({
           unsubscribe();
         };
       } catch (error) {
-        console.log(error);
+        /*console.log(error);*/
       } finally {
         setLoading(false);
       }

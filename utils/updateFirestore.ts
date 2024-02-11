@@ -52,7 +52,7 @@ export const createNewTask = async (
       message.error('You are not allowed to take this action')
     }
   } catch (error: any) {
-    console.log(error)
+    /*console.log(error)*/
     throw error
   }
 }
