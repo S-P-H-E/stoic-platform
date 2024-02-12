@@ -25,6 +25,7 @@ import Link from 'next/link';
 import { FaPen } from 'react-icons/fa6';
 import PhotoUpload from './Settings/ProfilePhotoUpload';
 import BannerUpload from './Settings/BannerPhotoUpload';
+import {getUserRoleColor} from "@/utils/utils";
 
 interface Role {
   id: string;
@@ -259,7 +260,7 @@ export default function UserProfile({
                   userRoles !== 'User' &&
                   userRoles.length > 0 &&
                   userRoles[0]?.color &&
-                  `text-${userRoles[0].color}`
+                  `text-${getUserRoleColor(userRoles)}`
               )}
             >
               {userName ? userName : 'Loading...'}

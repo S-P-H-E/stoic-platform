@@ -1,3 +1,5 @@
+import {Role} from "@/types/types";
+
 export const sanitizeString = (input: string) => {
     const sanitizedString = input
         .toLowerCase()
@@ -34,6 +36,20 @@ export function parseChannelIdFromUrl(url: string) {
   } else {
     return null;
   }
+}
+
+export function getUserRoleColor(userRoles: Role[] | 'User'): string {
+  if (userRoles === 'User' || userRoles.length === 0) {
+    return 'white';
+  }
+
+  const leastOrderRole = userRoles.reduce(
+      (minRole, currentRole) =>
+          minRole.order < currentRole.order ? minRole : currentRole,
+      userRoles[0]
+  );
+
+  return leastOrderRole.color;
 }
 
 export function formatNumber(number: number): string {

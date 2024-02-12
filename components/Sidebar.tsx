@@ -31,7 +31,7 @@ import StoicLogo from '@/public/stoicWhite.webp';
 import {useEffect, useState} from 'react';
 import {collection, onSnapshot} from 'firebase/firestore';
 import {db} from '@/utils/firebase';
-import {truncateText} from '@/utils/utils';
+import {getUserRoleColor, truncateText} from '@/utils/utils';
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 
 const montserrat = Montserrat({weight: '600', subsets: ['latin']});
@@ -131,20 +131,6 @@ const Sidebar = () => {
 
         return () => unsubscribe();
     }, []);
-
-    function getUserRoleColor(userRoles: Role[] | 'User'): string {
-        if (userRoles === 'User' || userRoles.length === 0) {
-            return 'white';
-        }
-
-        const leastOrderRole = userRoles.reduce(
-            (minRole, currentRole) =>
-                minRole.order < currentRole.order ? minRole : currentRole,
-            userRoles[0]
-        );
-
-        return leastOrderRole.color;
-    }
 
     const handleMouseEnter = () => {
         setExtraContentHover(true)
