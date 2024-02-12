@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { doc, onSnapshot, collection, query, where } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
-import {SocialInfo} from "@/types/types";
+import {Activity, SocialInfo} from "@/types/types";
 
 interface Role {
   id: string;
@@ -28,6 +28,7 @@ export function UserDataFetcherById(userId: string) {
   const [userOnboarding, setUserOnboarding] = useState(false)
   const [userCreatedAt, setUserCreatedAt] = useState<Date | undefined>(undefined)
   const [userEmailVerified, setUserEmailVerified] = useState(false)
+  const [userActivities, setUserActivities] = useState<Activity[]>([]);
 
   const [roles, setRoles] = useState<Role[]>([]);
 
@@ -55,7 +56,6 @@ export function UserDataFetcherById(userId: string) {
 
       if (userData) {
         const userRoles = userData.roles && userData.roles.map((roleName: string) => {
-          // Assuming roles data is already fetched and available globally
           const role = roles.find((r) => r.name === roleName);
           return role || { name: roleName, color: 'white' };
         });
@@ -64,22 +64,34 @@ export function UserDataFetcherById(userId: string) {
         setUserEmail(userData.email);
         setUserProfileBannerUrl(userData.bannerUrl);
         setUserStatus(userData.status);
-        setUserRoles(userRoles || "User")
-        setUserProfileImageUrl(userData.photoUrl)
+        setUserRoles(userRoles || "User");
+        setUserProfileImageUrl(userData.photoUrl);
         setGeneralLastCourse(userData.generalLastCourse);
-        setGeneralLastLesson(userData.generalLastLesson)
+        setGeneralLastLesson(userData.generalLastLesson);
         setUserStripeId(userData.stripe_customer_id);
-        setUserDescription(userData.description)
-        setUserSocial(userData.social)
-        setUserOnboarding(userData.onboading)
-        setUserEmailVerified(userData.emailVerified)
-        setUserCreatedAt(userData.createdAt)
-        setUserUid(userData.uid)
+        setUserDescription(userData.description);
+        setUserSocial(userData.social);
+        setUserOnboarding(userData.onboarding);
+        setUserEmailVerified(userData.emailVerified);
+        setUserCreatedAt(userData.createdAt);
+        setUserUid(userData.uid);
       }
     });
 
-    return () => unsubscribe();
+    const activitiesRef = collection(db, `users/${userId}/activities`);
+    const activitiesQuery = query(activitiesRef);
+
+    const unsubscribeActivities = onSnapshot(activitiesQuery, (activitiesSnapshot) => {
+      const activitiesData = activitiesSnapshot.docs.map(doc => doc.data() as Activity);
+      setUserActivities(activitiesData);
+    });
+
+    return () => {
+      unsubscribe();
+      unsubscribeActivities();
+    };
   }, [userId, roles]);
 
-  return { userUid, userEmailVerified, userCreatedAt, userDescription, userSocial, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userOnboarding, userStatus, userProfileImageUrl, userProfileBannerUrl };
+
+  return { userActivities, userUid, userEmailVerified, userCreatedAt, userDescription, userSocial, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userOnboarding, userStatus, userProfileImageUrl, userProfileBannerUrl };
 }

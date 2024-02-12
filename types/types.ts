@@ -1,3 +1,13 @@
+import type {Timestamp} from "firebase/firestore";
+
+export interface Activity {
+  completedAt: Timestamp;
+  icon: string;
+  title: string;
+  type: string;
+  courseName: string;
+}
+
 export interface Task {
   id: string;
   name: string;
@@ -30,6 +40,7 @@ export interface User {
   profileBannerUrl?: string;
   onboarding: boolean;
   social?: SocialInfo;
+  activities?: Activity[]
 }
   
 export interface Role {

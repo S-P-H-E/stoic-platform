@@ -85,7 +85,6 @@ export default function LessonComponent({
   const { userStatus, userId } = UserDataFetcher();
   const isPremium = isUserAllowedToFetch(userStatus);
 
-
   const fadeInAnimationVariants = {
     // for framer motion
     initial: {
@@ -96,7 +95,7 @@ export default function LessonComponent({
       opacity: 1,
       y: 0,
       transition: {
-        delay: 0.045 * index,
+        delay: (index % 1) * 0.05,
       },
     }),
   };
@@ -152,10 +151,10 @@ export default function LessonComponent({
               'courses',
               String(courseId)
             );
-            setDoc(userCourseRef, { lastLessonId: lessonId }, { merge: true });
+            await setDoc(userCourseRef, { lastLessonId: lessonId }, { merge: true });
   
             const userRef = doc(db, 'users', userId);
-            updateDoc(userRef, {
+            await updateDoc(userRef, {
               generalLastCourse: courseId,
               generalLastLesson: lessonId,
             });
@@ -248,17 +247,16 @@ export default function LessonComponent({
     fetchLessonsForCourse();
   }, [courseId, lessonId, userId, router, vimeoUrl, isPremium]);
 
-  useEffect(() => {
-    const CompleteVideoLesson = async () => {
+  const CompleteLessonFunction = async () => {
       try {
         const lessonCompletionRef = doc(
-          db,
-          'users',
-          String(userId),
-          'courses',
-          String(courseId),
-          'lessons',
-          String(lessonId)
+            db,
+            'users',
+            String(userId),
+            'courses',
+            String(courseId),
+            'lessons',
+            String(lessonId)
         );
 
         const lessonCompletionSnapshot = await getDoc(lessonCompletionRef);
@@ -266,52 +264,53 @@ export default function LessonComponent({
 
         if (!isCompleted) {
           const userCourseLessonsRef = collection(
-            db,
-            'users',
-            String(userId),
-            'courses',
-            String(courseId),
-            'lessons'
+              db,
+              'users',
+              String(userId),
+              'courses',
+              String(courseId),
+              'lessons'
           );
 
           const userCourseRef = doc(
-            db,
-            'users',
-            String(userId),
-            'courses',
-            String(courseId)
+              db,
+              'users',
+              String(userId),
+              'courses',
+              String(courseId)
           );
 
           const activitiesRef = collection(
-            db,
-            'users',
-            String(userId),
-            'activities'
+              db,
+              'users',
+              String(userId),
+              'activities'
           );
 
           if (lesson.title) {
             const lessonDocRef = doc(
-              activitiesRef,
-              `completed_${lesson.title}_lesson`
+                activitiesRef,
+                `completed_${lesson.title}_lesson`
             );
 
             await setDoc(lessonDocRef, {
-              title: `Completed '${lesson.title}' Lesson`,
+              title: `Completed -${lesson.title}- Lesson`,
               completedAt: new Date(),
               icon: 'CheckCheck',
+              type: lesson.type || 'video',
+              courseName: courseName
             });
           }
 
           await setDoc(
-            doc(userCourseLessonsRef, String(lessonId)),
-            {
-              completed: true,
-              // doesnt set the completed at again if it already exists
-              ...(lessonCompletionSnapshot.data()?.completedAt
-                ? {}
-                : { completedAt: new Date() }),
-            },
-            { merge: true }
+              doc(userCourseLessonsRef, String(lessonId)),
+              {
+                completed: true,
+                ...(lessonCompletionSnapshot.data()?.completedAt
+                    ? {}
+                    : { completedAt: new Date() }),
+              },
+              { merge: true }
           );
 
           await updateDoc(userCourseRef, {
@@ -319,8 +318,9 @@ export default function LessonComponent({
           });
         }
       } catch (error) {}
-    };
+  }
 
+  useEffect(() => {
     const handleVimeoMessageAsync = async (event: MessageEvent) => {
       if (event.origin === 'https://player.vimeo.com' && userId && isPremium && lesson?.type == 'video') {
         const iframe = document.querySelector('iframe');
@@ -338,7 +338,7 @@ export default function LessonComponent({
 
         player.on('ended', async function () {
           setLocalCompleted(true);
-          await CompleteVideoLesson();
+          await CompleteLessonFunction()
         });
       }
     };
@@ -463,6 +463,13 @@ export default function LessonComponent({
     fetchLessonCompletionStatus();
   }, [userId, courseId, isPremium]);
 
+  const handleFinishLesson = async () => {
+    setLocalCompleted(true);
+    await CompleteLessonFunction()
+
+    message.success(`Successfully completed the ${lesson.title} lesson.`)
+  }
+
   if (locked) {
     return (
       <Unauthorized/>
@@ -522,22 +529,31 @@ export default function LessonComponent({
 
       <h1 className="text-2xl lg:text-3xl font-medium">
         {courseName} - Episode {lesson.order}
-        {/*  - {completedLessonCount}  */}
+          {/*- {completedLessonCount}*/}
       </h1>
 
       <div className="flex flex-col lg:flex-row w-full">
         <div className="w-full">
           <>
             {lesson.type == 'text' ?
-              <div className="relative flex flex-col justify-between sm:w-full rounded-3xl aspect-video p-10">
+              <div className="relative flex flex-col justify-between sm:w-full rounded-3xl aspect-video p-10 gap-2">
                 <div className="break-words max-w-full" dangerouslySetInnerHTML={{ __html: lesson?.content[page - 1 || 0] }} />
                 {lesson?.content.length > (page ?? 1) &&
-                  <Link href={`/courses/${courseId}/${lessonId}?page=${(Number(page) || 1) + 1}`}><ButtonShad className="w-fit" variant="secondary">NEXT</ButtonShad></Link>
+                  <Link className="w-fit" href={`/courses/${courseId}/${lessonId}?page=${(Number(page) || 1) + 1}`}><ButtonShad className="w-fit" variant="ring">NEXT</ButtonShad></Link>
                 }
 
                 {page > 1 &&
-                  <Link href={`/courses/${courseId}/${lessonId}?page=${(Number(page)) - 1}`}><ButtonShad className="w-fit" variant="secondary">PREVIOUS</ButtonShad></Link>
+                  <Link className="w-fit" href={`/courses/${courseId}/${lessonId}?page=${(Number(page)) - 1}`}><ButtonShad className="w-fit" variant="ring">PREVIOUS</ButtonShad></Link>
                 }
+
+                {lesson.type === 'text' && (page ?? 1) == lesson.content.length && (
+                    <div className="flex justify-center mt-4">
+                      <ButtonShad className="active:scale-95 transition" onClick={handleFinishLesson} variant="secondary">
+                        Finish Lesson
+                      </ButtonShad>
+                    </div>
+                )}
+
               </div>
             :
               <div className="relative sm:w-full rounded-3xl aspect-video shadow-2xl shadow-white/10">

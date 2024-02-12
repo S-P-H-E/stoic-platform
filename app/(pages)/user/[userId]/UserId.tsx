@@ -26,7 +26,7 @@ interface GlobalUser {
 
 const UserIdComponent = ({userId}: {userId: string}) => {
     const { userOnboarding: userOnboardingGlobal, userId: userIdGlobal, userStatus: userStatusGlobal, userStripeId: userStripeIdGlobal, userName: userNameGlobal } = UserDataFetcher();
-    const { userSocial, userOnboarding, userDescription, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, userProfileImageUrl, userProfileBannerUrl } = UserDataFetcherById(userId);
+    const { userSocial, userOnboarding, userDescription, userStripeId, userRoles, generalLastCourse, userEmail, generalLastLesson, userName, userStatus, userProfileImageUrl, userProfileBannerUrl, userActivities } = UserDataFetcherById(userId);
 
     const [loading, setLoading] = useState(true);
     const [timedOut, setTimedOut] = useState(false);
@@ -68,6 +68,7 @@ const UserIdComponent = ({userId}: {userId: string}) => {
                 profileImageUrl: userProfileImageUrl,
                 profileBannerUrl: userProfileBannerUrl,
                 onboarding: userOnboarding,
+                activities: userActivities
             };
 
             const globalUser: GlobalUser = {
@@ -81,7 +82,7 @@ const UserIdComponent = ({userId}: {userId: string}) => {
             setGlobalUser(globalUser)
             setUser(user)
         }
-    }, [generalLastCourse, generalLastLesson, userDescription, userEmail, userIdGlobal, userName,
+    }, [userActivities, generalLastCourse, generalLastLesson, userDescription, userEmail, userIdGlobal, userName,
         userNameGlobal, userProfileBannerUrl, userProfileImageUrl, userRoles, userStatus, userStatusGlobal,
         userStripeId, userStripeIdGlobal, userSocial, userOnboardingGlobal, userOnboarding
     ])
@@ -104,7 +105,7 @@ const UserIdComponent = ({userId}: {userId: string}) => {
             <main className='h-full flex flex-col gap-4 w-full min-w-[300px]'>
                 <UserIdHeader isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
                 <div className='w-full xl:w-[80%] lg:w-[85%] max-w-7xl max-h-7xl px-6 mx-auto flex flex-col lg:flex-row gap-4 pb-8'>{/*  PADDING CHECK! !! ! ! */}
-                    <Activities isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
+                    <Activities userActivities={user.activities} isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
                     <div className="gap-4 flex flex-col w-full md:w-1/2 max-w-[25rem]">
                         <AboutMe isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>
                         <Socials isAuthorized={isAuthorized} userId={userId} globalUser={globalUser} user={user}/>

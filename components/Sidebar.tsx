@@ -83,8 +83,9 @@ const Sidebar = () => {
         {
             label: 'Stoic AI',
             icon: BrainCircuit,
-            href: '/_stoicai',
-            locked: true
+            href: '/stoicai',
+            locked: true,
+            extraContentSide: 'top'
         },
 /*        {
             label: 'Image AI',
@@ -201,27 +202,32 @@ const Sidebar = () => {
                                             </Link>
                                         </TooltipTrigger>
 
-                                        {route.extraContent &&
+                                        {route.extraContent || route.locked ? (
                                             <TooltipContent
                                                 onMouseLeave={handleMouseLeave}
                                                 onMouseEnter={handleMouseEnter}
                                                 className={clsx("bg-darkgray text-base hover:bg-border active:scale-95 transition duration-200", route.extraContentSide === 'right' &&  'mb-2')}
                                                 side={route.extraContentSide as "right" | "top" | "bottom" | "left" | undefined}
                                             >
-                                                {route.extraContentHref ?
-                                                    <Link href={route.extraContentHref}>
-                                                        <div className="px-4 py-0.5 flex items-center gap-2">
-                                                            <route.extraContentIcon size={20}/>
-                                                            {route.extraContent}
-                                                        </div>
-                                                    </Link>
-                                                    :
-                                                    <div>
-                                                        {route.extraContent}
-                                                    </div>
-                                                }
+                                                {route.extraContent ? (
+                                                    <>
+                                                        {route.extraContentHref ? (
+                                                            <Link href={route.extraContentHref}>
+                                                                <div className="px-4 py-0.5 flex items-center gap-2">
+                                                                    <route.extraContentIcon size={20}/>
+                                                                    {route.extraContent}
+                                                                </div>
+                                                            </Link>
+                                                        ) : (
+                                                            <div>{route.extraContent}</div>
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    route.locked && <div>Coming soon...</div>
+                                                )}
                                             </TooltipContent>
-                                        }
+                                        ) : null}
+
                                     </Tooltip>
                                 </TooltipProvider>
                             ))}

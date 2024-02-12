@@ -6,7 +6,7 @@ import {useAuthState} from 'react-firebase-hooks/auth';
 import {auth, db} from '@/utils/firebase';
 import {useRouter} from 'next/navigation';
 import {User} from 'firebase/auth';
-import {SocialInfo} from "@/types/types";
+import {Activity, SocialInfo} from "@/types/types";
 
 interface UserDataFetcherResult {
     userStripeId: string;
@@ -28,6 +28,7 @@ interface UserDataFetcherResult {
     userEmailVerified: boolean;
     userUid?: undefined | string;
     userPassword?: string | null;
+    userActivities: Activity[]
 }
 
 interface Role {
@@ -57,6 +58,7 @@ export function UserDataFetcher(): UserDataFetcherResult {
     const [userCreatedAt, setUserCreatedAt] = useState<Date | undefined>(undefined)
     const [userEmailVerified, setUserEmailVerified] = useState(false)
     const [userUid, setUserUid] = useState(undefined)
+    const [userActivities, setUserActivities] = useState<Activity[]>([]);
 
     const [roles, setRoles] = useState<Role[]>([]);
 
@@ -186,17 +188,17 @@ export function UserDataFetcher(): UserDataFetcherResult {
 
                     const userData = querySnapshot.docs[0].data();
 
-                    /*          console.log(userData)
-
-                              if (!userData.custom) {
-                                console.log("Custom field not found for the user. You can add your logic here.");
-                              } else {
-                                console.log("Custom field is found")
-                              }*/
-
                     const userRoles = userData.roles && userData.roles.map((roleName: string) => {
                         const role = roles.find((r) => r.name === roleName);
                         return role || {name: roleName, color: 'white'}; // Default color if role not found
+                    });
+
+                    const activitiesRef = collection(db, `users/${querySnapshot.docs[0].id}/activities`);
+                    const activitiesQuery = query(activitiesRef);
+
+                    const unsubscribeActivities = onSnapshot(activitiesQuery, (activitiesSnapshot) => {
+                        const activitiesData = activitiesSnapshot.docs.map(doc => doc.data() as Activity);
+                        setUserActivities(activitiesData);
                     });
 
                     setUserName(userData.name);
@@ -216,12 +218,11 @@ export function UserDataFetcher(): UserDataFetcherResult {
                     setUserCreatedAt(userData.createdAt)
                     setUserUid(userData.uid)
                     setUserPassword(userData.password)
+                    setUserStatus(userData.status);
 
-                    const newUserStatus = userData.status;
-                    setUserStatus(newUserStatus);
-                    /*          if (newUserStatus === "user") {
-                                router.push('/upgrade');
-                                } */
+                    return () => {
+                        unsubscribeActivities();
+                    };
                 }
             });
 
@@ -255,6 +256,7 @@ export function UserDataFetcher(): UserDataFetcherResult {
         fetching,
         userProfileImageUrl,
         userProfileBannerUrl,
-        userPassword
+        userPassword,
+        userActivities
     };
 }
