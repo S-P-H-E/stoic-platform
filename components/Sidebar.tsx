@@ -204,8 +204,8 @@ const Sidebar = () => {
 
                                         {route.extraContent || route.locked ? (
                                             <TooltipContent
-                                                onMouseLeave={handleMouseLeave}
-                                                onMouseEnter={handleMouseEnter}
+                                                onMouseLeave={!route.locked ? handleMouseLeave : undefined}
+                                                onMouseEnter={!route.locked ? handleMouseEnter : undefined}
                                                 className={clsx("bg-darkgray text-base hover:bg-border active:scale-95 transition duration-200", route.extraContentSide === 'right' &&  'mb-2')}
                                                 side={route.extraContentSide as "right" | "top" | "bottom" | "left" | undefined}
                                             >

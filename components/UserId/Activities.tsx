@@ -34,7 +34,7 @@ const Activities = ({
             opacity: 1,
             y: 0,
             transition: {
-                delay: 0.04 * index,
+                delay: (index % 1) * 0.15,
             },
         }),
     };
@@ -54,7 +54,7 @@ const Activities = ({
                 >
                     <ActivityCard
                         isAuthorized={isAuthorized}
-                        title={activity.title}
+                        title={activity.title ? activity.title : 'Loading...'}
                         completedAt={activity.completedAt}
                         icon={activity.icon}
                     />
