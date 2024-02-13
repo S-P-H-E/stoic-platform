@@ -12,7 +12,6 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import { ButtonShad } from '@/components/ui/buttonshad'
 import { doc, setDoc } from 'firebase/firestore'
-import {createCustomerIfNull} from "@/utils/utils";
 
 export default function UpgradeComponent({userStatus}: {userStatus: string | undefined}) {
   const { userName, userId, userEmail, userStripeId } = UserDataFetcher()
@@ -61,6 +60,41 @@ export default function UpgradeComponent({userStatus}: {userStatus: string | und
     },
   ]
 
+  const createCustomerIfNull = async () => {
+    if (userName && userEmail && !userStripeId) {
+      const response = await fetch('/api/stripe/create-customer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userName,
+          userEmail,
+          userStripeId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create customer');
+      }
+
+      const data = await response.json();
+
+      await setDoc(
+        doc(db, 'users', userId as string),
+        {
+          stripe_customer_id: data.id,
+        },
+        { merge: true }
+      );
+
+      return data.id
+    } else {
+      return null;
+      // console.log("STRIPE CREDENTIALS ERROR");
+    }
+  };
+
   const generateCheckoutLink = async (createdStripeId?: string) => {
     try {
       if (userStripeId || createdStripeId) {
@@ -106,7 +140,7 @@ export default function UpgradeComponent({userStatus}: {userStatus: string | und
         }
       } else {
         /*console.log('creating new customer...')*/
-        const createdCustomerId = await createCustomerIfNull(userId, userName, userEmail, userStripeId);
+        const createdCustomerId = await createCustomerIfNull();
         /*console.log('created new customer with id: ' + createdCustomerId)*/
 
         /*console.log('creating customerportal')*/
