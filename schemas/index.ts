@@ -7,6 +7,10 @@ export const ResetPasswordPageSchema = z.object({
     })
 })
 
+export const LibraryFormSchema = z.object({
+    query: z.string()
+})
+
 export const UpdatePasswordPageSchema = z.object({
     password: z.string().min(1, {
         message: 'Password is required.'

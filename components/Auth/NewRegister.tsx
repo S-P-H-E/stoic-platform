@@ -48,6 +48,33 @@ export default function NewRegister() {
 
     const { name: formName} = form.watch();
 
+    const createCustomerIfNullOnRegister = async (userName: string | undefined | null, userEmail: string | null | undefined, userStripeId?: string) => {
+        if (userName && userEmail && !userStripeId) {
+            const response = await fetch('/api/stripe/create-customer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userName,
+                    userEmail,
+                    userStripeId,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create customer');
+            }
+
+            const data = await response.json();
+
+            return data.id
+        } else {
+            return null;
+            // console.log("STRIPE CREDENTIALS ERROR");
+        }
+    };
+
     const register = async (values: z.infer<typeof RegisterSchema>) => {
         try {
             const existingUserRef = doc(db, "users", convertToAsciiEquivalent(values.name));
@@ -65,6 +92,8 @@ export default function NewRegister() {
 
                 const hashedPassword = await bcrypt.hash(values.password, 10);
 
+                const generatedStripeId = await createCustomerIfNullOnRegister(userName, userEmail)
+
                 const userData = {
                     name: userName,
                     email: userEmail,
@@ -75,7 +104,8 @@ export default function NewRegister() {
                     password: hashedPassword,
                     status: 'user',
                     onboarding: true,
-                    custom: true
+                    custom: true,
+                    user_stripe_id: generatedStripeId
                 }
 
                 const userRef = doc(db, "users", convertToAsciiEquivalent(userName));
@@ -90,6 +120,7 @@ export default function NewRegister() {
             const errorCode = firebaseError.code as keyof typeof firebaseErrorMessages;
             const errorMessage = firebaseErrorMessages[errorCode] || "An error occurred. Please try again.";
 
+            /*console.log(error)*/
             message.error(errorMessage);
         }
     }

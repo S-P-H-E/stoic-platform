@@ -18,6 +18,33 @@ const Social = () => {
     const twitterProvider = new TwitterAuthProvider()
     const microsoftProvider = new OAuthProvider('microsoft.com');
 
+    const createCustomerIfNullOnRegister = async (userName: string | undefined | null, userEmail: string | null | undefined, userStripeId?: string) => {
+        if (userName && userEmail && !userStripeId) {
+            const response = await fetch('/api/stripe/create-customer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userName,
+                    userEmail,
+                    userStripeId,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create customer');
+            }
+
+            const data = await response.json();
+
+            return data.id
+        } else {
+            return null;
+            // console.log("STRIPE CREDENTIALS ERROR");
+        }
+    };
+
     const generateUniqueDocumentId = async (baseId: string) => {
         let suffix = 1;
         let uniqueId = baseId;
@@ -72,6 +99,8 @@ const Social = () => {
                 console.log(uniqueId)
 */
 
+                const generatedStripeId = await createCustomerIfNullOnRegister(user?.displayName, user?.email)
+
                 const userData = {
                     name: user?.displayName,
                     email: user?.email,
@@ -81,7 +110,8 @@ const Social = () => {
                     createdAt: user?.metadata.creationTime,
                     status: 'user',
                     onboarding: true,
-                    custom: true
+                    custom: true,
+                    user_stripe_id: generatedStripeId
                 }
 
                 const userRef = doc(db, "users", uniqueId);
