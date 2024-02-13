@@ -272,10 +272,10 @@ export default function Resources({isPremium, userStatus, userId}: { isPremium: 
         if (isPremium && userId) {
             const resourcesCollection = collection(db, 'resources');
 
-            let q = query(resourcesCollection, orderBy('downloadCount', "desc"), limit(8));
+            let q = query(resourcesCollection, orderBy('downloadCount', "desc"), limit(12));
 
             if (lastDoc) {
-                q = query(resourcesCollection, orderBy('downloadCount', "desc"), startAfter(lastDoc), limit(8));
+                q = query(resourcesCollection, orderBy('downloadCount', "desc"), startAfter(lastDoc), limit(12));
             }
 
             try {
