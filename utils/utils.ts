@@ -1,5 +1,7 @@
 import {Role} from "@/types/types";
 import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
+import {doc, setDoc} from "firebase/firestore";
+import {db} from "@/utils/firebase";
 
 export const sanitizeString = (input: string) => {
     const sanitizedString = input
@@ -163,4 +165,66 @@ export const detectAndStyleLinks = (comment: string) => {
   });
 
   return styledText;
+};
+
+export const createCustomerIfNullOnRegister = async (userName: string | undefined | null, userEmail: string | null | undefined, userStripeId?: string) => {
+  if (userName && userEmail && !userStripeId) {
+    const response = await fetch('/api/stripe/create-customer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userName,
+        userEmail,
+        userStripeId,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create customer');
+    }
+
+    const data = await response.json();
+
+    return data.id
+  } else {
+    return null;
+    // console.log("STRIPE CREDENTIALS ERROR");
+  }
+};
+
+export const createCustomerIfNull = async (userId: string | null, userName: string | null, userEmail: string | undefined, userStripeId?: string) => {
+  if (userName && userEmail && !userStripeId) {
+    const response = await fetch('/api/stripe/create-customer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userName,
+        userEmail,
+        userStripeId,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create customer');
+    }
+
+    const data = await response.json();
+
+    await setDoc(
+        doc(db, 'users', userId as string),
+        {
+          stripe_customer_id: data.id,
+        },
+        { merge: true }
+    );
+
+    return data.id
+  } else {
+    return null;
+    // console.log("STRIPE CREDENTIALS ERROR");
+  }
 };

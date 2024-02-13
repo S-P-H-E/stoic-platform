@@ -9,7 +9,7 @@ import {auth, db} from "@/utils/firebase";
 import {message} from "antd";
 import {useRouter} from "next/navigation";
 import {collection, doc, getDoc, getDocs, query, setDoc, where} from "firebase/firestore";
-import {convertToAsciiEquivalent} from "@/utils/utils";
+import {convertToAsciiEquivalent, createCustomerIfNull, createCustomerIfNullOnRegister} from "@/utils/utils";
 
 const Social = () => {
     const router = useRouter()
@@ -72,6 +72,9 @@ const Social = () => {
                 console.log(uniqueId)
 */
 
+
+                const createdCustomerId = await createCustomerIfNullOnRegister(user?.displayName, user?.email, )
+                
                 const userData = {
                     name: user?.displayName,
                     email: user?.email,
@@ -81,7 +84,8 @@ const Social = () => {
                     createdAt: user?.metadata.creationTime,
                     status: 'user',
                     onboarding: true,
-                    custom: true
+                    custom: true,
+                    user_stripe_id: createdCustomerId
                 }
 
                 const userRef = doc(db, "users", uniqueId);

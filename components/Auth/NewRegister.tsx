@@ -24,7 +24,7 @@ import type {FirebaseError} from "@firebase/util";
 import {BiLoader} from "react-icons/bi";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import CardWrapper from "@/components/CardWrapper";
-import {convertToAsciiEquivalent} from "@/utils/utils";
+import {convertToAsciiEquivalent, createCustomerIfNullOnRegister} from "@/utils/utils";
 import {sendEmailVerification} from "firebase/auth";
 
 const firebaseErrorMessages: Record<string, string> = {
@@ -65,6 +65,8 @@ export default function NewRegister() {
 
                 const hashedPassword = await bcrypt.hash(values.password, 10);
 
+                const createdCustomerId = await createCustomerIfNullOnRegister(userName, userEmail)
+
                 const userData = {
                     name: userName,
                     email: userEmail,
@@ -75,7 +77,8 @@ export default function NewRegister() {
                     password: hashedPassword,
                     status: 'user',
                     onboarding: true,
-                    custom: true
+                    custom: true,
+                    createdCustomerId: createdCustomerId
                 }
 
                 const userRef = doc(db, "users", convertToAsciiEquivalent(userName));

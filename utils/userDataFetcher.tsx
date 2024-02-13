@@ -95,18 +95,20 @@ export function UserDataFetcher(): UserDataFetcherResult {
         const checkSubscription = async () => {
             const subscription = await hasSubscription();
 
-            if (userId && subscription && userStatus === "user") {
+            if (userId && subscription && userStatus == "user") {
                 const userRef = doc(db, 'users', userId);
 
                 await updateDoc(userRef, {
                     status: 'premium',
                 });
-            } else if (userId && !subscription && userStatus === "premium") {
+
+            } else if (userId && !subscription && userStatus == "premium") {
                 const userRef = doc(db, 'users', userId);
 
-                await updateDoc(userRef, {
+/*                await updateDoc(userRef, {
                     status: 'user',
-                });
+                });*/
+
             }
         };
 
