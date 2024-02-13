@@ -25,7 +25,7 @@ import Link from 'next/link';
 import { FaPen } from 'react-icons/fa6';
 import PhotoUpload from './Settings/ProfilePhotoUpload';
 import BannerUpload from './Settings/BannerPhotoUpload';
-import {getUserRoleColor} from "@/utils/utils";
+import {detectAndStyleLinks, getUserRoleColor} from "@/utils/utils";
 
 interface Role {
   id: string;
@@ -281,7 +281,7 @@ export default function UserProfile({
                 black ? 'bg-darkgray' : 'bg-black'
               )}
             >
-              <p>{userDescription ? userDescription : 'No description provided'}</p>
+              <p className="whitespace-pre-wrap" dangerouslySetInnerHTML={{__html: userDescription ? detectAndStyleLinks(userDescription) : 'No description provided'}}/>
             </div>
             {/*             <div className='flex justify-between pb-5 pt-2'>
               <div className='bg-white text-black w-fit py-1 px-2 md:py-1 md:px-3 rounded-full flex items-center gap-2 text-xs md:text-sm font-semibold'>

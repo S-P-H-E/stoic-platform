@@ -20,6 +20,7 @@ import { motion } from 'framer-motion';
 import UserImagePassable from '../UserImagePassable';
 import clsx from 'clsx';
 import { IoSend } from "react-icons/io5";
+import {detectAndStyleLinks} from "@/utils/utils";
 
 
 interface Comment {
@@ -205,26 +206,6 @@ export default function Comments({
     };
   };
 
-  const detectAndStyleLinks = (comment: string) => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const matches = comment.match(urlRegex);
-
-    if (!matches) {
-      return comment;
-    }
-
-    let styledComment = comment;
-
-    matches.forEach((match) => {
-      styledComment = styledComment.replace(
-        match,
-        `<a href="${match}" class="text-blue-500 underline" target="_blank" rel="noopener noreferrer">${match}</a>`
-      );
-    });
-
-    return styledComment;
-  };
-
   function getUserRoleColor(userRoles: Role[] | 'User'): string {
     if (userRoles === 'User' || userRoles.length === 0) {
       return 'white';
@@ -354,12 +335,9 @@ export default function Comments({
                 ) : null}
               </div>
               <p
-                className="py-3 break-all"
+                className="py-3 break-all whitespace-pre-wrap"
                 dangerouslySetInnerHTML={{
                   __html: detectAndStyleLinks(comment.comment)
-                    .split('\n')
-                    .map((line) => `${line}<br />`)
-                    .join(''),
                 }}
               ></p>
               <div className="flex items-center"></div>

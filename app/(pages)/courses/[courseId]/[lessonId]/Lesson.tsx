@@ -44,7 +44,7 @@ import ShinyButton from '@/components/ShinyButton';
 import { ButtonShad } from '@/components/ui/buttonshad';
 import Lottie from 'lottie-react';
 import checkmarkAnimation from '@/public/lottie/checkmarkAnimation.json';
-import { isUserAllowedToFetch } from '@/utils/utils';
+import {detectAndStyleLinks, isUserAllowedToFetch} from '@/utils/utils';
 import Unauthorized from './../../../../../components/Unauthorized';
 import {UserDataFetcher} from "@/utils/userDataFetcher";
 
@@ -628,16 +628,7 @@ export default function LessonComponent({
                   </div>
                 </div>
               </div>
-              <p className="rounded-xl mt-3 max-w-[950px] text-sm lg:text-base">
-                {lesson.description
-                  .split('\n')
-                  .map((line: number, index: number) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
-              </p>
+              <p className="rounded-xl mt-3 max-w-[950px] text-sm lg:text-base whitespace-pre-wrap" dangerouslySetInnerHTML={{__html: detectAndStyleLinks(lesson.description)}}/>
             </div>
             }
 

@@ -28,6 +28,7 @@ import { FaPen } from 'react-icons/fa';
 import { IoIosSave, IoIosCloseCircle } from 'react-icons/io';
 import Chatbox from './Chatbox';
 import { GoReply } from 'react-icons/go';
+import {detectAndStyleLinks} from "@/utils/utils";
 
 interface Message {
   userProfilePic: any;
@@ -178,27 +179,6 @@ export default function Chat({
 
 
   const test = members.find(member => member.id === 'hoj596WZZ55925csUnq0')?.name
-  console.log(test)
-
-  const detectAndStyleLinks = (comment: string) => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const matches = comment.match(urlRegex);
-
-    if (!matches) {
-      return comment;
-    }
-
-    let styledComment = comment;
-
-    matches.forEach((match) => {
-      styledComment = styledComment.replace(
-        match,
-        `<a href="${match}" class="text-blue-500 underline" target="_blank" rel="noopener noreferrer">${match}</a>`
-      );
-    });
-
-    return styledComment;
-  };
 
   const MessageTimestamp = ({
     createdAt,

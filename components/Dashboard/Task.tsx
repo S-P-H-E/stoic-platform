@@ -14,6 +14,7 @@ import { message } from 'antd';
 import { ButtonShad } from '../ui/buttonshad';
 import { BiTrash } from 'react-icons/bi';
 import { motion, AnimatePresence } from 'framer-motion';
+import {detectAndStyleLinks} from "@/utils/utils";
 
 export default function Task({ task, userId }: { userId: string | null | undefined, task: Task }) {
   const [checked, setChecked] = useState(false);
@@ -160,7 +161,10 @@ export default function Task({ task, userId }: { userId: string | null | undefin
           </AccordionTrigger>
           {task.description && (
             <AccordionContent className="p-4 whitespace-pre-wrap bg-darkgray border-b border-l border-r rounded-b-lg border-border">
-              {task.description}
+              <p dangerouslySetInnerHTML={{
+                __html: detectAndStyleLinks(task.description)
+              }}
+              />
             </AccordionContent>
           )}
         </AccordionItem>

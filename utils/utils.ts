@@ -144,3 +144,23 @@ export const decrypt = (encryptedData: string, key: Buffer): string => {
   decryptedData += decipher.final('utf8');
   return decryptedData;
 };
+
+export const detectAndStyleLinks = (comment: string) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const matches = comment.match(urlRegex);
+
+  if (!matches) {
+    return comment;
+  }
+
+  let styledText = comment;
+
+  matches.forEach((match) => {
+    styledText = styledText.replace(
+        match,
+        `<a href="${match}" class="text-blue-500 underline" target="_blank" rel="noopener noreferrer">${match}</a>`
+    );
+  });
+
+  return styledText;
+};

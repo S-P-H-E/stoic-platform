@@ -6,6 +6,7 @@ import { message } from 'antd';
 import clsx from 'clsx';
 import { doc, updateDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
+import {detectAndStyleLinks} from "@/utils/utils";
 
 const AboutMe = ({
   user,
@@ -94,14 +95,7 @@ const AboutMe = ({
           />
         ) : (
           user.description ? 
-            <p className="break-all line-clamp-[12] opacity-90">
-              {user.description?.split('\n').map((line, index) => (
-                <React.Fragment key={index}>
-                  {line}
-                  <br />
-                </React.Fragment>
-              ))}
-            </p>
+            <p className="break-all line-clamp-[12] opacity-90 whitespace-pre-wrap" dangerouslySetInnerHTML={{__html: detectAndStyleLinks(user.description)}}/>
           :
             <p>{isCurrentUser ? "You haven't added a description. Click to add one!" : "This user hasn't added a description."}</p>
         )}
