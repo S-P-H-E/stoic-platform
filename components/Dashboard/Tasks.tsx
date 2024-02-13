@@ -6,7 +6,6 @@ import { FaFilter } from 'react-icons/fa6';
 import { ButtonShad } from '@/components/ui/buttonshad';
 import { motion } from 'framer-motion';
 import {
-  DropdownMenuSeparator,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -16,7 +15,6 @@ import {
 import { isUserAllowedToFetch } from '@/utils/utils';
 import { Task as TypeTask } from '@/types/types';
 import { fetchUserTasks } from '@/utils/getFirestore';
-import { message } from 'antd';
 import CreateTaskButton from './CreateTaskButton';
 import { ScaleLoader } from 'react-spinners';
 

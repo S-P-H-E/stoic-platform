@@ -1,4 +1,5 @@
 import {Role} from "@/types/types";
+import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
 
 export const sanitizeString = (input: string) => {
     const sanitizedString = input
@@ -126,3 +127,20 @@ export function isValidURL(value: string | undefined, socialPlatform: string): b
 }
 
 export const isUserAllowedToFetch = (status: string | undefined) => status === 'premium' || status === 'admin';
+
+export const encrypt = (data: string, key: Buffer): string => {
+  const iv = randomBytes(16); // Generate random initialization vector
+  const cipher = createCipheriv('aes-256-cbc', key, iv);
+  let encryptedData = cipher.update(data, 'utf8', 'hex');
+  encryptedData += cipher.final('hex');
+  return iv.toString('hex') + ':' + encryptedData;
+};
+
+export const decrypt = (encryptedData: string, key: Buffer): string => {
+  const parts = encryptedData.split(':');
+  const iv = Buffer.from(parts.shift()!, 'hex');
+  const decipher = createDecipheriv('aes-256-cbc', key, iv);
+  let decryptedData = decipher.update(parts.join(':'), 'hex', 'utf8');
+  decryptedData += decipher.final('utf8');
+  return decryptedData;
+};
