@@ -86,9 +86,9 @@ export function UserDataFetcher(): UserDataFetcherResult {
                     return data;
                 }
             } catch (error) {
-/*
-                console.log(error)
-*/
+                /*
+                                console.log(error)
+                */
             }
         };
 
@@ -104,51 +104,106 @@ export function UserDataFetcher(): UserDataFetcherResult {
             } else if (userId && !subscription && userStatus === "premium") {
                 const userRef = doc(db, 'users', userId);
 
-        /*        await updateDoc(userRef, {
-                    status: 'user',
-                });*/
+                /*        await updateDoc(userRef, {
+                            status: 'user',
+                        });*/
             }
         };
 
         if (userStripeId) {
-            checkSubscription();
+            /* checkSubscription(); */
         }
 
     }, [userStripeId, user, userStatus, userId, router])
 
 
-/*    // SYNCS DATABASE INFO TO FIREBASE AUTH
+    /*    // SYNCS DATABASE INFO TO FIREBASE AUTH
+        useEffect(() => {
+            const unsubscribeAuth = auth.onAuthStateChanged((authUser) => {
+                if (authUser) {
+                    const userRef = collection(db, 'users');
+                    const q = query(userRef,
+                        where('email', '==', authUser.email),
+                        where('custom', '==', true)
+                    );
+
+                    const unsubscribeFirestore = onSnapshot(q, async (querySnapshot) => {
+                        if (!querySnapshot.empty) {
+                            const userData = querySnapshot.docs[0].data();
+
+                            const { emailVerified, displayName, photoURL } = authUser;
+                            await updateDoc(doc(db, 'users', querySnapshot.docs[0].id), {
+                                emailVerified: emailVerified,
+                                photoUrl: photoURL,
+                            });
+                        }
+                    });
+
+                    return () => {
+                        unsubscribeFirestore();
+                    };
+                }
+            });
+
+            return () => {
+                unsubscribeAuth();
+            };
+        }, []);*/
+
     useEffect(() => {
-        const unsubscribeAuth = auth.onAuthStateChanged((authUser) => {
-            if (authUser) {
-                const userRef = collection(db, 'users');
-                const q = query(userRef,
-                    where('email', '==', authUser.email),
-                    where('custom', '==', true)
-                );
+        if (!userStripeId) {
+            const createCustomerIfNull = async () => {
+                if (userName && userEmail) {
+                    const response = await fetch('/api/stripe/create-customer', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            userName,
+                            userEmail,
+                            userStripeId
+                        }),
+                    });
 
-                const unsubscribeFirestore = onSnapshot(q, async (querySnapshot) => {
-                    if (!querySnapshot.empty) {
-                        const userData = querySnapshot.docs[0].data();
-
-                        const { emailVerified, displayName, photoURL } = authUser;
-                        await updateDoc(doc(db, 'users', querySnapshot.docs[0].id), {
-                            emailVerified: emailVerified,
-                            photoUrl: photoURL,
-                        });
+                    if (!response.ok) {
+                        throw new Error('Failed to create customer');
                     }
-                });
 
-                return () => {
-                    unsubscribeFirestore();
-                };
+                    const data = await response.json();
+
+                    const {customerId, hasSubscription} = data;
+
+                    if (userStatus === 'admin') {
+                        await setDoc(
+                            doc(db, 'users', userId as string),
+                            {
+                                stripe_customer_id: customerId,
+                            },
+                            {merge: true}
+                        );
+                    } else {
+                        await setDoc(
+                            doc(db, 'users', userId as string),
+                            {
+                                status: hasSubscription ? 'premium' : 'user',
+                                stripe_customer_id: customerId,
+                            },
+                            {merge: true}
+                        );
+                    }
+
+                } else {
+                    /* console.log("STRIPE CREDENTIALS ERROR") */
+                }
             }
-        });
 
-        return () => {
-            unsubscribeAuth();
-        };
-    }, []);*/
+            createCustomerIfNull()
+        } else {
+            null
+        }
+
+    }, [userStatus, userStripeId, userName, userId, userEmail])
 
 
     useEffect(() => {

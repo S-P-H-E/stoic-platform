@@ -80,10 +80,13 @@ export default function UpgradeComponent({userStatus}: {userStatus: string | und
 
       const data = await response.json();
 
+      const { customerId, hasSubscription } = data;
+
       await setDoc(
         doc(db, 'users', userId as string),
         {
-          stripe_customer_id: data.id,
+          status: hasSubscription ? 'premium' : 'user',
+          stripe_customer_id: customerId,
         },
         { merge: true }
       );

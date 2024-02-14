@@ -48,31 +48,37 @@ export default function NewRegister() {
 
     const { name: formName} = form.watch();
 
-    const createCustomerIfNullOnRegister = async (userName: string | undefined | null, userEmail: string | null | undefined, userStripeId?: string) => {
-        if (userName && userEmail && !userStripeId) {
-            const response = await fetch('/api/stripe/create-customer', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userName,
-                    userEmail,
-                    userStripeId,
-                }),
-            });
+    const createCustomerIfNullOnRegister = async (userName: string | undefined | null, userEmail: string | null | undefined, userStripeId?: string | null) => {
+        try {
+            if (userName && userEmail && !userStripeId) {
+                const response = await fetch('/api/stripe/create-customer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userName,
+                        userEmail,
+                    }),
+                });
 
-            if (!response.ok) {
-                throw new Error('Failed to create customer');
+                if (!response.ok) {
+                    throw new Error('Failed to create customer');
+                }
+
+                const data = await response.json();
+
+                const { customerId, hasSubscription } = data;
+
+                return { customerId, hasSubscription }
+            } else {
+                return null;
+                // console.log("STRIPE CREDENTIALS ERROR");
             }
-
-            const data = await response.json();
-
-            return data.id
-        } else {
-            return null;
-            // console.log("STRIPE CREDENTIALS ERROR");
+        } catch (err) {
+            console.log(err)
         }
+
     };
 
     const register = async (values: z.infer<typeof RegisterSchema>) => {
@@ -85,6 +91,7 @@ export default function NewRegister() {
             } else {
 
                 const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+
                 await sendEmailVerification(userCredential.user)
 
                 const userEmail = userCredential.user.email;
@@ -92,7 +99,11 @@ export default function NewRegister() {
 
                 const hashedPassword = await bcrypt.hash(values.password, 10);
 
-                const generatedStripeId = await createCustomerIfNullOnRegister(userName, userEmail)
+                const userStripeId = null
+
+                const response = await createCustomerIfNullOnRegister(userName, userEmail, userStripeId)
+
+                const { customerId, hasSubscription } = response!;
 
                 const userData = {
                     name: userName,
@@ -102,10 +113,10 @@ export default function NewRegister() {
                     emailVerified: userCredential.user.emailVerified,
                     createdAt: userCredential.user.metadata.creationTime,
                     password: hashedPassword,
-                    status: 'user',
+                    status: hasSubscription ? 'premium' : 'user',
                     onboarding: true,
                     custom: true,
-                    user_stripe_id: generatedStripeId
+                    user_stripe_id: customerId
                 }
 
                 const userRef = doc(db, "users", convertToAsciiEquivalent(userName));

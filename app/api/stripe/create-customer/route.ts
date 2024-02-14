@@ -9,22 +9,57 @@ export async function POST(request: NextRequest) {
 
     const { userName, userEmail, userStripeId } = body; //check user stripe id here too
 
-/*    console.log(userEmail)
-    console.log(userName)
-    console.log(userStripeId)*/
+    const existingCustomers = await stripe.customers.search({
+        query: `email: "${userEmail}"`
+    })
 
-    try {
-        if (userName && userEmail && !userStripeId) {
-            const customer = await stripe.customers.create({
-                email: String(userEmail),
-                name: String(userName)
-            });
-    
-        return new Response(JSON.stringify(customer));
-        } else {
-            return new Response("User already is a stripe customer or user credentials are wrong.")
+    const customerExists = existingCustomers.data.length > 0
+
+    if (existingCustomers && customerExists) {
+        try {
+            const paidCustomer = existingCustomers.data.find((customer) => customer.currency);
+            const firstCustomer = existingCustomers.data[0]
+
+            const customerId = paidCustomer?.id || firstCustomer.id
+
+            const subscriptions = await stripe.subscriptions.list({
+                customer: customerId
+            })
+
+            const hasSubscription = subscriptions.data.length > 0;
+
+            return new Response(JSON.stringify({ customerId, hasSubscription }));
+        } catch (error: any) {
+/*
+            console.log(error)
+*/
+            return new Response(error)
         }
-    } catch (error) {
-        /*console.log(error)*/
+    } else {
+        try {
+            if (userName && userEmail && !userStripeId) {
+                const customer = await stripe.customers.create({
+                    email: String(userEmail),
+                    name: String(userName)
+                });
+
+
+                if (!customer) {
+                    return new Response("User already is a stripe customer or user credentials are wrong.")
+                }
+
+                const customerId = customer.id
+                const hasSubscription = false
+
+                return new Response(JSON.stringify({customerId, hasSubscription}));
+            } else {
+                return new Response("User already is a stripe customer or user credentials are wrong.")
+            }
+        } catch (error: any) {
+/*
+            console.log(error)
+*/
+            return new Response(error)
+        }
     }
 }

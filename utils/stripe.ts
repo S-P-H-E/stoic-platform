@@ -62,8 +62,8 @@ export async function generateCustomerPortalLink(customerId: string) {
   }
 }
 
-export async function createCustomerIfNull() {
-  if (user && userName && userEmail && !userStripeId) {
+const createCustomerIfNull = async () => {
+  if (userName && userEmail && !userStripeId) {
     const response = await fetch('/api/stripe/create-customer', {
       method: 'POST',
       headers: {
@@ -82,17 +82,20 @@ export async function createCustomerIfNull() {
 
     const data = await response.json();
 
-   /* console.log(data);*/
+    const { customerId, hasSubscription } = data;
 
     await setDoc(
-      doc(db, 'users', userId as string),
-      {
-        stripe_customer_id: data.customer.id,
-      },
-      { merge: true }
+        doc(db, 'users', userId as string),
+        {
+          status: hasSubscription ? 'premium' : 'user',
+          stripe_customer_id: customerId,
+        },
+        { merge: true }
     );
+
+    return data.id
   } else {
-    // Handle the case when the user document doesn't exist
-    return undefined;
+    return null;
+    // console.log("STRIPE CREDENTIALS ERROR");
   }
-}
+};

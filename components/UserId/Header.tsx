@@ -105,6 +105,7 @@ const UserIdHeader = ({
                         <div className="flex gap-2 items-center">
                             <Membership
                                 user={user}
+                                globalUserStatus={globalUser.status}
                                 globalUserName={globalUser.name}
                                 globalStripeCustomerId={globalUser.stripeId || undefined}
                                 globalUserRole={globalUser.status}

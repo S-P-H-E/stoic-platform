@@ -573,7 +573,7 @@ export default function SettingsComponent({
 
                                 <div className="flex flex-col gap-4 w-fit mt-4">
                                     <div>
-                                        <Membership settings user={user} userId={userId} stripeCustomerId={user.stripeId} globalUserId={globalUser?.id} globalUserRole={globalUser?.status}
+                                        <Membership globalUserStatus={globalUser?.status} settings user={user} userId={userId} stripeCustomerId={user.stripeId} globalUserId={globalUser?.id} globalUserRole={globalUser?.status}
                                                     globalUserName={globalUser?.name} globalStripeCustomerId={globalUser?.stripeId}/>
                                     </div>
 

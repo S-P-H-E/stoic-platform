@@ -18,7 +18,7 @@ const Social = () => {
     const twitterProvider = new TwitterAuthProvider()
     const microsoftProvider = new OAuthProvider('microsoft.com');
 
-    const createCustomerIfNullOnRegister = async (userName: string | undefined | null, userEmail: string | null | undefined, userStripeId?: string) => {
+    const createCustomerIfNullOnRegister = async (userName: string | undefined | null, userEmail: string | null | undefined, userStripeId?: string | null) => {
         if (userName && userEmail && !userStripeId) {
             const response = await fetch('/api/stripe/create-customer', {
                 method: 'POST',
@@ -38,7 +38,9 @@ const Social = () => {
 
             const data = await response.json();
 
-            return data.id
+            const { customerId, hasSubscription } = data;
+
+            return { customerId, hasSubscription }
         } else {
             return null;
             // console.log("STRIPE CREDENTIALS ERROR");
@@ -95,11 +97,11 @@ const Social = () => {
 
                 const uniqueId = await generateUniqueDocumentId(sanitizedName);
 
-/*
-                console.log(uniqueId)
-*/
+                const userStripeId = null
 
-                const generatedStripeId = await createCustomerIfNullOnRegister(user?.displayName, user?.email)
+                const response = await createCustomerIfNullOnRegister(user?.displayName, user?.email, userStripeId)
+
+                const { customerId, hasSubscription } = response!;
 
                 const userData = {
                     name: user?.displayName,
@@ -108,10 +110,10 @@ const Social = () => {
                     uid: user?.uid,
                     emailVerified: user?.emailVerified,
                     createdAt: user?.metadata.creationTime,
-                    status: 'user',
                     onboarding: true,
                     custom: true,
-                    user_stripe_id: generatedStripeId
+                    status: hasSubscription ? 'premium' : 'user',
+                    user_stripe_id: customerId
                 }
 
                 const userRef = doc(db, "users", uniqueId);

@@ -11,8 +11,6 @@ import { message } from 'antd';
 import { LuWallet } from "react-icons/lu";
 import clsx from "clsx";
 
-
-
 interface MembershipProps {
   stripeCustomerId: string | undefined;
   userId: string;
@@ -20,11 +18,12 @@ interface MembershipProps {
   globalUserRole: string | undefined;
   globalStripeCustomerId: string | undefined;
   globalUserName: string | null | undefined;
+  globalUserStatus: string | undefined;
   user: User;
   settings?: boolean;
 }
 
-export default function Membership({settings, user, stripeCustomerId, userId, globalUserId, globalUserRole, globalUserName, globalStripeCustomerId}: MembershipProps) {
+export default function Membership({settings, user, globalUserStatus, stripeCustomerId, userId, globalUserId, globalUserRole, globalUserName, globalStripeCustomerId}: MembershipProps) {
     const [loading, setLoading] = useState(false);
 
     const router = useRouter()
@@ -53,16 +52,29 @@ export default function Membership({settings, user, stripeCustomerId, userId, gl
           if (!response.ok) {
             throw new Error('Failed to create customer');
           }
-  
+
           const data = await response.json();
-  
-          await setDoc(
-            doc(db, 'users', userId as string),
-            {
-              stripe_customer_id: data.id,
-            },
-            { merge: true }
-          );
+
+          const { customerId, hasSubscription } = data;
+
+          if (user.status === 'admin') {
+            await setDoc(
+                doc(db, 'users', userId as string),
+                {
+                  stripe_customer_id: customerId,
+                },
+                {merge: true}
+            );
+          } else {
+            await setDoc(
+                doc(db, 'users', userId as string),
+                {
+                  status: hasSubscription ? 'premium' : 'user',
+                  stripe_customer_id: customerId,
+                },
+                {merge: true}
+            );
+          }
 
           return data.id
         } else {
@@ -74,7 +86,6 @@ export default function Membership({settings, user, stripeCustomerId, userId, gl
       } finally {
         setLoading(false)
       }
-
     }
 
     const generateCustomerPortal = async (createdStripeId?: string) => {
