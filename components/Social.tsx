@@ -97,11 +97,11 @@ const Social = () => {
 
                 const uniqueId = await generateUniqueDocumentId(sanitizedName);
 
-                const userStripeId = null
+/*                const userStripeId = null
 
                 const response = await createCustomerIfNullOnRegister(user?.displayName, user?.email, userStripeId)
 
-                const { customerId, hasSubscription } = response!;
+                const { customerId, hasSubscription } = response!;*/
 
                 const userData = {
                     name: user?.displayName,
@@ -112,8 +112,8 @@ const Social = () => {
                     createdAt: user?.metadata.creationTime,
                     onboarding: true,
                     custom: true,
-                    status: hasSubscription ? 'premium' : 'user',
-                    user_stripe_id: customerId
+                    status: 'user',
+                    /*stripe_customer_id: customerId*/
                 }
 
                 const userRef = doc(db, "users", uniqueId);

@@ -99,11 +99,11 @@ export default function NewRegister() {
 
                 const hashedPassword = await bcrypt.hash(values.password, 10);
 
-                const userStripeId = null
+/*                const userStripeId = null
 
                 const response = await createCustomerIfNullOnRegister(userName, userEmail, userStripeId)
 
-                const { customerId, hasSubscription } = response!;
+                const { customerId, hasSubscription } = response!;*/
 
                 const userData = {
                     name: userName,
@@ -113,10 +113,10 @@ export default function NewRegister() {
                     emailVerified: userCredential.user.emailVerified,
                     createdAt: userCredential.user.metadata.creationTime,
                     password: hashedPassword,
-                    status: hasSubscription ? 'premium' : 'user',
+                    status: 'user',
                     onboarding: true,
                     custom: true,
-                    user_stripe_id: customerId
+                 /*   stripe_customer_id: customerId*/
                 }
 
                 const userRef = doc(db, "users", convertToAsciiEquivalent(userName));
