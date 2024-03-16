@@ -50,7 +50,7 @@ export default function Resources({isPremium, userStatus, userId}: { isPremium: 
         setIsPlaying(false);
     };
 
-    const handleScroll = async () => {
+/*     const handleScroll = async () => {
         if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) {
             return;
         }
@@ -60,7 +60,11 @@ export default function Resources({isPremium, userStatus, userId}: { isPremium: 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [resources]);
+    }, [resources]); */
+
+    const resetResources = () => {
+        setResources([]);
+    };
 
     const renderToastContent2 = (
         audioName: string,
@@ -251,7 +255,7 @@ export default function Resources({isPremium, userStatus, userId}: { isPremium: 
         });
     };
 
-    console.log(areResourcesLoading)
+    /* console.log(areResourcesLoading) */
 
     useEffect(() => {
         const filtered = resources.filter((resources) => {
@@ -270,6 +274,8 @@ export default function Resources({isPremium, userStatus, userId}: { isPremium: 
 
     const fetchResources = async () => {
         if (isPremium && userId) {
+            resetResources()
+
             const resourcesCollection = collection(db, 'resources');
 
             const q = query(resourcesCollection, orderBy('downloadCount', "desc"));
