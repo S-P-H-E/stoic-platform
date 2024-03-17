@@ -104,14 +104,14 @@ export function UserDataFetcher(): UserDataFetcherResult {
             } else if (userId && !subscription && userStatus === "premium") {
                 const userRef = doc(db, 'users', userId);
 
-                /*        await updateDoc(userRef, {
+                        await updateDoc(userRef, {
                             status: 'user',
-                        });*/
+                        });
             }
         };
 
         if (userStripeId) {
-            /* checkSubscription(); */
+             checkSubscription();
         }
 
     }, [userStripeId, user, userStatus, userId, router])
